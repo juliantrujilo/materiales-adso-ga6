@@ -1,0 +1,1114 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manual Didáctico del Aprendiz — Sesión 1 (Modelo Relacional & 3FN) | SENA ADSO 3389010</title>
+
+  <!-- Tipografías Google Fonts Institucionales de Alta Gama -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@600;700;800;900&family=Syne:wght@700;800;900&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --sena-verde: #39a900;
+      --sena-verde-dark: #236b00;
+      --sena-verde-bg: #f0fdf4;
+      --sena-verde-border: #bbf7d0;
+      --sena-naranja: #ff6b00;
+      --sena-naranja-dark: #c2410c;
+      --sena-naranja-bg: #fff7ed;
+      --sena-naranja-border: #fed7aa;
+      --azul-tech: #0284c7;
+      --azul-tech-dark: #0369a1;
+      --azul-bg: #eff6ff;
+      --azul-border: #bfdbfe;
+      --purpura-pro: #7c3aed;
+      --purpura-bg: #faf5ff;
+      --purpura-border: #e9d5ff;
+
+      --bg-page: #f8fafc;
+      --bg-card: #ffffff;
+      --bg-subtle: #f1f5f9;
+      --borde-light: #e2e8f0;
+      --texto-main: #0f172a;
+      --texto-muted: #334155;
+      --texto-sub: #64748b;
+      --texto-dimmer: #94a3b8;
+
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
+      --shadow-card: 0 8px 24px rgba(15,23,42,0.06);
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --radius-xl: 20px;
+    }
+
+    * { margin:0; padding:0; box-sizing:border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg-page);
+      color: var(--texto-main);
+      line-height: 1.7;
+    }
+
+    /* Topbar Fijo */
+    .doc-topbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--borde-light);
+      padding: 12px 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    .topbar-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .sena-badge {
+      background: linear-gradient(135deg, var(--sena-verde), var(--sena-verde-dark));
+      color: #fff;
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 14px;
+      padding: 5px 12px;
+      border-radius: 8px;
+      letter-spacing: 0.5px;
+    }
+    .topbar-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 14.5px;
+      font-weight: 700;
+      color: var(--texto-main);
+    }
+    .topbar-sub {
+      font-size: 11.5px;
+      color: var(--texto-sub);
+    }
+    .topbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .btn-topbar {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 7px 14px;
+      border-radius: 20px;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      cursor: pointer;
+    }
+    .btn-topbar.portal {
+      background: #f1f5f9;
+      color: var(--texto-muted);
+      border: 1px solid var(--borde-light);
+    }
+    .btn-topbar.portal:hover {
+      background: #e2e8f0;
+      color: var(--texto-main);
+    }
+    .btn-topbar.pres {
+      background: linear-gradient(135deg, var(--sena-verde), var(--sena-verde-dark));
+      color: #fff;
+      box-shadow: 0 2px 8px rgba(57,169,0,0.25);
+    }
+    .btn-topbar.pres:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 14px rgba(57,169,0,0.35);
+    }
+    .btn-topbar.print {
+      background: #ffffff;
+      color: var(--azul-tech);
+      border: 1px solid var(--azul-border);
+    }
+    .btn-topbar.print:hover {
+      background: var(--azul-bg);
+    }
+
+    /* Layout Doc: Sidebar + Contenido */
+    .doc-layout {
+      display: flex;
+      max-width: 1440px;
+      margin: 0 auto;
+      min-height: calc(100vh - 65px);
+    }
+
+    /* Sidebar Índice de Navegación */
+    .doc-sidebar {
+      width: 300px;
+      flex-shrink: 0;
+      background: #ffffff;
+      border-right: 1px solid var(--borde-light);
+      position: sticky;
+      top: 61px;
+      height: calc(100vh - 61px);
+      overflow-y: auto;
+      padding: 24px 16px;
+    }
+    .sidebar-heading {
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--texto-sub);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 12px;
+      padding-left: 8px;
+    }
+    .doc-nav-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .doc-nav-link {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--texto-muted);
+      text-decoration: none;
+      transition: all 0.2s ease;
+      line-height: 1.35;
+    }
+    .doc-nav-link:hover {
+      background: #f8fafc;
+      color: var(--sena-verde-dark);
+      padding-left: 15px;
+    }
+    .doc-nav-link.active {
+      background: var(--sena-verde-bg);
+      color: var(--sena-verde-dark);
+      border-left: 3px solid var(--sena-verde);
+      font-weight: 700;
+    }
+    .doc-nav-num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--texto-dimmer);
+      width: 18px;
+      text-align: right;
+    }
+
+    /* Contenedor del Artículo */
+    .doc-main {
+      flex: 1;
+      min-width: 0;
+      padding: 40px 48px 80px;
+      max-width: 960px;
+    }
+
+    @media (max-width: 992px) {
+      .doc-sidebar { display: none; }
+      .doc-main { padding: 24px 20px; }
+    }
+
+    /* Tipografía y Elementos del Manual */
+    .doc-header-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--sena-verde-bg);
+      border: 1px solid var(--sena-verde-border);
+      padding: 5px 14px;
+      border-radius: 30px;
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--sena-verde-dark);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 16px;
+    }
+    .doc-title {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(28px, 3.5vw, 40px);
+      font-weight: 800;
+      color: var(--texto-main);
+      line-height: 1.2;
+      margin-bottom: 12px;
+      letter-spacing: -0.5px;
+    }
+    .doc-subtitle {
+      font-size: 16px;
+      color: var(--texto-muted);
+      margin-bottom: 24px;
+      line-height: 1.6;
+    }
+
+    /* Meta Caja */
+    .meta-box-panel {
+      background: #ffffff;
+      border: 1px solid var(--borde-light);
+      border-radius: var(--radius-md);
+      padding: 16px 20px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 16px;
+      margin-bottom: 40px;
+      box-shadow: var(--shadow-sm);
+    }
+    .meta-item-label {
+      font-size: 10.5px;
+      font-weight: 700;
+      color: var(--texto-sub);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 2px;
+    }
+    .meta-item-val {
+      font-size: 13.5px;
+      font-weight: 800;
+      color: var(--texto-main);
+    }
+
+    /* Secciones de Contenido */
+    .doc-section {
+      margin-bottom: 56px;
+      scroll-margin-top: 80px;
+    }
+    .sec-h2 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--texto-main);
+      margin-bottom: 16px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #f1f5f9;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .sec-h3 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--texto-main);
+      margin: 24px 0 12px;
+    }
+    p { margin-bottom: 16px; font-size: 14.5px; color: var(--texto-muted); }
+
+    /* Callouts / Alertas Didácticas */
+    .callout {
+      border-radius: var(--radius-md);
+      padding: 18px 22px;
+      margin: 20px 0;
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+      border: 1px solid;
+    }
+    .callout-icon { flex-shrink: 0; margin-top: 2px; }
+    .callout-content { font-size: 13.5px; line-height: 1.6; }
+    .callout-content strong { color: var(--texto-main); }
+    .callout.verde {
+      background: var(--sena-verde-bg);
+      border-color: var(--sena-verde-border);
+      color: #14532d;
+    }
+    .callout.naranja {
+      background: var(--sena-naranja-bg);
+      border-color: var(--sena-naranja-border);
+      color: #7c2d12;
+    }
+    .callout.tech {
+      background: var(--azul-bg);
+      border-color: var(--azul-border);
+      color: #0c4a6e;
+    }
+
+    /* Cajas de Plantillas Copiables con Botón */
+    .copy-box-container {
+      background: #ffffff;
+      border: 1.5px solid var(--borde-light);
+      border-radius: var(--radius-md);
+      margin: 20px 0;
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+    }
+    .copy-box-header {
+      background: #f8fafc;
+      border-bottom: 1px solid var(--borde-light);
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .copy-box-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--texto-main);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .btn-copy {
+      background: #ffffff;
+      border: 1px solid var(--borde-light);
+      border-radius: 6px;
+      padding: 5px 12px;
+      font-size: 11.5px;
+      font-weight: 700;
+      color: var(--sena-verde-dark);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+    }
+    .btn-copy:hover {
+      background: var(--sena-verde);
+      border-color: var(--sena-verde);
+      color: #ffffff;
+    }
+    .copy-box-body {
+      padding: 16px 18px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      color: #334155;
+      background: #ffffff;
+      white-space: pre-wrap;
+      line-height: 1.6;
+      max-height: 380px;
+      overflow-y: auto;
+    }
+
+    /* Tablas Estructuradas */
+    .table-card {
+      background: #ffffff;
+      border: 1px solid var(--borde-light);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      margin: 20px 0;
+      box-shadow: var(--shadow-sm);
+    }
+    .doc-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 13px;
+    }
+    .doc-table th {
+      background: #f8fafc;
+      padding: 12px 16px;
+      font-weight: 700;
+      color: var(--texto-main);
+      border-bottom: 2px solid var(--borde-light);
+      text-transform: uppercase;
+      font-size: 11px;
+      letter-spacing: 0.5px;
+    }
+    .doc-table td {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--borde-light);
+      color: var(--texto-muted);
+      vertical-align: middle;
+    }
+    .doc-table tr:hover { background: #f8fafc; }
+    .badge-pk {
+      background: #fef08a;
+      color: #854d0e;
+      font-weight: 800;
+      font-size: 10.5px;
+      padding: 2px 7px;
+      border-radius: 4px;
+      border: 1px solid #fde047;
+    }
+    .badge-fk {
+      background: #e0f2fe;
+      color: #0369a1;
+      font-weight: 800;
+      font-size: 10.5px;
+      padding: 2px 7px;
+      border-radius: 4px;
+      border: 1px solid #bae6fd;
+    }
+
+    /* Lista de Chequeo Interactiva */
+    .checklist-container {
+      background: #ffffff;
+      border: 1.5px solid var(--borde-light);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      margin: 24px 0;
+      box-shadow: var(--shadow-sm);
+    }
+    .checklist-progress-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+    .checklist-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 12px;
+      border-radius: 8px;
+      transition: background 0.2s ease;
+      cursor: pointer;
+      user-select: none;
+    }
+    .checklist-item:hover { background: #f8fafc; }
+    .check-custom {
+      width: 20px;
+      height: 20px;
+      border-radius: 6px;
+      border: 2px solid #cbd5e1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 2px;
+      transition: all 0.2s ease;
+    }
+    .checklist-item.checked .check-custom {
+      background: var(--sena-verde);
+      border-color: var(--sena-verde);
+      color: #fff;
+    }
+    .checklist-item.checked .checklist-text {
+      text-decoration: line-through;
+      color: var(--texto-dimmer);
+    }
+    .checklist-text {
+      font-size: 13.5px;
+      color: var(--texto-main);
+      line-height: 1.5;
+    }
+    .checklist-tip {
+      font-size: 11px;
+      color: var(--texto-sub);
+      display: block;
+      margin-top: 2px;
+    }
+
+    /* Estilos de Impresión */
+    @media print {
+      .doc-topbar, .doc-sidebar, .btn-copy, .btn-topbar { display: none !important; }
+      .doc-main { max-width: 100% !important; padding: 0 !important; }
+      body { background: #fff !important; color: #000 !important; }
+      .copy-box-container, .table-card, .checklist-container { box-shadow: none !important; border-color: #ccc !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- TOPBAR FIJO -->
+  <header class="doc-topbar">
+    <div class="topbar-left">
+      <div class="sena-badge">SENA</div>
+      <div>
+        <div class="topbar-title">ADSO 3389010 — Guía 6 | Manual de la Sesión 1</div>
+        <div class="topbar-sub">Modelo Relacional, Cardinalidad y Normalización (1FN, 2FN, 3FN)</div>
+      </div>
+    </div>
+    <div class="topbar-actions">
+      <a href="../index.html" class="btn-topbar portal">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+        Portal Guía 6
+      </a>
+      <a href="./PRESENTACION_SESION01_MODELO_RELACIONAL.html" target="_blank" class="btn-topbar pres">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+        Ver Presentación ↗
+      </a>
+      <button type="button" class="btn-topbar print" onclick="window.print()">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect width="12" height="8" x="6" y="14"/></svg>
+        Imprimir / Guardar PDF
+      </button>
+    </div>
+  </header>
+
+  <!-- CONTENEDOR DOCUMENTO -->
+  <div class="doc-layout">
+
+    <!-- SIDEBAR DE NAVEGACIÓN RÁPIDA -->
+    <aside class="doc-sidebar">
+      <div class="sidebar-heading">Índice del Manual</div>
+      <ul class="doc-nav-list">
+        <li><a href="#sec-1" class="doc-nav-link active"><span class="doc-nav-num">01</span> Ficha Técnica & RAPs</a></li>
+        <li><a href="#sec-2" class="doc-nav-link"><span class="doc-nav-num">02</span> Estructura del PDF</a></li>
+        <li><a href="#sec-3" class="doc-nav-link"><span class="doc-nav-num">03</span> Plantillas de Copia Rápida</a></li>
+        <li><a href="#sec-4" class="doc-nav-link"><span class="doc-nav-num">04</span> Normalización EV01 (1FN-3FN)</a></li>
+        <li><a href="#sec-5" class="doc-nav-link"><span class="doc-nav-num">05</span> Matriz de Cardinalidades</a></li>
+        <li><a href="#sec-6" class="doc-nav-link"><span class="doc-nav-num">06</span> Diccionario de Datos SQL</a></li>
+        <li><a href="#sec-7" class="doc-nav-link"><span class="doc-nav-num">07</span> Guía CASE Workbench (EV02)</a></li>
+        <li><a href="#sec-8" class="doc-nav-link"><span class="doc-nav-num">08</span> Conclusiones & APA 7</a></li>
+        <li><a href="#sec-9" class="doc-nav-link"><span class="doc-nav-num">09</span> Checklist Anti-Rechazo</a></li>
+      </ul>
+    </aside>
+
+    <!-- CUERPO PRINCIPAL DEL MANUAL -->
+    <main class="doc-main">
+
+      <!-- ENCABEZADO PRINCIPAL -->
+      <header style="margin-bottom:32px;">
+        <div class="doc-header-badge">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+          Material Didáctico del Aprendiz — Sesión 1
+        </div>
+        <h1 class="doc-title">Manual de Diseño Relacional & Normalización Formal (1FN a 3FN)</h1>
+        <p class="doc-subtitle">
+          Guía técnica paso a paso para el desarrollo y entrega de las evidencias <strong>GA6-220501096-AA1-EV01</strong> y <strong>GA6-220501096-AA1-EV02</strong> sobre el proyecto formativo <strong>TechStore Pro React (MERN)</strong>.
+        </p>
+
+        <!-- META PANEL -->
+        <div class="meta-box-panel">
+          <div>
+            <div class="meta-item-label">Programa</div>
+            <div class="meta-item-val">ADSO (Ficha 3389010)</div>
+          </div>
+          <div>
+            <div class="meta-item-label">Fase del Proyecto</div>
+            <div class="meta-item-val">Fase 3: Ejecución (AP6)</div>
+          </div>
+          <div>
+            <div class="meta-item-label">Competencia</div>
+            <div class="meta-item-val">220501096 — Software</div>
+          </div>
+          <div>
+            <div class="meta-item-label">Fecha Límite Zajuna</div>
+            <div class="meta-item-val" style="color:var(--sena-naranja-dark);">25 / Octubre / 2026 (Corte 1)</div>
+          </div>
+        </div>
+      </header>
+
+      <!-- ========================================================
+           SECCIÓN 1: FICHA TÉCNICA Y CONTEXTO
+           ======================================================== -->
+      <section id="sec-1" class="doc-section">
+        <h2 class="sec-h2">1. Ficha Técnica y Contexto Normativo en Guía 6</h2>
+        <p>
+          En el ciclo de vida del software, la base de datos representa el cimiento sobre el cual descansan las transacciones, la consistencia y la seguridad del sistema. Un diseño relacional deficiente ocasiona redundancias masivas, anomalías de inserción, actualización y borrado que degradan la experiencia de usuario.
+        </p>
+        <p>
+          En esta primera sesión técnica abordamos la <strong>Actividad de Aprendizaje GA6-220501096-AA1</strong> (*Crear un modelo de base de datos, con base a los requerimientos del cliente*), evaluando el <strong>RAP 220501096-02</strong> (*Construir la base de datos para el software a partir del modelo de datos*).
+        </p>
+
+        <div class="callout verde">
+          <div class="callout-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+          <div class="callout-content">
+            <strong>Las 2 Evidencias a Desarrollar:</strong><br>
+            • <strong>AA1-EV01 (Conocimiento):</strong> Resolución de problemas aplicando el modelo relacional, cardinalidad y normalización (Documento PDF con 1FN, 2FN y 3FN).<br>
+            • <strong>AA1-EV02 (Desempeño):</strong> Modelo entidad relación de caso (Diagrama E-R en herramienta CASE formal con diccionario de datos).
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================================
+           SECCIÓN 2: ESTRUCTURA DEL DOCUMENTO PDF
+           ======================================================== -->
+      <section id="sec-2" class="doc-section">
+        <h2 class="sec-h2">2. Estructura Obligatoria del Documento PDF (SENA AVA V5)</h2>
+        <p>
+          Para obtener una calificación de <strong>Aprobado (A)</strong> según la Guía de Virtualidad del SENA, cada documento entregado debe seguir rigurosamente este orden:
+        </p>
+
+        <div class="copy-box-container">
+          <div class="copy-box-header">
+            <span class="copy-box-title">Esquema de Contenido Reglamentario</span>
+            <span style="font-size:11px;color:var(--texto-sub);">Formato PDF Individual</span>
+          </div>
+          <div class="copy-box-body">📁 Estructura del Documento PDF:
+├── 1. Portada Institucional Reglamentaria (Modelo Oficial a Color)
+├── 2. Introducción Técnica Contextualizada al Proyecto
+├── 3. Objetivos (1 General y 4 Específicos con Taxonomía Técnica)
+├── 4. Desarrollo Técnico Guiado:
+│   ├── 4.1 Planteamiento del Problema (Estado 0FN No Normalizado)
+│   ├── 4.2 Detección de Anomalías Relacionales (Inserción, Modificación, Borrado)
+│   ├── 4.3 Aplicación Metódica de 1FN (Valores Atómicos & Casillero Postal)
+│   ├── 4.4 Aplicación Metódica de 2FN (Dependencias Funcionales Completas)
+│   ├── 4.5 Aplicación Metódica de 3FN (Cero Dependencias Transitivas)
+│   ├── 4.6 Matriz de Relaciones y Cardinalidades (R1 a R6)
+│   └── 4.7 Diccionario de Datos Normalizado (Tipos SQL, Claves PK/FK)
+├── 5. Diagrama Entidad-Relación Exportado en Alta Definición (Para EV02)
+├── 6. Conclusiones Técnicas Profesionales (Mínimo 3)
+└── 7. Referencias Bibliográficas (Normas APA 7ma Edición)</div>
+        </div>
+      </section>
+
+      <!-- ========================================================
+           SECCIÓN 3: PLANTILLAS DE COPIA RÁPIDA
+           ======================================================== -->
+      <section id="sec-3" class="doc-section">
+        <h2 class="sec-h2">3. Plantillas Institucionales Modelo (Copia Rápida)</h2>
+        <p>Utiliza estos bloques directamente en tu procesador de texto (Word o Google Docs):</p>
+
+        <!-- PORTADA -->
+        <h3 class="sec-h3">3.1. Portada Institucional Reglamentaria</h3>
+        <div class="copy-box-container">
+          <div class="copy-box-header">
+            <span class="copy-box-title">📄 Portada Oficial SENA CADPH Garzón</span>
+            <button class="btn-copy" onclick="copiarAlPortapapeles('codePortada', this)">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+              Copiar Portada
+            </button>
+          </div>
+          <div class="copy-box-body" id="codePortada">SERVICIO NACIONAL DE APRENDIZAJE (SENA)
+REGIONAL HUILA — CENTRO AGROEMPRESARIAL Y DESARROLLO PECUARIO DEL HUILA (GARZÓN)
+TECNOLOGÍA EN ANÁLISIS Y DESARROLLO DE SOFTWARE (ADSO)
+FICHA DE CARACTERIZACIÓN: 3389010 — MODALIDAD VIRTUAL
+
+FASE 3: EJECUCIÓN
+ACTIVIDAD DE PROYECTO 6 (AP6): Desarrollar la estructura de datos y la interfaz de usuario del software.
+
+EVIDENCIA: GA6-220501096-AA1-EV01
+RESOLUCIÓN DE PROBLEMAS APLICANDO EL MODELO RELACIONAL, CARDINALIDAD Y NORMALIZACIÓN
+[O bien: GA6-220501096-AA1-EV02 — MODELO ENTIDAD RELACIÓN DE CASO]
+
+COMPETENCIA: 220501096 — Construir la solución de software de acuerdo con el diseño y metodologías de desarrollo.
+RESULTADO DE APRENDIZAJE: 220501096-02 — Construir la base de datos para el software a partir del modelo de datos.
+
+PROYECTO FORMATIVO BASE: TechStore Pro React (E-Commerce MERN)
+
+DATOS DEL APRENDIZ:
+Nombre Completo: [NOMBRES Y APELLIDOS DEL APRENDIZ]
+Documento de Identidad: C.C. [NÚMERO DE DOCUMENTO]
+Correo Institucional: [aprendiz@soy.sena.edu.co]
+
+EQUIPO EJECUTOR DE FORMACIÓN:
+Instructor Líder: JULIÁN ANDRÉS TRUJILLO MORALES
+Rol: Instructor Técnico de Desarrollo de Software
+
+GARZÓN (HUILA) / COLOMBIA — OCTUBRE DE 2026</div>
+        </div>
+
+        <!-- INTRODUCCIÓN -->
+        <h3 class="sec-h3">3.2. Introducción Técnica Modelo</h3>
+        <div class="copy-box-container">
+          <div class="copy-box-header">
+            <span class="copy-box-title">📝 Introducción Técnica Contextualizada</span>
+            <button class="btn-copy" onclick="copiarAlPortapapeles('codeIntro', this)">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+              Copiar Introducción
+            </button>
+          </div>
+          <div class="copy-box-body" id="codeIntro">El presente informe técnico expone el proceso de diseño conceptual, lógico y estructuración relacional de la base de datos para el proyecto formativo TechStore Pro React, correspondiente a la plataforma web de comercio electrónico desarrollada durante la Fase 3: Ejecución de la Tecnología en Análisis y Desarrollo de Software (ADSO — Ficha 3389010).
+
+A través de la aplicación metódica de las reglas de normalización (Primera, Segunda y Tercera Forma Normal), se transforma un esquema plano con redundancias y riesgos de inconsistencia en una estructura de datos robusta, escalable y optimizada. Asimismo, se determinan con precisión las claves primarias (PK), claves foráneas (FK) y cardinalidades relacionales, garantizando la integridad referencial y preparando el sistema para su posterior implementación física en el motor de base de datos MySQL.</div>
+        </div>
+
+        <!-- OBJETIVOS -->
+        <h3 class="sec-h3">3.3. Objetivos Técnico-Pedagógicos</h3>
+        <div class="callout tech">
+          <div class="callout-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+          </div>
+          <div class="callout-content">
+            <strong>Objetivo General:</strong><br>
+            Diseñar la estructura lógica y conceptual de la base de datos relacional para el sistema TechStore Pro React mediante técnicas formales de normalización hasta 3FN y diagramación Entidad-Relación, garantizando la consistencia e integridad de los datos.<br><br>
+            <strong>Objetivos Específicos:</strong><br>
+            1. Identificar entidades primarias, atributos y restricciones funcionales del e-commerce.<br>
+            2. Aplicar sistemáticamente la 1FN, 2FN y 3FN para erradicar anomalías de inserción, actualización y borrado.<br>
+            3. Establecer las cardinalidades (1:1, 1:N y rotura de N:M) entre usuarios, productos, órdenes y transacciones.<br>
+            4. Construir el diagrama Entidad-Relación en una herramienta CASE formal y documentar el diccionario de datos.
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================================
+           SECCIÓN 4: NORMALIZACIÓN PASO A PASO (EV01)
+           ======================================================== -->
+      <section id="sec-4" class="doc-section">
+        <h2 class="sec-h2">4. Paso a Paso Didáctico para la Evidencia EV01</h2>
+        <p>Desarrollo guiado del caso real de facturación del e-commerce <em>TechStore Pro React</em>:</p>
+
+        <!-- 0FN -->
+        <h3 class="sec-h3">Paso 1: Estado Inicial No Normalizado (0FN)</h3>
+        <p>Una sola tabla masiva donde se almacena todo el ticket de compra:</p>
+        <div class="copy-box-container">
+          <div class="copy-box-body">Factura_Global (
+    id_factura, fecha_emision, cedula_cliente, nombre_cliente, email_cliente, 
+    telefono_cliente, direccion_cliente, ciudad_cliente, 
+    productos_comprados [id_prod, nombre_prod, categoria_prod, precio_prod, cantidad], 
+    subtotal, iva, total_factura, metodo_pago, estado_pago, referencia_transaccion
+)</div>
+        </div>
+
+        <div class="callout naranja">
+          <div class="callout-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg>
+          </div>
+          <div class="callout-content">
+            <strong>Las 3 Grandes Anomalías Relacionales Detectadas en 0FN:</strong><br>
+            • <strong>Anomalía de Inserción:</strong> No se puede registrar un cliente nuevo si aún no ha comprado nada (los campos de factura quedarían en NULL, rompiendo la PK). Tampoco se puede registrar un producto si aún no se ha vendido.<br>
+            • <strong>Anomalía de Actualización:</strong> Si un cliente cambia su celular, hay que actualizarlo en cada una de sus compras históricas. Un solo olvido causa inconsistencia en la base de datos.<br>
+            • <strong>Anomalía de Borrado:</strong> Si se cancela la única compra de un cliente, se borran accidentalmente todos sus datos de contacto del sistema.
+          </div>
+        </div>
+
+        <!-- 1FN -->
+        <h3 class="sec-h3">Paso 2: Aplicación de la Primera Forma Normal (1FN)</h3>
+        <p>
+          <strong>Analogía Didáctica:</strong> <em>"El Casillero Postal Único"</em>. No puedes meter múltiples cartas desordenadas en un solo casillero. Cada celda de la tabla debe contener exactamente <strong>un solo valor indivisible (atómico)</strong> y crecer hacia abajo (en filas), no hacia los lados en listas o campos repetitivos.
+        </p>
+        <p><strong>Transformaciones:</strong></p>
+        <ul style="margin-left:24px;margin-bottom:16px;">
+          <li>Se extrae la lista de productos comprados generando una fila por cada ítem adquirido.</li>
+          <li>Se descompone el atributo compuesto <code>nombre_cliente</code> en <code>primer_nombre</code> y <code>primer_apellido</code>.</li>
+          <li>Se define una <strong>clave primaria compuesta</strong> que identifique unívocamente cada fila: <code>(id_factura, id_producto)</code>.</li>
+        </ul>
+
+        <!-- 2FN -->
+        <h3 class="sec-h3">Paso 3: Aplicación de la Segunda Forma Normal (2FN)</h3>
+        <p>
+          <strong>Analogía Didáctica:</strong> <em>"Cada Dato con su Dueño Real"</em>. Cuando tienes una clave primaria compuesta, ningún dato descriptivo puede depender únicamente de un pedazo de la clave.
+        </p>
+        <p>
+          En <code>(id_factura, id_producto)</code>: los datos del cliente y la fecha dependen exclusivamente de la <code>id_factura</code>. La descripción y el precio del producto dependen exclusivamente de <code>id_producto</code>. Solo la cantidad comprada depende de ambos.
+        </p>
+        <p><strong>Separación en 3 tablas:</strong></p>
+        <ol style="margin-left:24px;margin-bottom:16px;">
+          <li><code>ordenes</code> (id_orden [PK], fecha_orden, cedula_cliente, nombres, email...)</li>
+          <li><code>productos</code> (id_producto [PK], nombre_producto, categoria, precio_base, stock...)</li>
+          <li><code>detalle_orden</code> (id_orden [PK, FK], id_producto [PK, FK], cantidad, precio_venta) — <em>Tabla asociativa que rompe la relación N:M.</em></li>
+        </ol>
+
+        <!-- 3FN -->
+        <h3 class="sec-h3">Paso 4: Aplicación de la Tercera Forma Normal (3FN)</h3>
+        <p>
+          <strong>Analogía Didáctica:</strong> <em>"Cero Teléfono Roto"</em>. Ningún campo no clave puede depender de otro campo no clave.
+        </p>
+        <p>
+          En la tabla <code>ordenes</code>, la dirección y teléfono dependían de la cédula del cliente (dependencia transitiva). En la tabla <code>productos</code>, la descripción de la categoría dependía del nombre de la categoría.
+        </p>
+        <p><strong>Resultado Final:</strong> Se aíslan las tablas maestras <code>usuarios</code> y <code>categorias</code>, y se crea la tabla transaccional <code>transacciones</code> para la pasarela electrónica.</p>
+      </section>
+
+      <!-- ========================================================
+           SECCIÓN 5: MATRIZ DE CARDINALIDADES
+           ======================================================== -->
+      <section id="sec-5" class="doc-section">
+        <h2 class="sec-h2">5. Matriz de Relaciones y Cardinalidades (R1 a R6)</h2>
+        <div class="table-card">
+          <table class="doc-table">
+            <thead>
+              <tr>
+                <th># Relación</th>
+                <th>Tabla Origen</th>
+                <th style="text-align:center;">Cardinalidad</th>
+                <th>Tabla Destino</th>
+                <th>Justificación de Negocio</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>R1</strong></td>
+                <td><code>usuarios</code></td>
+                <td style="text-align:center;"><strong>1 : N</strong></td>
+                <td><code>ordenes</code></td>
+                <td>Un usuario registrado puede generar cero o muchas órdenes de compra. Cada orden pertenece a un único usuario.</td>
+              </tr>
+              <tr>
+                <td><strong>R2</strong></td>
+                <td><code>categorias</code></td>
+                <td style="text-align:center;"><strong>1 : N</strong></td>
+                <td><code>productos</code></td>
+                <td>Una categoría agrupa múltiples productos. Cada producto pertenece estrictamente a una categoría principal.</td>
+              </tr>
+              <tr>
+                <td><strong>R3</strong></td>
+                <td><code>ordenes</code></td>
+                <td style="text-align:center;"><strong>1 : N</strong></td>
+                <td><code>detalle_orden</code></td>
+                <td>Una orden se compone de uno o más renglones de compra detallados.</td>
+              </tr>
+              <tr>
+                <td><strong>R4</strong></td>
+                <td><code>productos</code></td>
+                <td style="text-align:center;"><strong>1 : N</strong></td>
+                <td><code>detalle_orden</code></td>
+                <td>Un producto puede estar presente en múltiples renglones de órdenes de distintos clientes.</td>
+              </tr>
+              <tr>
+                <td><strong>R5</strong></td>
+                <td><code>ordenes</code></td>
+                <td style="text-align:center;"><strong>1 : 1</strong></td>
+                <td><code>transacciones</code></td>
+                <td>Cada orden aprobada genera una única transacción electrónica vinculada mediante <code>UNIQUE</code> en <code>id_orden</code>.</td>
+              </tr>
+              <tr>
+                <td><strong>R6 (Intermedia)</strong></td>
+                <td><code>ordenes</code></td>
+                <td style="text-align:center;"><strong>N : M</strong></td>
+                <td><code>productos</code></td>
+                <td>Relación muchos a muchos descompuesta formalmente mediante la tabla intermedia asociativa <code>detalle_orden</code>.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ========================================================
+           SECCIÓN 6: DICCIONARIO DE DATOS
+           ======================================================== -->
+      <section id="sec-6" class="doc-section">
+        <h2 class="sec-h2">6. Diccionario de Datos SQL Normalizado</h2>
+        <p>Estructura de las tablas principales que el aprendiz debe incluir en su entregable:</p>
+
+        <h3 class="sec-h3">Tabla: `usuarios`</h3>
+        <div class="table-card">
+          <table class="doc-table">
+            <thead>
+              <tr><th>Campo</th><th>Tipo SQL</th><th>Longitud</th><th>Clave</th><th>Nulo</th><th>Descripción</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><code>id_usuario</code></td><td>INT</td><td>AUTO</td><td><span class="badge-pk">PK</span></td><td>NOT NULL</td><td>Identificador único autonumérico.</td></tr>
+              <tr><td><code>numero_documento</code></td><td>VARCHAR</td><td>20</td><td>UNIQUE</td><td>NOT NULL</td><td>Documento de identidad del cliente.</td></tr>
+              <tr><td><code>nombres</code></td><td>VARCHAR</td><td>60</td><td>-</td><td>NOT NULL</td><td>Nombres completos del usuario.</td></tr>
+              <tr><td><code>email</code></td><td>VARCHAR</td><td>100</td><td>UNIQUE</td><td>NOT NULL</td><td>Correo electrónico para login del sistema.</td></tr>
+              <tr><td><code>rol</code></td><td>ENUM</td><td>-</td><td>-</td><td>NOT NULL</td><td>Perfil: 'Cliente' o 'Admin'.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 class="sec-h3">Tabla: `productos`</h3>
+        <div class="table-card">
+          <table class="doc-table">
+            <thead>
+              <tr><th>Campo</th><th>Tipo SQL</th><th>Longitud</th><th>Clave</th><th>Nulo</th><th>Descripción</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><code>id_producto</code></td><td>INT</td><td>AUTO</td><td><span class="badge-pk">PK</span></td><td>NOT NULL</td><td>Identificador único del producto.</td></tr>
+              <tr><td><code>codigo_sku</code></td><td>VARCHAR</td><td>30</td><td>UNIQUE</td><td>NOT NULL</td><td>Código único de inventario.</td></tr>
+              <tr><td><code>nombre_producto</code></td><td>VARCHAR</td><td>120</td><td>-</td><td>NOT NULL</td><td>Denominación comercial del artículo.</td></tr>
+              <tr><td><code>precio_base</code></td><td>DECIMAL</td><td>(10,2)</td><td>-</td><td>NOT NULL</td><td>Precio de venta en COP (> 0).</td></tr>
+              <tr><td><code>id_categoria</code></td><td>INT</td><td>-</td><td><span class="badge-fk">FK</span></td><td>NOT NULL</td><td>Referencia a la tabla `categorias`.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ========================================================
+           SECCIÓN 7: TUTORIAL CASE WORKBENCH (EV02)
+           ======================================================== -->
+      <section id="sec-7" class="doc-section">
+        <h2 class="sec-h2">7. Guía Tutorial para la Evidencia EV02 (Diagrama CASE)</h2>
+        <p>Pasos exactos para construir el diagrama formal en MySQL Workbench:</p>
+
+        <div style="display:flex;flex-direction:column;gap:12px;margin:16px 0;">
+          <div style="background:#fff;border:1px solid var(--borde-light);border-left:4px solid var(--sena-verde);padding:14px;border-radius:8px;">
+            <strong>Paso 1 — Iniciar Modelo EER:</strong> Abre MySQL Workbench ➔ Menú <em>File ➔ New Model</em> (o <code>Ctrl + N</code>) ➔ Doble clic en <strong>"Add Diagram"</strong> para abrir el lienzo.
+          </div>
+          <div style="background:#fff;border:1px solid var(--borde-light);border-left:4px solid var(--azul-tech);padding:14px;border-radius:8px;">
+            <strong>Paso 2 — Agregar las Tablas:</strong> Selecciona la herramienta <em>Place a New Table (T)</em> y haz clic en el lienzo. Define campos con marcas <strong>PK</strong> (Primary Key), <strong>NN</strong> (Not Null), <strong>UQ</strong> (Unique) y <strong>AI</strong> (Auto-Increment).
+          </div>
+          <div style="background:#fff;border:1px solid var(--borde-light);border-left:4px solid var(--sena-naranja);padding:14px;border-radius:8px;">
+            <strong>Paso 3 — Conectar las Relaciones:</strong> Usa la herramienta <em>1:n Non-Identifying Relationship</em> (línea punteada) para unir <code>categorias ➔ productos</code> y <code>usuarios ➔ ordenes</code>. La pata de gallo apunta a la tabla hija.
+          </div>
+          <div style="background:#fff;border:1px solid var(--borde-light);border-left:4px solid var(--purpura-pro);padding:14px;border-radius:8px;">
+            <strong>Paso 4 — Exportar en Alta Resolución:</strong> Ve a <em>File ➔ Export ➔ Export as PNG...</em> o <em>Export as PDF...</em> Asegúrate de que las líneas no se crucen sobre el texto y que todas las claves sean 100% legibles.
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================================
+           SECCIÓN 8: CONCLUSIONES Y APA
+           ======================================================== -->
+      <section id="sec-8" class="doc-section">
+        <h2 class="sec-h2">8. Modelos de Conclusiones Técnicas & Normas APA</h2>
+        <div class="copy-box-container">
+          <div class="copy-box-header">
+            <span class="copy-box-title">Modelos de Conclusiones Profesionales</span>
+            <button class="btn-copy" onclick="copiarAlPortapapeles('codeConclusiones', this)">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+              Copiar Conclusiones
+            </button>
+          </div>
+          <div class="copy-box-body" id="codeConclusiones">1. Garantía de Integridad y Eliminación de Anomalías:
+La aplicación rigurosa de las tres primeras formas normales (1FN, 2FN y 3FN) permitió transformar la estructura plana original en un modelo relacional de seis entidades coherentes. Este proceso eliminó por completo las anomalías de inserción, actualización y borrado, asegurando que los datos de clientes y productos permanezcan consistentes aun cuando se modifiquen los históricos de órdenes.
+
+2. Eficiencia en el Almacenamiento y Mantenimiento:
+Al aislar las dependencias transitivas en tablas maestras como categorias y transacciones, se reduce drásticamente el espacio de almacenamiento físico y se facilita la evolución futura del software, permitiendo incorporar nuevos métodos de pago o atributos descriptivos sin alterar las tablas centrales de facturación.
+
+3. Escalabilidad y Preparación para el Desarrollo Backend:
+El diagrama Entidad-Relación construido en la herramienta CASE constituye el plano exacto para la ejecución del script SQL DDL durante la siguiente fase de desarrollo. La definición explícita de claves foráneas y reglas de integridad en cascada garantiza la robustez del sistema frente a transacciones concurrentes en el entorno web.</div>
+        </div>
+
+        <h3 class="sec-h3">Referencias Bibliográficas (APA 7ma Edición)</h3>
+        <div class="callout tech" style="font-size:12.5px;">
+          <div class="callout-content">
+            • Elmasri, R., & Navathe, S. B. (2017). <em>Fundamentals of Database Systems</em> (7th ed.). Pearson Education.<br>
+            • Silberschatz, A., Korth, H. F., & Sudarshan, S. (2020). <em>Database System Concepts</em> (7th ed.). McGraw-Hill Education.<br>
+            • Servicio Nacional de Aprendizaje — SENA. (2024). <em>Componente Formativo: Bases de datos: SQL y NoSQL</em>. Ecosistema de Recursos Educativos Digitales.<br>
+            • MySQL Documentation Team. (2024). <em>MySQL Workbench Manual: Visual Database Design</em>. Oracle Corporation.
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================================
+           SECCIÓN 9: LISTA DE CHEQUEO ANTI-RECHAZO
+           ======================================================== -->
+      <section id="sec-9" class="doc-section">
+        <h2 class="sec-h2">9. Lista de Chequeo Anti-Rechazo (Auto-Auditoría del Aprendiz)</h2>
+        <p>Marca cada casilla antes de subir tu PDF a la plataforma Zajuna para garantizar tu calificación de <strong>Aprobado (A)</strong>:</p>
+
+        <div class="checklist-container">
+          <div class="checklist-progress-row">
+            <strong style="font-size:14px;color:var(--texto-main);">Puntos de Control de Calidad:</strong>
+            <span id="checkCounter" style="font-size:12px;font-weight:800;color:var(--sena-verde-dark);background:var(--sena-verde-bg);padding:4px 10px;border-radius:20px;border:1px solid var(--sena-verde-border);">0 de 8 Verificados</span>
+          </div>
+
+          <div class="checklist-item" onclick="toggleCheck(this)">
+            <div class="check-custom">✓</div>
+            <div>
+              <div class="checklist-text">1. Portada Institucional Reglamentaria Completa</div>
+              <span class="checklist-tip">Incluye Centro CADPH Garzón, Ficha 3389010, regional, tus datos y el nombre del instructor líder.</span>
+            </div>
+          </div>
+
+          <div class="checklist-item" onclick="toggleCheck(this)">
+            <div class="check-custom">✓</div>
+            <div>
+              <div class="checklist-text">2. Introducción y Objetivos Técnicos Redactados</div>
+              <span class="checklist-tip">Escritos en tercera persona contextualizando el proyecto formativo TechStore Pro React.</span>
+            </div>
+          </div>
+
+          <div class="checklist-item" onclick="toggleCheck(this)">
+            <div class="check-custom">✓</div>
+            <div>
+              <div class="checklist-text">3. Tabla 0FN y Justificación de las 3 Anomalías</div>
+              <span class="checklist-tip">Explica claramente qué fallaba en inserción, modificación y eliminación en el ticket plano.</span>
+            </div>
+          </div>
+
+          <div class="checklist-item" onclick="toggleCheck(this)">
+            <div class="check-custom">✓</div>
+            <div>
+              <div class="checklist-text">4. Aplicación Paso a Paso de 1FN, 2FN y 3FN</div>
+              <span class="checklist-tip">Demuestra la separación progresiva de las entidades hasta llegar a las 6 tablas normalizadas.</span>
+            </div>
+          </div>
+
+          <div class="checklist-item" onclick="toggleCheck(this)">
+            <div class="check-custom">✓</div>
+            <div>
+              <div class="checklist-text">5. Matriz de Cardinalidades y Diccionario de Datos</div>
+              <span class="checklist-tip">Identifica con precisión claves primarias (PK), foráneas (FK) y longitudes de campos SQL.</span>
+            </div>
+          </div>
+
+          <div class="checklist-item" onclick="toggleCheck(this)">
+            <div class="check-custom">✓</div>
+            <div>
+              <div class="checklist-text">6. Diagrama Entidad-Relación Nítido en CASE (EV02)</div>
+              <span class="checklist-tip">Exportado en alta resolución desde MySQL Workbench o dbdiagram.io sin textos cortados.</span>
+            </div>
+          </div>
+
+          <div class="checklist-item" onclick="toggleCheck(this)">
+            <div class="check-custom">✓</div>
+            <div>
+              <div class="checklist-text">7. Conclusiones Profesionales y Referencias APA 7</div>
+              <span class="checklist-tip">Mínimo 3 conclusiones que argumenten la integridad referencial y bibliografía académica.</span>
+            </div>
+          </div>
+
+          <div class="checklist-item" onclick="toggleCheck(this)">
+            <div class="check-custom">✓</div>
+            <div>
+              <div class="checklist-text">8. Archivo Exportado Individualmente en Formato PDF</div>
+              <span class="checklist-tip">Nombrado reglamentariamente (ej: GA6_220501096_AA1_EV01_TuNombre.pdf) y subido a su respectivo enlace en Zajuna.</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- PIE DEL MANUAL -->
+      <footer style="margin-top:60px;padding-top:20px;border-top:1px solid var(--borde-light);font-size:12px;color:var(--texto-sub);display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+        <div>Servicio Nacional de Aprendizaje (SENA) — Regional Huila | Centro CADPH Garzón</div>
+        <div>Instructor Líder: <strong>Julián Andrés Trujillo Morales</strong> 💻📚</div>
+      </footer>
+
+    </main>
+  </div>
+
+  <script>
+    // Copiar al portapapeles con feedback visual
+    function copiarAlPortapapeles(idElemento, btn) {
+      const el = document.getElementById(idElemento);
+      if (!el) return;
+      const texto = el.innerText || el.textContent;
+
+      navigator.clipboard.writeText(texto).then(() => {
+        const textoOriginal = btn.innerHTML;
+        btn.innerHTML = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> ¡Copiado con Éxito! ✓`;
+        btn.style.background = "var(--sena-verde)";
+        btn.style.borderColor = "var(--sena-verde)";
+        btn.style.color = "#ffffff";
+        setTimeout(() => {
+          btn.innerHTML = textoOriginal;
+          btn.style.background = "";
+          btn.style.borderColor = "";
+          btn.style.color = "";
+        }, 2200);
+      }).catch(err => {
+        alert("Selecciona y copia el texto manualmente.");
+      });
+    }
+
+    // Toggle Checkboxes en Checklist
+    function toggleCheck(item) {
+      item.classList.toggle('checked');
+      actualizarContadorChecklist();
+    }
+
+    function actualizarContadorChecklist() {
+      const total = document.querySelectorAll('.checklist-item').length;
+      const completados = document.querySelectorAll('.checklist-item.checked').length;
+      const counter = document.getElementById('checkCounter');
+      if (counter) {
+        counter.innerText = `${completados} de ${total} Verificados`;
+        if (completados === total) {
+          counter.style.background = "var(--sena-verde)";
+          counter.style.color = "#ffffff";
+          counter.innerText = "¡100% Listo para Subir a Zajuna! 🚀";
+        } else {
+          counter.style.background = "var(--sena-verde-bg)";
+          counter.style.color = "var(--sena-verde-dark)";
+        }
+      }
+    }
+
+    // ScrollSpy en Sidebar
+    window.addEventListener('DOMContentLoaded', () => {
+      const sections = document.querySelectorAll('section[id^="sec-"]');
+      const navLinks = document.querySelectorAll('.doc-nav-link');
+
+      window.addEventListener('scroll', () => {
+        let current = '';
+        sections.forEach(sec => {
+          const top = sec.offsetTop - 120;
+          if (window.pageYOffset >= top) {
+            current = sec.getAttribute('id');
+          }
+        });
+
+        navLinks.forEach(link => {
+          link.classList.remove('active');
+          if (link.getAttribute('href') === `#${current}`) {
+            link.classList.add('active');
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>
