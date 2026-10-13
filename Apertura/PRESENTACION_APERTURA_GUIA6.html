@@ -17,19 +17,21 @@
   --sena-verde-border: rgba(57, 169, 0, 0.28);
   
   --sena-naranja: #ff6b00;
-  --sena-naranja-dark: #cc5600;
+  --sena-naranja-dark: #c2410c;
   --sena-naranja-bg: rgba(255, 107, 0, 0.08);
   --sena-naranja-border: rgba(255, 107, 0, 0.28);
 
   --azul-tech: #0284c7;
+  --azul-tech-dark: #0369a1;
   --azul-bg: rgba(2, 132, 199, 0.08);
+  --azul-border: rgba(2, 132, 199, 0.28);
+
   --purpura: #7c3aed;
   --purpura-bg: rgba(124, 58, 237, 0.08);
 
-  /* Fondos y Cristalografía Clara */
+  /* Fondos y Superficies Claras */
   --bg-main: #f8fafc;
   --bg-card: #ffffff;
-  --bg-card-hover: #ffffff;
   --borde-light: #e2e8f0;
   --borde-focus: #cbd5e1;
   
@@ -44,1022 +46,1973 @@
   --radius-md: 12px;
 }
 
-*{margin:0;padding:0;box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{
-  font-family:'Plus Jakarta Sans',sans-serif;
-  color:var(--texto-main);
-  background-color:var(--bg-main);
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  color: var(--texto-main);
+  background-color: var(--bg-main);
   background-image: 
-    radial-gradient(circle at 5% 10%, rgba(57, 169, 0, 0.06) 0%, transparent 40%),
-    radial-gradient(circle at 95% 90%, rgba(255, 107, 0, 0.06) 0%, transparent 40%),
+    radial-gradient(circle at 5% 10%, rgba(57, 169, 0, 0.05) 0%, transparent 40%),
+    radial-gradient(circle at 95% 90%, rgba(255, 107, 0, 0.05) 0%, transparent 40%),
     radial-gradient(circle at 50% 50%, rgba(2, 132, 199, 0.03) 0%, transparent 60%);
   background-attachment: fixed;
-  line-height:1.6;
-  overflow-x:hidden;
+  line-height: 1.6;
+  overflow-x: hidden;
 }
 
-/* Barra Superior Institucional Clara */
-.topbar{
-  position:sticky;
-  top:0;
-  z-index:1000;
-  background:rgba(255, 255, 255, 0.92);
-  backdrop-filter:blur(16px);
-  -webkit-backdrop-filter:blur(16px);
-  border-bottom:2px solid var(--sena-verde);
-  padding:12px 32px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  box-shadow:0 4px 20px rgba(0,0,0,0.06);
-}
-.topbar-left{display:flex;align-items:center;gap:16px}
-.sena-badge{
-  background:linear-gradient(135deg, var(--sena-verde), var(--sena-verde-dark));
-  color:#fff;
-  font-family:'Syne',sans-serif;
-  font-weight:800;
-  font-size:16px;
-  padding:6px 16px;
-  border-radius:8px;
-  letter-spacing:1px;
-  box-shadow:0 4px 12px var(--sena-verde-bg);
-}
-.topbar-brand{font-family:'Outfit',sans-serif;font-size:15px;font-weight:700;color:var(--texto-main);letter-spacing:-0.3px}
-.topbar-sub{font-size:12px;color:var(--sena-verde-dark);font-weight:700}
-.topbar-nav{display:flex;gap:4px;align-items:center}
-.topbar-nav a{
-  color:var(--texto-muted);
-  text-decoration:none;
-  font-size:12px;
-  font-weight:600;
-  padding:6px 14px;
-  border-radius:20px;
-  border:1px solid transparent;
-  transition:all .25s ease;
-  white-space:nowrap;
-}
-.topbar-nav a:hover, .topbar-nav a.active{
-  color:var(--sena-verde-dark);
-  border-color:var(--sena-verde-border);
-  background:var(--sena-verde-bg);
+/* ==========================================================
+   SIDEBAR LATERAL OBLIGATORIO (280px)
+   ========================================================== */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 280px;
+  background: rgba(255, 255, 255, 0.98);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-right: 1px solid var(--borde-light);
+  display: flex;
+  flex-direction: column;
+  z-index: 1000;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 4px 0 24px rgba(15, 23, 42, 0.04);
 }
 
-.btn-presentacion{
-  background:linear-gradient(135deg, var(--sena-verde), var(--sena-verde-dark));
-  color:#fff;
-  border:none;
-  padding:9px 20px;
-  border-radius:20px;
-  font-size:12px;
-  font-weight:700;
-  cursor:pointer;
-  display:flex;
-  align-items:center;
-  gap:8px;
-  transition:all 0.3s ease;
-  margin-left:12px;
-  text-decoration:none;
-  box-shadow:0 4px 14px rgba(57,169,0,0.25);
-}
-.btn-presentacion:hover{
-  transform:translateY(-2px);
-  box-shadow:0 8px 20px rgba(57,169,0,0.35);
+.sidebar.collapsed {
+  transform: translateX(-100%);
 }
 
-/* Indicador de Progreso Superior */
-.progress-bar{
-  position:fixed;
-  top:0;
-  left:0;
-  height:4px;
-  background:linear-gradient(90deg, var(--sena-verde), var(--sena-naranja), var(--azul-tech));
-  z-index:1001;
-  width:0%;
-  transition:width 0.2s ease;
+.sidebar-header {
+  padding: 18px 16px;
+  border-bottom: 1px solid var(--borde-light);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #ffffff;
 }
 
-/* Layout Diapositivas */
-.slide{
-  min-height:calc(100vh - 65px);
-  padding:80px 40px 60px;
-  position:relative;
-  scroll-margin-top:65px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  border-bottom:1px solid var(--borde-light);
-}
-.slide-inner{max-width:1240px;width:100%;margin:0 auto}
-
-.slide-header-badge{
-  display:inline-flex;
-  align-items:center;
-  gap:8px;
-  background:var(--sena-verde-bg);
-  border:1px solid var(--sena-verde-border);
-  padding:6px 16px;
-  border-radius:30px;
-  font-size:12px;
-  font-weight:700;
-  color:var(--sena-verde-dark);
-  letter-spacing:1px;
-  text-transform:uppercase;
-  margin-bottom:16px;
-}
-.slide-header-badge.naranja{
-  background:var(--sena-naranja-bg);
-  border-color:var(--sena-naranja-border);
-  color:var(--sena-naranja-dark);
-}
-.slide-header-badge.tech{
-  background:var(--azul-bg);
-  border-color:rgba(2, 132, 199, 0.3);
-  color:var(--azul-tech);
-}
-.slide-header-badge .dot{width:8px;height:8px;background:currentColor;border-radius:50%}
-
-.slide-num-indicator{
-  position:absolute;
-  top:30px;
-  right:40px;
-  font-family:'Syne',sans-serif;
-  font-size:26px;
-  font-weight:800;
-  color:#cbd5e1;
-  letter-spacing:-1px;
+.sidebar-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
-/* Estilos Portada Hero */
-.hero-wrapper{
-  display:grid;
-  grid-template-columns:1.2fr 0.8fr;
-  gap:40px;
-  align-items:center;
-}
-.hero-title{
-  font-family:'Syne',sans-serif;
-  font-size:clamp(36px, 5vw, 60px);
-  font-weight:800;
-  line-height:1.08;
-  margin-bottom:24px;
-  color:var(--texto-main);
-  letter-spacing:-1px;
-}
-.hero-title span.grad-verde{
-  color:var(--sena-verde-dark);
-  background:linear-gradient(135deg, var(--sena-verde), var(--sena-verde-dark));
-  -webkit-background-clip:text;
-  background-clip:text;
-  -webkit-text-fill-color:transparent;
-}
-.hero-title span.grad-naranja{
-  color:var(--sena-naranja);
-  background:linear-gradient(135deg, var(--sena-naranja), var(--sena-naranja-dark));
-  -webkit-background-clip:text;
-  background-clip:text;
-  -webkit-text-fill-color:transparent;
-}
-.hero-subtitle{
-  font-size:clamp(16px, 1.8vw, 19px);
-  color:var(--texto-muted);
-  line-height:1.65;
-  margin-bottom:36px;
-  font-weight:400;
-}
-.hero-card-widget{
-  background:var(--bg-card);
-  border:1.5px solid var(--borde-light);
-  border-radius:var(--radius-xl);
-  padding:32px;
-  box-shadow:var(--shadow-card);
-  position:relative;
-  overflow:hidden;
-}
-.hero-card-widget::before{
-  content:'';
-  position:absolute;
-  top:0;
-  left:0;
-  right:0;
-  height:6px;
-  background:linear-gradient(90deg, var(--sena-verde), var(--sena-naranja));
-}
-.hero-meta-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:16px;
-}
-.meta-box{
-  background:#f8fafc;
-  border:1px solid var(--borde-light);
-  padding:16px 20px;
-  border-radius:var(--radius-md);
-}
-.meta-box-title{font-size:11px;font-weight:700;color:var(--texto-sub);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
-.meta-box-val{font-size:15px;font-weight:800;color:var(--texto-main)}
-.meta-box-sub{font-size:12px;color:var(--sena-verde-dark);font-weight:600;margin-top:2px}
-
-/* Grid & Cards Premium Claras */
-.sec-title{
-  font-family:'Syne',sans-serif;
-  font-size:clamp(28px, 3.5vw, 40px);
-  font-weight:800;
-  color:var(--texto-main);
-  margin-bottom:12px;
-  line-height:1.15;
-}
-.sec-desc{
-  font-size:16px;
-  color:var(--texto-muted);
-  max-width:850px;
-  margin-bottom:40px;
+.sidebar-logo {
+  background: linear-gradient(135deg, var(--sena-verde), var(--sena-verde-dark));
+  color: #fff;
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 13.5px;
+  padding: 5px 9px;
+  border-radius: 7px;
+  letter-spacing: 0.5px;
 }
 
-.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
-.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:24px}
-
-.card-premium{
-  background:var(--bg-card);
-  border:1.5px solid var(--borde-light);
-  border-radius:var(--radius-lg);
-  padding:28px;
-  transition:all 0.3s ease;
-  position:relative;
-  box-shadow:var(--shadow-card);
-  display:flex;
-  flex-direction:column;
-  justify-content:space-between;
-}
-.card-premium:hover{
-  transform:translateY(-5px);
-  border-color:var(--sena-verde-border);
-  box-shadow:var(--shadow-hover);
-}
-.card-premium.highlight-verde{border-top:5px solid var(--sena-verde)}
-.card-premium.highlight-naranja{border-top:5px solid var(--sena-naranja)}
-.card-premium.highlight-tech{border-top:5px solid var(--azul-tech)}
-
-.card-icon{
-  width:48px;
-  height:48px;
-  border-radius:14px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:22px;
-  margin-bottom:20px;
-  background:#f1f5f9;
-  border:1px solid var(--borde-light);
-}
-.card-title{font-family:'Outfit',sans-serif;font-size:20px;font-weight:700;color:var(--texto-main);margin-bottom:10px}
-.card-text{font-size:14px;color:var(--texto-muted);line-height:1.6;margin-bottom:16px}
-
-.list-premium{list-style:none;margin-top:12px}
-.list-premium li{
-  font-size:13.5px;
-  color:var(--texto-main);
-  padding:6px 0;
-  display:flex;
-  align-items:flex-start;
-  gap:10px;
-}
-.list-premium li::before{
-  content:'✓';
-  color:var(--sena-verde);
-  font-weight:900;
-  font-size:14px;
+.sidebar-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 13px;
+  font-weight: 800;
+  color: #0f172a;
+  line-height: 1.2;
 }
 
-/* Timeline Bloques Temáticos */
-.bloques-container{
-  display:grid;
-  grid-template-columns:repeat(3, 1fr);
-  gap:24px;
+.sidebar-sub {
+  font-size: 10px;
+  color: #64748b;
+  font-weight: 600;
 }
-.bloque-card{
-  background:var(--bg-card);
-  border:1.5px solid var(--borde-light);
-  border-radius:var(--radius-xl);
-  padding:32px 26px;
-  position:relative;
-  transition:all 0.3s ease;
-  box-shadow:var(--shadow-card);
-}
-.bloque-card:hover{
-  transform:translateY(-5px);
-  border-color:var(--sena-verde-border);
-  box-shadow:var(--shadow-hover);
-}
-.bloque-tag{
-  font-size:11px;
-  font-weight:800;
-  text-transform:uppercase;
-  letter-spacing:1.5px;
-  padding:4px 12px;
-  border-radius:20px;
-  display:inline-block;
-  margin-bottom:16px;
-}
-.bloque-tag.b1{background:var(--sena-verde-bg);color:var(--sena-verde-dark);border:1px solid var(--sena-verde-border)}
-.bloque-tag.b2{background:var(--sena-naranja-bg);color:var(--sena-naranja-dark);border:1px solid var(--sena-naranja-border)}
-.bloque-tag.b3{background:var(--azul-bg);color:var(--azul-tech);border:1px solid rgba(2, 132, 199, 0.3)}
 
-.bloque-num{font-family:'Syne',sans-serif;font-size:36px;font-weight:800;color:#cbd5e1;position:absolute;top:24px;right:24px}
-.bloque-title{font-size:20px;font-weight:700;color:var(--texto-main);margin-bottom:12px}
-.bloque-desc{font-size:13.5px;color:var(--texto-muted);line-height:1.6;margin-bottom:20px}
+.sidebar-toggle-btn {
+  background: transparent;
+  border: 1px solid transparent;
+  color: #64748b;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
 
-/* Tabla Matriz Sincronizada */
-.table-wrapper{
-  background:var(--bg-card);
-  border:1.5px solid var(--borde-light);
-  border-radius:var(--radius-lg);
-  overflow:hidden;
-  box-shadow:var(--shadow-card);
+.sidebar-toggle-btn:hover {
+  background: #f1f5f9;
+  color: #0f172a;
+  border-color: #e2e8f0;
 }
-.matriz-table{width:100%;border-collapse:collapse;text-align:left}
-.matriz-table th{
-  background:#f1f5f9;
-  font-family:'Outfit',sans-serif;
-  font-size:12.5px;
-  font-weight:700;
-  color:var(--texto-main);
-  text-transform:uppercase;
-  letter-spacing:1px;
-  padding:16px 20px;
-  border-bottom:2px solid var(--borde-light);
+
+/* Botón Flotante Reactivo */
+.floating-sidebar-toggle {
+  position: fixed;
+  top: 18px;
+  left: 20px;
+  z-index: 999;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  color: #1e293b;
+  height: 38px;
+  padding: 0 14px 0 10px;
+  border-radius: 10px;
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.08), 0 2px 4px rgba(0, 0, 0, 0.04);
+  display: none;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-family: 'Outfit', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
-.matriz-table td{
-  padding:16px 20px;
-  border-bottom:1px solid var(--borde-light);
-  font-size:13.5px;
-  color:var(--texto-main);
-  vertical-align:middle;
+
+.floating-sidebar-toggle:hover {
+  background: #ffffff;
+  color: var(--sena-verde-dark);
+  border-color: var(--sena-verde);
+  box-shadow: 0 8px 22px rgba(57, 169, 0, 0.2);
+  transform: translateY(-1px);
 }
-.matriz-table tr:hover{background:#f8fafc}
-.sesion-badge{
-  font-family:'JetBrains Mono',monospace;
-  font-size:12px;
-  font-weight:700;
-  background:var(--sena-verde-bg);
-  color:var(--sena-verde-dark);
-  padding:4px 10px;
-  border-radius:6px;
-  border:1px solid var(--sena-verde-border);
-  display:inline-block;
-  white-space:nowrap;
+
+.sidebar.collapsed ~ .floating-sidebar-toggle,
+.floating-sidebar-toggle.visible {
+  display: inline-flex !important;
+  animation: fadeInToggle 0.25s ease-out forwards;
 }
-.evidencia-tag{
-  display:inline-block;
-  font-size:11.5px;
-  font-weight:600;
-  background:#f1f5f9;
-  border:1px solid var(--borde-light);
-  padding:3px 8px;
-  border-radius:4px;
-  margin:2px 2px;
-  color:var(--texto-muted);
-  white-space:nowrap;
+
+@keyframes fadeInToggle {
+  from { opacity: 0; transform: translateX(-12px); }
+  to { opacity: 1; transform: translateX(0); }
 }
-.deadline-badge{
-  font-size:12px;
-  font-weight:700;
-  color:#b91c1c;
-  background:#fef2f2;
-  padding:4px 10px;
-  border-radius:6px;
-  border:1px solid #fca5a5;
-  white-space:nowrap;
+
+.sidebar-scroll {
+  flex: 1;
+  overflow-y: auto;
+  padding: 14px 10px;
 }
-.deadline-badge.corte1{
-  color:var(--sena-naranja-dark);
-  background:var(--sena-naranja-bg);
-  border-color:var(--sena-naranja-border);
+
+.sidebar-scroll::-webkit-scrollbar {
+  width: 4px;
 }
-.deadline-badge.corte2{
-  color:var(--sena-verde-dark);
-  background:var(--sena-verde-bg);
-  border-color:var(--sena-verde-border);
+
+.sidebar-scroll::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
 }
-.matriz-table td.col-nowrap, .matriz-table th.col-nowrap{
-  white-space:nowrap;
+
+.nav-group {
+  margin-bottom: 18px;
+}
+
+.nav-group-title {
+  font-size: 9.5px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: #94a3b8;
+  padding: 0 10px 6px 10px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 7px 10px;
+  border-radius: 8px;
+  color: #475569;
+  text-decoration: none;
+  font-size: 11.8px;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  margin-bottom: 2px;
+  position: relative;
+}
+
+.nav-link:hover {
+  background: #f1f5f9;
+  color: #0f172a;
+}
+
+.nav-link.active {
+  background: rgba(57, 169, 0, 0.1);
+  color: var(--sena-verde-dark);
+  font-weight: 700;
+}
+
+.nav-link.active::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 6px;
+  bottom: 6px;
+  width: 3.5px;
+  background: var(--sena-verde);
+  border-radius: 0 4px 4px 0;
+}
+
+.nav-link-num {
+  font-size: 10px;
+  font-weight: 700;
+  color: #94a3b8;
+  min-width: 15px;
+}
+
+.nav-link.active .nav-link-num {
+  color: var(--sena-verde);
+}
+
+.nav-link-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #64748b;
+  flex-shrink: 0;
+}
+
+.nav-link:hover .nav-link-icon {
+  color: #0f172a;
+}
+
+.nav-link.active .nav-link-icon {
+  color: var(--sena-verde-dark);
+}
+
+.nav-link-text {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sidebar-footer {
+  padding: 12px 14px;
+  border-top: 1px solid #e2e8f0;
+  background: #f8fafc;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.sidebar-corte-badge {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(255, 107, 0, 0.08);
+  border: 1px solid rgba(255, 107, 0, 0.22);
+  padding: 6px 10px;
+  border-radius: 8px;
+  font-size: 10.5px;
+  font-weight: 700;
+  color: var(--sena-naranja-dark);
+}
+
+.sidebar-link-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  padding: 6px 10px;
+  border-radius: 8px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #334155;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.sidebar-link-btn:hover {
+  background: #f1f5f9;
+  border-color: #94a3b8;
+  color: #0f172a;
+}
+
+/* ==========================================================
+   CONTENIDO PRINCIPAL ADAPTABLE (.main-content)
+   ========================================================== */
+.main-content {
+  margin-left: 280px;
+  min-height: 100vh;
+  transition: margin-left 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar.collapsed ~ .main-content {
+  margin-left: 0;
+}
+
+/* Barra Superior de Estado y Controles */
+.content-topbar {
+  position: sticky;
+  top: 0;
+  z-index: 900;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--borde-light);
+  padding: 10px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.topbar-breadcrumbs {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--texto-sub);
+  font-weight: 600;
+}
+
+.topbar-breadcrumbs .sep { color: #cbd5e1; }
+.topbar-breadcrumbs .current { color: var(--sena-verde-dark); font-weight: 700; }
+
+.topbar-tools {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.topbar-tool-btn {
+  background: #ffffff;
+  border: 1px solid var(--borde-light);
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--texto-muted);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.topbar-tool-btn:hover {
+  background: #f8fafc;
+  color: var(--texto-main);
+  border-color: #cbd5e1;
+}
+
+/* Barra de Progreso Global */
+.progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--sena-verde), var(--sena-naranja));
+  width: 0%;
+  z-index: 2000;
+  transition: width 0.1s ease;
+}
+
+/* ==========================================================
+   ESTRUCTURA DE CADA SLIDE
+   ========================================================== */
+.slide {
+  min-height: 100vh;
+  padding: 40px 48px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border-bottom: 1px dashed #e2e8f0;
+  position: relative;
+}
+
+.slide-inner {
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.slide-num-indicator {
+  position: absolute;
+  top: 24px;
+  right: 48px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--texto-sub);
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid var(--borde-light);
+  padding: 4px 10px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Headers y Tipografía */
+.slide-header-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--sena-verde-bg);
+  border: 1px solid var(--sena-verde-border);
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--sena-verde-dark);
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  margin-bottom: 14px;
+}
+
+.slide-header-badge.tech {
+  background: var(--azul-bg);
+  border-color: var(--azul-border);
+  color: var(--azul-tech);
+}
+
+.slide-header-badge.naranja {
+  background: var(--sena-naranja-bg);
+  border-color: var(--sena-naranja-border);
+  color: var(--sena-naranja-dark);
+}
+
+.slide-header-badge .dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.sec-title {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(24px, 2.5vw, 34px);
+  font-weight: 800;
+  color: var(--texto-main);
+  line-height: 1.25;
+  margin-bottom: 10px;
+  letter-spacing: -0.5px;
+}
+
+.sec-desc {
+  font-size: 15px;
+  color: var(--texto-muted);
+  max-width: 860px;
+  line-height: 1.6;
+  margin-bottom: 28px;
+}
+
+.grad-verde {
+  background: linear-gradient(135deg, var(--sena-verde), var(--sena-verde-dark));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.grad-naranja {
+  background: linear-gradient(135deg, var(--sena-naranja), #ea580c);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.grad-tech {
+  background: linear-gradient(135deg, var(--azul-tech), #1d4ed8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* ==========================================================
+   COMPONENTES Y TARJETAS PREMIUM
+   ========================================================== */
+.card-premium {
+  background: linear-gradient(175deg, #ffffff 0%, #fbfcfe 65%, #f8fafc 100%);
+  border: 1px solid var(--borde-light);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  box-shadow: var(--shadow-card);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.card-premium:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-hover);
+  border-color: rgba(57, 169, 0, 0.3);
+}
+
+.card-premium::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3.5px;
+  background: #cbd5e1;
+}
+
+.card-premium.top-verde::before { background: linear-gradient(90deg, var(--sena-verde), var(--sena-verde-dark)); }
+.card-premium.top-naranja::before { background: linear-gradient(90deg, var(--sena-naranja), #ea580c); }
+.card-premium.top-tech::before { background: linear-gradient(90deg, var(--azul-tech), #1d4ed8); }
+
+.card-header-flex {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.card-icon-badge {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f1f5f9;
+  color: var(--texto-main);
+  flex-shrink: 0;
+}
+
+.card-icon-badge.verde { background: var(--sena-verde-bg); color: var(--sena-verde-dark); }
+.card-icon-badge.naranja { background: var(--sena-naranja-bg); color: var(--sena-naranja-dark); }
+.card-icon-badge.tech { background: var(--azul-bg); color: var(--azul-tech); }
+
+.card-pill-tag {
+  font-size: 10.5px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  padding: 3px 9px;
+  border-radius: 14px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.card-pill-tag.verde { background: var(--sena-verde-bg); color: var(--sena-verde-dark); border: 1px solid var(--sena-verde-border); }
+.card-pill-tag.naranja { background: var(--sena-naranja-bg); color: var(--sena-naranja-dark); border: 1px solid var(--sena-naranja-border); }
+.card-pill-tag.tech { background: var(--azul-bg); color: var(--azul-tech); border: 1px solid var(--azul-border); }
+
+.card-title {
+  font-family: 'Outfit', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--texto-main);
+  line-height: 1.3;
+  margin-bottom: 8px;
+}
+
+.card-text {
+  font-size: 13.5px;
+  color: var(--texto-muted);
+  line-height: 1.55;
+  margin-bottom: 16px;
+}
+
+.list-premium {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--texto-muted);
+}
+
+.list-premium li {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.list-premium li svg {
+  flex-shrink: 0;
+  margin-top: 3px;
+}
+
+/* Grillas */
+.grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+.grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
+
+/* Hero Portada */
+.hero-wrapper {
+  display: grid;
+  grid-template-columns: 1.25fr 0.95fr;
+  gap: 40px;
+  align-items: center;
+}
+
+.hero-title {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(30px, 3.8vw, 46px);
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -0.8px;
+  color: var(--texto-main);
+  margin-bottom: 16px;
+}
+
+.hero-subtitle {
+  font-size: 16px;
+  color: var(--texto-muted);
+  line-height: 1.6;
+  margin-bottom: 28px;
+}
+
+.hero-card-widget {
+  background: #ffffff;
+  border-radius: var(--radius-xl);
+  padding: 30px;
+  border: 1px solid var(--borde-light);
+  box-shadow: 0 15px 35px rgba(15, 23, 42, 0.06);
+}
+
+.hero-meta-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.meta-box {
+  background: #f8fafc;
+  border: 1px solid var(--borde-light);
+  border-radius: var(--radius-md);
+  padding: 14px 16px;
+}
+
+.meta-box-title {
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: var(--texto-sub);
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+}
+
+.meta-box-val {
+  font-family: 'Outfit', sans-serif;
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--texto-main);
+  line-height: 1.2;
+}
+
+.meta-box-sub {
+  font-size: 11px;
+  color: var(--texto-sub);
+  margin-top: 4px;
 }
 
 /* Callout Box Institucional */
-.callout-box{
-  background:var(--sena-verde-bg);
-  border:1.5px solid var(--sena-verde-border);
-  border-radius:var(--radius-lg);
-  padding:24px 30px;
-  margin-top:28px;
-  display:flex;
-  align-items:center;
-  gap:24px;
+.callout-box {
+  background: var(--sena-verde-bg);
+  border: 1.5px solid var(--sena-verde-border);
+  border-radius: var(--radius-lg);
+  padding: 20px 24px;
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  margin-top: 24px;
 }
-.callout-icon{font-size:36px;flex-shrink:0}
-.callout-content h4{font-size:16px;font-weight:700;color:var(--sena-verde-dark);margin-bottom:4px}
-.callout-content p{font-size:14px;color:var(--texto-main)}
 
-/* Controles Flotantes para Navegación */
-.nav-controls{
-  position:fixed;
-  bottom:30px;
-  right:40px;
-  z-index:999;
-  display:flex;
-  gap:10px;
-  background:rgba(255, 255, 255, 0.95);
-  padding:8px;
-  border-radius:30px;
-  border:1.5px solid var(--borde-light);
-  backdrop-filter:blur(16px);
-  box-shadow:0 10px 25px rgba(0,0,0,0.1);
+.callout-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background: #ffffff;
+  border: 1px solid var(--sena-verde-border);
+  color: var(--sena-verde-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
 }
-.btn-nav-control{
-  width:40px;
-  height:40px;
-  border-radius:50%;
-  border:none;
-  background:#f1f5f9;
-  color:var(--texto-main);
-  font-size:16px;
-  cursor:pointer;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  transition:all 0.2s ease;
+
+.callout-content h4 {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--sena-verde-dark);
+  margin-bottom: 4px;
 }
-.btn-nav-control:hover{
-  background:var(--sena-verde);
-  color:#fff;
-  box-shadow:0 4px 12px var(--sena-verde-bg);
+
+.callout-content p {
+  font-size: 13.5px;
+  color: var(--texto-main);
+  line-height: 1.5;
+}
+
+/* Tabla de Matriz de Sesiones */
+.table-wrapper {
+  background: #ffffff;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--borde-light);
+  overflow-x: auto;
+  box-shadow: var(--shadow-card);
+}
+
+.matriz-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 13px;
+}
+
+.matriz-table th {
+  background: #f8fafc;
+  padding: 12px 18px;
+  font-weight: 700;
+  font-size: 11.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: var(--texto-sub);
+  border-bottom: 1px solid var(--borde-light);
+}
+
+.matriz-table td {
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--borde-light);
+  vertical-align: middle;
+}
+
+.matriz-table tr:hover {
+  background: #fbfcfe;
+}
+
+.sesion-badge {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11.5px;
+  font-weight: 700;
+  background: #f1f5f9;
+  color: var(--texto-main);
+  padding: 4px 10px;
+  border-radius: 6px;
+  border: 1px solid var(--borde-light);
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  white-space: nowrap;
+}
+
+.evidencia-tag {
+  display: inline-block;
+  font-size: 11.5px;
+  font-weight: 600;
+  background: #f1f5f9;
+  border: 1px solid var(--borde-light);
+  padding: 3px 8px;
+  border-radius: 4px;
+  margin: 2px;
+  color: var(--texto-muted);
+  white-space: nowrap;
+}
+
+.deadline-badge {
+  font-size: 11.5px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 6px;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.deadline-badge.corte1 {
+  color: var(--sena-naranja-dark);
+  background: var(--sena-naranja-bg);
+  border: 1px solid var(--sena-naranja-border);
+}
+
+.deadline-badge.corte2 {
+  color: var(--sena-verde-dark);
+  background: var(--sena-verde-bg);
+  border: 1px solid var(--sena-verde-border);
+}
+
+/* Botones Principales */
+.btn-action-pro {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  border: none;
+}
+
+.btn-action-pro.verde {
+  background: linear-gradient(135deg, var(--sena-verde), var(--sena-verde-dark));
+  color: #fff;
+  box-shadow: 0 4px 14px var(--sena-verde-bg);
+}
+
+.btn-action-pro.verde:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(57, 169, 0, 0.25);
+}
+
+.btn-action-pro.tech {
+  background: linear-gradient(135deg, var(--azul-tech), var(--azul-tech-dark));
+  color: #fff;
+  box-shadow: 0 4px 14px rgba(2, 132, 199, 0.25);
+}
+
+.btn-action-pro.tech:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(2, 132, 199, 0.35);
+}
+
+.btn-action-pro.neutral {
+  background: #ffffff;
+  color: var(--texto-main);
+  border: 1px solid var(--borde-light);
+}
+
+.btn-action-pro.neutral:hover {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+}
+
+/* Checklist Interactivo */
+.checklist-card {
+  background: #ffffff;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--borde-light);
+  padding: 24px;
+  box-shadow: var(--shadow-card);
+}
+
+.checklist-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid #f1f5f9;
+  cursor: pointer;
+}
+
+.checklist-item:last-child { border-bottom: none; }
+
+.checklist-checkbox {
+  width: 20px;
+  height: 20px;
+  border-radius: 6px;
+  border: 2px solid #cbd5e1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 2px;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+  background: #ffffff;
+}
+
+.checklist-item.checked .checklist-checkbox {
+  background: var(--sena-verde);
+  border-color: var(--sena-verde);
+  color: #ffffff;
+}
+
+.checklist-item.checked .checklist-text h5 {
+  text-decoration: line-through;
+  color: #94a3b8;
+}
+
+.checklist-text h5 {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--texto-main);
+  margin-bottom: 3px;
+  transition: color 0.2s;
+}
+
+.checklist-text p {
+  font-size: 12.5px;
+  color: var(--texto-sub);
+  line-height: 1.4;
+}
+
+/* Toast de Notificación */
+.toast-notice {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background: #0f172a;
+  color: #ffffff;
+  padding: 12px 20px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+  transform: translateY(100px);
+  opacity: 0;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 3000;
+}
+
+.toast-notice.show {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+/* Responsividad */
+@media (max-width: 1024px) {
+  .hero-wrapper { grid-template-columns: 1fr; gap: 30px; }
+  .grid-3 { grid-template-columns: repeat(2, 1fr); }
+  .grid-4 { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 768px) {
+  .sidebar { transform: translateX(-100%); }
+  .floating-sidebar-toggle { display: inline-flex !important; }
+  .main-content { margin-left: 0; }
+  .slide { padding: 30px 20px; }
+  .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+  .content-topbar { padding: 10px 16px; }
 }
 </style>
 </head>
 <body>
 
-<!-- Progress Bar Superior -->
+<!-- BARRA DE PROGRESO SUPERIOR -->
 <div class="progress-bar" id="progressBar"></div>
 
-<!-- Topbar Principal Glassmorphic Clara -->
-<header class="topbar">
-  <div class="topbar-left">
-    <div class="sena-badge">SENA</div>
-    <div>
-      <div class="topbar-brand">ADSO — Ficha 3389010 (Virtual)</div>
-      <div class="topbar-sub">Fase 3: Ejecución | Guía 6 (GA6-220501096)</div>
-    </div>
-  </div>
-  <nav class="topbar-nav">
-    <a href="#slide-1" class="active">1. Inicio</a>
-    <a href="#slide-2">2. Ficha Técnica</a>
-    <a href="#slide-3">3. Competencia & RAPs</a>
-    <a href="#slide-4">4. Bloques Lógicos</a>
-    <a href="#slide-5">5. Cortes Zajuna</a>
-    <a href="#slide-6">6. Cronograma & Sesiones</a>
-    <a href="#slide-7">7. Proyecto Base</a>
-    <a href="#slide-8">8. Reglas & Éxito</a>
-  </nav>
-  <button class="btn-presentacion" onclick="toggleFullscreen()">
-    <span>📺</span> Pantalla Completa
-  </button>
-</header>
-
-<!-- SLIDE 1: PORTADA HERO -->
-<section class="slide" id="slide-1">
-  <div class="slide-num-indicator">01 / 08</div>
-  <div class="slide-inner">
-    <div class="hero-wrapper">
+<!-- ==========================================================
+     SIDEBAR LATERAL OBLIGATORIO (280px)
+     ========================================================== -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <div class="sidebar-brand">
+      <div class="sidebar-logo">SENA</div>
       <div>
-        <div class="slide-header-badge">
-          <span class="dot"></span> APERTURA GUÍA DE APRENDIZAJE 6 (AP6)
-        </div>
-        <h1 class="hero-title">
-          Construcción de <span class="grad-verde">Bases de Datos</span> & <span class="grad-naranja">Front-End Web</span>
-        </h1>
-        <p class="hero-subtitle">
-          Estructura pedagógica, competencias técnicas, matriz de sesiones y plan de ruta para el desarrollo de la solución de software en la Fase 3: Ejecución.
-        </p>
-        <div style="display:flex;gap:14px;flex-wrap:wrap">
-          <a href="#slide-2" class="btn-presentacion" style="font-size:14px;padding:12px 28px">
-            Explorar Ruta de Aprendizaje →
-          </a>
-          <a href="https://julianon2.github.io/seguimiento-adso-3389010/" target="_blank" class="btn-presentacion" style="font-size:14px;padding:12px 24px;background:linear-gradient(135deg, #0284c7, #0369a1);box-shadow:0 4px 14px rgba(2, 132, 199, 0.3)">
-            📊 Dashboard de Seguimiento ↗
-          </a>
-        </div>
+        <div class="sidebar-title">ADSO 3389010</div>
+        <div class="sidebar-sub">Apertura Guía 6</div>
       </div>
+    </div>
+    <button class="sidebar-toggle-btn" onclick="toggleSidebar()" title="Colapsar Menú Lateral">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <rect width="18" height="18" x="3" y="3" rx="2" ry="2"/>
+        <line x1="9" x2="9" y1="3" y2="21"/>
+        <path d="m14 9-3 3 3 3"/>
+      </svg>
+    </button>
+  </div>
 
-      <div class="hero-card-widget">
-        <div style="font-family:'Syne',sans-serif;font-size:18px;font-weight:800;color:var(--texto-main);margin-bottom:20px;display:flex;align-items:center;justify-content:space-between">
-          <span>DATOS DE LA GUÍA 6</span>
-          <span style="font-size:11px;color:var(--sena-verde-dark);background:var(--sena-verde-bg);padding:4px 10px;border-radius:12px;border:1px solid var(--sena-verde-border);font-weight:800">AP6 EXECUTION</span>
-        </div>
-        <div class="hero-meta-grid">
-          <div class="meta-box">
-            <div class="meta-box-title">Competencia</div>
-            <div class="meta-box-val">220501096</div>
-            <div class="meta-box-sub">Desarrollo Software</div>
+  <div class="sidebar-scroll">
+    <!-- BLOQUE 1: ENCUADRE INSTITUCIONAL -->
+    <div class="nav-group">
+      <div class="nav-group-title">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2 2z"/></svg>
+        <span>Bloque 1: Apertura & RAPs</span>
+      </div>
+      <a href="#slide-1" class="nav-link active" data-slide="1">
+        <span class="nav-link-num">01</span>
+        <span class="nav-link-icon">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2 2z"/></svg>
+        </span>
+        <span class="nav-link-text">Portada & Presentación</span>
+      </a>
+      <a href="#slide-2" class="nav-link" data-slide="2">
+        <span class="nav-link-num">02</span>
+        <span class="nav-link-icon">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>
+        </span>
+        <span class="nav-link-text">Ficha Técnica & Tiempos</span>
+      </a>
+      <a href="#slide-3" class="nav-link" data-slide="3">
+        <span class="nav-link-num">03</span>
+        <span class="nav-link-icon">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/></svg>
+        </span>
+        <span class="nav-link-text">Competencia & RAPs</span>
+      </a>
+    </div>
+
+    <!-- BLOQUE 2: ARQUITECTURA PEDAGÓGICA & SLA -->
+    <div class="nav-group">
+      <div class="nav-group-title">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+        <span>Bloque 2: Ruta Curricular</span>
+      </div>
+      <a href="#slide-4" class="nav-link" data-slide="4">
+        <span class="nav-link-num">04</span>
+        <span class="nav-link-icon">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+        </span>
+        <span class="nav-link-text">3 Bloques Lógicos</span>
+      </a>
+      <a href="#slide-5" class="nav-link" data-slide="5">
+        <span class="nav-link-num">05</span>
+        <span class="nav-link-icon">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        </span>
+        <span class="nav-link-text">SLA Virtualidad & 2 Cortes</span>
+      </a>
+    </div>
+
+    <!-- BLOQUE 3: MATRIZ DE SESIONES & PROYECTO -->
+    <div class="nav-group">
+      <div class="nav-group-title">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"/></svg>
+        <span>Bloque 3: Mapeo y Práctica</span>
+      </div>
+      <a href="#slide-6" class="nav-link" data-slide="6">
+        <span class="nav-link-num">06</span>
+        <span class="nav-link-icon">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M3 3h18v18H3z"/><path d="M3 9h18"/><path d="M3 15h18"/><path d="M9 3v18"/><path d="M15 3v18"/></svg>
+        </span>
+        <span class="nav-link-text">Matriz de 7 Sesiones</span>
+      </a>
+      <a href="#slide-7" class="nav-link" data-slide="7">
+        <span class="nav-link-num">07</span>
+        <span class="nav-link-icon">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/><path d="M3 12c0 1.66 4 3 9 3s9-1.34 9-3"/></svg>
+        </span>
+        <span class="nav-link-text">TechStore Pro MERN</span>
+      </a>
+    </div>
+
+    <!-- BLOQUE 4: REGLAS & ÉXITO -->
+    <div class="nav-group">
+      <div class="nav-group-title">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        <span>Bloque 4: Reglas y Cierre</span>
+      </div>
+      <a href="#slide-8" class="nav-link" data-slide="8">
+        <span class="nav-link-num">08</span>
+        <span class="nav-link-icon">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m9 11 3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+        </span>
+        <span class="nav-link-text">Reglas & Checklist</span>
+      </a>
+    </div>
+  </div>
+
+  <div class="sidebar-footer">
+    <div class="sidebar-corte-badge">
+      <span>Corte 1: 25/Oct</span>
+      <span>Corte 2: 04/Nov</span>
+    </div>
+    <a href="https://julianon2.github.io/seguimiento-adso-3389010/" target="_blank" class="sidebar-link-btn">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg>
+      Dashboard en Vivo ↗
+    </a>
+    <a href="../index.html" class="sidebar-link-btn" style="background:#f1f5f9;border-color:#e2e8f0;">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m15 18-6-6 6-6"/></svg>
+      Hub de Materiales
+    </a>
+  </div>
+</aside>
+
+<!-- BOTÓN FLOTANTE REACTIVO (Abre el Sidebar cuando está colapsado) -->
+<button class="floating-sidebar-toggle" id="floatingToggle" onclick="toggleSidebar()">
+  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+    <rect width="18" height="18" x="3" y="3" rx="2" ry="2"/>
+    <line x1="9" x2="9" y1="3" y2="21"/>
+    <path d="m11 9 3 3-3 3"/>
+  </svg>
+  <span>Menú (8 Slides)</span>
+</button>
+
+<!-- ==========================================================
+     CONTENEDOR DE CONTENIDO PRINCIPAL
+     ========================================================== -->
+<div class="main-content" id="mainContent">
+
+  <!-- TOPBAR SUPERIOR LIGERO -->
+  <header class="content-topbar">
+    <div class="topbar-breadcrumbs">
+      <span>ADSO 3389010</span>
+      <span class="sep">/</span>
+      <span>Guía 6 (GA6-220501096)</span>
+      <span class="sep">/</span>
+      <span class="current" id="breadcrumbSlideTitle">01. Portada & Presentación</span>
+    </div>
+
+    <div class="topbar-tools">
+      <button class="topbar-tool-btn" onclick="copiarFichaTecnica()">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+        Copiar Ficha
+      </button>
+      <button class="topbar-tool-btn" onclick="toggleFullscreen()">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
+        Pantalla Completa
+      </button>
+    </div>
+  </header>
+
+  <!-- ==========================================================
+       SLIDE 1: PORTADA & ENCUADRE INSTITUCIONAL
+       ========================================================== -->
+  <section class="slide" id="slide-1" data-slide="1" data-title="01. Portada & Presentación">
+    <div class="slide-num-indicator">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      01 / 08
+    </div>
+    <div class="slide-inner">
+      <div class="hero-wrapper">
+        <div>
+          <div class="slide-header-badge">
+            <span class="dot"></span> APERTURA GUÍA DE APRENDIZAJE 6 (AP6)
           </div>
-          <div class="meta-box">
-            <div class="meta-box-title">Horas Totales</div>
-            <div class="meta-box-val">288 Horas</div>
-            <div class="meta-box-sub">14h Sincrónicas (Apertura + 6 Ses.)</div>
+          <h1 class="hero-title">
+            Construcción de <span class="grad-verde">Bases de Datos</span> & <span class="grad-naranja">Front-End Web</span>
+          </h1>
+          <p class="hero-subtitle">
+            Bienvenido a la Guía 6. Aquí encuentras la estructura pedagógica oficial, competencias técnicas, matriz de 7 sesiones sincrónicas y la estrategia de evaluación en dos cortes para la <strong>Fase 3: Ejecución</strong>.
+          </p>
+          <div style="display:flex;gap:12px;flex-wrap:wrap">
+            <a href="#slide-2" class="btn-action-pro verde">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+              Explorar Ruta de Aprendizaje
+            </a>
+            <a href="https://julianon2.github.io/seguimiento-adso-3389010/" target="_blank" class="btn-action-pro tech">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg>
+              Dashboard de Seguimiento ↗
+            </a>
           </div>
-          <div class="meta-box">
-            <div class="meta-box-title">Fecha Inicio</div>
-            <div class="meta-box-val">06 / Oct / 2026</div>
-            <div class="meta-box-sub">Martes de apertura</div>
+        </div>
+
+        <div class="hero-card-widget">
+          <div style="font-family:'Syne',sans-serif;font-size:16px;font-weight:800;color:var(--texto-main);margin-bottom:18px;display:flex;align-items:center;justify-content:space-between">
+            <span>DATOS DE LA GUÍA 6</span>
+            <span style="font-size:10.5px;color:var(--sena-verde-dark);background:var(--sena-verde-bg);padding:3px 10px;border-radius:12px;border:1px solid var(--sena-verde-border);font-weight:800">AP6 VIRTUAL</span>
           </div>
-          <div class="meta-box">
-            <div class="meta-box-title">Fecha Cierre</div>
-            <div class="meta-box-val">04 / Nov / 2026</div>
-            <div class="meta-box-sub">Cierre final Zajuna</div>
+          <div class="hero-meta-grid">
+            <div class="meta-box">
+              <div class="meta-box-title">Competencia</div>
+              <div class="meta-box-val">220501096</div>
+              <div class="meta-box-sub">Desarrollo Software</div>
+            </div>
+            <div class="meta-box">
+              <div class="meta-box-title">Horas Totales</div>
+              <div class="meta-box-val">288 Horas</div>
+              <div class="meta-box-sub">14h Sincrónicas (7 Ses.)</div>
+            </div>
+            <div class="meta-box">
+              <div class="meta-box-title">Apertura Oficial</div>
+              <div class="meta-box-val">06 / Oct / 2026</div>
+              <div class="meta-box-sub">Martes 6:30 PM</div>
+            </div>
+            <div class="meta-box">
+              <div class="meta-box-title">Cierre Definitivo</div>
+              <div class="meta-box-val">04 / Nov / 2026</div>
+              <div class="meta-box-sub">Cierre Zajuna 23:59</div>
+            </div>
+          </div>
+          <div style="margin-top:18px;padding-top:14px;border-top:1px solid var(--borde-light);font-size:12.5px;color:var(--texto-muted);display:flex;align-items:center;justify-content:space-between">
+            <div style="display:flex;align-items:center;gap:8px">
+              <div class="card-icon-badge verde" style="width:26px;height:26px;">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              </div>
+              <span><strong>Instructor:</strong> Julián Andrés Trujillo</span>
+            </div>
+            <span style="font-size:11px;color:var(--texto-sub)">Ficha 3389010</span>
           </div>
         </div>
-        <div style="margin-top:20px;padding-top:16px;border-top:1px solid var(--borde-light);font-size:13px;color:var(--texto-muted);display:flex;align-items:center;gap:10px">
-          <span style="color:var(--sena-verde);font-size:18px">👨‍🏫</span>
-          <span><strong>Instructor Líder:</strong> Julián Andrés Trujillo Morales</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================
+       SLIDE 2: FICHA TÉCNICA & PARÁMETROS
+       ========================================================== -->
+  <section class="slide" id="slide-2" data-slide="2" data-title="02. Ficha Técnica & Parámetros">
+    <div class="slide-num-indicator">02 / 08</div>
+    <div class="slide-inner">
+      <div class="slide-header-badge tech">
+        <span class="dot"></span> PARÁMETROS INSTITUCIONALES SENA
+      </div>
+      <h2 class="sec-title">Ficha Técnica y Tiempos de Ejecución</h2>
+      <p class="sec-desc">
+        La Guía 6 articula el diseño y modelado de datos relacionales y documentales con la capa visual e interactiva de front-end para tu aplicación web.
+      </p>
+
+      <div class="grid-3">
+        <div class="card-premium top-verde">
+          <div>
+            <div class="card-header-flex">
+              <div class="card-icon-badge verde">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>
+              </div>
+              <span class="card-pill-tag verde">14h Sincrónicas</span>
+            </div>
+            <h3 class="card-title">Cronograma Sincrónico</h3>
+            <p class="card-text">
+              7 Encuentros en vivo organizados 1 a 1 con las carpetas del repositorio de trabajo:
+            </p>
+            <ul class="list-premium">
+              <li>
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--sena-verde)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                <span><strong>Estructura:</strong> 📁 Apertura/ + 📁 Sesión 1/ a 📁 Sesión 6/</span>
+              </li>
+              <li>
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--sena-verde)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                <span><strong>Días:</strong> Lunes y Martes</span>
+              </li>
+              <li>
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--sena-verde)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                <span><strong>Horario:</strong> 6:30 PM a 8:30 PM (2 horas por sesión)</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="card-premium top-naranja">
+          <div>
+            <div class="card-header-flex">
+              <div class="card-icon-badge naranja">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+              </div>
+              <span class="card-pill-tag naranja">E-Commerce MERN</span>
+            </div>
+            <h3 class="card-title">Enfoque de Proyecto Formativo</h3>
+            <p class="card-text">
+              Todo el aprendizaje se aplica directamente sobre el aplicativo del proyecto:
+            </p>
+            <ul class="list-premium">
+              <li>
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--sena-naranja)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                <span><strong>Proyecto Base:</strong> TechStore Pro React</span>
+              </li>
+              <li>
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--sena-naranja)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                <span><strong>Stack:</strong> React, Node.js, MySQL y MongoDB</span>
+              </li>
+              <li>
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--sena-naranja)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                <span><strong>Alineación:</strong> Entregables progresivos acumulativos</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="card-premium top-tech">
+          <div>
+            <div class="card-header-flex">
+              <div class="card-icon-badge tech">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"/></svg>
+              </div>
+              <span class="card-pill-tag tech">274h Autónomas</span>
+            </div>
+            <h3 class="card-title">Trabajo Autónomo & Acompañamiento</h3>
+            <p class="card-text">
+              Complementación y práctica guiada con acompañamiento continuo del instructor:
+            </p>
+            <ul class="list-premium">
+              <li>
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--azul-tech)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                <span><strong>Materiales:</strong> Guías, Manuales y Scripts SQL/NoSQL</span>
+              </li>
+              <li>
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--azul-tech)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                <span><strong>Canal Permanente:</strong> Foro de Dudas en Zajuna y Teams</span>
+              </li>
+              <li>
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--azul-tech)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                <span><strong>Grabaciones:</strong> Publicadas 24h tras la sesión</span>
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- SLIDE 2: FICHA TÉCNICA Y PARÁMETROS -->
-<section class="slide" id="slide-2">
-  <div class="slide-num-indicator">02 / 08</div>
-  <div class="slide-inner">
-    <div class="slide-header-badge tech">
-      <span class="dot"></span> PARÁMETROS INSTITUCIONALES SENA
+  <!-- ==========================================================
+       SLIDE 3: COMPETENCIA & RAPS
+       ========================================================== -->
+  <section class="slide" id="slide-3" data-slide="3" data-title="03. Competencia & RAPs">
+    <div class="slide-num-indicator">03 / 08</div>
+    <div class="slide-inner">
+      <div class="slide-header-badge">
+        <span class="dot"></span> MARCO CURRICULAR INSTITUCIONAL
+      </div>
+      <h2 class="sec-title">Competencia Técnica y Resultados de Aprendizaje</h2>
+      <p class="sec-desc">
+        La Guía de Aprendizaje 6 certifica la competencia laboral <strong>220501096 (Desarrollo de Software)</strong> evaluando dos Resultados de Aprendizaje (RAP) complementarios:
+      </p>
+
+      <div class="grid-2">
+        <div class="card-premium top-verde">
+          <div>
+            <div class="card-header-flex">
+              <div class="card-icon-badge verde">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/><path d="M3 12c0 1.66 4 3 9 3s9-1.34 9-3"/></svg>
+              </div>
+              <span class="card-pill-tag verde">RAP 220501096-02</span>
+            </div>
+            <h3 class="card-title" style="font-size:20px">Construir la Base de Datos para el Software</h3>
+            <p class="card-text">
+              Diseñar, implementar y poblar las estructuras de almacenamiento relacionales (MySQL) y documentales (MongoDB), asegurando integridad referencial, normalización y optimización de consultas.
+            </p>
+          </div>
+          <div style="margin-top:16px;padding-top:14px;border-top:1px solid var(--borde-light);display:flex;gap:6px;flex-wrap:wrap">
+            <span class="evidencia-tag">Diagramas E-R</span>
+            <span class="evidencia-tag">Normalización 1FN-3FN</span>
+            <span class="evidencia-tag">DDL & Restricciones</span>
+            <span class="evidencia-tag">DML Transaccional</span>
+            <span class="evidencia-tag">Colecciones MongoDB</span>
+          </div>
+        </div>
+
+        <div class="card-premium top-tech">
+          <div>
+            <div class="card-header-flex">
+              <div class="card-icon-badge tech">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect width="20" height="14" x="2" y="3" rx="2"/><line x1="8" x2="16" y1="21" y2="21"/><line x1="12" x2="12" y1="17" y2="21"/></svg>
+              </div>
+              <span class="card-pill-tag tech">RAP 220501096-03</span>
+            </div>
+            <h3 class="card-title" style="font-size:20px">Crear Componentes Front-End del Software</h3>
+            <p class="card-text">
+              Diseñar la experiencia de usuario y arquitectura de interacción UX/UI en Figma, maquetar prototipos interactivos adaptativos y construir componentes web con HTML5 semántico, CSS3 y JavaScript.
+            </p>
+          </div>
+          <div style="margin-top:16px;padding-top:14px;border-top:1px solid var(--borde-light);display:flex;gap:6px;flex-wrap:wrap">
+            <span class="evidencia-tag">Wireframing Figma</span>
+            <span class="evidencia-tag">Arquitectura UX</span>
+            <span class="evidencia-tag">HTML5 Semántico</span>
+            <span class="evidencia-tag">CSS3 Flexbox / Grid</span>
+            <span class="evidencia-tag">Interactividad JS</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="callout-box">
+        <div class="callout-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="16" y2="12"/><line x1="12" x2="12.01" y1="8" y2="8"/></svg>
+        </div>
+        <div class="callout-content">
+          <h4>Definición de la Competencia General (220501096)</h4>
+          <p>Desarrollar la solución de software de acuerdo con el diseño y metodologías acordadas con el cliente, garantizando la persistencia fiable de datos y una interfaz accesible e intuitiva.</p>
+        </div>
+      </div>
     </div>
-    <h2 class="sec-title">Ficha Técnica y Tiempos de Ejecución</h2>
-    <p class="sec-desc">
-      La Guía 6 articula el modelo de datos relacional y no relacional con la capa de presentación visual de la aplicación.
-    </p>
+  </section>
 
-    <div class="grid-3">
-      <div class="card-premium highlight-verde">
-        <div>
-          <div class="card-icon" style="color:var(--sena-verde-dark)">📅</div>
-          <h3 class="card-title">Cronograma Sincrónico</h3>
-          <p class="card-text">
-            7 Encuentros sincrónicos en vivo organizados 1 a 1 con las 7 carpetas del repositorio:
+  <!-- ==========================================================
+       SLIDE 4: ESTRUCTURACIÓN EN 3 BLOQUES LÓGICOS
+       ========================================================== -->
+  <section class="slide" id="slide-4" data-slide="4" data-title="04. 3 Bloques Lógicos">
+    <div class="slide-num-indicator">04 / 08</div>
+    <div class="slide-inner">
+      <div class="slide-header-badge naranja">
+        <span class="dot"></span> RUTA PEDAGÓGICA OPTIMIZADA
+      </div>
+      <h2 class="sec-title">Organización Lógica en 3 Bloques Temáticos</h2>
+      <p class="sec-desc">
+        Para evitar confusiones conceptuales entre paradigmas, la ruta formativa de la Guía 6 se divide en 3 bloques secuenciales donde cada tema sirve de base para el siguiente:
+      </p>
+
+      <div class="grid-3">
+        <div class="card-premium top-verde">
+          <div>
+            <div class="card-header-flex">
+              <span style="font-family:'Syne',sans-serif;font-size:22px;font-weight:900;color:var(--sena-verde-dark)">01</span>
+              <span class="card-pill-tag verde">Apertura + Ses. 1 y 2</span>
+            </div>
+            <h3 class="card-title">Bases de Datos Relacionales (SQL)</h3>
+            <p class="card-text">
+              Modelado conceptual entidad-relación, normalización formal hasta Tercera Forma Normal (3FN) y script físico completo en MySQL (DDL + DML).
+            </p>
+            <ul class="list-premium">
+              <li>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--sena-verde)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                <span><strong>📁 Apertura:</strong> Ruta y Dashboard</span>
+              </li>
+              <li>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--sena-verde)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                <span><strong>📁 Sesión 1:</strong> Normalización 1FN-3FN</span>
+              </li>
+              <li>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--sena-verde)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                <span><strong>📁 Sesión 2:</strong> SQL Workbench (DDL/DML)</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="card-premium top-naranja">
+          <div>
+            <div class="card-header-flex">
+              <span style="font-family:'Syne',sans-serif;font-size:22px;font-weight:900;color:var(--sena-naranja-dark)">02</span>
+              <span class="card-pill-tag naranja">Sesiones 3 y 4</span>
+            </div>
+            <h3 class="card-title">Bases de Datos NoSQL (MongoDB)</h3>
+            <p class="card-text">
+              Modelado de documentos flexibles JSON/BSON, creación de colecciones dinámicas y ejecución de consultas CRUD para la sustentación en video.
+            </p>
+            <ul class="list-premium">
+              <li>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--sena-naranja)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                <span><strong>📁 Sesión 3:</strong> JSON/BSON & Colecciones</span>
+              </li>
+              <li>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--sena-naranja)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                <span><strong>📁 Sesión 4:</strong> CRUD & Video Sustentatorio</span>
+              </li>
+              <li>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--sena-naranja)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                <span><strong>Cierre Técnico:</strong> Domingo 25/Oct</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="card-premium top-tech">
+          <div>
+            <div class="card-header-flex">
+              <span style="font-family:'Syne',sans-serif;font-size:22px;font-weight:900;color:var(--azul-tech-dark)">03</span>
+              <span class="card-pill-tag tech">Sesiones 5 y 6</span>
+            </div>
+            <h3 class="card-title">Prototipado UI/UX & Front-End Web</h3>
+            <p class="card-text">
+              Diseño de interfaces centradas en el usuario con Figma (wireframes y mockups), maquetación responsiva HTML5/CSS3 y balance evaluativo final.
+            </p>
+            <ul class="list-premium">
+              <li>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--azul-tech)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                <span><strong>📁 Sesión 5:</strong> Prototipos Figma</span>
+              </li>
+              <li>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--azul-tech)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                <span><strong>📁 Sesión 6:</strong> Maquetación Web</span>
+              </li>
+              <li>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--azul-tech)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                <span><strong>Cierre Definitivo:</strong> Miércoles 04/Nov</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================
+       SLIDE 5: SLA VIRTUALIDAD & ESTRATEGIA 2 CORTES
+       ========================================================== -->
+  <section class="slide" id="slide-5" data-slide="5" data-title="05. SLA Virtualidad & 2 Cortes">
+    <div class="slide-num-indicator">05 / 08</div>
+    <div class="slide-inner">
+      <div class="slide-header-badge naranja">
+        <span class="dot"></span> CUMPLIMIENTO REGULATORIO Y SLA ZAJUNA
+      </div>
+      <h2 class="sec-title">Estrategia de Entregas & Cortes de Calificación</h2>
+      <p class="sec-desc">
+        Para dar cumplimiento al SLA de virtualidad SENA (calificación oportuna dentro de 24 a 48 horas) y protegerte contra represamientos de última hora, dividimos la guía en <strong>dos cortes oficiales</strong>:
+      </p>
+
+      <div class="grid-2">
+        <!-- CORTE 1 -->
+        <div class="card-premium top-naranja">
+          <div>
+            <div class="card-header-flex">
+              <div class="card-icon-badge naranja">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg>
+              </div>
+              <span class="card-pill-tag naranja">Corte 1 — Bases de Datos</span>
+            </div>
+            <h3 class="card-title" style="font-size:20px">Corte 1: Cierre Técnico BD (SQL & NoSQL)</h3>
+            <p style="font-size:13px;font-weight:800;color:var(--sena-naranja-dark);margin-bottom:12px;display:flex;align-items:center;gap:6px;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>
+              Fecha Límite: Domingo 25 de Octubre de 2026 (23:59 hrs)
+            </p>
+            <p class="card-text">
+              Abarca el modelado conceptual, normalización, scripts SQL y esquemas documentales:
+            </p>
+            <ul class="list-premium">
+              <li>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--sena-naranja)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                <span><strong>AA1-EV01 & AA1-EV02:</strong> Diagrama E-R y Normalización 1FN-3FN</span>
+              </li>
+              <li>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--sena-naranja)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                <span><strong>AA2-EV01 & AA2-EV02:</strong> Sentencias DDL y creación de tablas en MySQL</span>
+              </li>
+              <li>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--sena-naranja)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                <span><strong>AA2-EV03:</strong> Script SQL DML ejecutable (`.sql`)</span>
+              </li>
+              <li>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--sena-naranja)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                <span><strong>AA1-EV03:</strong> Colecciones y documentos JSON/BSON</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- CORTE 2 -->
+        <div class="card-premium top-verde">
+          <div>
+            <div class="card-header-flex">
+              <div class="card-icon-badge verde">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" x2="4" y1="22" y2="15"/></svg>
+              </div>
+              <span class="card-pill-tag verde">Corte 2 — Cierre Definitivo</span>
+            </div>
+            <h3 class="card-title" style="font-size:20px">Corte 2: Cierre Final (Video & Front-End)</h3>
+            <p style="font-size:13px;font-weight:800;color:var(--sena-verde-dark);margin-bottom:12px;display:flex;align-items:center;gap:6px;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>
+              Fecha Límite Definitiva: Miércoles 04 de Noviembre de 2026 (23:59 hrs)
+            </p>
+            <p class="card-text">
+              Abarca la sustentación en video de MongoDB y el diseño e implementación front-end:
+            </p>
+            <ul class="list-premium">
+              <li>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--sena-verde)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                <span><strong>AA1-EV04:</strong> Video demostrativo de operaciones CRUD (máx 7 min)</span>
+              </li>
+              <li>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--sena-verde)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                <span><strong>AA3-EV01..03:</strong> Prototipos interactivos Figma y mapa UX</span>
+              </li>
+              <li>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--sena-verde)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                <span><strong>AA4-EV01..03:</strong> Maquetación web HTML5, CSS3 y JavaScript</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="callout-box">
+        <div class="callout-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <div class="callout-content">
+          <h4>¿Por qué la estrategia de 2 Cortes es tu mayor ventaja pedagógica?</h4>
+          <p>
+            <strong>1. Retroalimentación Oportuna:</strong> Si tu script SQL o modelo documental requiere un ajuste, lo sabrás a tiempo en el Corte 1 sin arriesgar tu aprobación final.<br>
+            <strong>2. Cero Represamientos:</strong> Subir evidencias de forma modular previene la caída de plataforma a fin de mes y asegura tus notas registradas en el <a href="https://julianon2.github.io/seguimiento-adso-3389010/" target="_blank" style="color:var(--azul-tech);font-weight:700">Dashboard de Seguimiento ADSO ↗</a>.
           </p>
-          <ul class="list-premium">
-            <li><strong>Estructura:</strong> 📁 Apertura/ + 📁 Sesión 1/ a 📁 Sesión 6/</li>
-            <li><strong>Días:</strong> Lunes y Martes</li>
-            <li><strong>Horario:</strong> 6:30 PM a 8:30 PM (2 hrs/sesión)</li>
-            <li><strong>Duración Total:</strong> 14 Horas Presenciales Virtuales</li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="card-premium highlight-naranja">
-        <div>
-          <div class="card-icon" style="color:var(--sena-naranja)">🎯</div>
-          <h3 class="card-title">Enfoque de Proyecto</h3>
-          <p class="card-text">
-            Todo el aprendizaje se aplica directamente al sistema formativo del programa:
-          </p>
-          <ul class="list-premium">
-            <li><strong>Proyecto Formativo:</strong> TechStore Pro React</li>
-            <li><strong>Arquitectura:</strong> MERN (React, Node, Express, MongoDB/MySQL)</li>
-            <li><strong>Alineación:</strong> Entregables progresivos acumulativos</li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="card-premium highlight-tech">
-        <div>
-          <div class="card-icon" style="color:var(--azul-tech)">📑</div>
-          <h3 class="card-title">Trabajo Autónomo</h3>
-          <p class="card-text">
-            Complementación práctica y autónoma del aprendiz en la plataforma Zajuna:
-          </p>
-          <ul class="list-premium">
-            <li><strong>Horas Autónomas:</strong> 274 Horas asistidas</li>
-            <li><strong>Materiales:</strong> Guías, Manuales y Ejercicios SQL/NoSQL</li>
-            <li><strong>Acompañamiento:</strong> Foro de dudas y Teams</li>
-          </ul>
         </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- SLIDE 3: COMPETENCIA Y RAPS -->
-<section class="slide" id="slide-3">
-  <div class="slide-num-indicator">03 / 08</div>
-  <div class="slide-inner">
-    <div class="slide-header-badge">
-      <span class="dot"></span> MARCO CURRICULAR INSTITUCIONAL
+  <!-- ==========================================================
+       SLIDE 6: MATRIZ DE 7 SESIONES & REPOSITORIO
+       ========================================================== -->
+  <section class="slide" id="slide-6" data-slide="6" data-title="06. Matriz de 7 Sesiones">
+    <div class="slide-num-indicator">06 / 08</div>
+    <div class="slide-inner">
+      <div class="slide-header-badge tech">
+        <span class="dot"></span> MATRIZ DE SINCRONIZACIÓN DE SESIONES & CARPETAS
+      </div>
+      <h2 class="sec-title">Cronograma y Estructura de Carpetas GA6</h2>
+      <p class="sec-desc">
+        Mapeo de la <strong>Apertura Institucional</strong> y las <strong>6 Sesiones Técnicas</strong> con las carpetas del repositorio de trabajo y sus evidencias asociadas en Zajuna:
+      </p>
+
+      <div class="table-wrapper">
+        <table class="matriz-table">
+          <thead>
+            <tr>
+              <th>Carpeta</th>
+              <th>Fecha Sincrónica</th>
+              <th>Actividad (AA)</th>
+              <th>Tema Central</th>
+              <th>Evidencias</th>
+              <th>Corte SLA</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="sesion-badge" style="background:var(--sena-verde-bg);color:var(--sena-verde-dark);font-weight:800">📁 Apertura/</span></td>
+              <td>Martes 06/10/2026</td>
+              <td><span class="evidencia-tag" style="background:var(--sena-verde-bg);color:var(--sena-verde-dark);font-weight:700">Apertura</span></td>
+              <td>Ruta Pedagógica, RAPs, Bloques Lógicos, Acuerdos y Dashboard.</td>
+              <td><span class="evidencia-tag">Inducción</span></td>
+              <td><span class="evidencia-tag">Informativa</span></td>
+            </tr>
+            <tr>
+              <td><span class="sesion-badge">📁 Sesión 1/</span></td>
+              <td>Martes 13/10/2026</td>
+              <td><span class="evidencia-tag">AA1</span></td>
+              <td>Diagramas Entidad-Relación y Normalización formal (1FN, 2FN, 3FN).</td>
+              <td><span class="evidencia-tag">AA1-EV01</span> <span class="evidencia-tag">AA1-EV02</span></td>
+              <td><span class="deadline-badge corte1">Corte 1 — 25/Oct</span></td>
+            </tr>
+            <tr>
+              <td><span class="sesion-badge">📁 Sesión 2/</span></td>
+              <td>Lunes 19/10/2026</td>
+              <td><span class="evidencia-tag">AA2</span></td>
+              <td>SQL Completo DDL (`CREATE/ALTER`) y DML (`INSERT/SELECT/UPDATE/DELETE`).</td>
+              <td><span class="evidencia-tag">AA2-EV01..03</span></td>
+              <td><span class="deadline-badge corte1">Corte 1 — 25/Oct</span></td>
+            </tr>
+            <tr>
+              <td><span class="sesion-badge">📁 Sesión 3/</span></td>
+              <td>Martes 20/10/2026</td>
+              <td><span class="evidencia-tag">AA1</span></td>
+              <td>Bases de Datos NoSQL, sintaxis JSON/BSON y colecciones dinámicas.</td>
+              <td><span class="evidencia-tag">AA1-EV03</span></td>
+              <td><span class="deadline-badge corte1">Corte 1 — 25/Oct</span></td>
+            </tr>
+            <tr>
+              <td><span class="sesion-badge">📁 Sesión 4/</span></td>
+              <td>Lunes 26/10/2026</td>
+              <td><span class="evidencia-tag">AA1</span></td>
+              <td>Operaciones CRUD en MongoDB Compass/Shell y pautas de sustentación.</td>
+              <td><span class="evidencia-tag">AA1-EV04</span></td>
+              <td><span class="deadline-badge corte2">Corte 2 — 04/Nov</span></td>
+            </tr>
+            <tr>
+              <td><span class="sesion-badge">📁 Sesión 5/</span></td>
+              <td>Martes 27/10/2026</td>
+              <td><span class="evidencia-tag">AA3</span></td>
+              <td>Prototipado interactivo UX/UI con Figma, mapas de navegación y mockups.</td>
+              <td><span class="evidencia-tag">AA3-EV01..03</span></td>
+              <td><span class="deadline-badge corte2">Corte 2 — 04/Nov</span></td>
+            </tr>
+            <tr>
+              <td><span class="sesion-badge">📁 Sesión 6/</span></td>
+              <td>Lunes 02/11/2026</td>
+              <td><span class="evidencia-tag">AA4</span></td>
+              <td>Maquetación responsiva HTML5/CSS3, JavaScript y balance evaluativo final.</td>
+              <td><span class="evidencia-tag">AA4-EV01..03</span></td>
+              <td><span class="deadline-badge corte2">Corte 2 — 04/Nov</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
-    <h2 class="sec-title">Competencia Técnica y Resultados de Aprendizaje</h2>
-    <p class="sec-desc">
-      Norma de competencia y RAPs específicos que certifica la Guía de Aprendizaje 6.
-    </p>
+  </section>
 
-    <div class="grid-2">
-      <div class="card-premium highlight-verde">
-        <div>
-          <div style="font-size:11px;font-weight:800;color:var(--sena-verde-dark);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px">RAP 220501096-02</div>
-          <h3 class="card-title" style="font-size:22px">Construir la Base de Datos para el Software</h3>
-          <p class="card-text" style="font-size:15px;color:var(--texto-main)">
-            Diseñar, implementar y poblar las estructuras de almacenamiento relacionales (SQL) y documentales (NoSQL) garantizando la integridad referencial y optimización de consultas.
-          </p>
+  <!-- ==========================================================
+       SLIDE 7: TECHSTORE PRO REACT (MERN)
+       ========================================================== -->
+  <section class="slide" id="slide-7" data-slide="7" data-title="07. TechStore Pro MERN">
+    <div class="slide-num-indicator">07 / 08</div>
+    <div class="slide-inner">
+      <div class="slide-header-badge">
+        <span class="dot"></span> APLICACIÓN PRÁCTICA EN EL PROYECTO FORMATIVO
+      </div>
+      <h2 class="sec-title">Proyecto Transversal: TechStore Pro React</h2>
+      <p class="sec-desc">
+        Las evidencias de la Guía 6 no son ejercicios aislados: cada entregable construye una parte del e-commerce formativo del programa:
+      </p>
+
+      <div class="grid-3">
+        <div class="card-premium top-verde">
+          <div>
+            <div class="card-header-flex">
+              <div class="card-icon-badge verde">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/><path d="M3 12c0 1.66 4 3 9 3s9-1.34 9-3"/></svg>
+              </div>
+              <span class="card-pill-tag verde">MySQL Workbench</span>
+            </div>
+            <h3 class="card-title">Capa Relacional SQL</h3>
+            <p class="card-text">
+              Diseño normalizado para la gestión transaccional de usuarios, roles, pedidos, detalle de facturación e inventario con integridad de claves foráneas.
+            </p>
+            <ul class="list-premium">
+              <li>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--sena-verde)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                <span>Esquema DDL con ON DELETE RESTRICT</span>
+              </li>
+              <li>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--sena-verde)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                <span>Consultas DML con INNER JOIN complejas</span>
+              </li>
+            </ul>
+          </div>
         </div>
-        <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--borde-light);display:flex;gap:8px;flex-wrap:wrap">
-          <span class="evidencia-tag">Diagramas E-R</span>
-          <span class="evidencia-tag">Normalización 1FN-3FN</span>
-          <span class="evidencia-tag">DDL & Restricciones</span>
-          <span class="evidencia-tag">DML & Scripts</span>
-          <span class="evidencia-tag">MongoDB & JSON</span>
+
+        <div class="card-premium top-naranja">
+          <div>
+            <div class="card-header-flex">
+              <div class="card-icon-badge naranja">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+              </div>
+              <span class="card-pill-tag naranja">MongoDB Compass</span>
+            </div>
+            <h3 class="card-title">Capa Documental NoSQL</h3>
+            <p class="card-text">
+              Colecciones dinámicas de productos tecnológicos con especificaciones variables por categoría, imágenes anidadas y logs de auditoría.
+            </p>
+            <ul class="list-premium">
+              <li>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--sena-naranja)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                <span>Documentos JSON/BSON sin esquema rígido</span>
+              </li>
+              <li>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--sena-naranja)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                <span>Operaciones CRUD demostradas en video</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="card-premium top-tech">
+          <div>
+            <div class="card-header-flex">
+              <div class="card-icon-badge tech">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
+              </div>
+              <span class="card-pill-tag tech">Figma + Web UI</span>
+            </div>
+            <h3 class="card-title">Capa Visual Front-End</h3>
+            <p class="card-text">
+              Prototipado en Figma y maquetación web responsiva de la tienda: catálogo, carrito de compras, checkout y dashboard administrativo.
+            </p>
+            <ul class="list-premium">
+              <li>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--azul-tech)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                <span>Componentes modulares accesibles</span>
+              </li>
+              <li>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--azul-tech)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                <span>HTML5 semántico y CSS3 responsive</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================
+       SLIDE 8: REGLAS, CHECKLIST & ÉXITO
+       ========================================================== -->
+  <section class="slide" id="slide-8" data-slide="8" data-title="08. Reglas & Checklist">
+    <div class="slide-num-indicator">08 / 08</div>
+    <div class="slide-inner">
+      <div class="slide-header-badge naranja">
+        <span class="dot"></span> PAUTAS DE CALIDAD Y ALISTAMIENTO
+      </div>
+      <h2 class="sec-title">Reglas de Oro Institucionales & Checklist de Inicio</h2>
+      <p class="sec-desc">
+        Pautas obligatorias de presentación formal y lista interactiva para asegurar que cuentas con todas las herramientas configuradas antes de arrancar las sesiones técnicas:
+      </p>
+
+      <div class="grid-2">
+        <!-- REGLAS DE ORO -->
+        <div class="card-premium top-verde">
+          <div>
+            <div class="card-header-flex">
+              <div class="card-icon-badge verde">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              </div>
+              <span class="card-pill-tag verde">Estándar SENA</span>
+            </div>
+            <h3 class="card-title">Reglas de Oro para Entregables</h3>
+            <p class="card-text">
+              Criterios que determinan la aprobación de tus evidencias en la plataforma:
+            </p>
+            <ul class="list-premium">
+              <li>
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--sena-verde)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                <span><strong>Formato Oficial PDF:</strong> Todo informe debe llevar portada institucional con tu nombre, ficha 3389010 e introducción técnica. Cero documentos sin formato.</span>
+              </li>
+              <li>
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--sena-verde)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                <span><strong>Código Probado:</strong> Scripts `.sql` limpios y probados antes de subir. No adjuntar capturas de pantalla de código cuando se pide el script.</span>
+              </li>
+              <li>
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--sena-verde)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                <span><strong>Video Técnico Puntual:</strong> Para el video de MongoDB, duración máxima de 7 minutos con audio claro demostrando el CRUD en vivo.</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- CHECKLIST DE INDUCCIÓN INTERACTIVO -->
+        <div class="checklist-card">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+            <h4 style="font-family:'Outfit',sans-serif;font-size:16px;font-weight:700;color:var(--texto-main);">Checklist de Alistamiento Técnico</h4>
+            <span id="checklistCounter" style="font-size:11px;font-weight:800;color:var(--sena-verde-dark);background:var(--sena-verde-bg);padding:3px 9px;border-radius:12px;border:1px solid var(--sena-verde-border)">0 / 4 Completados</span>
+          </div>
+          
+          <div class="checklist-item" onclick="toggleChecklistItem(this)">
+            <div class="checklist-checkbox">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <div class="checklist-text">
+              <h5>Acceso a Zajuna & Repositorio de Materiales</h5>
+              <p>Verifiqué mi usuario en Zajuna y guardé en marcadores el Hub de Materiales y el Dashboard.</p>
+            </div>
+          </div>
+
+          <div class="checklist-item" onclick="toggleChecklistItem(this)">
+            <div class="checklist-checkbox">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <div class="checklist-text">
+              <h5>Instalación de MySQL Workbench / XAMPP</h5>
+              <p>Tengo listo mi motor de bases de datos local o la extensión Database Client en VS Code.</p>
+            </div>
+          </div>
+
+          <div class="checklist-item" onclick="toggleChecklistItem(this)">
+            <div class="checklist-checkbox">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <div class="checklist-text">
+              <h5>Cuenta en dbdiagram.io & Figma</h5>
+              <p>Cuentas activas para modelado conceptual relacional y prototipado UI/UX interactivo.</p>
+            </div>
+          </div>
+
+          <div class="checklist-item" onclick="toggleChecklistItem(this)">
+            <div class="checklist-checkbox">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <div class="checklist-text">
+              <h5>Claridad de las Fechas Límite (2 Cortes)</h5>
+              <p>Tengo agendado el Corte 1 (25 de Octubre) y el Corte 2 (04 de Noviembre de 2026).</p>
+            </div>
+          </div>
         </div>
       </div>
 
-      <div class="card-premium highlight-tech">
-        <div>
-          <div style="font-size:11px;font-weight:800;color:var(--azul-tech);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px">RAP 220501096-03</div>
-          <h3 class="card-title" style="font-size:22px">Crear Componentes Front-End del Software</h3>
-          <p class="card-text" style="font-size:15px;color:var(--texto-main)">
-            Diseñar la arquitectura de interacción UX/UI, maquetar prototipos interactivos y construir componentes de interfaz gráfica web adaptativos y accesibles.
-          </p>
-        </div>
-        <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--borde-light);display:flex;gap:8px;flex-wrap:wrap">
-          <span class="evidencia-tag">Wireframing Figma</span>
-          <span class="evidencia-tag">Mapa de Navegación UX</span>
-          <span class="evidencia-tag">HTML5 Semántico</span>
-          <span class="evidencia-tag">CSS3 Flexbox/Grid</span>
-          <span class="evidencia-tag">JS Interactividad</span>
-        </div>
+      <div style="text-align:center;margin-top:36px">
+        <a href="../index.html" class="btn-action-pro verde" style="padding:14px 32px;font-size:14px;box-shadow:0 8px 24px rgba(57,169,0,0.3)">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2 2z"/></svg>
+          Ingresar al Hub de Materiales GA6
+        </a>
       </div>
     </div>
+  </section>
 
-    <div class="callout-box">
-      <div class="callout-icon">💡</div>
-      <div class="callout-content">
-        <h4>Competencia General 220501096</h4>
-        <p>Desarrollar la solución de software de acuerdo con el diseño y metodologías de desarrollo acordadas con el cliente o equipo técnico.</p>
-      </div>
-    </div>
-  </div>
-</section>
+</div>
 
-<!-- SLIDE 4: ESTRUCTURACIÓN LÓGICA EN 3 BLOQUES -->
-<section class="slide" id="slide-4">
-  <div class="slide-num-indicator">04 / 08</div>
-  <div class="slide-inner">
-    <div class="slide-header-badge naranja">
-      <span class="dot"></span> RUTA PEDAGÓGICA OPTIMIZADA
-    </div>
-    <h2 class="sec-title">Organización Lógica en 3 Bloques Temáticos</h2>
-    <p class="sec-desc">
-      Para evitar saltos conceptuales entre paradigmas, estructuramos la ruta pedagógica (Apertura institucional + 6 sesiones sincrónicas) en tres bloques continuos y acumulativos:
-    </p>
-
-    <div class="bloques-container">
-      <div class="bloque-card">
-        <span class="bloque-num">01</span>
-        <span class="bloque-tag b1">Apertura + Sesiones 1 y 2</span>
-        <h3 class="bloque-title">Bases de Datos Relacionales (SQL)</h3>
-        <p class="bloque-desc">
-          Apertura institucional de la guía, modelado conceptual Entidad-Relación, normalización formal (1FN-3FN) y programación física completa en MySQL (DDL y DML).
-        </p>
-        <ul class="list-premium">
-          <li><strong>📁 Apertura:</strong> Inducción & Dashboard ADSO</li>
-          <li><strong>📁 Sesión 1:</strong> Normalización (1FN, 2FN, 3FN)</li>
-          <li><strong>📁 Sesión 2:</strong> SQL Completo (DDL + DML)</li>
-        </ul>
-      </div>
-
-      <div class="bloque-card">
-        <span class="bloque-num">02</span>
-        <span class="bloque-tag b2">Sesiones 3 y 4</span>
-        <h3 class="bloque-title">Bases de Datos NoSQL (MongoDB)</h3>
-        <p class="bloque-desc">
-          Modelado documental JSON/BSON, creación de colecciones dinámicas y ejecución de operaciones CRUD en MongoDB Compass y Shell para el video sustentatorio.
-        </p>
-        <ul class="list-premium">
-          <li><strong>📁 Sesión 3:</strong> Esquemas JSON/BSON & Colecciones</li>
-          <li><strong>📁 Sesión 4:</strong> CRUD MongoDB & Sustentación Video</li>
-          <li>Cierre Técnico Corte 1 (25 de Octubre)</li>
-        </ul>
-      </div>
-
-      <div class="bloque-card">
-        <span class="bloque-num">03</span>
-        <span class="bloque-tag b3">Sesiones 5 y 6</span>
-        <h3 class="bloque-title">Prototipado UI/UX & Front-End Web</h3>
-        <p class="bloque-desc">
-          Diseño centrado en el usuario con Figma (wireframes, mapas UX y mockups), seguido de la maquetación responsiva HTML5, CSS3, JavaScript y cierre evaluativo.
-        </p>
-        <ul class="list-premium">
-          <li><strong>📁 Sesión 5:</strong> Prototipado Interactivo Figma</li>
-          <li><strong>📁 Sesión 6:</strong> Maquetación Web HTML5/CSS3/JS</li>
-          <li>Cierre Final Corte 2 (04 de Noviembre)</li>
-        </ul>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- SLIDE 5: ESTRATEGIA DE ENTREGAS Y CORTES ZAJUNA -->
-<section class="slide" id="slide-5">
-  <div class="slide-num-indicator">05 / 08</div>
-  <div class="slide-inner">
-    <div class="slide-header-badge naranja">
-      <span class="dot"></span> CUMPLIMIENTO REGULATORIO Y SLA ZAJUNA
-    </div>
-    <h2 class="sec-title">Estrategia de Entregas & Cortes de Calificación</h2>
-    <p class="sec-desc">
-      Para dar cumplimiento estricto a la Guía de Virtualidad SENA (SLA de calificación dentro de las 24 a 48 horas posteriores al envío) y evitar hallazgos por represamiento, organizamos las entregas de la Guía 6 en <strong>dos cortes oficiales de evaluación</strong>:
-    </p>
-
-    <div class="grid-2">
-      <!-- CARD CORTE 1 -->
-      <div class="card-premium highlight-naranja" style="position:relative;overflow:hidden">
-        <div style="position:absolute;top:16px;right:16px;background:var(--sena-naranja);color:#fff;font-weight:800;font-size:11px;padding:4px 12px;border-radius:12px;text-transform:uppercase;letter-spacing:1px">
-          Corte 1 — Bases de Datos
-        </div>
-        <div class="card-icon" style="color:var(--sena-naranja)">📦</div>
-        <h3 class="card-title" style="font-size:22px;margin-bottom:8px">Corte 1: Cierre Técnico BD (SQL & NoSQL)</h3>
-        <p style="font-size:14px;font-weight:800;color:var(--sena-naranja-dark);margin-bottom:12px">
-          📅 Fecha Límite de Entrega: Domingo 25 de Octubre de 2026 (23:59 hrs)
-        </p>
-        <p class="card-text" style="font-size:14px;color:var(--texto-muted);margin-bottom:16px">
-          Cubre las evidencias técnicas de diseño, normalización, scripts DDL/DML relacionales y estructuración documental NoSQL para su calificación oportuna:
-        </p>
-        <ul class="list-premium">
-          <li><strong>AA1-EV01 & AA1-EV02:</strong> Diagrama Entidad-Relación y Normalización 1FN/2FN/3FN.</li>
-          <li><strong>AA2-EV01 & AA2-EV02:</strong> Sentencias DDL y creación de tablas/restricciones en MySQL.</li>
-          <li><strong>AA2-EV03:</strong> Script SQL DML ejecutable con datos de prueba (`.sql`).</li>
-          <li><strong>AA1-EV03:</strong> Esquema de colecciones y documentos JSON/BSON NoSQL.</li>
-        </ul>
-      </div>
-
-      <!-- CARD CORTE 2 -->
-      <div class="card-premium highlight-verde" style="position:relative;overflow:hidden">
-        <div style="position:absolute;top:16px;right:16px;background:var(--sena-verde-dark);color:#fff;font-weight:800;font-size:11px;padding:4px 12px;border-radius:12px;text-transform:uppercase;letter-spacing:1px">
-          Corte 2 — Cierre Definitivo
-        </div>
-        <div class="card-icon" style="color:var(--sena-verde-dark)">🏁</div>
-        <h3 class="card-title" style="font-size:22px;margin-bottom:8px">Corte 2: Cierre Final (Video & Front-End)</h3>
-        <p style="font-size:14px;font-weight:800;color:var(--sena-verde-dark);margin-bottom:12px">
-          📅 Fecha Límite Definitiva: Miércoles 04 de Noviembre de 2026 (23:59 hrs)
-        </p>
-        <p class="card-text" style="font-size:14px;color:var(--texto-muted);margin-bottom:16px">
-          Cubre la sustentación en video de la base de datos documental y la capa visual de interfaz de usuario UX/UI y maquetación web:
-        </p>
-        <ul class="list-premium">
-          <li><strong>AA1-EV04:</strong> Video demostrativo de operaciones CRUD en MongoDB (max 7 min).</li>
-          <li><strong>AA3-EV01..03:</strong> Prototipos interactivos wireframing/mockups en Figma y mapa UX.</li>
-          <li><strong>AA4-EV01..03:</strong> Maquetación web responsiva HTML5 semántico, CSS3 y JavaScript.</li>
-        </ul>
-      </div>
-    </div>
-
-    <div class="callout-box" style="border-left-color:var(--sena-naranja);background:var(--sena-naranja-bg);margin-top:24px">
-      <div class="callout-icon">⚡</div>
-      <div class="callout-content">
-        <h4 style="color:var(--sena-naranja-dark)">¿Por qué dividimos las entregas en 2 Cortes?</h4>
-        <p style="color:var(--texto-main)">
-          <strong>1. Garantía de Calificación SLA:</strong> El instructor dispone de tiempo para calificar y retroalimentar a cada aprendiz antes del cierre masivo del mes.<br>
-          <strong>2. Retroalimentación Temprana:</strong> Si requieres ajustar tu script SQL o esquema NoSQL, recibirás tu nota del Corte 1 a tiempo para aplicarla en la sustentación final y el Front-End.<br>
-          <strong>3. Evita represamientos en Zajuna:</strong> Previene la sobrecarga de última hora y garantiza el cumplimiento del 100% de tus evidencias registradas en el <a href="https://julianon2.github.io/seguimiento-adso-3389010/" target="_blank" style="color:var(--azul-tech);font-weight:700">Dashboard de Seguimiento ADSO ↗</a>.
-        </p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- SLIDE 6: MATRIZ COMPLETA DE 7 SESIONES -->
-<section class="slide" id="slide-6">
-  <div class="slide-num-indicator">06 / 08</div>
-  <div class="slide-inner">
-    <div class="slide-header-badge tech">
-      <span class="dot"></span> MATRIZ DE SINCRONIZACIÓN DE SESIONES & CARPETAS
-    </div>
-    <h2 class="sec-title">Cronograma y Estructura de Carpetas GA6</h2>
-    <p class="sec-desc">
-      Mapeo 1 a 1 de la <strong>Apertura Institucional</strong> y las <strong>6 Sesiones Técnicas</strong> con las carpetas del repositorio de trabajo y sus fechas límite en Zajuna:
-    </p>
-
-    <div class="table-wrapper">
-      <table class="matriz-table">
-        <thead>
-          <tr>
-            <th class="col-nowrap">Carpeta de Trabajo</th>
-            <th class="col-nowrap">Fecha Sincrónica</th>
-            <th class="col-nowrap">Actividad de Aprendizaje (AA)</th>
-            <th>Tema Principal de la Clase</th>
-            <th class="col-nowrap">Evidencias Asociadas</th>
-            <th class="col-nowrap">Fecha Límite (Zajuna)</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td class="col-nowrap"><span class="sesion-badge" style="background:linear-gradient(135deg,var(--sena-verde),var(--sena-naranja));color:#fff;">📁 Apertura/</span></td>
-            <td class="col-nowrap">Martes 06/10/2026</td>
-            <td class="col-nowrap"><span class="evidencia-tag" style="background:var(--sena-verde-bg);color:var(--sena-verde-dark);font-weight:700">Apertura Institucional</span></td>
-            <td><strong>Apertura Guía 6:</strong> Socialización de la Ruta Pedagógica, RAPs, Bloques Temáticos, Acuerdos y presentación del <a href="https://julianon2.github.io/seguimiento-adso-3389010/" target="_blank" style="color:var(--azul-tech);font-weight:700">Dashboard de Seguimiento ADSO ↗</a>.</td>
-            <td class="col-nowrap"><span class="evidencia-tag">Presentación General</span></td>
-            <td class="col-nowrap"><span class="evidencia-tag" style="background:#f1f5f9;color:var(--texto-sub);font-weight:700">N/A (Sesión Informativa)</span></td>
-          </tr>
-          <tr>
-            <td class="col-nowrap"><span class="sesion-badge">📁 Sesión 1/</span></td>
-            <td class="col-nowrap">Martes 13/10/2026</td>
-            <td class="col-nowrap"><span class="evidencia-tag">GA6-220501096-AA1</span></td>
-            <td><strong>Modelo Relacional & Normalización:</strong> Diagramas E-R, cardinalidades (1:1, 1:N, N:M) y aplicación paso a paso de las reglas de normalización (1FN, 2FN, 3FN).</td>
-            <td class="col-nowrap"><span class="evidencia-tag">AA1-EV01</span> <span class="evidencia-tag">AA1-EV02</span></td>
-            <td class="col-nowrap"><span class="deadline-badge corte1">Corte 1 — 25/10/2026</span></td>
-          </tr>
-          <tr>
-            <td class="col-nowrap"><span class="sesion-badge">📁 Sesión 2/</span></td>
-            <td class="col-nowrap">Lunes 19/10/2026</td>
-            <td class="col-nowrap"><span class="evidencia-tag">GA6-220501096-AA2</span></td>
-            <td><strong>SQL Completo (DDL & DML):</strong> Creación física de tablas (`CREATE/ALTER/DROP`), restricciones de integridad (PK/FK) y manipulación de datos (`INSERT/SELECT/UPDATE/DELETE`).</td>
-            <td class="col-nowrap"><span class="evidencia-tag">AA2-EV01</span> <span class="evidencia-tag">AA2-EV02</span> <span class="evidencia-tag">AA2-EV03</span></td>
-            <td class="col-nowrap"><span class="deadline-badge corte1">Corte 1 — 25/10/2026</span></td>
-          </tr>
-          <tr>
-            <td class="col-nowrap"><span class="sesion-badge">📁 Sesión 3/</span></td>
-            <td class="col-nowrap">Martes 20/10/2026</td>
-            <td class="col-nowrap"><span class="evidencia-tag">GA6-220501096-AA1</span></td>
-            <td><strong>Bases de Datos NoSQL & Documentos JSON:</strong> Sintaxis JSON/BSON, esquemas dinámicos, arreglos y estructuración de colecciones en MongoDB.</td>
-            <td class="col-nowrap"><span class="evidencia-tag">AA1-EV03</span></td>
-            <td class="col-nowrap"><span class="deadline-badge corte1">Corte 1 — 25/10/2026</span></td>
-          </tr>
-          <tr>
-            <td class="col-nowrap"><span class="sesion-badge">📁 Sesión 4/</span></td>
-            <td class="col-nowrap">Lunes 26/10/2026</td>
-            <td class="col-nowrap"><span class="evidencia-tag">GA6-220501096-AA1</span></td>
-            <td><strong>Operaciones CRUD en MongoDB & Sustentación:</strong> Práctica en MongoDB Compass y Shell, consultas y pautas técnicas para el video demostrativo.</td>
-            <td class="col-nowrap"><span class="evidencia-tag">AA1-EV04</span></td>
-            <td class="col-nowrap"><span class="deadline-badge corte2">Corte 2 — 04/11/2026</span></td>
-          </tr>
-          <tr>
-            <td class="col-nowrap"><span class="sesion-badge">📁 Sesión 5/</span></td>
-            <td class="col-nowrap">Martes 27/10/2026</td>
-            <td class="col-nowrap"><span class="evidencia-tag">GA6-220501096-AA3</span></td>
-            <td><strong>Prototipado UX/UI en Figma:</strong> Wireframes, mapas de navegación, diseño visual responsivo y prototipos interactivos del front-end.</td>
-            <td class="col-nowrap"><span class="evidencia-tag">AA3-EV01..03</span></td>
-            <td class="col-nowrap"><span class="deadline-badge corte2">Corte 2 — 04/11/2026</span></td>
-          </tr>
-          <tr>
-            <td class="col-nowrap"><span class="sesion-badge">📁 Sesión 6/</span></td>
-            <td class="col-nowrap">Lunes 02/11/2026</td>
-            <td class="col-nowrap"><span class="evidencia-tag">GA6-220501096-AA4</span></td>
-            <td><strong>Maquetación Web Front-End & Cierre:</strong> Maquetación con HTML5 semántico, CSS3 Flexbox/Grid, interactividad JavaScript y balance final de la guía.</td>
-            <td class="col-nowrap"><span class="evidencia-tag">AA4-EV01..03</span></td>
-            <td class="col-nowrap"><span class="deadline-badge corte2">Corte 2 — 04/11/2026</span></td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-</section>
-
-<!-- SLIDE 7: PROYECTO BASE TECHSTORE PRO REACT -->
-<section class="slide" id="slide-7">
-  <div class="slide-num-indicator">07 / 08</div>
-  <div class="slide-inner">
-    <div class="slide-header-badge">
-      <span class="dot"></span> APLICACIÓN PRÁCTICA EN EL PROYECTO FORMATIVO
-    </div>
-    <h2 class="sec-title">Proyecto Transversal: TechStore Pro React</h2>
-    <p class="sec-desc">
-      Cómo se integran las evidencias de la Guía 6 dentro del desarrollo del E-Commerce MERN:
-    </p>
-
-    <div class="grid-3">
-      <div class="card-premium highlight-verde">
-        <div class="card-icon">🗄️</div>
-        <h3 class="card-title">Capa Relacional MySQL</h3>
-        <p class="card-text">
-          Diseño del esquema físico relacional para gestión transaccional de usuarios, productos, categorías y pedidos con restricciones de llaves foráneas.
-        </p>
-      </div>
-
-      <div class="card-premium highlight-naranja">
-        <div class="card-icon">🍃</div>
-        <h3 class="card-title">Capa Documental MongoDB</h3>
-        <p class="card-text">
-          Modelado de colecciones de productos con variantes dinámicas, especificaciones técnicas y registros de auditoría JSON sin esquema rígido.
-        </p>
-      </div>
-
-      <div class="card-premium highlight-tech">
-        <div class="card-icon">🎨</div>
-        <h3 class="card-title">Capa Visual Front-End</h3>
-        <p class="card-text">
-          Prototipado en Figma y maquetación web limpia de la tienda virtual (Catálogo, Carrito de Compras, Detalle de Producto y Panel de Administración).
-        </p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- SLIDE 8: REGLAS Y FACTORES DE ÉXITO -->
-<section class="slide" id="slide-8">
-  <div class="slide-num-indicator">08 / 08</div>
-  <div class="slide-inner">
-    <div class="slide-header-badge naranja">
-      <span class="dot"></span> PAUTAS DE TRABAJO Y ENTREGAS
-    </div>
-    <h2 class="sec-title">Compromisos y Factores de Éxito</h2>
-    <p class="sec-desc">
-      Criterios clave para un desempeño excelente durante la Guía de Aprendizaje 6:
-    </p>
-
-    <div class="grid-2">
-      <div class="card-premium highlight-verde">
-        <h3 class="card-title">📋 Calidad en Entregables</h3>
-        <ul class="list-premium">
-          <li><strong>Formato Estándar:</strong> Entregas en PDF (con normas de presentación SENA) o carpetas comprimidas `.zip` según la evidencia.</li>
-          <li><strong>Código Probado:</strong> Scripts `.sql` ejecutables sin errores sintácticos.</li>
-          <li><strong>Videos Demostrativos:</strong> Audio claro, resolución mínima 720p y duración máxima de 7 minutos para la evidencia de MongoDB.</li>
-        </ul>
-      </div>
-
-      <div class="card-premium highlight-tech">
-        <h3 class="card-title">🤝 Acompañamiento & Comunicación</h3>
-        <ul class="list-premium">
-          <li><strong>Encuentros Sincrónicos:</strong> Participación activa y preguntas en vivo en Microsoft Teams.</li>
-          <li><strong>Grabaciones:</strong> Disponibles en el canal oficial 24 horas después de cada sesión.</li>
-          <li><strong>Foro de Dudas:</strong> Canal permanente para resolución de inquietudes técnicas en Zajuna.</li>
-        </ul>
-      </div>
-    </div>
-
-    <div style="text-align:center;margin-top:40px">
-      <div style="display:inline-block;background:linear-gradient(135deg, var(--sena-verde), var(--sena-verde-dark));padding:16px 36px;border-radius:30px;font-family:'Syne',sans-serif;font-size:18px;font-weight:800;color:#fff;box-shadow:0 8px 24px rgba(57,169,0,0.3)">
-        🚀 ¡Bienvenidos a la Guía 6! Éxitos en esta Fase de Ejecución.
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- Controles Flotantes para Navegación -->
-<div class="nav-controls">
-  <button class="btn-nav-control" onclick="prevSlide()" title="Anterior">←</button>
-  <button class="btn-nav-control" onclick="nextSlide()" title="Siguiente">→</button>
+<!-- TOAST FLOTANTE -->
+<div class="toast-notice" id="toastNotice">
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+  <span id="toastMessage">Texto copiado al portapapeles</span>
 </div>
 
 <script>
-// Manejo de Navegación por Diapositivas y Teclado
-let currentSlideIndex = 1;
-const totalSlides = 8;
-
-function updateProgress() {
-  const scrollTop = window.scrollY;
-  const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-  const progress = (scrollTop / docHeight) * 100;
-  document.getElementById('progressBar').style.width = progress + '%';
+// Manejo del Sidebar (Colapso y Expansión)
+function toggleSidebar() {
+  const sidebar = document.getElementById('sidebar');
+  const floatingToggle = document.getElementById('floatingToggle');
   
-  // Actualizar enlace activo en Topbar
+  sidebar.classList.toggle('collapsed');
+  
+  if (sidebar.classList.contains('collapsed')) {
+    floatingToggle.classList.add('visible');
+  } else {
+    floatingToggle.classList.remove('visible');
+  }
+}
+
+// ScrollSpy e Indicador de Progreso
+function initScrollSpy() {
   const slides = document.querySelectorAll('.slide');
-  slides.forEach((slide, index) => {
-    const rect = slide.getBoundingClientRect();
-    if (rect.top <= 150 && rect.bottom >= 150) {
-      const links = document.querySelectorAll('.topbar-nav a');
-      links.forEach(l => l.classList.remove('active'));
-      if (links[index]) links[index].classList.add('active');
+  const navLinks = document.querySelectorAll('.sidebar .nav-link');
+  const breadcrumbTitle = document.getElementById('breadcrumbSlideTitle');
+  const progressBar = document.getElementById('progressBar');
+
+  window.addEventListener('scroll', () => {
+    // Actualizar barra de progreso superior
+    const scrollTop = window.scrollY;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const progress = (scrollTop / docHeight) * 100;
+    progressBar.style.width = progress + '%';
+
+    // Detección de slide visible
+    let currentSlide = null;
+    slides.forEach(slide => {
+      const rect = slide.getBoundingClientRect();
+      if (rect.top <= window.innerHeight * 0.4 && rect.bottom >= window.innerHeight * 0.4) {
+        currentSlide = slide;
+      }
+    });
+
+    if (currentSlide) {
+      const slideId = currentSlide.getAttribute('id');
+      const slideNum = currentSlide.getAttribute('data-slide');
+      const slideTitle = currentSlide.getAttribute('data-title');
+
+      if (breadcrumbTitle && slideTitle) {
+        breadcrumbTitle.textContent = slideTitle;
+      }
+
+      navLinks.forEach(link => {
+        if (link.getAttribute('data-slide') === slideNum) {
+          link.classList.add('active');
+          link.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+        } else {
+          link.classList.remove('active');
+        }
+      });
     }
   });
 }
 
-window.addEventListener('scroll', updateProgress);
+// Checklist Interactivo
+function toggleChecklistItem(item) {
+  item.classList.toggle('checked');
+  updateChecklistCounter();
+}
 
-function goToSlide(num) {
-  if (num < 1) num = 1;
-  if (num > totalSlides) num = totalSlides;
-  currentSlideIndex = num;
-  const target = document.getElementById(`slide-${num}`);
-  if (target) {
-    target.scrollIntoView({ behavior: 'smooth' });
+function updateChecklistCounter() {
+  const total = document.querySelectorAll('.checklist-item').length;
+  const checked = document.querySelectorAll('.checklist-item.checked').length;
+  const counter = document.getElementById('checklistCounter');
+  if (counter) {
+    counter.textContent = `${checked} / ${total} Completados`;
+    if (checked === total) {
+      counter.style.background = 'var(--sena-verde)';
+      counter.style.color = '#ffffff';
+      showToast('¡Felicitaciones! Has completado el alistamiento técnico para la Guía 6.');
+    } else {
+      counter.style.background = 'var(--sena-verde-bg)';
+      counter.style.color = 'var(--sena-verde-dark)';
+    }
   }
 }
 
-function nextSlide() {
-  goToSlide(currentSlideIndex + 1);
+// Toast de retroalimentación
+function showToast(msg) {
+  const toast = document.getElementById('toastNotice');
+  const text = document.getElementById('toastMessage');
+  text.textContent = msg;
+  toast.classList.add('show');
+  setTimeout(() => {
+    toast.classList.remove('show');
+  }, 3200);
 }
 
-function prevSlide() {
-  goToSlide(currentSlideIndex - 1);
+// Copiar Ficha Técnica
+function copiarFichaTecnica() {
+  const text = `SENA — ADSO (Ficha 3389010 Virtual)
+Guía de Aprendizaje 6: GA6-220501096
+Fase 3: Ejecución | 288 Horas Totales
+Apertura: Martes 06/10/2026 | Cierre Zajuna: Miércoles 04/11/2026
+Cortes de Entrega:
+- Corte 1 (BDs SQL & NoSQL): Domingo 25/10/2026
+- Corte 2 (Video & Front-End): Miércoles 04/11/2026
+Encuentros Sincrónicos: Lunes y Martes 6:30 PM - 8:30 PM`;
+
+  navigator.clipboard.writeText(text).then(() => {
+    showToast('Ficha técnica copiada al portapapeles');
+  }).catch(() => {
+    showToast('Error al copiar ficha técnica');
+  });
 }
 
-document.addEventListener('keydown', (e) => {
-  if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') {
-    e.preventDefault();
-    nextSlide();
-  } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
-    e.preventDefault();
-    prevSlide();
-  }
-});
-
+// Pantalla Completa
 function toggleFullscreen() {
   if (!document.fullscreenElement) {
     document.documentElement.requestFullscreen().catch(err => console.log(err));
@@ -1069,6 +2022,31 @@ function toggleFullscreen() {
     }
   }
 }
+
+// Navegación por teclado (Flechas)
+document.addEventListener('keydown', (e) => {
+  const activeLink = document.querySelector('.sidebar .nav-link.active');
+  const currentNum = activeLink ? parseInt(activeLink.getAttribute('data-slide')) : 1;
+
+  if (e.key === 'ArrowRight' || e.key === 'PageDown') {
+    if (currentNum < 8) {
+      e.preventDefault();
+      const target = document.getElementById(`slide-${currentNum + 1}`);
+      if (target) target.scrollIntoView({ behavior: 'smooth' });
+    }
+  } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+    if (currentNum > 1) {
+      e.preventDefault();
+      const target = document.getElementById(`slide-${currentNum - 1}`);
+      if (target) target.scrollIntoView({ behavior: 'smooth' });
+    }
+  }
+});
+
+// Inicialización al cargar la página
+document.addEventListener('DOMContentLoaded', () => {
+  initScrollSpy();
+});
 </script>
 </body>
 </html>
