@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sesión 4 — Modelado NoSQL y JSON | SENA ADSO GA6</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&family=Syne:wght@700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root { --sena-verde: #39a900; --sena-naranja: #ff6b00; --texto: #1a1a2e; --bg: #f8fafc; --borde: #e2e8f0; }
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',sans-serif;color:var(--texto);background:var(--bg);line-height:1.6}
+.topbar{position:sticky;top:0;z-index:100;background:#fff;border-bottom:2px solid var(--sena-verde);padding:12px 32px;display:flex;align-items:center;justify-content:space-between}
+.slide{min-height:100vh;padding:80px 48px;position:relative;border-bottom:1px solid var(--borde)}
+pre{background:#1e1e2e;color:#cdd6f4;padding:16px;border-radius:12px;font-family:'JetBrains Mono';font-size:13px}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div style="font-weight:700;color:var(--sena-verde)">SENA ADSO 3389010 | Bloque 2: NoSQL — Guía 6 (Sesión 4)</div>
+</header>
+<section class="slide">
+  <h1 style="font-family:'Syne';font-size:48px;margin-bottom:24px">Modelado de Bases de Datos NoSQL y Sintaxis JSON</h1>
+  <p style="font-size:18px;margin-bottom:32px">Introducción a las bases de datos no relacionales, documentos BSON/JSON, colecciones y estructura flexible (EV03).</p>
+  <pre><code>// Ejemplo Documento JSON NoSQL en MongoDB
+{
+  "_id": "60c72b2f9b1d8b2b88888888",
+  "placa": "ABC123",
+  "marca": "Toyota",
+  "modelo": 2024,
+  "kilometraje": 15000,
+  "mantenimientos": [
+    { "fecha": "2026-01-15", "tipo": "Cambio de aceite" },
+    { "fecha": "2026-06-20", "tipo": "Alineación y balanceo" }
+  ]
+}</code></pre>
+</section>
+</body>
+</html>

@@ -1,0 +1,1365 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portal de Aprendizaje — Guía 6 (GA6-220501096) | SENA ADSO 3389010</title>
+  
+  <!-- Tipografías Google Fonts de Alta Gama -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@600;700;800;900&family=Syne:wght@700;800;900&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      /* Paleta SENA Institucional Premium */
+      --sena-verde: #39a900;
+      --sena-verde-dark: #236b00;
+      --sena-verde-light: #52c41a;
+      --sena-verde-bg: #f0fdf4;
+      --sena-verde-border: #bbf7d0;
+      --sena-verde-glow: rgba(57, 169, 0, 0.15);
+
+      --sena-naranja: #ff6b00;
+      --sena-naranja-dark: #c2410c;
+      --sena-naranja-bg: #fff7ed;
+      --sena-naranja-border: #fed7aa;
+      --sena-naranja-glow: rgba(255, 107, 0, 0.15);
+
+      --azul-tech: #0284c7;
+      --azul-tech-dark: #0369a1;
+      --azul-bg: #eff6ff;
+      --azul-border: #bfdbfe;
+      --azul-glow: rgba(2, 132, 199, 0.15);
+
+      --purpura-pro: #8b5cf6;
+      --purpura-bg: #faf5ff;
+      --purpura-border: #e9d5ff;
+
+      /* Superficies y Neutros Glassmorphic */
+      --bg-page: #f8fafc;
+      --bg-glass: rgba(255, 255, 255, 0.88);
+      --bg-glass-card: rgba(255, 255, 255, 0.92);
+      --bg-subtle: #f1f5f9;
+      --borde-glass: rgba(226, 232, 240, 0.85);
+      --borde-glass-active: rgba(57, 169, 0, 0.4);
+
+      --texto-main: #0f172a;
+      --texto-muted: #334155;
+      --texto-sub: #64748b;
+      --texto-dimmer: #94a3b8;
+
+      /* Sombras Multicapa Sofisticadas */
+      --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.04);
+      --shadow-card: 0 10px 30px -10px rgba(15, 23, 42, 0.07);
+      --shadow-hover: 0 20px 40px -12px rgba(15, 23, 42, 0.14);
+      --shadow-glow-green: 0 8px 24px -6px rgba(57, 169, 0, 0.3);
+      --shadow-glow-blue: 0 8px 24px -6px rgba(2, 132, 199, 0.3);
+
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 18px;
+      --radius-xl: 24px;
+    }
+
+    * { margin:0; padding:0; box-sizing:border-box; }
+    
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg-page);
+      color: var(--texto-main);
+      line-height: 1.6;
+      overflow-x: hidden;
+      min-height: 100vh;
+      position: relative;
+    }
+
+    /* Fondos Aurora / Mesh Gradients Dinámicos */
+    body::before {
+      content: '';
+      position: fixed;
+      top: -120px;
+      left: -100px;
+      width: 550px;
+      height: 550px;
+      background: radial-gradient(circle, rgba(57, 169, 0, 0.09) 0%, rgba(57, 169, 0, 0.01) 70%, transparent 100%);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    body::after {
+      content: '';
+      position: fixed;
+      top: 15%;
+      right: -150px;
+      width: 650px;
+      height: 650px;
+      background: radial-gradient(circle, rgba(2, 132, 199, 0.08) 0%, rgba(2, 132, 199, 0.01) 70%, transparent 100%);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Topbar Glassmorphic Flotante */
+    .portal-topbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(255, 255, 255, 0.88);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--borde-glass);
+      padding: 12px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+    }
+
+    .topbar-brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .sena-badge {
+      background: linear-gradient(135deg, var(--sena-verde), var(--sena-verde-dark));
+      color: #fff;
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 15px;
+      padding: 6px 14px;
+      border-radius: 10px;
+      letter-spacing: 0.5px;
+      box-shadow: 0 4px 12px rgba(57, 169, 0, 0.25);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+    }
+
+    .topbar-info h1 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 15.5px;
+      font-weight: 700;
+      color: var(--texto-main);
+      line-height: 1.2;
+    }
+
+    .topbar-breadcrumbs {
+      font-size: 11.5px;
+      color: var(--texto-sub);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .topbar-breadcrumbs span.sep { color: #cbd5e1; font-weight: 300; }
+
+    .topbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    /* Input de Búsqueda Rápida */
+    .search-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .search-input {
+      background: #f8fafc;
+      border: 1.5px solid var(--borde-glass);
+      border-radius: 20px;
+      padding: 8px 16px 8px 36px;
+      font-size: 12.5px;
+      color: var(--texto-main);
+      width: 260px;
+      transition: all 0.25s ease;
+      outline: none;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .search-input:focus {
+      width: 320px;
+      background: #ffffff;
+      border-color: var(--sena-verde);
+      box-shadow: 0 0 0 3px rgba(57, 169, 0, 0.12);
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 12px;
+      pointer-events: none;
+      color: var(--texto-sub);
+    }
+
+    .btn-dashboard-top {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: linear-gradient(135deg, #0284c7, #0369a1);
+      color: #fff;
+      text-decoration: none;
+      font-size: 12.5px;
+      font-weight: 700;
+      padding: 8px 18px;
+      border-radius: 20px;
+      box-shadow: var(--shadow-glow-blue);
+      transition: all 0.25s ease;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .btn-dashboard-top:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 24px rgba(2, 132, 199, 0.4);
+    }
+
+    /* Contenedor Principal */
+    .portal-container {
+      max-width: 1320px;
+      margin: 0 auto;
+      padding: 32px 28px 0;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Hero Principal con Efecto Glassmorphic */
+    .hero-panel {
+      background: var(--bg-glass);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1.5px solid rgba(255, 255, 255, 0.9);
+      border-radius: var(--radius-xl);
+      padding: 36px 40px;
+      margin-bottom: 32px;
+      box-shadow: var(--shadow-card);
+      position: relative;
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: 1.4fr 1fr;
+      gap: 36px;
+      align-items: center;
+    }
+
+    @media (max-width: 1024px) {
+      .hero-panel {
+        grid-template-columns: 1fr;
+        padding: 30px;
+      }
+    }
+
+    .hero-badge-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--sena-verde-bg);
+      border: 1px solid var(--sena-verde-border);
+      padding: 5px 14px;
+      border-radius: 30px;
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--sena-verde-dark);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 16px;
+    }
+
+    .hero-badge-pill .pulse-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--sena-verde);
+      box-shadow: 0 0 0 3px rgba(57, 169, 0, 0.25);
+    }
+
+    .hero-title {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(28px, 3.4vw, 42px);
+      font-weight: 800;
+      color: var(--texto-main);
+      line-height: 1.15;
+      margin-bottom: 14px;
+      letter-spacing: -0.5px;
+    }
+
+    .hero-title span.grad-verde {
+      background: linear-gradient(135deg, var(--sena-verde), var(--sena-verde-dark));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-title span.grad-tech {
+      background: linear-gradient(135deg, var(--azul-tech), var(--azul-tech-dark));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-desc {
+      font-size: 14.5px;
+      color: var(--texto-muted);
+      line-height: 1.6;
+      margin-bottom: 22px;
+    }
+
+    /* Widget de Estado y Progreso */
+    .hero-progress-widget {
+      background: #ffffff;
+      border: 1.5px solid var(--borde-glass);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .progress-widget-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+
+    .progress-widget-title {
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--texto-sub);
+    }
+
+    .progress-percentage {
+      font-family: 'Syne', sans-serif;
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--sena-verde-dark);
+    }
+
+    .progress-bar-track {
+      width: 100%;
+      height: 8px;
+      background: #f1f5f9;
+      border-radius: 10px;
+      overflow: hidden;
+      margin-bottom: 18px;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      width: 28.5%;
+      background: linear-gradient(90deg, var(--sena-verde), var(--sena-naranja));
+      border-radius: 10px;
+      transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .progress-kpis-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .kpi-card {
+      background: #f8fafc;
+      border: 1px solid var(--borde-glass);
+      border-radius: 10px;
+      padding: 10px 14px;
+      font-size: 11.5px;
+    }
+
+    .kpi-card-label {
+      color: var(--texto-sub);
+      font-size: 10.5px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 3px;
+    }
+
+    .kpi-card-val {
+      font-weight: 800;
+      color: var(--texto-main);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .kpi-card-val.corte1 { color: var(--sena-naranja-dark); }
+    .kpi-card-val.corte2 { color: var(--sena-verde-dark); }
+
+    /* Barra de Navegación y Filtros Interactivos */
+    .controls-strip {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--borde-glass);
+    }
+
+    .filter-pills-group {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .pill-btn {
+      background: #ffffff;
+      border: 1.5px solid var(--borde-glass);
+      color: var(--texto-muted);
+      font-size: 12px;
+      font-weight: 600;
+      padding: 7px 16px;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .pill-btn:hover {
+      border-color: var(--sena-verde-light);
+      color: var(--sena-verde-dark);
+      background: var(--sena-verde-bg);
+    }
+
+    .pill-btn.active {
+      background: var(--sena-verde);
+      border-color: var(--sena-verde);
+      color: #ffffff;
+      font-weight: 700;
+      box-shadow: 0 4px 14px rgba(57, 169, 0, 0.25);
+    }
+
+    .view-switcher-group {
+      display: flex;
+      background: #ffffff;
+      border: 1px solid var(--borde-glass);
+      border-radius: 10px;
+      padding: 3px;
+      gap: 3px;
+    }
+
+    .view-btn {
+      background: transparent;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 7px;
+      font-size: 11.5px;
+      font-weight: 700;
+      color: var(--texto-sub);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+    }
+
+    .view-btn.active {
+      background: #f1f5f9;
+      color: var(--texto-main);
+    }
+
+    /* Grilla de Sesiones (Vista Cards) */
+    .sessions-grid-view {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+      gap: 24px;
+    }
+
+    @media (max-width: 820px) {
+      .sessions-grid-view {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Tarjeta de Sesión Premium */
+    .session-card-pro {
+      background: var(--bg-glass-card);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1.5px solid var(--borde-glass);
+      border-radius: var(--radius-lg);
+      padding: 26px;
+      box-shadow: var(--shadow-sm);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .session-card-pro::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: #cbd5e1;
+      transition: background 0.3s ease;
+    }
+
+    .session-card-pro.theme-verde::before { background: linear-gradient(90deg, var(--sena-verde), var(--sena-verde-dark)); }
+    .session-card-pro.theme-naranja::before { background: linear-gradient(90deg, var(--sena-naranja), var(--sena-naranja-dark)); }
+    .session-card-pro.theme-azul::before { background: linear-gradient(90deg, var(--azul-tech), var(--azul-tech-dark)); }
+
+    .session-card-pro:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-hover);
+      border-color: rgba(57, 169, 0, 0.35);
+      background: #ffffff;
+    }
+
+    .card-pro-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+
+    .folder-tag-badge {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11.5px;
+      font-weight: 700;
+      color: var(--texto-main);
+      background: #f8fafc;
+      padding: 4px 10px;
+      border-radius: 6px;
+      border: 1px solid var(--borde-glass);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .status-pill-indicator {
+      font-size: 10.5px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      padding: 3px 10px;
+      border-radius: 20px;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .status-pill-indicator.completada {
+      background: var(--sena-verde-bg);
+      color: var(--sena-verde-dark);
+      border: 1px solid var(--sena-verde-border);
+    }
+
+    .status-pill-indicator.hoy {
+      background: var(--sena-naranja-bg);
+      color: var(--sena-naranja-dark);
+      border: 1px solid var(--sena-naranja-border);
+      animation: pulse-glow 2s infinite;
+    }
+
+    .status-pill-indicator.proxima {
+      background: var(--azul-bg);
+      color: var(--azul-tech);
+      border: 1px solid var(--azul-border);
+    }
+
+    .status-pill-indicator.programada {
+      background: #f1f5f9;
+      color: var(--texto-sub);
+      border: 1px solid var(--borde-glass);
+    }
+
+    @keyframes pulse-glow {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(255, 107, 0, 0.4); }
+      50% { box-shadow: 0 0 0 4px rgba(255, 107, 0, 0); }
+    }
+
+    .card-pro-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--texto-main);
+      line-height: 1.3;
+      margin-bottom: 8px;
+    }
+
+    .card-pro-date {
+      font-size: 12px;
+      color: var(--texto-sub);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 12px;
+      font-weight: 500;
+    }
+
+    .card-pro-desc {
+      font-size: 13px;
+      color: var(--texto-muted);
+      line-height: 1.55;
+      margin-bottom: 18px;
+    }
+
+    .card-pro-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 20px;
+    }
+
+    .tech-chip {
+      font-size: 11px;
+      font-weight: 600;
+      background: #f8fafc;
+      border: 1px solid var(--borde-glass);
+      padding: 3px 8px;
+      border-radius: 5px;
+      color: var(--texto-muted);
+    }
+
+    .deadline-chip {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 5px;
+    }
+
+    .deadline-chip.corte1 {
+      background: var(--sena-naranja-bg);
+      color: var(--sena-naranja-dark);
+      border: 1px solid var(--sena-naranja-border);
+    }
+
+    .deadline-chip.corte2 {
+      background: var(--sena-verde-bg);
+      color: var(--sena-verde-dark);
+      border: 1px solid var(--sena-verde-border);
+    }
+
+    /* Acciones de la Tarjeta */
+    .card-pro-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      border-top: 1px solid var(--borde-glass);
+      padding-top: 16px;
+    }
+
+    .btn-card-action {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      text-decoration: none;
+      font-size: 12.5px;
+      font-weight: 700;
+      padding: 9px 16px;
+      border-radius: var(--radius-sm);
+      transition: all 0.2s ease;
+      cursor: pointer;
+    }
+
+    .btn-card-action.primary-green {
+      background: linear-gradient(135deg, var(--sena-verde), var(--sena-verde-dark));
+      color: #ffffff;
+      box-shadow: 0 4px 12px rgba(57, 169, 0, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+
+    .btn-card-action.primary-green:hover {
+      box-shadow: 0 6px 16px rgba(57, 169, 0, 0.35);
+      transform: translateY(-1px);
+    }
+
+    .btn-card-action.primary-orange {
+      background: linear-gradient(135deg, var(--sena-naranja), var(--sena-naranja-dark));
+      color: #ffffff;
+      box-shadow: 0 4px 12px rgba(255, 107, 0, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+
+    .btn-card-action.primary-orange:hover {
+      box-shadow: 0 6px 16px rgba(255, 107, 0, 0.35);
+      transform: translateY(-1px);
+    }
+
+    .btn-card-action.secondary-neutral {
+      background: #f8fafc;
+      color: var(--texto-main);
+      border: 1px solid var(--borde-glass);
+    }
+
+    .btn-card-action.secondary-neutral:hover {
+      background: #f1f5f9;
+      border-color: #cbd5e1;
+    }
+
+    .btn-card-action.preview-btn {
+      background: transparent;
+      color: var(--azul-tech);
+      border: 1px dashed var(--azul-border);
+      font-size: 12px;
+    }
+
+    .btn-card-action.preview-btn:hover {
+      background: var(--azul-bg);
+      border-color: var(--azul-tech);
+    }
+
+    .btn-card-action.disabled-locked {
+      background: #f8fafc;
+      color: var(--texto-dimmer);
+      border: 1px dashed var(--borde-glass);
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    /* Modal Visor Cinema Embebido */
+    .cinema-modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(15, 23, 42, 0.7);
+      backdrop-filter: blur(8px);
+      z-index: 1000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .cinema-modal-overlay.active {
+      display: flex;
+    }
+
+    .cinema-modal-card {
+      background: #ffffff;
+      border-radius: var(--radius-xl);
+      width: 95vw;
+      max-width: 1400px;
+      height: 90vh;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.35);
+      border: 1.5px solid rgba(255, 255, 255, 0.6);
+      overflow: hidden;
+      animation: modalFadeIn 0.25s ease-out;
+    }
+
+    @keyframes modalFadeIn {
+      from { opacity: 0; transform: scale(0.97) translateY(10px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    .cinema-modal-header {
+      background: #f8fafc;
+      border-bottom: 1px solid var(--borde-glass);
+      padding: 12px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .cinema-modal-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--texto-main);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .cinema-modal-controls {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .cinema-btn-tool {
+      background: #ffffff;
+      border: 1px solid var(--borde-glass);
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--texto-muted);
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .cinema-btn-tool:hover {
+      background: #f1f5f9;
+      color: var(--texto-main);
+    }
+
+    .cinema-btn-close {
+      background: #fee2e2;
+      border: 1px solid #fecaca;
+      color: #b91c1c;
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: 800;
+    }
+
+    .cinema-iframe-wrapper {
+      flex: 1;
+      width: 100%;
+      height: 100%;
+      background: #0f172a;
+    }
+
+    .cinema-iframe-wrapper iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    /* Footer Institucional */
+    .portal-footer {
+      max-width: 1320px;
+      margin: 48px auto 0;
+      padding: 24px 28px 0;
+      border-top: 1px solid var(--borde-glass);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+      font-size: 12px;
+      color: var(--texto-sub);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- TOPBAR INSTITUCIONAL ELEGANTE -->
+  <header class="portal-topbar">
+    <div class="topbar-brand">
+      <div class="sena-badge">SENA</div>
+      <div class="topbar-info">
+        <h1>ADSO — Ficha 3389010 (Virtual)</h1>
+        <div class="topbar-breadcrumbs">
+          <span>Fase 3: Ejecución</span>
+          <span class="sep">/</span>
+          <span>Guía 6 (GA6-220501096)</span>
+          <span class="sep">/</span>
+          <span style="color:var(--sena-verde-dark);font-weight:700">Hub Central de Materiales</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- BÚSQUEDA RÁPIDA Y ACCIÓN -->
+    <div class="topbar-actions">
+      <div class="search-wrapper">
+        <svg class="search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        <input type="text" id="searchInput" class="search-input" placeholder="Buscar: EV01, DDL, MongoDB, Figma..." oninput="filtrarPorBusqueda()">
+      </div>
+
+      <a href="https://julianon2.github.io/seguimiento-adso-3389010/" target="_blank" class="btn-dashboard-top">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg>
+        Dashboard en Vivo ↗
+      </a>
+    </div>
+  </header>
+
+  <!-- CONTENEDOR PRINCIPAL -->
+  <div class="portal-container">
+
+    <!-- HERO PRINCIPAL GLASSMORPHIC -->
+    <section class="hero-panel">
+      <div>
+        <div class="hero-badge-pill">
+          <span class="pulse-dot"></span>
+          GUÍA DE APRENDIZAJE 6 (GA6-220501096)
+        </div>
+        <h2 class="hero-title">
+          Construcción de <span class="grad-verde">Bases de Datos</span> & <span class="grad-tech">Front-End Web</span>
+        </h2>
+        <p class="hero-desc">
+          Entorno interactivo para consultar las presentaciones sincrónicas, manuales de estudio y especificaciones técnicas de las evidencias evaluadas en la Fase 3: Ejecución, articuladas con el proyecto formativo <strong>TechStore Pro React (MERN)</strong>.
+        </p>
+
+        <div style="display:flex;gap:12px;flex-wrap:wrap;">
+          <div style="font-size:12px;color:var(--texto-sub);display:flex;align-items:center;gap:6px;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--sena-verde)" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+            <strong>288 Horas Totales:</strong> 14h Sincrónicas (1 Apertura + 6 Sesiones)
+          </div>
+          <div style="font-size:12px;color:var(--texto-sub);display:flex;align-items:center;gap:6px;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--azul-tech)" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+            <strong>Horario:</strong> Lunes y Martes 6:30 PM – 8:30 PM
+          </div>
+        </div>
+      </div>
+
+      <!-- WIDGET DE AVANCE FORMATIVO -->
+      <div class="hero-progress-widget">
+        <div class="progress-widget-header">
+          <span class="progress-widget-title">Avance del Cronograma Sincrónico</span>
+          <span class="progress-percentage">28.5%</span>
+        </div>
+        <div class="progress-bar-track">
+          <div class="progress-bar-fill"></div>
+        </div>
+        <div class="progress-kpis-grid">
+          <div class="kpi-card">
+            <div class="kpi-card-label">🟧 Corte 1 (Bases de Datos)</div>
+            <div class="kpi-card-val corte1">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>
+              25 / Oct / 2026
+            </div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-card-label">🟩 Corte 2 (Cierre Definitivo)</div>
+            <div class="kpi-card-val corte2">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>
+              04 / Nov / 2026
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- BARRA DE FILTROS Y CONTROLES -->
+    <div class="controls-strip">
+      <div class="filter-pills-group">
+        <button class="pill-btn active" onclick="filtrarPorBloque('todos', this)">
+          <span>Todos los Encuentros</span>
+          <span style="background:rgba(255,255,255,0.25);padding:1px 6px;border-radius:10px;font-size:10px;">7</span>
+        </button>
+        <button class="pill-btn" onclick="filtrarPorBloque('b1', this)">
+          <span>Bloque 1: SQL Relacional</span>
+          <span style="background:#f1f5f9;color:#64748b;padding:1px 6px;border-radius:10px;font-size:10px;">3</span>
+        </button>
+        <button class="pill-btn" onclick="filtrarPorBloque('b2', this)">
+          <span>Bloque 2: NoSQL MongoDB</span>
+          <span style="background:#f1f5f9;color:#64748b;padding:1px 6px;border-radius:10px;font-size:10px;">2</span>
+        </button>
+        <button class="pill-btn" onclick="filtrarPorBloque('b3', this)">
+          <span>Bloque 3: Front-End UI/UX</span>
+          <span style="background:#f1f5f9;color:#64748b;padding:1px 6px;border-radius:10px;font-size:10px;">2</span>
+        </button>
+      </div>
+
+      <div style="font-size:11.5px;color:var(--texto-sub);display:flex;align-items:center;gap:6px;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        <span>Exclusiones de seguridad aplicadas (.gitignore activo)</span>
+      </div>
+    </div>
+
+    <!-- GRILLA DE SESIONES -->
+    <main class="sessions-grid-view" id="sessionsContainer">
+
+      <!-- ==========================================
+           1. CARPETA APERTURA
+           ========================================== -->
+      <article class="session-card-pro theme-verde" data-bloque="b1" data-search="apertura induccion ruta pedagogica dashboard acuerdos raps sla">
+        <div>
+          <div class="card-pro-header">
+            <span class="folder-tag-badge">📁 Apertura/</span>
+            <span class="status-pill-indicator completada">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+              Completada
+            </span>
+          </div>
+          <h3 class="card-pro-title">Apertura Institucional de Guía 6</h3>
+          <div class="card-pro-date">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>
+            Martes, 06 de Octubre de 2026 (6:30 PM)
+          </div>
+          <p class="card-pro-desc">
+            Socialización de la Ruta Pedagógica de la Guía 6, RAPs evaluados, estructura de bloques temáticos, cronograma sincrónico y presentación del Dashboard de Seguimiento.
+          </p>
+          <div class="card-pro-chips">
+            <span class="tech-chip">Inducción</span>
+            <span class="tech-chip">Estrategia 2 Cortes</span>
+            <span class="tech-chip">SLA Zajuna</span>
+          </div>
+        </div>
+
+        <div class="card-pro-actions">
+          <a href="./Apertura/PRESENTACION_APERTURA_GUIA6.html" target="_blank" class="btn-card-action primary-green">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            Abrir Presentación Completa ↗
+          </a>
+          <button type="button" class="btn-card-action preview-btn" onclick="abrirVisorCinema('./Apertura/PRESENTACION_APERTURA_GUIA6.html', 'Apertura Institucional Guía 6')">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+            Previsualizar en Pantalla
+          </button>
+        </div>
+      </article>
+
+      <!-- ==========================================
+           2. CARPETA SESIÓN 1 (HOY)
+           ========================================== -->
+      <article class="session-card-pro theme-verde" data-bloque="b1" data-search="sesion 1 modelo relacional normalizacion 1fn 2fn 3fn entidad relacion dbdiagram dbml sql aa1-ev01 aa1-ev02">
+        <div>
+          <div class="card-pro-header">
+            <span class="folder-tag-badge">📁 Sesión 1/</span>
+            <span class="status-pill-indicator hoy">
+              <span class="pulse-dot" style="background:#ea580c"></span>
+              Realizada Hoy
+            </span>
+          </div>
+          <h3 class="card-pro-title">Modelo Relacional & Normalización (1FN, 2FN, 3FN)</h3>
+          <div class="card-pro-date">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>
+            Martes, 13 de Octubre de 2026 (6:30 PM)
+          </div>
+          <p class="card-pro-desc">
+            Diagramas Entidad-Relación, cardinalidades (1:1, 1:N, N:M), aplicación paso a paso de las tres primeras formas normales, generador DBML y modelado en dbdiagram.io.
+          </p>
+          <div class="card-pro-chips">
+            <span class="tech-chip">AA1-EV01</span>
+            <span class="tech-chip">AA1-EV02</span>
+            <span class="tech-chip">1FN / 2FN / 3FN</span>
+            <span class="deadline-chip corte1">Corte 1 — 25/Oct</span>
+          </div>
+        </div>
+
+        <div class="card-pro-actions">
+          <a href="./Sesión 1/PRESENTACION_SESION01_MODELO_RELACIONAL.html" target="_blank" class="btn-card-action primary-green">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            Abrir Presentación Interactiva ↗
+          </a>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;">
+            <a href="./Sesión 1/MANUAL_SESION01.md" target="_blank" class="btn-card-action secondary-neutral" style="font-size:11.5px;padding:7px 10px;">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"/><path d="M6 6h10"/><path d="M6 10h10"/></svg>
+              Manual (.md)
+            </a>
+            <button type="button" class="btn-card-action preview-btn" style="font-size:11.5px;padding:7px 10px;" onclick="abrirVisorCinema('./Sesión 1/PRESENTACION_SESION01_MODELO_RELACIONAL.html', 'Sesión 1 — Modelo Relacional y Normalización')">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+              Previsualizar
+            </button>
+          </div>
+        </div>
+      </article>
+
+      <!-- ==========================================
+           3. CARPETA SESIÓN 2 (PRÓXIMA)
+           ========================================== -->
+      <article class="session-card-pro theme-naranja" data-bloque="b1" data-search="sesion 2 sql completo ddl dml create alter drop insert select update delete script workbench mysql aa2-ev01 aa2-ev02 aa2-ev03">
+        <div>
+          <div class="card-pro-header">
+            <span class="folder-tag-badge">📁 Sesión 2/</span>
+            <span class="status-pill-indicator proxima">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              Próxima Sesión
+            </span>
+          </div>
+          <h3 class="card-pro-title">SQL Completo (DDL & DML en MySQL Workbench)</h3>
+          <div class="card-pro-date">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>
+            Lunes, 19 de Octubre de 2026 (6:30 PM)
+          </div>
+          <p class="card-pro-desc">
+            Definición física DDL (CREATE, ALTER, DROP), restricciones PK/FK (ON DELETE CASCADE), manipulación transaccional DML (INSERT, SELECT INNER JOIN, UPDATE, DELETE) y script final .sql.
+          </p>
+          <div class="card-pro-chips">
+            <span class="tech-chip">AA2-EV01</span>
+            <span class="tech-chip">AA2-EV02</span>
+            <span class="tech-chip">AA2-EV03</span>
+            <span class="tech-chip">Script .sql</span>
+            <span class="deadline-chip corte1">Corte 1 — 25/Oct</span>
+          </div>
+        </div>
+
+        <div class="card-pro-actions">
+          <a href="./Sesión 2/PRESENTACION_SESION02_DDL_RESTRICCIONES.html" target="_blank" class="btn-card-action primary-orange">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            Abrir Presentación Sesión 2 ↗
+          </a>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;">
+            <a href="./Sesión 2/MANUAL_SESION02.md" target="_blank" class="btn-card-action secondary-neutral" style="font-size:11.5px;padding:7px 10px;">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"/><path d="M6 6h10"/><path d="M6 10h10"/></svg>
+              Manual SQL (.md)
+            </a>
+            <button type="button" class="btn-card-action preview-btn" style="font-size:11.5px;padding:7px 10px;" onclick="abrirVisorCinema('./Sesión 2/PRESENTACION_SESION02_DDL_RESTRICCIONES.html', 'Sesión 2 — SQL Completo DDL & DML')">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+              Previsualizar
+            </button>
+          </div>
+        </div>
+      </article>
+
+      <!-- ==========================================
+           4. CARPETA SESIÓN 3
+           ========================================== -->
+      <article class="session-card-pro theme-azul" data-bloque="b2" data-search="sesion 3 nosql mongodb json bson colecciones esquemas dinamicos aa1-ev03">
+        <div>
+          <div class="card-pro-header">
+            <span class="folder-tag-badge">📁 Sesión 3/</span>
+            <span class="status-pill-indicator programada">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/></svg>
+              Programada
+            </span>
+          </div>
+          <h3 class="card-pro-title">Bases de Datos NoSQL & Documentos JSON</h3>
+          <div class="card-pro-date">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>
+            Martes, 20 de Octubre de 2026 (6:30 PM)
+          </div>
+          <p class="card-pro-desc">
+            Fundamentos del modelo documental NoSQL frente a tablas relacionales, sintaxis JSON/BSON, esquemas dinámicos flexibles y estructuración de colecciones en MongoDB.
+          </p>
+          <div class="card-pro-chips">
+            <span class="tech-chip">AA1-EV03</span>
+            <span class="tech-chip">JSON / BSON</span>
+            <span class="tech-chip">MongoDB</span>
+            <span class="deadline-chip corte1">Corte 1 — 25/Oct</span>
+          </div>
+        </div>
+
+        <div class="card-pro-actions">
+          <button class="btn-card-action disabled-locked" title="El material se activará en la fecha programada">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            Disponible el 20 de Octubre
+          </button>
+        </div>
+      </article>
+
+      <!-- ==========================================
+           5. CARPETA SESIÓN 4
+           ========================================== -->
+      <article class="session-card-pro theme-azul" data-bloque="b2" data-search="sesion 4 crud mongodb compass shell sustentacion video documental aa1-ev04">
+        <div>
+          <div class="card-pro-header">
+            <span class="folder-tag-badge">📁 Sesión 4/</span>
+            <span class="status-pill-indicator programada">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/></svg>
+              Programada
+            </span>
+          </div>
+          <h3 class="card-pro-title">Operaciones CRUD MongoDB & Sustentación Video</h3>
+          <div class="card-pro-date">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>
+            Lunes, 26 de Octubre de 2026 (6:30 PM)
+          </div>
+          <p class="card-pro-desc">
+            Práctica técnica en MongoDB Compass y terminal Shell (insertOne, find, updateOne, deleteOne) y pautas de grabación para la evidencia de sustentación en video.
+          </p>
+          <div class="card-pro-chips">
+            <span class="tech-chip">AA1-EV04</span>
+            <span class="tech-chip">Compass & Shell</span>
+            <span class="tech-chip">Video max 7min</span>
+            <span class="deadline-chip corte2">Corte 2 — 04/Nov</span>
+          </div>
+        </div>
+
+        <div class="card-pro-actions">
+          <button class="btn-card-action disabled-locked" title="El material se activará en la fecha programada">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            Disponible el 26 de Octubre
+          </button>
+        </div>
+      </article>
+
+      <!-- ==========================================
+           6. CARPETA SESIÓN 5
+           ========================================== -->
+      <article class="session-card-pro theme-verde" data-bloque="b3" data-search="sesion 5 prototipado figma ui ux wireframes mockups mapa navegacion aa3-ev01 aa3-ev02 aa3-ev03">
+        <div>
+          <div class="card-pro-header">
+            <span class="folder-tag-badge">📁 Sesión 5/</span>
+            <span class="status-pill-indicator programada">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/></svg>
+              Programada
+            </span>
+          </div>
+          <h3 class="card-pro-title">Prototipado UX/UI en Figma (Mockups & Mapas)</h3>
+          <div class="card-pro-date">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>
+            Martes, 27 de Octubre de 2026 (6:30 PM)
+          </div>
+          <p class="card-pro-desc">
+            Diseño centrado en el usuario, heurísticas de Nielsen, accesibilidad web, diagramación de mapa de navegación y diseño visual de mockups interactivos en Figma.
+          </p>
+          <div class="card-pro-chips">
+            <span class="tech-chip">AA3-EV01..03</span>
+            <span class="tech-chip">Figma</span>
+            <span class="tech-chip">Wireframes & UI</span>
+            <span class="deadline-chip corte2">Corte 2 — 04/Nov</span>
+          </div>
+        </div>
+
+        <div class="card-pro-actions">
+          <button class="btn-card-action disabled-locked" title="El material se activará en la fecha programada">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            Disponible el 27 de Octubre
+          </button>
+        </div>
+      </article>
+
+      <!-- ==========================================
+           7. CARPETA SESIÓN 6
+           ========================================== -->
+      <article class="session-card-pro theme-verde" data-bloque="b3" data-search="sesion 6 maquetacion front end html5 css3 javascript web flexbox grid responsivo cierre guia aa4-ev01 aa4-ev02 aa4-ev03">
+        <div>
+          <div class="card-pro-header">
+            <span class="folder-tag-badge">📁 Sesión 6/</span>
+            <span class="status-pill-indicator programada">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/></svg>
+              Programada
+            </span>
+          </div>
+          <h3 class="card-pro-title">Maquetación Front-End Web & Cierre de Guía</h3>
+          <div class="card-pro-date">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>
+            Lunes, 02 de Noviembre de 2026 (6:30 PM)
+          </div>
+          <p class="card-pro-desc">
+            Traducción de mockups a código HTML5 semántico, CSS3 responsivo (Flexbox/Grid), dinamismo e interactividad con JavaScript y cierre formal de la Guía 6.
+          </p>
+          <div class="card-pro-chips">
+            <span class="tech-chip">AA4-EV01..03</span>
+            <span class="tech-chip">HTML5 / CSS3 / JS</span>
+            <span class="tech-chip">Cierre Técnico</span>
+            <span class="deadline-chip corte2">Corte 2 — 04/Nov</span>
+          </div>
+        </div>
+
+        <div class="card-pro-actions">
+          <button class="btn-card-action disabled-locked" title="El material se activará en la fecha programada">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            Disponible el 02 de Noviembre
+          </button>
+        </div>
+      </article>
+
+    </main>
+
+    <!-- FOOTER INSTITUCIONAL -->
+    <footer class="portal-footer">
+      <div>
+        <strong>Servicio Nacional de Aprendizaje (SENA)</strong> — Centro de Formación | Regional Tolima
+      </div>
+      <div>
+        Instructor Líder de Software: <strong>Julián Andrés Trujillo Morales</strong> 💻📚
+      </div>
+    </footer>
+
+  </div>
+
+  <!-- ==========================================
+       MODAL VISOR CINEMA EMBEBIDO
+       ========================================== -->
+  <div class="cinema-modal-overlay" id="cinemaModal" onclick="cerrarVisorCinemaOnBackdrop(event)">
+    <div class="cinema-modal-card">
+      <div class="cinema-modal-header">
+        <div class="cinema-modal-title" id="cinemaModalTitle">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--sena-verde)" stroke-width="2.5"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          Visor de Material Interactivo
+        </div>
+        <div class="cinema-modal-controls">
+          <a href="#" id="cinemaOpenExternal" target="_blank" class="cinema-btn-tool">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            Abrir en Pestaña Completa ↗
+          </a>
+          <button type="button" class="cinema-btn-close" onclick="cerrarVisorCinema()" title="Cerrar (Esc)">×</button>
+        </div>
+      </div>
+      <div class="cinema-iframe-wrapper">
+        <iframe id="cinemaIframe" src="about:blank" title="Previsualizador de contenido interactivo"></iframe>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCRIPT DE FILTROS, BÚSQUEDA Y MODAL CINEMA -->
+  <script>
+    let bloqueActivo = 'todos';
+
+    // Filtro por Bloque Temático
+    function filtrarPorBloque(bloque, btn) {
+      bloqueActivo = bloque;
+      const botones = document.querySelectorAll('.pill-btn');
+      botones.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      aplicarFiltrosCombinados();
+    }
+
+    // Búsqueda en tiempo real
+    function filtrarPorBusqueda() {
+      aplicarFiltrosCombinados();
+    }
+
+    function aplicarFiltrosCombinados() {
+      const query = document.getElementById('searchInput').value.toLowerCase().trim();
+      const tarjetas = document.querySelectorAll('.session-card-pro');
+
+      tarjetas.forEach(card => {
+        const bloqueCard = card.getAttribute('data-bloque');
+        const searchData = card.getAttribute('data-search') || '';
+        const titulo = card.querySelector('.card-pro-title').innerText.toLowerCase();
+
+        const coincideBloque = (bloqueActivo === 'todos' || bloqueCard === bloqueActivo);
+        const coincideQuery = (query === '' || searchData.includes(query) || titulo.includes(query));
+
+        if (coincideBloque && coincideQuery) {
+          card.style.display = 'flex';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
+
+    // Apertura del Visor Cinema Embebido
+    function abrirVisorCinema(url, titulo) {
+      const modal = document.getElementById('cinemaModal');
+      const iframe = document.getElementById('cinemaIframe');
+      const titleEl = document.getElementById('cinemaModalTitle');
+      const extLink = document.getElementById('cinemaOpenExternal');
+
+      if (modal && iframe) {
+        iframe.src = url;
+        if (titleEl) titleEl.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--sena-verde)" stroke-width="2.5"><polygon points="5 3 19 12 5 21 5 3"/></svg> ${titulo}`;
+        if (extLink) extLink.href = url;
+
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      }
+    }
+
+    function cerrarVisorCinema() {
+      const modal = document.getElementById('cinemaModal');
+      const iframe = document.getElementById('cinemaIframe');
+      if (modal) {
+        modal.classList.remove('active');
+        document.body.style.overflow = '';
+      }
+      if (iframe) {
+        iframe.src = 'about:blank';
+      }
+    }
+
+    function cerrarVisorCinemaOnBackdrop(e) {
+      if (e.target && e.target.id === 'cinemaModal') {
+        cerrarVisorCinema();
+      }
+    }
+
+    // Cerrar con Escape
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        cerrarVisorCinema();
+      }
+    });
+  </script>
+
+</body>
+</html>

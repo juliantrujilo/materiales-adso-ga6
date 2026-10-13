@@ -1,0 +1,29 @@
+# ============================================================
+# 🔒 ARCHIVOS PRIVADOS DEL INSTRUCTOR (NUNCA SUBIR A GITHUB)
+# ============================================================
+
+# Guías pedagógicas internas y planificación del instructor
+**/GUIA_INSTRUCTOR_*
+**/guia_instructor_*
+**/*_INSTRUCTOR.*
+
+# Anuncios pre y post sesión para Zajuna LMS
+**/ANUNCIO_*
+**/anuncio_*
+
+# Mensajes de convocatoria y seguimiento para Microsoft Teams
+**/MENSAJES_TEAMS_*
+**/mensajes_teams_*
+
+# Carpetas de materiales internos del instructor
+**/Material De Formación Julián/**
+**/material_instructor/**
+**/*.internal.*
+**/*.draft.*
+
+# Archivos de configuración del sistema y editores
+.DS_Store
+Thumbs.db
+*.log
+.vscode/
+.idea/

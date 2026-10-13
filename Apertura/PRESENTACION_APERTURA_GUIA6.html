@@ -1,0 +1,1074 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Apertura & Estructura General Guía 6 — ADSO 3389010 | SENA Virtual</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Syne:wght@700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  /* Paleta SENA Institucional Premium Claras */
+  --sena-verde: #39a900;
+  --sena-verde-dark: #236b00;
+  --sena-verde-soft: #44c702;
+  --sena-verde-bg: rgba(57, 169, 0, 0.08);
+  --sena-verde-border: rgba(57, 169, 0, 0.28);
+  
+  --sena-naranja: #ff6b00;
+  --sena-naranja-dark: #cc5600;
+  --sena-naranja-bg: rgba(255, 107, 0, 0.08);
+  --sena-naranja-border: rgba(255, 107, 0, 0.28);
+
+  --azul-tech: #0284c7;
+  --azul-bg: rgba(2, 132, 199, 0.08);
+  --purpura: #7c3aed;
+  --purpura-bg: rgba(124, 58, 237, 0.08);
+
+  /* Fondos y Cristalografía Clara */
+  --bg-main: #f8fafc;
+  --bg-card: #ffffff;
+  --bg-card-hover: #ffffff;
+  --borde-light: #e2e8f0;
+  --borde-focus: #cbd5e1;
+  
+  --texto-main: #0f172a;
+  --texto-muted: #475569;
+  --texto-sub: #64748b;
+  
+  --shadow-card: 0 10px 30px rgba(15, 23, 42, 0.05), 0 1px 3px rgba(0, 0, 0, 0.03);
+  --shadow-hover: 0 20px 40px rgba(57, 169, 0, 0.12), 0 4px 12px rgba(0, 0, 0, 0.05);
+  --radius-xl: 20px;
+  --radius-lg: 16px;
+  --radius-md: 12px;
+}
+
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Plus Jakarta Sans',sans-serif;
+  color:var(--texto-main);
+  background-color:var(--bg-main);
+  background-image: 
+    radial-gradient(circle at 5% 10%, rgba(57, 169, 0, 0.06) 0%, transparent 40%),
+    radial-gradient(circle at 95% 90%, rgba(255, 107, 0, 0.06) 0%, transparent 40%),
+    radial-gradient(circle at 50% 50%, rgba(2, 132, 199, 0.03) 0%, transparent 60%);
+  background-attachment: fixed;
+  line-height:1.6;
+  overflow-x:hidden;
+}
+
+/* Barra Superior Institucional Clara */
+.topbar{
+  position:sticky;
+  top:0;
+  z-index:1000;
+  background:rgba(255, 255, 255, 0.92);
+  backdrop-filter:blur(16px);
+  -webkit-backdrop-filter:blur(16px);
+  border-bottom:2px solid var(--sena-verde);
+  padding:12px 32px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  box-shadow:0 4px 20px rgba(0,0,0,0.06);
+}
+.topbar-left{display:flex;align-items:center;gap:16px}
+.sena-badge{
+  background:linear-gradient(135deg, var(--sena-verde), var(--sena-verde-dark));
+  color:#fff;
+  font-family:'Syne',sans-serif;
+  font-weight:800;
+  font-size:16px;
+  padding:6px 16px;
+  border-radius:8px;
+  letter-spacing:1px;
+  box-shadow:0 4px 12px var(--sena-verde-bg);
+}
+.topbar-brand{font-family:'Outfit',sans-serif;font-size:15px;font-weight:700;color:var(--texto-main);letter-spacing:-0.3px}
+.topbar-sub{font-size:12px;color:var(--sena-verde-dark);font-weight:700}
+.topbar-nav{display:flex;gap:4px;align-items:center}
+.topbar-nav a{
+  color:var(--texto-muted);
+  text-decoration:none;
+  font-size:12px;
+  font-weight:600;
+  padding:6px 14px;
+  border-radius:20px;
+  border:1px solid transparent;
+  transition:all .25s ease;
+  white-space:nowrap;
+}
+.topbar-nav a:hover, .topbar-nav a.active{
+  color:var(--sena-verde-dark);
+  border-color:var(--sena-verde-border);
+  background:var(--sena-verde-bg);
+}
+
+.btn-presentacion{
+  background:linear-gradient(135deg, var(--sena-verde), var(--sena-verde-dark));
+  color:#fff;
+  border:none;
+  padding:9px 20px;
+  border-radius:20px;
+  font-size:12px;
+  font-weight:700;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  gap:8px;
+  transition:all 0.3s ease;
+  margin-left:12px;
+  text-decoration:none;
+  box-shadow:0 4px 14px rgba(57,169,0,0.25);
+}
+.btn-presentacion:hover{
+  transform:translateY(-2px);
+  box-shadow:0 8px 20px rgba(57,169,0,0.35);
+}
+
+/* Indicador de Progreso Superior */
+.progress-bar{
+  position:fixed;
+  top:0;
+  left:0;
+  height:4px;
+  background:linear-gradient(90deg, var(--sena-verde), var(--sena-naranja), var(--azul-tech));
+  z-index:1001;
+  width:0%;
+  transition:width 0.2s ease;
+}
+
+/* Layout Diapositivas */
+.slide{
+  min-height:calc(100vh - 65px);
+  padding:80px 40px 60px;
+  position:relative;
+  scroll-margin-top:65px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-bottom:1px solid var(--borde-light);
+}
+.slide-inner{max-width:1240px;width:100%;margin:0 auto}
+
+.slide-header-badge{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  background:var(--sena-verde-bg);
+  border:1px solid var(--sena-verde-border);
+  padding:6px 16px;
+  border-radius:30px;
+  font-size:12px;
+  font-weight:700;
+  color:var(--sena-verde-dark);
+  letter-spacing:1px;
+  text-transform:uppercase;
+  margin-bottom:16px;
+}
+.slide-header-badge.naranja{
+  background:var(--sena-naranja-bg);
+  border-color:var(--sena-naranja-border);
+  color:var(--sena-naranja-dark);
+}
+.slide-header-badge.tech{
+  background:var(--azul-bg);
+  border-color:rgba(2, 132, 199, 0.3);
+  color:var(--azul-tech);
+}
+.slide-header-badge .dot{width:8px;height:8px;background:currentColor;border-radius:50%}
+
+.slide-num-indicator{
+  position:absolute;
+  top:30px;
+  right:40px;
+  font-family:'Syne',sans-serif;
+  font-size:26px;
+  font-weight:800;
+  color:#cbd5e1;
+  letter-spacing:-1px;
+}
+
+/* Estilos Portada Hero */
+.hero-wrapper{
+  display:grid;
+  grid-template-columns:1.2fr 0.8fr;
+  gap:40px;
+  align-items:center;
+}
+.hero-title{
+  font-family:'Syne',sans-serif;
+  font-size:clamp(36px, 5vw, 60px);
+  font-weight:800;
+  line-height:1.08;
+  margin-bottom:24px;
+  color:var(--texto-main);
+  letter-spacing:-1px;
+}
+.hero-title span.grad-verde{
+  color:var(--sena-verde-dark);
+  background:linear-gradient(135deg, var(--sena-verde), var(--sena-verde-dark));
+  -webkit-background-clip:text;
+  background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+.hero-title span.grad-naranja{
+  color:var(--sena-naranja);
+  background:linear-gradient(135deg, var(--sena-naranja), var(--sena-naranja-dark));
+  -webkit-background-clip:text;
+  background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+.hero-subtitle{
+  font-size:clamp(16px, 1.8vw, 19px);
+  color:var(--texto-muted);
+  line-height:1.65;
+  margin-bottom:36px;
+  font-weight:400;
+}
+.hero-card-widget{
+  background:var(--bg-card);
+  border:1.5px solid var(--borde-light);
+  border-radius:var(--radius-xl);
+  padding:32px;
+  box-shadow:var(--shadow-card);
+  position:relative;
+  overflow:hidden;
+}
+.hero-card-widget::before{
+  content:'';
+  position:absolute;
+  top:0;
+  left:0;
+  right:0;
+  height:6px;
+  background:linear-gradient(90deg, var(--sena-verde), var(--sena-naranja));
+}
+.hero-meta-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:16px;
+}
+.meta-box{
+  background:#f8fafc;
+  border:1px solid var(--borde-light);
+  padding:16px 20px;
+  border-radius:var(--radius-md);
+}
+.meta-box-title{font-size:11px;font-weight:700;color:var(--texto-sub);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
+.meta-box-val{font-size:15px;font-weight:800;color:var(--texto-main)}
+.meta-box-sub{font-size:12px;color:var(--sena-verde-dark);font-weight:600;margin-top:2px}
+
+/* Grid & Cards Premium Claras */
+.sec-title{
+  font-family:'Syne',sans-serif;
+  font-size:clamp(28px, 3.5vw, 40px);
+  font-weight:800;
+  color:var(--texto-main);
+  margin-bottom:12px;
+  line-height:1.15;
+}
+.sec-desc{
+  font-size:16px;
+  color:var(--texto-muted);
+  max-width:850px;
+  margin-bottom:40px;
+}
+
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+
+.card-premium{
+  background:var(--bg-card);
+  border:1.5px solid var(--borde-light);
+  border-radius:var(--radius-lg);
+  padding:28px;
+  transition:all 0.3s ease;
+  position:relative;
+  box-shadow:var(--shadow-card);
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+}
+.card-premium:hover{
+  transform:translateY(-5px);
+  border-color:var(--sena-verde-border);
+  box-shadow:var(--shadow-hover);
+}
+.card-premium.highlight-verde{border-top:5px solid var(--sena-verde)}
+.card-premium.highlight-naranja{border-top:5px solid var(--sena-naranja)}
+.card-premium.highlight-tech{border-top:5px solid var(--azul-tech)}
+
+.card-icon{
+  width:48px;
+  height:48px;
+  border-radius:14px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:22px;
+  margin-bottom:20px;
+  background:#f1f5f9;
+  border:1px solid var(--borde-light);
+}
+.card-title{font-family:'Outfit',sans-serif;font-size:20px;font-weight:700;color:var(--texto-main);margin-bottom:10px}
+.card-text{font-size:14px;color:var(--texto-muted);line-height:1.6;margin-bottom:16px}
+
+.list-premium{list-style:none;margin-top:12px}
+.list-premium li{
+  font-size:13.5px;
+  color:var(--texto-main);
+  padding:6px 0;
+  display:flex;
+  align-items:flex-start;
+  gap:10px;
+}
+.list-premium li::before{
+  content:'✓';
+  color:var(--sena-verde);
+  font-weight:900;
+  font-size:14px;
+}
+
+/* Timeline Bloques Temáticos */
+.bloques-container{
+  display:grid;
+  grid-template-columns:repeat(3, 1fr);
+  gap:24px;
+}
+.bloque-card{
+  background:var(--bg-card);
+  border:1.5px solid var(--borde-light);
+  border-radius:var(--radius-xl);
+  padding:32px 26px;
+  position:relative;
+  transition:all 0.3s ease;
+  box-shadow:var(--shadow-card);
+}
+.bloque-card:hover{
+  transform:translateY(-5px);
+  border-color:var(--sena-verde-border);
+  box-shadow:var(--shadow-hover);
+}
+.bloque-tag{
+  font-size:11px;
+  font-weight:800;
+  text-transform:uppercase;
+  letter-spacing:1.5px;
+  padding:4px 12px;
+  border-radius:20px;
+  display:inline-block;
+  margin-bottom:16px;
+}
+.bloque-tag.b1{background:var(--sena-verde-bg);color:var(--sena-verde-dark);border:1px solid var(--sena-verde-border)}
+.bloque-tag.b2{background:var(--sena-naranja-bg);color:var(--sena-naranja-dark);border:1px solid var(--sena-naranja-border)}
+.bloque-tag.b3{background:var(--azul-bg);color:var(--azul-tech);border:1px solid rgba(2, 132, 199, 0.3)}
+
+.bloque-num{font-family:'Syne',sans-serif;font-size:36px;font-weight:800;color:#cbd5e1;position:absolute;top:24px;right:24px}
+.bloque-title{font-size:20px;font-weight:700;color:var(--texto-main);margin-bottom:12px}
+.bloque-desc{font-size:13.5px;color:var(--texto-muted);line-height:1.6;margin-bottom:20px}
+
+/* Tabla Matriz Sincronizada */
+.table-wrapper{
+  background:var(--bg-card);
+  border:1.5px solid var(--borde-light);
+  border-radius:var(--radius-lg);
+  overflow:hidden;
+  box-shadow:var(--shadow-card);
+}
+.matriz-table{width:100%;border-collapse:collapse;text-align:left}
+.matriz-table th{
+  background:#f1f5f9;
+  font-family:'Outfit',sans-serif;
+  font-size:12.5px;
+  font-weight:700;
+  color:var(--texto-main);
+  text-transform:uppercase;
+  letter-spacing:1px;
+  padding:16px 20px;
+  border-bottom:2px solid var(--borde-light);
+}
+.matriz-table td{
+  padding:16px 20px;
+  border-bottom:1px solid var(--borde-light);
+  font-size:13.5px;
+  color:var(--texto-main);
+  vertical-align:middle;
+}
+.matriz-table tr:hover{background:#f8fafc}
+.sesion-badge{
+  font-family:'JetBrains Mono',monospace;
+  font-size:12px;
+  font-weight:700;
+  background:var(--sena-verde-bg);
+  color:var(--sena-verde-dark);
+  padding:4px 10px;
+  border-radius:6px;
+  border:1px solid var(--sena-verde-border);
+  display:inline-block;
+  white-space:nowrap;
+}
+.evidencia-tag{
+  display:inline-block;
+  font-size:11.5px;
+  font-weight:600;
+  background:#f1f5f9;
+  border:1px solid var(--borde-light);
+  padding:3px 8px;
+  border-radius:4px;
+  margin:2px 2px;
+  color:var(--texto-muted);
+  white-space:nowrap;
+}
+.deadline-badge{
+  font-size:12px;
+  font-weight:700;
+  color:#b91c1c;
+  background:#fef2f2;
+  padding:4px 10px;
+  border-radius:6px;
+  border:1px solid #fca5a5;
+  white-space:nowrap;
+}
+.deadline-badge.corte1{
+  color:var(--sena-naranja-dark);
+  background:var(--sena-naranja-bg);
+  border-color:var(--sena-naranja-border);
+}
+.deadline-badge.corte2{
+  color:var(--sena-verde-dark);
+  background:var(--sena-verde-bg);
+  border-color:var(--sena-verde-border);
+}
+.matriz-table td.col-nowrap, .matriz-table th.col-nowrap{
+  white-space:nowrap;
+}
+
+/* Callout Box Institucional */
+.callout-box{
+  background:var(--sena-verde-bg);
+  border:1.5px solid var(--sena-verde-border);
+  border-radius:var(--radius-lg);
+  padding:24px 30px;
+  margin-top:28px;
+  display:flex;
+  align-items:center;
+  gap:24px;
+}
+.callout-icon{font-size:36px;flex-shrink:0}
+.callout-content h4{font-size:16px;font-weight:700;color:var(--sena-verde-dark);margin-bottom:4px}
+.callout-content p{font-size:14px;color:var(--texto-main)}
+
+/* Controles Flotantes para Navegación */
+.nav-controls{
+  position:fixed;
+  bottom:30px;
+  right:40px;
+  z-index:999;
+  display:flex;
+  gap:10px;
+  background:rgba(255, 255, 255, 0.95);
+  padding:8px;
+  border-radius:30px;
+  border:1.5px solid var(--borde-light);
+  backdrop-filter:blur(16px);
+  box-shadow:0 10px 25px rgba(0,0,0,0.1);
+}
+.btn-nav-control{
+  width:40px;
+  height:40px;
+  border-radius:50%;
+  border:none;
+  background:#f1f5f9;
+  color:var(--texto-main);
+  font-size:16px;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  transition:all 0.2s ease;
+}
+.btn-nav-control:hover{
+  background:var(--sena-verde);
+  color:#fff;
+  box-shadow:0 4px 12px var(--sena-verde-bg);
+}
+</style>
+</head>
+<body>
+
+<!-- Progress Bar Superior -->
+<div class="progress-bar" id="progressBar"></div>
+
+<!-- Topbar Principal Glassmorphic Clara -->
+<header class="topbar">
+  <div class="topbar-left">
+    <div class="sena-badge">SENA</div>
+    <div>
+      <div class="topbar-brand">ADSO — Ficha 3389010 (Virtual)</div>
+      <div class="topbar-sub">Fase 3: Ejecución | Guía 6 (GA6-220501096)</div>
+    </div>
+  </div>
+  <nav class="topbar-nav">
+    <a href="#slide-1" class="active">1. Inicio</a>
+    <a href="#slide-2">2. Ficha Técnica</a>
+    <a href="#slide-3">3. Competencia & RAPs</a>
+    <a href="#slide-4">4. Bloques Lógicos</a>
+    <a href="#slide-5">5. Cortes Zajuna</a>
+    <a href="#slide-6">6. Cronograma & Sesiones</a>
+    <a href="#slide-7">7. Proyecto Base</a>
+    <a href="#slide-8">8. Reglas & Éxito</a>
+  </nav>
+  <button class="btn-presentacion" onclick="toggleFullscreen()">
+    <span>📺</span> Pantalla Completa
+  </button>
+</header>
+
+<!-- SLIDE 1: PORTADA HERO -->
+<section class="slide" id="slide-1">
+  <div class="slide-num-indicator">01 / 08</div>
+  <div class="slide-inner">
+    <div class="hero-wrapper">
+      <div>
+        <div class="slide-header-badge">
+          <span class="dot"></span> APERTURA GUÍA DE APRENDIZAJE 6 (AP6)
+        </div>
+        <h1 class="hero-title">
+          Construcción de <span class="grad-verde">Bases de Datos</span> & <span class="grad-naranja">Front-End Web</span>
+        </h1>
+        <p class="hero-subtitle">
+          Estructura pedagógica, competencias técnicas, matriz de sesiones y plan de ruta para el desarrollo de la solución de software en la Fase 3: Ejecución.
+        </p>
+        <div style="display:flex;gap:14px;flex-wrap:wrap">
+          <a href="#slide-2" class="btn-presentacion" style="font-size:14px;padding:12px 28px">
+            Explorar Ruta de Aprendizaje →
+          </a>
+          <a href="https://julianon2.github.io/seguimiento-adso-3389010/" target="_blank" class="btn-presentacion" style="font-size:14px;padding:12px 24px;background:linear-gradient(135deg, #0284c7, #0369a1);box-shadow:0 4px 14px rgba(2, 132, 199, 0.3)">
+            📊 Dashboard de Seguimiento ↗
+          </a>
+        </div>
+      </div>
+
+      <div class="hero-card-widget">
+        <div style="font-family:'Syne',sans-serif;font-size:18px;font-weight:800;color:var(--texto-main);margin-bottom:20px;display:flex;align-items:center;justify-content:space-between">
+          <span>DATOS DE LA GUÍA 6</span>
+          <span style="font-size:11px;color:var(--sena-verde-dark);background:var(--sena-verde-bg);padding:4px 10px;border-radius:12px;border:1px solid var(--sena-verde-border);font-weight:800">AP6 EXECUTION</span>
+        </div>
+        <div class="hero-meta-grid">
+          <div class="meta-box">
+            <div class="meta-box-title">Competencia</div>
+            <div class="meta-box-val">220501096</div>
+            <div class="meta-box-sub">Desarrollo Software</div>
+          </div>
+          <div class="meta-box">
+            <div class="meta-box-title">Horas Totales</div>
+            <div class="meta-box-val">288 Horas</div>
+            <div class="meta-box-sub">14h Sincrónicas (Apertura + 6 Ses.)</div>
+          </div>
+          <div class="meta-box">
+            <div class="meta-box-title">Fecha Inicio</div>
+            <div class="meta-box-val">06 / Oct / 2026</div>
+            <div class="meta-box-sub">Martes de apertura</div>
+          </div>
+          <div class="meta-box">
+            <div class="meta-box-title">Fecha Cierre</div>
+            <div class="meta-box-val">04 / Nov / 2026</div>
+            <div class="meta-box-sub">Cierre final Zajuna</div>
+          </div>
+        </div>
+        <div style="margin-top:20px;padding-top:16px;border-top:1px solid var(--borde-light);font-size:13px;color:var(--texto-muted);display:flex;align-items:center;gap:10px">
+          <span style="color:var(--sena-verde);font-size:18px">👨‍🏫</span>
+          <span><strong>Instructor Líder:</strong> Julián Andrés Trujillo Morales</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 2: FICHA TÉCNICA Y PARÁMETROS -->
+<section class="slide" id="slide-2">
+  <div class="slide-num-indicator">02 / 08</div>
+  <div class="slide-inner">
+    <div class="slide-header-badge tech">
+      <span class="dot"></span> PARÁMETROS INSTITUCIONALES SENA
+    </div>
+    <h2 class="sec-title">Ficha Técnica y Tiempos de Ejecución</h2>
+    <p class="sec-desc">
+      La Guía 6 articula el modelo de datos relacional y no relacional con la capa de presentación visual de la aplicación.
+    </p>
+
+    <div class="grid-3">
+      <div class="card-premium highlight-verde">
+        <div>
+          <div class="card-icon" style="color:var(--sena-verde-dark)">📅</div>
+          <h3 class="card-title">Cronograma Sincrónico</h3>
+          <p class="card-text">
+            7 Encuentros sincrónicos en vivo organizados 1 a 1 con las 7 carpetas del repositorio:
+          </p>
+          <ul class="list-premium">
+            <li><strong>Estructura:</strong> 📁 Apertura/ + 📁 Sesión 1/ a 📁 Sesión 6/</li>
+            <li><strong>Días:</strong> Lunes y Martes</li>
+            <li><strong>Horario:</strong> 6:30 PM a 8:30 PM (2 hrs/sesión)</li>
+            <li><strong>Duración Total:</strong> 14 Horas Presenciales Virtuales</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="card-premium highlight-naranja">
+        <div>
+          <div class="card-icon" style="color:var(--sena-naranja)">🎯</div>
+          <h3 class="card-title">Enfoque de Proyecto</h3>
+          <p class="card-text">
+            Todo el aprendizaje se aplica directamente al sistema formativo del programa:
+          </p>
+          <ul class="list-premium">
+            <li><strong>Proyecto Formativo:</strong> TechStore Pro React</li>
+            <li><strong>Arquitectura:</strong> MERN (React, Node, Express, MongoDB/MySQL)</li>
+            <li><strong>Alineación:</strong> Entregables progresivos acumulativos</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="card-premium highlight-tech">
+        <div>
+          <div class="card-icon" style="color:var(--azul-tech)">📑</div>
+          <h3 class="card-title">Trabajo Autónomo</h3>
+          <p class="card-text">
+            Complementación práctica y autónoma del aprendiz en la plataforma Zajuna:
+          </p>
+          <ul class="list-premium">
+            <li><strong>Horas Autónomas:</strong> 274 Horas asistidas</li>
+            <li><strong>Materiales:</strong> Guías, Manuales y Ejercicios SQL/NoSQL</li>
+            <li><strong>Acompañamiento:</strong> Foro de dudas y Teams</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 3: COMPETENCIA Y RAPS -->
+<section class="slide" id="slide-3">
+  <div class="slide-num-indicator">03 / 08</div>
+  <div class="slide-inner">
+    <div class="slide-header-badge">
+      <span class="dot"></span> MARCO CURRICULAR INSTITUCIONAL
+    </div>
+    <h2 class="sec-title">Competencia Técnica y Resultados de Aprendizaje</h2>
+    <p class="sec-desc">
+      Norma de competencia y RAPs específicos que certifica la Guía de Aprendizaje 6.
+    </p>
+
+    <div class="grid-2">
+      <div class="card-premium highlight-verde">
+        <div>
+          <div style="font-size:11px;font-weight:800;color:var(--sena-verde-dark);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px">RAP 220501096-02</div>
+          <h3 class="card-title" style="font-size:22px">Construir la Base de Datos para el Software</h3>
+          <p class="card-text" style="font-size:15px;color:var(--texto-main)">
+            Diseñar, implementar y poblar las estructuras de almacenamiento relacionales (SQL) y documentales (NoSQL) garantizando la integridad referencial y optimización de consultas.
+          </p>
+        </div>
+        <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--borde-light);display:flex;gap:8px;flex-wrap:wrap">
+          <span class="evidencia-tag">Diagramas E-R</span>
+          <span class="evidencia-tag">Normalización 1FN-3FN</span>
+          <span class="evidencia-tag">DDL & Restricciones</span>
+          <span class="evidencia-tag">DML & Scripts</span>
+          <span class="evidencia-tag">MongoDB & JSON</span>
+        </div>
+      </div>
+
+      <div class="card-premium highlight-tech">
+        <div>
+          <div style="font-size:11px;font-weight:800;color:var(--azul-tech);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px">RAP 220501096-03</div>
+          <h3 class="card-title" style="font-size:22px">Crear Componentes Front-End del Software</h3>
+          <p class="card-text" style="font-size:15px;color:var(--texto-main)">
+            Diseñar la arquitectura de interacción UX/UI, maquetar prototipos interactivos y construir componentes de interfaz gráfica web adaptativos y accesibles.
+          </p>
+        </div>
+        <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--borde-light);display:flex;gap:8px;flex-wrap:wrap">
+          <span class="evidencia-tag">Wireframing Figma</span>
+          <span class="evidencia-tag">Mapa de Navegación UX</span>
+          <span class="evidencia-tag">HTML5 Semántico</span>
+          <span class="evidencia-tag">CSS3 Flexbox/Grid</span>
+          <span class="evidencia-tag">JS Interactividad</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout-box">
+      <div class="callout-icon">💡</div>
+      <div class="callout-content">
+        <h4>Competencia General 220501096</h4>
+        <p>Desarrollar la solución de software de acuerdo con el diseño y metodologías de desarrollo acordadas con el cliente o equipo técnico.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 4: ESTRUCTURACIÓN LÓGICA EN 3 BLOQUES -->
+<section class="slide" id="slide-4">
+  <div class="slide-num-indicator">04 / 08</div>
+  <div class="slide-inner">
+    <div class="slide-header-badge naranja">
+      <span class="dot"></span> RUTA PEDAGÓGICA OPTIMIZADA
+    </div>
+    <h2 class="sec-title">Organización Lógica en 3 Bloques Temáticos</h2>
+    <p class="sec-desc">
+      Para evitar saltos conceptuales entre paradigmas, estructuramos la ruta pedagógica (Apertura institucional + 6 sesiones sincrónicas) en tres bloques continuos y acumulativos:
+    </p>
+
+    <div class="bloques-container">
+      <div class="bloque-card">
+        <span class="bloque-num">01</span>
+        <span class="bloque-tag b1">Apertura + Sesiones 1 y 2</span>
+        <h3 class="bloque-title">Bases de Datos Relacionales (SQL)</h3>
+        <p class="bloque-desc">
+          Apertura institucional de la guía, modelado conceptual Entidad-Relación, normalización formal (1FN-3FN) y programación física completa en MySQL (DDL y DML).
+        </p>
+        <ul class="list-premium">
+          <li><strong>📁 Apertura:</strong> Inducción & Dashboard ADSO</li>
+          <li><strong>📁 Sesión 1:</strong> Normalización (1FN, 2FN, 3FN)</li>
+          <li><strong>📁 Sesión 2:</strong> SQL Completo (DDL + DML)</li>
+        </ul>
+      </div>
+
+      <div class="bloque-card">
+        <span class="bloque-num">02</span>
+        <span class="bloque-tag b2">Sesiones 3 y 4</span>
+        <h3 class="bloque-title">Bases de Datos NoSQL (MongoDB)</h3>
+        <p class="bloque-desc">
+          Modelado documental JSON/BSON, creación de colecciones dinámicas y ejecución de operaciones CRUD en MongoDB Compass y Shell para el video sustentatorio.
+        </p>
+        <ul class="list-premium">
+          <li><strong>📁 Sesión 3:</strong> Esquemas JSON/BSON & Colecciones</li>
+          <li><strong>📁 Sesión 4:</strong> CRUD MongoDB & Sustentación Video</li>
+          <li>Cierre Técnico Corte 1 (25 de Octubre)</li>
+        </ul>
+      </div>
+
+      <div class="bloque-card">
+        <span class="bloque-num">03</span>
+        <span class="bloque-tag b3">Sesiones 5 y 6</span>
+        <h3 class="bloque-title">Prototipado UI/UX & Front-End Web</h3>
+        <p class="bloque-desc">
+          Diseño centrado en el usuario con Figma (wireframes, mapas UX y mockups), seguido de la maquetación responsiva HTML5, CSS3, JavaScript y cierre evaluativo.
+        </p>
+        <ul class="list-premium">
+          <li><strong>📁 Sesión 5:</strong> Prototipado Interactivo Figma</li>
+          <li><strong>📁 Sesión 6:</strong> Maquetación Web HTML5/CSS3/JS</li>
+          <li>Cierre Final Corte 2 (04 de Noviembre)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 5: ESTRATEGIA DE ENTREGAS Y CORTES ZAJUNA -->
+<section class="slide" id="slide-5">
+  <div class="slide-num-indicator">05 / 08</div>
+  <div class="slide-inner">
+    <div class="slide-header-badge naranja">
+      <span class="dot"></span> CUMPLIMIENTO REGULATORIO Y SLA ZAJUNA
+    </div>
+    <h2 class="sec-title">Estrategia de Entregas & Cortes de Calificación</h2>
+    <p class="sec-desc">
+      Para dar cumplimiento estricto a la Guía de Virtualidad SENA (SLA de calificación dentro de las 24 a 48 horas posteriores al envío) y evitar hallazgos por represamiento, organizamos las entregas de la Guía 6 en <strong>dos cortes oficiales de evaluación</strong>:
+    </p>
+
+    <div class="grid-2">
+      <!-- CARD CORTE 1 -->
+      <div class="card-premium highlight-naranja" style="position:relative;overflow:hidden">
+        <div style="position:absolute;top:16px;right:16px;background:var(--sena-naranja);color:#fff;font-weight:800;font-size:11px;padding:4px 12px;border-radius:12px;text-transform:uppercase;letter-spacing:1px">
+          Corte 1 — Bases de Datos
+        </div>
+        <div class="card-icon" style="color:var(--sena-naranja)">📦</div>
+        <h3 class="card-title" style="font-size:22px;margin-bottom:8px">Corte 1: Cierre Técnico BD (SQL & NoSQL)</h3>
+        <p style="font-size:14px;font-weight:800;color:var(--sena-naranja-dark);margin-bottom:12px">
+          📅 Fecha Límite de Entrega: Domingo 25 de Octubre de 2026 (23:59 hrs)
+        </p>
+        <p class="card-text" style="font-size:14px;color:var(--texto-muted);margin-bottom:16px">
+          Cubre las evidencias técnicas de diseño, normalización, scripts DDL/DML relacionales y estructuración documental NoSQL para su calificación oportuna:
+        </p>
+        <ul class="list-premium">
+          <li><strong>AA1-EV01 & AA1-EV02:</strong> Diagrama Entidad-Relación y Normalización 1FN/2FN/3FN.</li>
+          <li><strong>AA2-EV01 & AA2-EV02:</strong> Sentencias DDL y creación de tablas/restricciones en MySQL.</li>
+          <li><strong>AA2-EV03:</strong> Script SQL DML ejecutable con datos de prueba (`.sql`).</li>
+          <li><strong>AA1-EV03:</strong> Esquema de colecciones y documentos JSON/BSON NoSQL.</li>
+        </ul>
+      </div>
+
+      <!-- CARD CORTE 2 -->
+      <div class="card-premium highlight-verde" style="position:relative;overflow:hidden">
+        <div style="position:absolute;top:16px;right:16px;background:var(--sena-verde-dark);color:#fff;font-weight:800;font-size:11px;padding:4px 12px;border-radius:12px;text-transform:uppercase;letter-spacing:1px">
+          Corte 2 — Cierre Definitivo
+        </div>
+        <div class="card-icon" style="color:var(--sena-verde-dark)">🏁</div>
+        <h3 class="card-title" style="font-size:22px;margin-bottom:8px">Corte 2: Cierre Final (Video & Front-End)</h3>
+        <p style="font-size:14px;font-weight:800;color:var(--sena-verde-dark);margin-bottom:12px">
+          📅 Fecha Límite Definitiva: Miércoles 04 de Noviembre de 2026 (23:59 hrs)
+        </p>
+        <p class="card-text" style="font-size:14px;color:var(--texto-muted);margin-bottom:16px">
+          Cubre la sustentación en video de la base de datos documental y la capa visual de interfaz de usuario UX/UI y maquetación web:
+        </p>
+        <ul class="list-premium">
+          <li><strong>AA1-EV04:</strong> Video demostrativo de operaciones CRUD en MongoDB (max 7 min).</li>
+          <li><strong>AA3-EV01..03:</strong> Prototipos interactivos wireframing/mockups en Figma y mapa UX.</li>
+          <li><strong>AA4-EV01..03:</strong> Maquetación web responsiva HTML5 semántico, CSS3 y JavaScript.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="callout-box" style="border-left-color:var(--sena-naranja);background:var(--sena-naranja-bg);margin-top:24px">
+      <div class="callout-icon">⚡</div>
+      <div class="callout-content">
+        <h4 style="color:var(--sena-naranja-dark)">¿Por qué dividimos las entregas en 2 Cortes?</h4>
+        <p style="color:var(--texto-main)">
+          <strong>1. Garantía de Calificación SLA:</strong> El instructor dispone de tiempo para calificar y retroalimentar a cada aprendiz antes del cierre masivo del mes.<br>
+          <strong>2. Retroalimentación Temprana:</strong> Si requieres ajustar tu script SQL o esquema NoSQL, recibirás tu nota del Corte 1 a tiempo para aplicarla en la sustentación final y el Front-End.<br>
+          <strong>3. Evita represamientos en Zajuna:</strong> Previene la sobrecarga de última hora y garantiza el cumplimiento del 100% de tus evidencias registradas en el <a href="https://julianon2.github.io/seguimiento-adso-3389010/" target="_blank" style="color:var(--azul-tech);font-weight:700">Dashboard de Seguimiento ADSO ↗</a>.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 6: MATRIZ COMPLETA DE 7 SESIONES -->
+<section class="slide" id="slide-6">
+  <div class="slide-num-indicator">06 / 08</div>
+  <div class="slide-inner">
+    <div class="slide-header-badge tech">
+      <span class="dot"></span> MATRIZ DE SINCRONIZACIÓN DE SESIONES & CARPETAS
+    </div>
+    <h2 class="sec-title">Cronograma y Estructura de Carpetas GA6</h2>
+    <p class="sec-desc">
+      Mapeo 1 a 1 de la <strong>Apertura Institucional</strong> y las <strong>6 Sesiones Técnicas</strong> con las carpetas del repositorio de trabajo y sus fechas límite en Zajuna:
+    </p>
+
+    <div class="table-wrapper">
+      <table class="matriz-table">
+        <thead>
+          <tr>
+            <th class="col-nowrap">Carpeta de Trabajo</th>
+            <th class="col-nowrap">Fecha Sincrónica</th>
+            <th class="col-nowrap">Actividad de Aprendizaje (AA)</th>
+            <th>Tema Principal de la Clase</th>
+            <th class="col-nowrap">Evidencias Asociadas</th>
+            <th class="col-nowrap">Fecha Límite (Zajuna)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="col-nowrap"><span class="sesion-badge" style="background:linear-gradient(135deg,var(--sena-verde),var(--sena-naranja));color:#fff;">📁 Apertura/</span></td>
+            <td class="col-nowrap">Martes 06/10/2026</td>
+            <td class="col-nowrap"><span class="evidencia-tag" style="background:var(--sena-verde-bg);color:var(--sena-verde-dark);font-weight:700">Apertura Institucional</span></td>
+            <td><strong>Apertura Guía 6:</strong> Socialización de la Ruta Pedagógica, RAPs, Bloques Temáticos, Acuerdos y presentación del <a href="https://julianon2.github.io/seguimiento-adso-3389010/" target="_blank" style="color:var(--azul-tech);font-weight:700">Dashboard de Seguimiento ADSO ↗</a>.</td>
+            <td class="col-nowrap"><span class="evidencia-tag">Presentación General</span></td>
+            <td class="col-nowrap"><span class="evidencia-tag" style="background:#f1f5f9;color:var(--texto-sub);font-weight:700">N/A (Sesión Informativa)</span></td>
+          </tr>
+          <tr>
+            <td class="col-nowrap"><span class="sesion-badge">📁 Sesión 1/</span></td>
+            <td class="col-nowrap">Martes 13/10/2026</td>
+            <td class="col-nowrap"><span class="evidencia-tag">GA6-220501096-AA1</span></td>
+            <td><strong>Modelo Relacional & Normalización:</strong> Diagramas E-R, cardinalidades (1:1, 1:N, N:M) y aplicación paso a paso de las reglas de normalización (1FN, 2FN, 3FN).</td>
+            <td class="col-nowrap"><span class="evidencia-tag">AA1-EV01</span> <span class="evidencia-tag">AA1-EV02</span></td>
+            <td class="col-nowrap"><span class="deadline-badge corte1">Corte 1 — 25/10/2026</span></td>
+          </tr>
+          <tr>
+            <td class="col-nowrap"><span class="sesion-badge">📁 Sesión 2/</span></td>
+            <td class="col-nowrap">Lunes 19/10/2026</td>
+            <td class="col-nowrap"><span class="evidencia-tag">GA6-220501096-AA2</span></td>
+            <td><strong>SQL Completo (DDL & DML):</strong> Creación física de tablas (`CREATE/ALTER/DROP`), restricciones de integridad (PK/FK) y manipulación de datos (`INSERT/SELECT/UPDATE/DELETE`).</td>
+            <td class="col-nowrap"><span class="evidencia-tag">AA2-EV01</span> <span class="evidencia-tag">AA2-EV02</span> <span class="evidencia-tag">AA2-EV03</span></td>
+            <td class="col-nowrap"><span class="deadline-badge corte1">Corte 1 — 25/10/2026</span></td>
+          </tr>
+          <tr>
+            <td class="col-nowrap"><span class="sesion-badge">📁 Sesión 3/</span></td>
+            <td class="col-nowrap">Martes 20/10/2026</td>
+            <td class="col-nowrap"><span class="evidencia-tag">GA6-220501096-AA1</span></td>
+            <td><strong>Bases de Datos NoSQL & Documentos JSON:</strong> Sintaxis JSON/BSON, esquemas dinámicos, arreglos y estructuración de colecciones en MongoDB.</td>
+            <td class="col-nowrap"><span class="evidencia-tag">AA1-EV03</span></td>
+            <td class="col-nowrap"><span class="deadline-badge corte1">Corte 1 — 25/10/2026</span></td>
+          </tr>
+          <tr>
+            <td class="col-nowrap"><span class="sesion-badge">📁 Sesión 4/</span></td>
+            <td class="col-nowrap">Lunes 26/10/2026</td>
+            <td class="col-nowrap"><span class="evidencia-tag">GA6-220501096-AA1</span></td>
+            <td><strong>Operaciones CRUD en MongoDB & Sustentación:</strong> Práctica en MongoDB Compass y Shell, consultas y pautas técnicas para el video demostrativo.</td>
+            <td class="col-nowrap"><span class="evidencia-tag">AA1-EV04</span></td>
+            <td class="col-nowrap"><span class="deadline-badge corte2">Corte 2 — 04/11/2026</span></td>
+          </tr>
+          <tr>
+            <td class="col-nowrap"><span class="sesion-badge">📁 Sesión 5/</span></td>
+            <td class="col-nowrap">Martes 27/10/2026</td>
+            <td class="col-nowrap"><span class="evidencia-tag">GA6-220501096-AA3</span></td>
+            <td><strong>Prototipado UX/UI en Figma:</strong> Wireframes, mapas de navegación, diseño visual responsivo y prototipos interactivos del front-end.</td>
+            <td class="col-nowrap"><span class="evidencia-tag">AA3-EV01..03</span></td>
+            <td class="col-nowrap"><span class="deadline-badge corte2">Corte 2 — 04/11/2026</span></td>
+          </tr>
+          <tr>
+            <td class="col-nowrap"><span class="sesion-badge">📁 Sesión 6/</span></td>
+            <td class="col-nowrap">Lunes 02/11/2026</td>
+            <td class="col-nowrap"><span class="evidencia-tag">GA6-220501096-AA4</span></td>
+            <td><strong>Maquetación Web Front-End & Cierre:</strong> Maquetación con HTML5 semántico, CSS3 Flexbox/Grid, interactividad JavaScript y balance final de la guía.</td>
+            <td class="col-nowrap"><span class="evidencia-tag">AA4-EV01..03</span></td>
+            <td class="col-nowrap"><span class="deadline-badge corte2">Corte 2 — 04/11/2026</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 7: PROYECTO BASE TECHSTORE PRO REACT -->
+<section class="slide" id="slide-7">
+  <div class="slide-num-indicator">07 / 08</div>
+  <div class="slide-inner">
+    <div class="slide-header-badge">
+      <span class="dot"></span> APLICACIÓN PRÁCTICA EN EL PROYECTO FORMATIVO
+    </div>
+    <h2 class="sec-title">Proyecto Transversal: TechStore Pro React</h2>
+    <p class="sec-desc">
+      Cómo se integran las evidencias de la Guía 6 dentro del desarrollo del E-Commerce MERN:
+    </p>
+
+    <div class="grid-3">
+      <div class="card-premium highlight-verde">
+        <div class="card-icon">🗄️</div>
+        <h3 class="card-title">Capa Relacional MySQL</h3>
+        <p class="card-text">
+          Diseño del esquema físico relacional para gestión transaccional de usuarios, productos, categorías y pedidos con restricciones de llaves foráneas.
+        </p>
+      </div>
+
+      <div class="card-premium highlight-naranja">
+        <div class="card-icon">🍃</div>
+        <h3 class="card-title">Capa Documental MongoDB</h3>
+        <p class="card-text">
+          Modelado de colecciones de productos con variantes dinámicas, especificaciones técnicas y registros de auditoría JSON sin esquema rígido.
+        </p>
+      </div>
+
+      <div class="card-premium highlight-tech">
+        <div class="card-icon">🎨</div>
+        <h3 class="card-title">Capa Visual Front-End</h3>
+        <p class="card-text">
+          Prototipado en Figma y maquetación web limpia de la tienda virtual (Catálogo, Carrito de Compras, Detalle de Producto y Panel de Administración).
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 8: REGLAS Y FACTORES DE ÉXITO -->
+<section class="slide" id="slide-8">
+  <div class="slide-num-indicator">08 / 08</div>
+  <div class="slide-inner">
+    <div class="slide-header-badge naranja">
+      <span class="dot"></span> PAUTAS DE TRABAJO Y ENTREGAS
+    </div>
+    <h2 class="sec-title">Compromisos y Factores de Éxito</h2>
+    <p class="sec-desc">
+      Criterios clave para un desempeño excelente durante la Guía de Aprendizaje 6:
+    </p>
+
+    <div class="grid-2">
+      <div class="card-premium highlight-verde">
+        <h3 class="card-title">📋 Calidad en Entregables</h3>
+        <ul class="list-premium">
+          <li><strong>Formato Estándar:</strong> Entregas en PDF (con normas de presentación SENA) o carpetas comprimidas `.zip` según la evidencia.</li>
+          <li><strong>Código Probado:</strong> Scripts `.sql` ejecutables sin errores sintácticos.</li>
+          <li><strong>Videos Demostrativos:</strong> Audio claro, resolución mínima 720p y duración máxima de 7 minutos para la evidencia de MongoDB.</li>
+        </ul>
+      </div>
+
+      <div class="card-premium highlight-tech">
+        <h3 class="card-title">🤝 Acompañamiento & Comunicación</h3>
+        <ul class="list-premium">
+          <li><strong>Encuentros Sincrónicos:</strong> Participación activa y preguntas en vivo en Microsoft Teams.</li>
+          <li><strong>Grabaciones:</strong> Disponibles en el canal oficial 24 horas después de cada sesión.</li>
+          <li><strong>Foro de Dudas:</strong> Canal permanente para resolución de inquietudes técnicas en Zajuna.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div style="text-align:center;margin-top:40px">
+      <div style="display:inline-block;background:linear-gradient(135deg, var(--sena-verde), var(--sena-verde-dark));padding:16px 36px;border-radius:30px;font-family:'Syne',sans-serif;font-size:18px;font-weight:800;color:#fff;box-shadow:0 8px 24px rgba(57,169,0,0.3)">
+        🚀 ¡Bienvenidos a la Guía 6! Éxitos en esta Fase de Ejecución.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Controles Flotantes para Navegación -->
+<div class="nav-controls">
+  <button class="btn-nav-control" onclick="prevSlide()" title="Anterior">←</button>
+  <button class="btn-nav-control" onclick="nextSlide()" title="Siguiente">→</button>
+</div>
+
+<script>
+// Manejo de Navegación por Diapositivas y Teclado
+let currentSlideIndex = 1;
+const totalSlides = 8;
+
+function updateProgress() {
+  const scrollTop = window.scrollY;
+  const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+  const progress = (scrollTop / docHeight) * 100;
+  document.getElementById('progressBar').style.width = progress + '%';
+  
+  // Actualizar enlace activo en Topbar
+  const slides = document.querySelectorAll('.slide');
+  slides.forEach((slide, index) => {
+    const rect = slide.getBoundingClientRect();
+    if (rect.top <= 150 && rect.bottom >= 150) {
+      const links = document.querySelectorAll('.topbar-nav a');
+      links.forEach(l => l.classList.remove('active'));
+      if (links[index]) links[index].classList.add('active');
+    }
+  });
+}
+
+window.addEventListener('scroll', updateProgress);
+
+function goToSlide(num) {
+  if (num < 1) num = 1;
+  if (num > totalSlides) num = totalSlides;
+  currentSlideIndex = num;
+  const target = document.getElementById(`slide-${num}`);
+  if (target) {
+    target.scrollIntoView({ behavior: 'smooth' });
+  }
+}
+
+function nextSlide() {
+  goToSlide(currentSlideIndex + 1);
+}
+
+function prevSlide() {
+  goToSlide(currentSlideIndex - 1);
+}
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') {
+    e.preventDefault();
+    nextSlide();
+  } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+    e.preventDefault();
+    prevSlide();
+  }
+});
+
+function toggleFullscreen() {
+  if (!document.fullscreenElement) {
+    document.documentElement.requestFullscreen().catch(err => console.log(err));
+  } else {
+    if (document.exitFullscreen) {
+      document.exitFullscreen();
+    }
+  }
+}
+</script>
+</body>
+</html>
