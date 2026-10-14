@@ -27,3 +27,9 @@ Thumbs.db
 *.log
 .vscode/
 .idea/
+
+# Archivos de video pesados (grabaciones locales > 100MB alojadas en Google Drive)
+*.mp4
+*.mkv
+*.avi
+*.mov
