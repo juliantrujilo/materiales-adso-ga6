@@ -277,11 +277,50 @@ body{font-family:'Inter',sans-serif;color:var(--texto);background:var(--bg);line
   scroll-margin-top: 20px;
   border-bottom: 1px solid var(--borde);
 }
+.sidebar-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.5);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: 1099;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+.sidebar-backdrop.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
 @media (max-width: 1024px) {
-  .sidebar { transform: translateX(-100%); }
-  .sidebar.open { transform: translateX(0); }
+  .sidebar { transform: translateX(-100%); z-index: 1200; }
+  .sidebar.open { transform: translateX(0); box-shadow: 10px 0 35px rgba(0, 0, 0, 0.25); }
   .main-content { margin-left: 0 !important; }
-  .floating-sidebar-toggle { display: flex !important; }
+  .floating-sidebar-toggle { display: flex !important; z-index: 1050; }
+  .slide-block-badge { left: 80px; }
+}
+@media (max-width: 900px) {
+  .col-3 { grid-template-columns: 1fr; gap: 16px; }
+}
+@media (max-width: 768px) {
+  .slide { padding: 68px 18px 40px; }
+  .col-2 { grid-template-columns: 1fr; gap: 16px; }
+  .slide-block-badge { left: 70px; top: 16px; font-size: 9.5px; padding: 4px 10px; }
+  .slide-num-badge { right: 14px; top: 16px; font-size: 10px; padding: 4px 8px; }
+  .floating-sidebar-toggle { top: 12px; left: 14px; height: 34px; padding: 0 10px; font-size: 11px; }
+  .floating-sidebar-toggle span { display: none; }
+  .portada-meta-item { min-width: 100%; }
+  .ddl-modal-overlay { padding: 0; }
+  .ddl-modal-card {
+    width: 100vw;
+    height: 100vh;
+    max-width: 100vw;
+    max-height: 100vh;
+    min-height: auto;
+    border-radius: 0;
+    border: none;
+  }
 }
 .slide.bg-alt{background:var(--bg-alt)}
 .slide.bg-verde{background:linear-gradient(135deg,var(--sena-verde-glow) 0%,#ffffff 65%)}
@@ -1706,6 +1745,9 @@ pre{background:#1e1e2e;color:#cdd6f4;padding:16px;border-radius:12px;overflow-x:
 </style>
 </head>
 <body>
+
+<!-- BACKDROP OVERLAY PARA MÓVIL -->
+<div class="sidebar-backdrop" id="sidebarBackdrop" onclick="toggleSidebar()"></div>
 
 <!-- SIDEBAR LATERAL NAVEGACIÓN MODERNA -->
 <aside class="sidebar" id="sidebar">
@@ -4118,23 +4160,47 @@ pre{background:#1e1e2e;color:#cdd6f4;padding:16px;border-radius:12px;overflow-x:
 <script>
 let esEvidencia01 = true;
 
-// Alternar Sidebar colapsado / expandido
+// Alternar Sidebar colapsado / expandido Responsive
 function toggleSidebar() {
   const sidebar = document.getElementById('sidebar');
   const main = document.getElementById('main-content');
   const toggleBtn = document.getElementById('floating-toggle');
-  if (sidebar && main) {
-    const isCollapsed = sidebar.classList.toggle('collapsed');
-    main.classList.toggle('expanded', isCollapsed);
-    if (toggleBtn) {
-      if (isCollapsed) {
-        toggleBtn.classList.add('visible');
-      } else {
-        toggleBtn.classList.remove('visible');
+  const backdrop = document.getElementById('sidebarBackdrop');
+  const isMobile = window.innerWidth <= 1024;
+
+  if (isMobile) {
+    if (sidebar) {
+      const isOpen = sidebar.classList.toggle('open');
+      if (backdrop) backdrop.classList.toggle('active', isOpen);
+    }
+  } else {
+    if (sidebar && main) {
+      const isCollapsed = sidebar.classList.toggle('collapsed');
+      main.classList.toggle('expanded', isCollapsed);
+      if (toggleBtn) {
+        if (isCollapsed) {
+          toggleBtn.classList.add('visible');
+        } else {
+          toggleBtn.classList.remove('visible');
+        }
       }
     }
   }
 }
+
+// Cerrar drawer automáticamente en móvil al hacer clic en un link
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.sidebar .nav-link').forEach(link => {
+    link.addEventListener('click', () => {
+      if (window.innerWidth <= 1024) {
+        const sidebar = document.getElementById('sidebar');
+        const backdrop = document.getElementById('sidebarBackdrop');
+        if (sidebar) sidebar.classList.remove('open');
+        if (backdrop) backdrop.classList.remove('active');
+      }
+    });
+  });
+});
 
 // ScrollSpy para el menú lateral
 document.addEventListener('DOMContentLoaded', () => {

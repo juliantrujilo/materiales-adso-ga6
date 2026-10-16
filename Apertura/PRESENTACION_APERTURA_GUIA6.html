@@ -510,18 +510,21 @@ body {
 .grad-verde {
   background: linear-gradient(135deg, var(--sena-verde), var(--sena-verde-dark));
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
 .grad-naranja {
   background: linear-gradient(135deg, var(--sena-naranja), #ea580c);
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
 .grad-tech {
   background: linear-gradient(135deg, var(--azul-tech), #1d4ed8);
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
@@ -754,11 +757,14 @@ body {
   border-radius: var(--radius-lg);
   border: 1px solid var(--borde-light);
   overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
   box-shadow: var(--shadow-card);
+  width: 100%;
 }
 
 .matriz-table {
   width: 100%;
+  min-width: 720px;
   border-collapse: collapse;
   text-align: left;
   font-size: 13px;
@@ -970,20 +976,108 @@ body {
   opacity: 1;
 }
 
-/* Responsividad */
+/* ==========================================================
+   BACKDROP Y RESPONSIVIDAD MULTIDISPOSITIVO (Móvil / Tablet)
+   ========================================================== */
+.sidebar-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.5);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: 1099;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+.sidebar-backdrop.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
 @media (max-width: 1024px) {
-  .hero-wrapper { grid-template-columns: 1fr; gap: 30px; }
-  .grid-3 { grid-template-columns: repeat(2, 1fr); }
-  .grid-4 { grid-template-columns: repeat(2, 1fr); }
+  .sidebar {
+    transform: translateX(-100%);
+    z-index: 1200;
+  }
+  .sidebar.mobile-open {
+    transform: translateX(0);
+    box-shadow: 10px 0 35px rgba(0, 0, 0, 0.25);
+  }
+  .main-content {
+    margin-left: 0 !important;
+  }
+  .floating-sidebar-toggle {
+    display: inline-flex !important;
+    z-index: 1050;
+  }
+  .hero-wrapper {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+  .grid-3 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .grid-4 {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
 @media (max-width: 768px) {
-  .sidebar { transform: translateX(-100%); }
-  .floating-sidebar-toggle { display: inline-flex !important; }
-  .main-content { margin-left: 0; }
-  .slide { padding: 30px 20px; }
-  .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
-  .content-topbar { padding: 10px 16px; }
+  .slide {
+    padding: 60px 18px 40px;
+  }
+  .slide-inner {
+    max-width: 100%;
+  }
+  .slide-num-indicator {
+    top: 14px;
+    right: 18px;
+    font-size: 10.5px;
+    padding: 3px 8px;
+  }
+  .floating-sidebar-toggle {
+    top: 12px;
+    left: 14px;
+    height: 34px;
+    padding: 0 10px;
+    font-size: 11px;
+  }
+  .floating-sidebar-toggle span {
+    display: none;
+  }
+  .content-topbar {
+    padding: 8px 14px;
+    padding-left: 56px;
+    font-size: 11px;
+  }
+  .topbar-breadcrumbs {
+    font-size: 10.5px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .topbar-tools {
+    display: none;
+  }
+  .sec-title {
+    font-size: clamp(20px, 5.5vw, 26px);
+  }
+  .sec-desc {
+    font-size: 13.5px;
+    margin-bottom: 20px;
+  }
+  .grid-2, .grid-3, .grid-4 {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+  .hero-cta-buttons {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .cta-btn {
+    justify-content: center;
+  }
 }
 </style>
 </head>
@@ -991,6 +1085,9 @@ body {
 
 <!-- BARRA DE PROGRESO SUPERIOR -->
 <div class="progress-bar" id="progressBar"></div>
+
+<!-- BACKDROP OVERLAY PARA MÓVIL -->
+<div class="sidebar-backdrop" id="sidebarBackdrop" onclick="toggleSidebar()"></div>
 
 <!-- ==========================================================
      SIDEBAR LATERAL OBLIGATORIO (280px)
@@ -1901,20 +1998,39 @@ body {
   <span id="toastMessage">Texto copiado al portapapeles</span>
 </div>
 
-<script>
-// Manejo del Sidebar (Colapso y Expansión)
+// Manejo del Sidebar (Colapso y Expansión Responsive)
 function toggleSidebar() {
   const sidebar = document.getElementById('sidebar');
   const floatingToggle = document.getElementById('floatingToggle');
-  
-  sidebar.classList.toggle('collapsed');
-  
-  if (sidebar.classList.contains('collapsed')) {
-    floatingToggle.classList.add('visible');
+  const backdrop = document.getElementById('sidebarBackdrop');
+  const isMobile = window.innerWidth <= 1024;
+
+  if (isMobile) {
+    sidebar.classList.toggle('mobile-open');
+    if (backdrop) backdrop.classList.toggle('active', sidebar.classList.contains('mobile-open'));
   } else {
-    floatingToggle.classList.remove('visible');
+    sidebar.classList.toggle('collapsed');
+    if (sidebar.classList.contains('collapsed')) {
+      floatingToggle.classList.add('visible');
+    } else {
+      floatingToggle.classList.remove('visible');
+    }
   }
 }
+
+// Cerrar drawer automáticamente en móvil al hacer clic en un link
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.sidebar .nav-link').forEach(link => {
+    link.addEventListener('click', () => {
+      if (window.innerWidth <= 1024) {
+        const sidebar = document.getElementById('sidebar');
+        const backdrop = document.getElementById('sidebarBackdrop');
+        if (sidebar) sidebar.classList.remove('mobile-open');
+        if (backdrop) backdrop.classList.remove('active');
+      }
+    });
+  });
+});
 
 // ScrollSpy e Indicador de Progreso
 function initScrollSpy() {

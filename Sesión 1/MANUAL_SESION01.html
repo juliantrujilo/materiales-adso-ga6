@@ -387,17 +387,20 @@
       overflow-y: auto;
     }
 
-    /* Tablas Estructuradas */
+    /* Tablas Estructuradas Responsivas */
     .table-card {
       background: #ffffff;
       border: 1px solid var(--borde-light);
       border-radius: var(--radius-md);
-      overflow: hidden;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
       margin: 20px 0;
       box-shadow: var(--shadow-sm);
+      width: 100%;
     }
     .doc-table {
       width: 100%;
+      min-width: 620px;
       border-collapse: collapse;
       text-align: left;
       font-size: 13px;
