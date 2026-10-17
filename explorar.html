@@ -1541,6 +1541,10 @@
                       <span>Sesión 6 · Front-End & Cierre</span>
                       <svg class="sidebar-nav-lock" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
                     </button>
+                    <button type="button" class="sidebar-nav-item sub" id="nav-pdf" onclick="switchView('view-pdf', this)">
+                      <svg class="sidebar-nav-icon theme-naranja" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/></svg>
+                      <span>Guía 6 en PDF (Oficial)</span>
+                    </button>
                   </div>
                 </div>
               </div>
@@ -1998,6 +2002,32 @@
   </div>
 
   <!-- ==========================================
+       VISTA: GUÍA 6 EN PDF (OFICIAL)
+       ========================================== -->
+  <div class="portal-container view-section hidden" id="view-pdf">
+    <section style="margin-top:28px;">
+      <div style="display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:12px;margin-bottom:18px;">
+        <div>
+          <h2 class="hero-title" style="font-size:26px;margin-bottom:6px;">Guía 6 en PDF (Oficial)</h2>
+          <p class="hero-desc">Documento oficial GA6-220501096 tal como se publica en Zajuna.</p>
+        </div>
+        <a href="docs/Guia_aprendizaje_6.pdf" download class="btn-card-action primary-green" style="width:auto;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
+          Descargar PDF
+        </a>
+      </div>
+
+      <div style="background:#1e1e1e;border-radius:var(--radius-lg);overflow:hidden;box-shadow:var(--shadow-card);height:80vh;min-height:520px;">
+        <iframe src="docs/Guia_aprendizaje_6.pdf" title="Guía de Aprendizaje 6 (GA6-220501096)" style="width:100%;height:100%;border:none;"></iframe>
+      </div>
+
+      <p style="font-size:11px;color:var(--texto-dimmer);margin-top:10px;">
+        Si el visor no carga en tu navegador (común en móviles), usa el botón "Descargar PDF" de arriba.
+      </p>
+    </section>
+  </div>
+
+  <!-- ==========================================
        VISTA: ACERCA DE ADSO
        ========================================== -->
   <div class="portal-container view-section hidden" id="view-ficha">
@@ -2151,6 +2181,7 @@
        ========================================================== */
     const breadcrumbPorVista = {
       'view-guia6': '<span>Fase 3: Ejecución</span><span class="sep">/</span><span>Guía 6 (GA6-220501096)</span><span class="sep">/</span><span style="color:var(--sena-verde-dark);font-weight:700">Hub Central de Materiales</span>',
+      'view-pdf': '<span>Fase 3: Ejecución</span><span class="sep">/</span><span>Guía 6 (GA6-220501096)</span><span class="sep">/</span><span style="color:var(--sena-verde-dark);font-weight:700">PDF Oficial</span>',
       'view-ficha': '<span style="color:var(--sena-verde-dark);font-weight:700">Acerca de ADSO</span>'
     };
 
