@@ -1,100 +1,3105 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sesión 2 — DDL y Restricciones SQL | SENA ADSO GA6</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&family=Syne:wght@700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
-<style>
-:root {
-  --sena-verde: #39a900; --sena-verde-dark: #2d8400;
-  --sena-verde-glow: rgba(57,169,0,0.10); --sena-verde-border: rgba(57,169,0,0.30);
-  --sena-naranja: #ff6b00; --sena-naranja-glow: rgba(255,107,0,0.10); --sena-naranja-border: rgba(255,107,0,0.30);
-  --texto: #1a1a2e; --texto-dim: rgba(26,26,46,0.62);
-  --bg: #f8fafc; --bg-alt: #f4f7f2; --borde: #e2e8f0;
-  --azul: #3b82f6; --azul-glow: rgba(59,130,246,0.10);
-  --purpura: #8b5cf6; --purpura-glow: rgba(139,92,246,0.10);
-}
-*{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Inter',sans-serif;color:var(--texto);background:var(--bg);line-height:1.6}
-.topbar{position:sticky;top:0;z-index:100;background:rgba(255,255,255,0.95);border-bottom:2px solid var(--sena-verde);padding:12px 32px;display:flex;align-items:center;justify-content:space-between}
-.sena-logo{background:var(--sena-verde);color:#fff;font-weight:900;font-size:18px;padding:8px 16px;border-radius:8px}
-.slide{min-height:100vh;padding:80px 48px;position:relative;border-bottom:1px solid var(--borde)}
-.slide-num-badge{position:absolute;top:24px;right:24px;background:var(--sena-verde-glow);color:var(--sena-verde);font-size:11px;font-weight:700;padding:6px 12px;border-radius:20px;border:1px solid var(--sena-verde-border)}
-.portada-titulo{font-family:'Syne',sans-serif;font-size:48px;font-weight:800;margin-bottom:24px}
-.col-2{display:grid;grid-template-columns:1fr 1fr;gap:24px}
-.card{background:#fff;border:2px solid var(--borde);border-radius:16px;padding:24px;border-top:5px solid var(--sena-verde)}
-pre,code{font-family:'JetBrains Mono',monospace;font-size:13px}
-pre{background:#1e1e2e;color:#cdd6f4;padding:16px;border-radius:12px;overflow-x:auto}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sesión 2 — SQL Físico: DDL, Restricciones & DML Didáctico | SENA ADSO GA6</title>
+  
+  <!-- Tipografías Google Fonts de Alta Gama -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Syne:wght@700;800;900&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --sena-verde: #39a900;
+      --sena-verde-dark: #236b00;
+      --sena-verde-soft: #44c702;
+      --sena-verde-bg: rgba(57, 169, 0, 0.08);
+      --sena-verde-border: rgba(57, 169, 0, 0.28);
+      --sena-verde-glow: rgba(57, 169, 0, 0.15);
+
+      --sena-naranja: #ff6b00;
+      --sena-naranja-dark: #c2410c;
+      --sena-naranja-bg: rgba(255, 107, 0, 0.08);
+      --sena-naranja-border: rgba(255, 107, 0, 0.28);
+      --sena-naranja-glow: rgba(255, 107, 0, 0.15);
+
+      --azul-tech: #0284c7;
+      --azul-tech-dark: #0369a1;
+      --azul-bg: rgba(2, 132, 199, 0.08);
+      --azul-border: rgba(2, 132, 199, 0.28);
+      --azul-glow: rgba(2, 132, 199, 0.15);
+
+      --purpura: #7c3aed;
+      --purpura-bg: rgba(124, 58, 237, 0.08);
+      --purpura-border: rgba(124, 58, 237, 0.28);
+
+      --bg-main: #f8fafc;
+      --bg-card: #ffffff;
+      --borde-light: #e2e8f0;
+      --borde-focus: #cbd5e1;
+
+      --texto-main: #0f172a;
+      --texto-muted: #334155;
+      --texto-sub: #64748b;
+      --texto-dimmer: #94a3b8;
+
+      --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.04);
+      --shadow-card: 0 10px 30px rgba(15, 23, 42, 0.05), 0 1px 3px rgba(0, 0, 0, 0.03);
+      --shadow-hover: 0 20px 40px rgba(57, 169, 0, 0.12), 0 4px 12px rgba(0, 0, 0, 0.05);
+
+      --radius-xl: 20px;
+      --radius-lg: 16px;
+      --radius-md: 12px;
+      --radius-sm: 8px;
+    }
+
+    * { margin:0; padding:0; box-sizing:border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      color: var(--texto-main);
+      background-color: var(--bg-main);
+      background-image: 
+        radial-gradient(circle at 5% 10%, rgba(255, 107, 0, 0.04) 0%, transparent 40%),
+        radial-gradient(circle at 95% 90%, rgba(57, 169, 0, 0.04) 0%, transparent 40%),
+        radial-gradient(circle at 50% 50%, rgba(2, 132, 199, 0.02) 0%, transparent 60%);
+      background-attachment: fixed;
+      line-height: 1.6;
+      overflow-x: hidden;
+      display: flex;
+    }
+
+    /* Barra de Progreso Superior */
+    .progress-bar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: 3.5px;
+      background: linear-gradient(90deg, var(--sena-naranja), var(--sena-verde));
+      width: 0%;
+      z-index: 2000;
+      transition: width 0.1s ease;
+    }
+
+    /* Telón Overlay para Móvil */
+    .sidebar-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.5);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      z-index: 1099;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+    }
+    .sidebar-backdrop.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    /* Botón Flotante Reactivo Móvil */
+    .floating-sidebar-toggle {
+      position: fixed;
+      top: 14px;
+      left: 14px;
+      z-index: 1050;
+      background: #ffffff;
+      border: 1px solid var(--borde-focus);
+      color: var(--texto-main);
+      height: 38px;
+      padding: 0 14px;
+      border-radius: 10px;
+      box-shadow: 0 4px 14px rgba(15, 23, 42, 0.08);
+      display: none;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      font-family: 'Outfit', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      transition: all 0.2s ease;
+    }
+    .floating-sidebar-toggle:hover {
+      border-color: var(--sena-naranja);
+      color: var(--sena-naranja-dark);
+    }
+    .floating-sidebar-toggle.visible {
+      display: inline-flex !important;
+      animation: fadeInToggle 0.25s ease-out forwards;
+    }
+    @keyframes fadeInToggle {
+      from { opacity: 0; transform: translateX(-12px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    /* ==========================================================
+       SIDEBAR UNIFICADO OFICIAL SENA (PATRÓN SESIÓN 1)
+       ========================================================== */
+    .sidebar {
+      position: fixed;
+      top: 0; left: 0; bottom: 0;
+      width: 280px;
+      background: #ffffff;
+      border-right: 1px solid var(--borde-light);
+      display: flex;
+      flex-direction: column;
+      z-index: 1000;
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 2px 0 20px rgba(15, 23, 42, 0.04);
+    }
+    .sidebar.collapsed {
+      transform: translateX(-100%);
+    }
+
+    .sidebar-header {
+      padding: 18px 16px;
+      border-bottom: 1px solid var(--borde-light);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #ffffff;
+    }
+
+    .sidebar-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .sidebar-logo {
+      width: 40px;
+      height: 40px;
+      background: var(--sena-verde);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+      flex-shrink: 0;
+      box-shadow: 0 4px 10px rgba(57, 169, 0, 0.25);
+    }
+
+    .sidebar-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--texto-main);
+      line-height: 1.2;
+    }
+
+    .sidebar-sub {
+      font-size: 10.5px;
+      color: var(--texto-sub);
+      font-weight: 600;
+    }
+
+    .sidebar-toggle-btn {
+      background: transparent;
+      border: 1px solid transparent;
+      color: var(--texto-sub);
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .sidebar-toggle-btn:hover {
+      background: #f1f5f9;
+      color: var(--texto-main);
+      border-color: var(--borde-light);
+    }
+
+    .sidebar-scroll {
+      flex: 1;
+      overflow-y: auto;
+      padding: 14px 10px;
+    }
+
+    .nav-group { margin-bottom: 16px; }
+
+    .nav-group-title {
+      font-size: 9.5px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--texto-dimmer);
+      padding: 0 10px 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .nav-link {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      padding: 7px 10px;
+      border-radius: 8px;
+      color: #475569;
+      text-decoration: none;
+      font-size: 11.8px;
+      font-weight: 600;
+      transition: all 0.2s ease;
+      margin-bottom: 2px;
+      position: relative;
+    }
+
+    .nav-link:hover {
+      background: #f1f5f9;
+      color: var(--texto-main);
+    }
+
+    .nav-link.active {
+      background: rgba(57, 169, 0, 0.1);
+      color: var(--sena-verde-dark);
+      font-weight: 700;
+    }
+
+    .nav-link.active::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 6px; bottom: 6px;
+      width: 3.5px;
+      background: var(--sena-verde);
+      border-radius: 0 4px 4px 0;
+    }
+
+    .nav-link-num {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--texto-dimmer);
+      min-width: 16px;
+    }
+    .nav-link.active .nav-link-num { color: var(--sena-verde); }
+
+    .nav-link-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--texto-sub);
+      flex-shrink: 0;
+    }
+    .nav-link.active .nav-link-icon { color: var(--sena-verde-dark); }
+
+    .nav-link-text {
+      flex: 1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .sidebar-footer {
+      padding: 12px 14px;
+      border-top: 1px solid var(--borde-light);
+      background: #f8fafc;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .sidebar-corte-badge {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--sena-naranja-bg);
+      border: 1px solid var(--sena-naranja-border);
+      padding: 6px 10px;
+      border-radius: 8px;
+      font-size: 10.5px;
+      font-weight: 700;
+      color: var(--sena-naranja-dark);
+    }
+
+    .sidebar-link-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      background: #ffffff;
+      border: 1px solid var(--borde-focus);
+      padding: 7px 10px;
+      border-radius: 8px;
+      font-size: 11px;
+      font-weight: 700;
+      color: #334155;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+    .sidebar-link-btn:hover {
+      background: #f1f5f9;
+      border-color: #94a3b8;
+      color: var(--texto-main);
+    }
+
+    /* ==========================================================
+       CONTENIDO PRINCIPAL (.main-content) — SIN TOPBAR
+       ========================================================== */
+    .main-content {
+      margin-left: 280px;
+      min-height: 100vh;
+      width: calc(100% - 280px);
+      display: flex;
+      flex-direction: column;
+      transition: margin-left 0.3s cubic-bezier(0.16, 1, 0.3, 1), width 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .main-content.expanded {
+      margin-left: 0 !important;
+      width: 100% !important;
+    }
+
+    .slide {
+      min-height: 100vh;
+      padding: 60px 48px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      border-bottom: 1px dashed var(--borde-light);
+      position: relative;
+      scroll-margin-top: 20px;
+    }
+
+    .slide.bg-alt { background: #fbfcfe; }
+    .slide.bg-naranja { background: linear-gradient(135deg, rgba(255, 107, 0, 0.03) 0%, #ffffff 70%); }
+    .slide.bg-verde { background: linear-gradient(135deg, rgba(57, 169, 0, 0.03) 0%, #ffffff 70%); }
+
+    .slide-inner {
+      max-width: 1200px;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    .slide-num-badge {
+      position: absolute;
+      top: 24px;
+      right: 40px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--texto-sub);
+      background: rgba(255, 255, 255, 0.9);
+      border: 1px solid var(--borde-light);
+      padding: 4px 12px;
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .slide-block-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 5px 14px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+
+    .slide-block-badge.naranja { background: var(--sena-naranja-bg); border: 1px solid var(--sena-naranja-border); color: var(--sena-naranja-dark); }
+    .slide-block-badge.verde { background: var(--sena-verde-bg); border: 1px solid var(--sena-verde-border); color: var(--sena-verde-dark); }
+    .slide-block-badge.azul { background: var(--azul-bg); border: 1px solid var(--azul-border); color: var(--azul-tech); }
+    .slide-block-badge.purpura { background: var(--purpura-bg); border: 1px solid var(--purpura-border); color: var(--purpura); }
+    .slide-block-badge .dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+
+    .sec-title {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(26px, 3.2vw, 42px);
+      font-weight: 800;
+      color: var(--texto-main);
+      line-height: 1.2;
+      margin-bottom: 12px;
+      letter-spacing: -0.5px;
+    }
+
+    .sec-desc {
+      font-size: 15px;
+      color: var(--texto-muted);
+      max-width: 920px;
+      line-height: 1.65;
+      margin-bottom: 26px;
+    }
+
+    .grad-naranja {
+      background: linear-gradient(135deg, var(--sena-naranja), #ea580c);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .grad-verde {
+      background: linear-gradient(135deg, var(--sena-verde), var(--sena-verde-dark));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .grad-tech {
+      background: linear-gradient(135deg, var(--azul-tech), #1d4ed8);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+    .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+
+    /* Tarjetas Didácticas y Contenedores */
+    .pro-card {
+      background: #ffffff;
+      border: 1px solid var(--borde-light);
+      border-radius: var(--radius-lg);
+      padding: 22px;
+      box-shadow: var(--shadow-sm);
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .pro-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3.5px;
+      background: var(--borde-light);
+      transition: background 0.25s ease;
+    }
+
+    .pro-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-card);
+      border-color: var(--borde-focus);
+    }
+
+    .pro-card.theme-naranja::before { background: linear-gradient(90deg, var(--sena-naranja), #ea580c); }
+    .pro-card.theme-verde::before { background: linear-gradient(90deg, var(--sena-verde), var(--sena-verde-dark)); }
+    .pro-card.theme-azul::before { background: linear-gradient(90deg, var(--azul-tech), #1d4ed8); }
+    .pro-card.theme-purpura::before { background: linear-gradient(90deg, var(--purpura), #5b21b6); }
+
+    /* Didáctica: Caja de Analogía */
+    .analogy-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 10.5px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      padding: 3px 10px;
+      border-radius: 20px;
+      background: #f1f5f9;
+      color: var(--texto-sub);
+      margin-bottom: 10px;
+      width: fit-content;
+    }
+
+    .bridge-banner {
+      background: linear-gradient(135deg, rgba(57,169,0,0.08) 0%, rgba(2,132,199,0.08) 100%);
+      border: 1.5px dashed var(--sena-verde-border);
+      border-radius: var(--radius-md);
+      padding: 16px 20px;
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .bridge-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      background: var(--sena-verde);
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .bridge-content h4 {
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--texto-main);
+      margin-bottom: 2px;
+    }
+    .bridge-content p {
+      font-size: 12.5px;
+      color: var(--texto-muted);
+      line-height: 1.5;
+    }
+
+    /* Mapeo Sesión 1 -> Sesión 2 */
+    .relation-map-row {
+      display: grid;
+      grid-template-columns: 180px 30px 1fr;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 14px;
+      background: #ffffff;
+      border: 1px solid var(--borde-light);
+      border-radius: var(--radius-sm);
+      margin-bottom: 8px;
+      font-size: 12.5px;
+    }
+
+    .relation-tag-s1 {
+      font-weight: 700;
+      color: var(--sena-verde-dark);
+      background: var(--sena-verde-bg);
+      padding: 4px 10px;
+      border-radius: 6px;
+      border: 1px solid var(--sena-verde-border);
+      text-align: center;
+    }
+
+    .relation-sql-s2 {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11.5px;
+      color: var(--azul-tech-dark);
+      background: var(--azul-bg);
+      padding: 4px 10px;
+      border-radius: 6px;
+      border: 1px solid var(--azul-border);
+    }
+
+    /* Traductor Didáctico al Mundo Real */
+    .rel-tab-btn {
+      background: #ffffff;
+      border: 1px solid var(--borde-light);
+      color: var(--texto-muted);
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 11.5px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .rel-tab-btn:hover {
+      background: #f1f5f9;
+      color: var(--texto-main);
+      border-color: var(--borde-focus);
+    }
+    .rel-tab-btn.active {
+      background: var(--sena-verde-bg);
+      color: var(--sena-verde-dark);
+      border-color: var(--sena-verde-border);
+      box-shadow: 0 2px 6px rgba(57, 169, 0, 0.12);
+    }
+
+    /* Jerarquía Genealógica de Tablas (Slide 3) */
+    .diagram-frame {
+      background: #ffffff;
+      border: 1px solid var(--borde-light);
+      border-radius: var(--radius-lg);
+      padding: 16px;
+      box-shadow: var(--shadow-sm);
+    }
+    .diagram-img-box {
+      width: 100%;
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      border: 1px solid var(--borde-light);
+      background: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: zoom-in;
+      transition: all 0.25s ease;
+    }
+    .diagram-img-box:hover {
+      box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+      border-color: var(--borde-focus);
+    }
+    .diagram-img-box img {
+      width: 100%;
+      height: auto;
+      display: block;
+      object-fit: contain;
+    }
+    .level-badge-pill {
+      font-size: 10.5px;
+      font-weight: 800;
+      text-transform: uppercase;
+      padding: 3px 8px;
+      border-radius: 6px;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .level-badge-pill.padre { background: var(--sena-verde-bg); color: var(--sena-verde-dark); border: 1px solid var(--sena-verde-border); }
+    .level-badge-pill.intermedio { background: var(--azul-bg); color: var(--azul-tech-dark); border: 1px solid var(--azul-border); }
+    .level-badge-pill.hijo { background: var(--sena-naranja-bg); color: var(--sena-naranja-dark); border: 1px solid var(--sena-naranja-border); }
+
+    .tree-step-card {
+      background: #ffffff;
+      border: 1px solid var(--borde-light);
+      border-radius: var(--radius-md);
+      padding: 14px 16px;
+      margin-bottom: 10px;
+      transition: all 0.2s ease;
+      border-left: 4px solid var(--borde-light);
+    }
+    .tree-step-card:hover {
+      transform: translateX(4px);
+      box-shadow: var(--shadow-sm);
+    }
+    .tree-step-card.lvl-1 { border-left-color: var(--sena-verde); }
+    .tree-step-card.lvl-2 { border-left-color: var(--azul-tech); }
+    .tree-step-card.lvl-3 { border-left-color: var(--sena-naranja); }
+
+    /* ==========================================================
+       ESTÁNDAR CODEBOX TIPO VS CODE (estandar_codebox.md)
+       ========================================================== */
+    .editor-window {
+      background: #1e1e1e;
+      border-radius: 12px;
+      border: 1px solid #333333;
+      box-shadow: 0 14px 34px rgba(0,0,0,0.25);
+      overflow: hidden;
+      font-family: 'JetBrains Mono', Consolas, monospace;
+      margin-top: 14px;
+      width: 100%;
+    }
+
+    .editor-titlebar {
+      background: #252526;
+      border-bottom: 1px solid #333333;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 14px;
+      height: 38px;
+    }
+
+    .editor-traffic-lights { display: flex; gap: 6px; }
+    .traffic-dot { width: 10px; height: 10px; border-radius: 50%; }
+    .traffic-dot.red { background: #ff5f56; }
+    .traffic-dot.yellow { background: #ffbd2e; }
+    .traffic-dot.green { background: #27c93f; }
+
+    .editor-tab {
+      background: #1e1e1e;
+      border-top: 2px solid var(--sena-naranja);
+      color: #cccccc;
+      padding: 6px 14px;
+      font-size: 11px;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-editor-copy {
+      background: #333333;
+      border: 1px solid #444444;
+      color: #e0e0e0;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+    }
+    .btn-editor-copy:hover {
+      background: var(--sena-naranja);
+      border-color: var(--sena-naranja);
+      color: #ffffff;
+    }
+
+    .editor-body {
+      display: flex;
+      padding: 14px 0;
+      background: #1e1e1e;
+      overflow-x: auto;
+      font-size: 12.5px;
+      line-height: 22px;
+    }
+
+    .editor-gutter {
+      user-select: none;
+      color: #858585;
+      padding: 0 12px;
+      text-align: right;
+      border-right: 1px solid #2d2d2d;
+      flex-shrink: 0;
+    }
+
+    .gutter-row {
+      height: 22px;
+      line-height: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 6px;
+    }
+
+    .chevron-fold { color: #6e7681; font-size: 9px; cursor: pointer; }
+    .editor-code { padding: 0 16px; color: #d4d4d4; flex-grow: 1; white-space: pre; }
+    .code-line { height: 22px; line-height: 22px; white-space: pre; }
+
+    .kwd { color: #569cd6; font-weight: 700; }
+    .type { color: #4ec9b0; }
+    .str { color: #ce9178; }
+    .func { color: #dcdcaa; }
+    .com { color: #6a9955; font-style: italic; }
+    .num { color: #b5cea8; }
+
+    /* Stepper Guiado */
+    .stepper-nav {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .step-card-btn {
+      background: #ffffff;
+      border: 1.5px solid var(--borde-light);
+      border-radius: var(--radius-md);
+      padding: 14px;
+      cursor: pointer;
+      text-align: left;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .step-card-btn:hover {
+      border-color: var(--sena-naranja);
+      background: var(--sena-naranja-bg);
+      transform: translateY(-2px);
+    }
+
+    .step-card-btn.active {
+      border-color: var(--sena-naranja);
+      background: #ffffff;
+      box-shadow: 0 6px 18px rgba(255, 107, 0, 0.15);
+    }
+
+    .step-num-circle {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: #f1f5f9;
+      color: var(--texto-sub);
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .step-card-btn.active .step-num-circle { background: var(--sena-naranja); color: #ffffff; }
+
+    /* Modal Stepper Overlay */
+    .stepper-modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.7);
+      backdrop-filter: blur(5px);
+      z-index: 9999;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .stepper-modal-overlay.active { display: flex; }
+
+    .stepper-modal-card {
+      background: #ffffff;
+      border-radius: var(--radius-xl);
+      width: 100%;
+      max-width: 860px;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.3);
+      padding: 28px;
+      animation: modalScale 0.25s ease-out;
+    }
+
+    @keyframes modalScale {
+      from { opacity: 0; transform: scale(0.96) translateY(12px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    .cweijan-params-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0;
+      font-size: 12.5px;
+    }
+    .cweijan-params-table th {
+      background: #f8fafc;
+      padding: 10px 14px;
+      text-align: left;
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      border-bottom: 2px solid var(--borde-light);
+      color: var(--texto-sub);
+    }
+    .cweijan-params-table td {
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--borde-light);
+      color: var(--texto-muted);
+    }
+
+    /* Checklist Interactivo */
+    .checklist-container {
+      background: #ffffff;
+      border: 1px solid var(--borde-light);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .checklist-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 18px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--borde-light);
+    }
+
+    .checklist-counter {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      font-weight: 700;
+      background: var(--sena-verde-bg);
+      color: var(--sena-verde-dark);
+      padding: 4px 12px;
+      border-radius: 20px;
+      border: 1px solid var(--sena-verde-border);
+    }
+
+    .checklist-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 10px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.2s ease;
+      margin-bottom: 8px;
+      border: 1px solid transparent;
+    }
+    .checklist-item:hover { background: #f8fafc; border-color: var(--borde-light); }
+    .checklist-item.checked { background: var(--sena-verde-bg); border-color: var(--sena-verde-border); }
+
+    .check-box-icon {
+      width: 18px;
+      height: 18px;
+      border-radius: 5px;
+      border: 2px solid #cbd5e1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 2px;
+      background: #ffffff;
+      transition: all 0.2s ease;
+    }
+    .checklist-item.checked .check-box-icon { background: var(--sena-verde); border-color: var(--sena-verde); color: #ffffff; }
+
+    /* Toast */
+    .toast-box {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: #0f172a;
+      color: #ffffff;
+      padding: 12px 20px;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: 10000;
+    }
+    .toast-box.show { transform: translateY(0); opacity: 1; }
+
+    /* ==========================================================
+       RESPONSIVIDAD MULTIDISPOSITIVO
+       ========================================================== */
+    @media (max-width: 1024px) {
+      .sidebar { transform: translateX(-100%); z-index: 1200; }
+      .sidebar.mobile-open { transform: translateX(0); box-shadow: 10px 0 40px rgba(0, 0, 0, 0.25); }
+      .main-content { margin-left: 0 !important; width: 100% !important; }
+      .floating-sidebar-toggle { display: inline-flex; }
+      .slide { padding: 60px 24px 40px; }
+      .grid-3 { grid-template-columns: repeat(2, 1fr); }
+      .grid-4 { grid-template-columns: repeat(2, 1fr); }
+      .stepper-nav { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 768px) {
+      .slide { padding: 56px 18px 40px; }
+      .slide-num-badge { top: 14px; right: 16px; font-size: 10px; padding: 3px 8px; }
+      .floating-sidebar-toggle { top: 12px; left: 14px; height: 34px; padding: 0 10px; font-size: 11px; }
+      .floating-sidebar-toggle span { display: none; }
+      .sec-title { font-size: clamp(22px, 6vw, 28px); }
+      .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; gap: 14px; }
+      .stepper-nav { grid-template-columns: 1fr; }
+      .relation-map-row { grid-template-columns: 1fr; gap: 6px; }
+      .stepper-modal-card { padding: 20px 16px; }
+    }
+  </style>
 </head>
 <body>
 
-<header class="topbar">
-  <div style="display:flex;align-items:center;gap:16px">
-    <div class="sena-logo">SENA</div>
-    <div>
-      <div style="font-weight:700;color:var(--sena-verde-dark)">ADSO 3389010 — Virtual</div>
-      <div style="font-size:12px;color:var(--texto-dim)">Fase 3: Ejecución | Guía 6 — Sesión 2</div>
+  <!-- BARRA DE PROGRESO SUPERIOR -->
+  <div class="progress-bar" id="progressBar"></div>
+
+  <!-- TELÓN OVERLAY MÓVIL -->
+  <div class="sidebar-backdrop" id="sidebarBackdrop" onclick="toggleSidebar()"></div>
+
+  <!-- BOTÓN FLOTANTE MÓVIL -->
+  <button class="floating-sidebar-toggle" id="floatingToggle" onclick="toggleSidebar()" aria-label="Abrir Menú de Diapositivas">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="3" x2="21" y1="6" y2="6"/><line x1="3" x2="21" y1="12" y2="12"/><line x1="3" x2="21" y1="18" y2="18"/></svg>
+    <span>Menú Sesión 2</span>
+  </button>
+
+  <!-- SIDEBAR INSTITUCIONAL OFICIAL (PATRÓN SESIÓN 1) -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-brand">
+        <div class="sidebar-logo" title="Servicio Nacional de Aprendizaje SENA">
+          <svg width="24" height="24" viewBox="0 0 64 62" fill="currentColor">
+            <path d="M32 0C28.2 0 25.1 3.1 25.1 6.9C25.1 10.7 28.2 13.8 32 13.8C35.8 13.8 38.9 10.7 38.9 6.9C38.9 3.1 35.8 0 32 0ZM32 16.2C23.2 16.2 16.2 23.2 16.2 32C16.2 40.8 23.2 47.8 32 47.8C40.8 47.8 47.8 40.8 47.8 32C47.8 23.2 40.8 16.2 32 16.2ZM32 20.8C38.2 20.8 43.2 25.8 43.2 32C43.2 38.2 38.2 43.2 32 43.2C25.8 43.2 20.8 38.2 20.8 32C20.8 25.8 25.8 20.8 32 20.8ZM8.5 28.5L0 47.8H9.8L12.5 41.5H20.2L8.5 28.5ZM55.5 28.5L43.8 41.5H51.5L54.2 47.8H64L55.5 28.5ZM26.2 50.8L21.5 61.5H29.8L32 56.5L34.2 61.5H42.5L37.8 50.8H26.2Z"/>
+          </svg>
+        </div>
+        <div>
+          <div class="sidebar-title">ADSO 3389010</div>
+          <div class="sidebar-sub">Guía 6 — Sesión 2</div>
+        </div>
+      </div>
+      <button class="sidebar-toggle-btn" onclick="toggleSidebar()" title="Colapsar Menú Lateral">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect width="18" height="18" x="3" y="3" rx="2"/><line x1="9" x2="9" y1="3" y2="21"/><path d="m14 9-3 3 3 3"/></svg>
+      </button>
+    </div>
+
+    <div class="sidebar-scroll">
+      <!-- BLOQUE 1 -->
+      <div class="nav-group">
+        <div class="nav-group-title">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2 2z"/></svg>
+          <span>Bloque 1: Apertura & Conexión S1</span>
+        </div>
+        <a href="#slide-1" class="nav-link active" data-slide="1">
+          <span class="nav-link-num">01</span>
+          <span class="nav-link-icon"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"/></svg></span>
+          <span class="nav-link-text">Portada Institucional</span>
+        </a>
+        <a href="#slide-2" class="nav-link" data-slide="2">
+          <span class="nav-link-num">02</span>
+          <span class="nav-link-icon"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M16 3h5v5"/><path d="M4 20L21 3"/><path d="M21 16v5h-5"/><path d="M15 15l6 6"/><path d="M4 4l5 5"/></svg></span>
+          <span class="nav-link-text">Puente con la Sesión 1</span>
+        </a>
+        <a href="#slide-3" class="nav-link" data-slide="3">
+          <span class="nav-link-num">03</span>
+          <span class="nav-link-icon"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg></span>
+          <span class="nav-link-text">Regla de Oro Jerárquica DDL</span>
+        </a>
+      </div>
+
+      <!-- BLOQUE 2 -->
+      <div class="nav-group">
+        <div class="nav-group-title">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5V19A9 3 0 0 0 21 19V5"/><path d="M3 12A9 3 0 0 0 21 12"/></svg>
+          <span>Bloque 2: Analogías & Restricciones</span>
+        </div>
+        <a href="#slide-4" class="nav-link" data-slide="4">
+          <span class="nav-link-num">04</span>
+          <span class="nav-link-icon"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="4 17 10 11 4 5"/><line x1="12" x2="20" y1="19" y2="19"/></svg></span>
+          <span class="nav-link-text">El Vocabulario DDL Explicado</span>
+        </a>
+        <a href="#slide-5" class="nav-link" data-slide="5">
+          <span class="nav-link-num">05</span>
+          <span class="nav-link-icon"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg></span>
+          <span class="nav-link-text">Tipos de Datos Cotidianos</span>
+        </a>
+        <a href="#slide-6" class="nav-link" data-slide="6">
+          <span class="nav-link-num">06</span>
+          <span class="nav-link-icon"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span>
+          <span class="nav-link-text">Las 6 Restricciones (Analogías)</span>
+        </a>
+        <a href="#slide-7" class="nav-link" data-slide="7">
+          <span class="nav-link-num">07</span>
+          <span class="nav-link-icon"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="18" x2="18" y1="20" y2="10"/><line x1="12" x2="12" y1="20" y2="4"/><line x1="6" x2="6" y1="20" y2="14"/></svg></span>
+          <span class="nav-link-text">Laboratorio de Errores Vivos</span>
+        </a>
+        <a href="#slide-8" class="nav-link" data-slide="8">
+          <span class="nav-link-num">08</span>
+          <span class="nav-link-icon"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/></svg></span>
+          <span class="nav-link-text">WhatsApp vs DIAN (CASCADE)</span>
+        </a>
+      </div>
+
+      <!-- BLOQUE 3 -->
+      <div class="nav-group">
+        <div class="nav-group-title">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+          <span>Bloque 3: Taller Guiado & Código</span>
+        </div>
+        <a href="#slide-9" class="nav-link" data-slide="9">
+          <span class="nav-link-num">09</span>
+          <span class="nav-link-icon"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><line x1="3" x2="21" y1="6" y2="6"/></svg></span>
+          <span class="nav-link-text">Anatomía de las 6 Tablas</span>
+        </a>
+        <a href="#slide-10" class="nav-link" data-slide="10">
+          <span class="nav-link-num">10</span>
+          <span class="nav-link-icon"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="5 3 19 12 5 21 5 3"/></svg></span>
+          <span class="nav-link-text">Mi Primer Query en el IDE</span>
+        </a>
+      </div>
+
+      <!-- BLOQUE 4 -->
+      <div class="nav-group">
+        <div class="nav-group-title">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          <span>Bloque 4: Paso a Paso Evidencias</span>
+        </div>
+        <a href="#slide-11" class="nav-link" data-slide="11">
+          <span class="nav-link-num">11</span>
+          <span class="nav-link-icon"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/></svg></span>
+          <span class="nav-link-text">Paso a Paso Entregables AA2</span>
+        </a>
+        <a href="#slide-12" class="nav-link" data-slide="12">
+          <span class="nav-link-num">12</span>
+          <span class="nav-link-icon"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></span>
+          <span class="nav-link-text">Checklist Anti-Errores (100%)</span>
+        </a>
+        <a href="#slide-13" class="nav-link" data-slide="13">
+          <span class="nav-link-num">13</span>
+          <span class="nav-link-icon"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg></span>
+          <span class="nav-link-text">Resumen & Próximo Encuentro</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="sidebar-footer">
+      <div class="sidebar-corte-badge">
+        <span style="display:inline-flex;align-items:center;gap:6px;"><svg width="9" height="9" viewBox="0 0 24 24" fill="#ea580c"><circle cx="12" cy="12" r="10"/></svg> Corte 1 (Bases de Datos)</span>
+        <span>25 / Oct</span>
+      </div>
+      <a href="../explorar.html" class="sidebar-link-btn">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+        Volver al Hub
+      </a>
+      <a href="MANUAL_SESION02.html" class="sidebar-link-btn" style="background:#eff6ff;color:#0284c7;border-color:#bfdbfe;">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+        Manual de Estudio Web ↗
+      </a>
+    </div>
+  </aside>
+
+  <!-- ==========================================================
+       CONTENIDO DE DIAPOSITIVAS (DIDÁCTICO Y CERCANO)
+       ========================================================== -->
+  <main class="main-content" id="main-content">
+
+    <!-- SLIDE 01: PORTADA -->
+    <section class="slide bg-naranja" id="slide-1" data-slide="1">
+      <div class="slide-num-badge">SLIDE 01 / 13</div>
+      <div class="slide-inner">
+        <div class="slide-block-badge naranja">
+          <span class="dot"></span>
+          GUÍA 6 · FASE 3: EJECUCIÓN (AP6)
+        </div>
+        <h1 class="sec-title" style="font-size:clamp(30px, 4.2vw, 50px);">
+          De los Diagramas al Motor Real: <span class="grad-naranja">SQL DDL</span> & <span class="grad-verde">Restricciones de Integridad</span>
+        </h1>
+        <p class="sec-desc">
+          ¡Hola, aprendiz! En este encuentro aprenderás cómo convertir cada cajita y relación que diseñaste en la Sesión 1 en código SQL vivo dentro de tu <strong>IDE Antigravity (Extensión Database Client)</strong> o en <strong>MySQL Workbench</strong>. Sin tecnicismos vacíos: comprenderás el porqué de cada comando para que tu base de datos proteja el negocio de <strong>TechStore Pro</strong> ante cualquier error humano.
+        </p>
+
+        <!-- PÍLDORA CONCEPTUAL DE ENCUADRE: RESTRICCIONES (CONSTRAINTS) -->
+        <div style="margin-top:16px;background:rgba(255,255,255,0.95);border:1.5px solid #fed7aa;border-left:4px solid var(--sena-naranja);border-radius:var(--radius-md);padding:12px 18px;display:flex;align-items:flex-start;gap:12px;box-shadow:0 2px 10px rgba(234,88,12,0.06);">
+          <div style="background:var(--sena-naranja-bg);color:var(--sena-naranja-dark);width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          </div>
+          <div>
+            <div style="font-size:12.5px;font-weight:800;color:var(--sena-naranja-dark);margin-bottom:3px;display:flex;align-items:center;gap:6px;">
+              <span>Pregunta Clave: ¿Qué es una "Restricción de Integridad" (Constraint)?</span>
+            </div>
+            <p style="font-size:12px;color:var(--texto-muted);line-height:1.55;margin:0;">
+              No pienses en código aburrido: una <strong>Constraint</strong> es un <strong>candado de seguridad o regla inviolable del negocio</strong>. Es la orden estricta que le das a MySQL para que le prohíba a cualquier usuario registrar compras sin cliente, precios negativos o correos repetidos. ¡El software protege a la tienda de cualquier error humano!
+            </p>
+          </div>
+        </div>
+
+        <div class="grid-4" style="margin-top:24px;">
+          <div class="pro-card">
+            <span style="font-size:11px;font-weight:800;color:var(--texto-sub);text-transform:uppercase;display:inline-flex;align-items:center;gap:5px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>Encuentro Sincrónico</span>
+            <div style="font-weight:800;font-size:13.5px;color:var(--texto-main);margin-top:4px;">Lunes, 19 / Oct / 2026</div>
+            <div style="font-size:11.5px;color:var(--texto-sub);">6:30 PM – 8:30 PM (Teams)</div>
+          </div>
+          <div class="pro-card">
+            <span style="font-size:11px;font-weight:800;color:var(--texto-sub);text-transform:uppercase;display:inline-flex;align-items:center;gap:5px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>Competencia</span>
+            <div style="font-weight:800;font-size:13.5px;color:var(--texto-main);margin-top:4px;">220501096</div>
+            <div style="font-size:11.5px;color:var(--texto-sub);">Construcción de Software</div>
+          </div>
+          <div class="pro-card">
+            <span style="font-size:11px;font-weight:800;color:var(--texto-sub);text-transform:uppercase;display:inline-flex;align-items:center;gap:5px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.93a2 2 0 0 1-1.66-.9l-.82-1.2A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13c0 1.1.9 2 2 2Z"/></svg>Evidencias Asociadas</span>
+            <div style="font-weight:800;font-size:13.5px;color:var(--sena-naranja-dark);margin-top:4px;">AA2-EV01, EV02, EV03</div>
+            <div style="font-size:11.5px;color:var(--texto-sub);">Taller, Restricciones y .sql</div>
+          </div>
+          <div class="pro-card">
+            <span style="font-size:11px;font-weight:800;color:var(--texto-sub);text-transform:uppercase;display:inline-flex;align-items:center;gap:5px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Cierre Corte 1 (Zajuna)</span>
+            <div style="font-weight:800;font-size:13.5px;color:var(--sena-naranja-dark);margin-top:4px;">25 de Octubre de 2026</div>
+            <div style="font-size:11.5px;color:var(--texto-sub);">11:59 PM (SLA Auditoría)</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 02: PUENTE DIDÁCTICO CON LA SESIÓN 1 -->
+    <section class="slide" id="slide-2" data-slide="2">
+      <div class="slide-num-badge">SLIDE 02 / 13</div>
+      <div class="slide-inner">
+        <div class="slide-block-badge verde">
+          <span class="dot"></span>
+          CONECTANDO LO QUE YA APRENDISTE
+        </div>
+        <h2 class="sec-title">El Puente: ¿Cómo se conecta con la Sesión 1?</h2>
+        <p class="sec-desc">
+          En la clase anterior dibujaste entidades y definiste <strong>6 relaciones de negocio (R1 a R6)</strong>. Mira cómo cada concepto que hiciste a mano se convierte en una instrucción directa en SQL:
+        </p>
+
+        <div class="bridge-banner">
+          <div class="bridge-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M16 3h5v5"/><path d="M4 20L21 3"/><path d="M21 16v5h-5"/><path d="M15 15l6 6"/><path d="M4 4l5 5"/></svg>
+          </div>
+          <div class="bridge-content">
+            <h4>De la Abstracción Mental a la Realidad en el Disco Duro</h4>
+            <p>Una entidad como <code>USUARIO</code> ahora es un <code>CREATE TABLE usuarios</code>. Una clave foránea que dibujaste como flecha ahora es una sentencia <code>FOREIGN KEY</code> que el motor valida cada milisegundo.</p>
+          </div>
+        </div>
+
+        <!-- MINI GUÍA DE LECTURA SQL: QUÉ ES CONSTRAINT EN LA RELACIÓN -->
+        <div style="margin-top:14px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:var(--radius-sm);padding:8px 14px;display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:11.5px;color:#166534;">
+          <span style="display:flex;align-items:center;gap:6px;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg>
+            <strong>¿Por qué dice <code>CONSTRAINT fk_...</code>?</strong>
+            <span>La palabra <code>CONSTRAINT</code> significa "Restricción / Regla Obligatoria", y <code>fk_...</code> es la placa o nombre único que le ponemos a esa regla para que MySQL la identifique.</span>
+          </span>
+          <span style="font-weight:700;color:var(--sena-verde-dark);white-space:nowrap;font-size:11px;">Profundizado en Slide 06 ➔</span>
+        </div>
+
+        <div class="grid-2" style="margin-top:12px;">
+          <div>
+            <div class="relation-map-row">
+              <span class="relation-tag-s1">Sesión 1: R1 (1:N)</span>
+              <span style="text-align:center;color:var(--texto-sub);">➔</span>
+              <span class="relation-sql-s2">pedidos: CONSTRAINT fk_pedidos_usuarios FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario) ON DELETE RESTRICT</span>
+            </div>
+            <div class="relation-map-row">
+              <span class="relation-tag-s1">Sesión 1: R2 (1:N)</span>
+              <span style="text-align:center;color:var(--texto-sub);">➔</span>
+              <span class="relation-sql-s2">productos: CONSTRAINT fk_productos_categorias FOREIGN KEY (id_categoria) REFERENCES categorias(id_categoria) ON DELETE RESTRICT</span>
+            </div>
+            <div class="relation-map-row">
+              <span class="relation-tag-s1">Sesión 1: R3 (1:N)</span>
+              <span style="text-align:center;color:var(--texto-sub);">➔</span>
+              <span class="relation-sql-s2">detalle_pedidos: CONSTRAINT fk_det_pedidos FOREIGN KEY (id_pedido) REFERENCES pedidos(id_pedido) ON DELETE CASCADE</span>
+            </div>
+          </div>
+          <div>
+            <div class="relation-map-row">
+              <span class="relation-tag-s1">Sesión 1: R4 (1:N)</span>
+              <span style="text-align:center;color:var(--texto-sub);">➔</span>
+              <span class="relation-sql-s2">detalle_pedidos: CONSTRAINT fk_det_productos FOREIGN KEY (id_producto) REFERENCES productos(id_producto) ON DELETE RESTRICT</span>
+            </div>
+            <div class="relation-map-row">
+              <span class="relation-tag-s1">Sesión 1: R5 (1:1)</span>
+              <span style="text-align:center;color:var(--texto-sub);">➔</span>
+              <span class="relation-sql-s2">transacciones: id_pedido INT UNIQUE NOT NULL + FOREIGN KEY (id_pedido) REFERENCES pedidos(id_pedido)</span>
+            </div>
+            <div class="relation-map-row">
+              <span class="relation-tag-s1">Sesión 1: R6 (N:M)</span>
+              <span style="text-align:center;color:var(--texto-sub);">➔</span>
+              <span class="relation-sql-s2">detalle_pedidos: Tabla asociativa puente con PRIMARY KEY (id_pedido, id_producto) que resuelve la relación N:M</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- TRADUCTOR DIDÁCTICO AL MUNDO REAL -->
+        <div class="didactic-translator-card" style="margin-top:22px;background:#ffffff;border:1.5px solid var(--borde-light);border-radius:var(--radius-lg);padding:18px 22px;box-shadow:var(--shadow-card);">
+          <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:14px;border-bottom:1px solid var(--borde-light);padding-bottom:10px;">
+            <div style="display:flex;align-items:center;gap:10px;">
+              <span style="background:var(--sena-naranja-bg);color:var(--sena-naranja-dark);padding:3px 10px;border-radius:20px;font-size:10.5px;font-weight:800;border:1px solid var(--sena-naranja-border);">
+                TRADUCTOR AL MUNDO REAL
+              </span>
+              <h3 style="font-family:'Syne',sans-serif;font-size:14.5px;color:var(--texto-main);margin:0;">
+                Toca cada relación para entenderla como en la vida cotidiana:
+              </h3>
+            </div>
+            <span style="font-size:11px;color:var(--texto-sub);font-weight:600;">Casos Cotidianos TechStore Pro</span>
+          </div>
+
+          <!-- BOTONES SELECTORES DE RELACIÓN (R1 a R6) -->
+          <div class="rel-pill-tabs" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;">
+            <button class="rel-tab-btn active" onclick="mostrarAnalogia(1, this)">
+              <span>R1: Cliente & Facturas</span>
+            </button>
+            <button class="rel-tab-btn" onclick="mostrarAnalogia(2, this)">
+              <span>R2: Pasillo & Productos</span>
+            </button>
+            <button class="rel-tab-btn" onclick="mostrarAnalogia(3, this)">
+              <span>R3: Factura & Renglones</span>
+            </button>
+            <button class="rel-tab-btn" onclick="mostrarAnalogia(4, this)">
+              <span>R4: Código de Barras</span>
+            </button>
+            <button class="rel-tab-btn" onclick="mostrarAnalogia(5, this)">
+              <span>R5: Voucher del Datáfono</span>
+            </button>
+            <button class="rel-tab-btn" onclick="mostrarAnalogia(6, this)">
+              <span>R6: El Carrito Físico</span>
+            </button>
+          </div>
+
+          <!-- TARJETA DINÁMICA DE LA ANALOGÍA -->
+          <div id="analogiaContainer" style="background:#f8fafc;border:1px solid var(--borde-light);border-radius:var(--radius-md);padding:14px 18px;">
+            <!-- Contenido inyectado dinámicamente por JavaScript -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 03: REGLA DE ORO JERÁRQUICA -->
+    <section class="slide bg-alt" id="slide-3" data-slide="3">
+      <div class="slide-num-badge">SLIDE 03 / 13</div>
+      <div class="slide-inner">
+        <div class="slide-block-badge naranja">
+          <span class="dot"></span>
+          ÁRBOL GENEALÓGICO RELACIONAL
+        </div>
+        <h2 class="sec-title">La Regla de Oro: ¿Quiénes son los Padres y los Hijos en SQL?</h2>
+        <p class="sec-desc">
+          En bases de datos relacionales existe un orden natural de nacimiento. Las tablas <strong>Padres</strong> deben crearse primero porque no dependen de nadie. Las tablas <strong>Hijas</strong> se crean después porque necesitan la llave de sus padres para existir. Si alteras el orden, MySQL aborta con el temido <strong>Error 1215</strong>:
+        </p>
+
+        <div class="grid-2" style="align-items:start;gap:24px;">
+          <!-- COLUMNA IZQUIERDA: DIAGRAMA VISUAL -->
+          <div class="diagram-frame">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:6px;">
+              <span style="font-size:12px;font-weight:800;color:var(--texto-main);display:flex;align-items:center;gap:6px;">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--sena-verde)" stroke-width="2.5"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
+                Mapa Genealógico de Tablas (dbdiagram.io)
+              </span>
+              <span class="level-badge-pill padre">Lectura: Izquierda ➔ Derecha</span>
+            </div>
+
+            <div class="diagram-img-box" onclick="abrirModalImagen('img/dbdiagram_padres_e_hijos.png', 'Esquema Relacional Genealógico — TechStore Pro')" title="Haz clic para ver en tamaño completo">
+              <img src="img/dbdiagram_padres_e_hijos.png" alt="Diagrama de jerarquía de tablas padres e hijos en dbdiagram.io" loading="lazy">
+            </div>
+
+            <!-- LEYENDA PEDAGÓGICA INFERIOR -->
+            <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;justify-content:space-between;">
+              <span class="level-badge-pill padre"><svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg> Nivel 1: Padres Raíz (Sin FK)</span>
+              <span class="level-badge-pill intermedio"><svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg> Nivel 2: Hijos Intermedios (1 FK)</span>
+              <span class="level-badge-pill hijo"><svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg> Nivel 3: Hijos Finales (FKs / Cascade)</span>
+            </div>
+          </div>
+
+          <!-- COLUMNA DERECHA: LOS 3 NIVELES EXPLICADOS -->
+          <div>
+            <!-- NIVEL 1 -->
+            <div class="tree-step-card lvl-1">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+                <span class="level-badge-pill padre">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m2 4 3 12h14l3-12-6 7-4-7-4 7-6-7zm3 16h14"/></svg>
+                  Nivel 1: Padres Fundadores
+                </span>
+                <span style="font-size:11px;font-weight:800;color:var(--sena-verde-dark);background:var(--sena-verde-bg);padding:2px 8px;border-radius:4px;">1º en el Script .SQL</span>
+              </div>
+              <h4 style="font-size:14px;font-weight:800;color:var(--texto-main);margin-bottom:4px;">
+                <code>categorias</code> y <code>usuarios</code>
+              </h4>
+              <p style="font-size:12px;color:var(--texto-muted);line-height:1.5;">
+                <strong>¿Por qué son padres?</strong> No tienen ninguna llave foránea (FK). Son totalmente autosuficientes. Un departamento o un cliente existen por sí solos antes de que haya productos o compras.
+              </p>
+            </div>
+
+            <!-- NIVEL 2 -->
+            <div class="tree-step-card lvl-2">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+                <span class="level-badge-pill intermedio">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/><path d="M16 16h5v5"/></svg>
+                  Nivel 2: Hijos Intermedios
+                </span>
+                <span style="font-size:11px;font-weight:800;color:var(--azul-tech-dark);background:var(--azul-bg);padding:2px 8px;border-radius:4px;">2º en el Script .SQL</span>
+              </div>
+              <h4 style="font-size:14px;font-weight:800;color:var(--texto-main);margin-bottom:4px;">
+                <code>productos</code> y <code>ordenes</code>
+              </h4>
+              <p style="font-size:12px;color:var(--texto-muted);line-height:1.5;">
+                <strong>¿Por qué son intermedios?</strong> Nacen gracias al Nivel 1 (un producto necesita su <code>id_categoria</code> y una orden necesita su <code>id_usuario</code>). Pero a su vez, ¡ellos serán los padres del Nivel 3!
+              </p>
+            </div>
+
+            <!-- NIVEL 3 -->
+            <div class="tree-step-card lvl-3">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+                <span class="level-badge-pill hijo">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 2v20"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                  Nivel 3: Hijos Dependientes
+                </span>
+                <span style="font-size:11px;font-weight:800;color:var(--sena-naranja-dark);background:var(--sena-naranja-bg);padding:2px 8px;border-radius:4px;">De Últimos en el Script .SQL</span>
+              </div>
+              <h4 style="font-size:14px;font-weight:800;color:var(--texto-main);margin-bottom:4px;">
+                <code>detalle_orden</code> y <code>transacciones</code>
+              </h4>
+              <p style="font-size:12px;color:var(--texto-muted);line-height:1.5;">
+                <strong>¿Por qué van al final?</strong> Tienen llaves foráneas compuestas. Si la orden y los productos no existen, el renglón de compra o el recibo bancario no tienen ningún sentido de existir.
+              </p>
+            </div>
+
+            <!-- BOTÓN SIMULADOR DE ERROR 1215 -->
+            <button onclick="toggleSimuladorError1215()" style="width:100%;margin-top:4px;background:#fef2f2;border:1px solid #fecaca;color:#b91c1c;padding:10px 14px;border-radius:var(--radius-sm);font-size:12px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:space-between;transition:all 0.2s;">
+              <span style="display:flex;align-items:center;gap:8px;">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg>
+                ¿Qué pasa si creo "productos" antes que "categorias"?
+              </span>
+              <span style="display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;background:#fee2e2;color:#991b1b;padding:4px 10px;border-radius:20px;border:1px solid #fca5a5;">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
+                Simular Error 1215
+              </span>
+            </button>
+          </div>
+        </div>
+
+        <!-- VENTANA SIMULADOR ERROR 1215 (COLAPSABLE) -->
+        <div id="simuladorError1215" style="display:none;margin-top:16px;background:#0f172a;color:#f8fafc;border-radius:var(--radius-md);padding:14px 18px;border:1px solid #334155;font-family:'JetBrains Mono',monospace;font-size:12px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;border-bottom:1px solid #1e293b;padding-bottom:6px;">
+            <span style="color:#ef4444;font-weight:700;display:inline-flex;align-items:center;gap:6px;">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+              Consola MySQL Server: Error de Integridad Referencial
+            </span>
+            <span style="color:#94a3b8;font-size:10.5px;">Atrapado en tiempo de compilación</span>
+          </div>
+          <div style="color:#f87171;margin-bottom:8px;">
+            ERROR 1215 (HY000): Cannot add foreign key constraint 'fk_productos_categorias'
+          </div>
+          <div style="color:#94a3b8;line-height:1.6;font-family:'Plus Jakarta Sans',sans-serif;font-size:12px;">
+            <strong style="color:#38bdf8;display:inline-flex;align-items:center;gap:5px;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+              Traducción Humana para el Aprendiz:
+            </strong><br>
+            MySQL intentó ejecutar la línea <code>FOREIGN KEY (id_categoria) REFERENCES categorias(id_categoria)</code>, pero al buscar en su memoria no encontró ninguna tabla llamada <code>categorias</code>. ¡El hijo no puede nacer porque la madre aún no ha sido creada!<br>
+            <strong style="color:#4ade80;display:inline-flex;align-items:center;gap:5px;margin-top:6px;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+              Solución de Oro:
+            </strong> En tu script <code>.sql</code>, coloca siempre el bloque de <code>CREATE TABLE categorias</code> arriba de <code>CREATE TABLE productos</code>.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 04: EL VOCABULARIO DDL EXPLICADO -->
+    <section class="slide" id="slide-4" data-slide="4">
+      <div class="slide-num-badge">SLIDE 04 / 13</div>
+      <div class="slide-inner">
+        <div class="slide-block-badge azul">
+          <span class="dot"></span>
+          COMANDOS ESTRUCTURALES
+        </div>
+        <h2 class="sec-title">El Vocabulario DDL: Las 4 Palabras Mágicas</h2>
+        <p class="sec-desc">
+          DDL significa <em>Data Definition Language</em>. No te preocupes por el inglés: son simplemente los comandos para fabricar los "contenedores" físicos donde se guardará la información:
+        </p>
+
+        <div class="grid-4">
+          <div class="pro-card">
+            <span style="font-family:'JetBrains Mono';font-size:13px;font-weight:800;color:var(--sena-verde-dark);">CREATE</span>
+            <div class="analogy-badge" style="margin:6px 0;">Construir</div>
+            <p style="font-size:12px;color:var(--texto-muted);">Como armar un estante nuevo en tu bodega. Define el nombre de la tabla y qué columnas tendrá.</p>
+          </div>
+          <div class="pro-card">
+            <span style="font-family:'JetBrains Mono';font-size:13px;font-weight:800;color:var(--azul-tech);">ALTER</span>
+            <div class="analogy-badge" style="margin:6px 0;">Remodelar</div>
+            <p style="font-size:12px;color:var(--texto-muted);">Como abrirle un nuevo compartimento al estante existente (ej: añadir el campo <code>telefono</code>).</p>
+          </div>
+          <div class="pro-card">
+            <span style="font-family:'JetBrains Mono';font-size:13px;font-weight:800;color:var(--sena-naranja-dark);">DROP</span>
+            <div class="analogy-badge" style="margin:6px 0;">Demoler</div>
+            <p style="font-size:12px;color:var(--texto-muted);">Destruye el estante por completo y bota toda la madera a la basura. ¡Irreversible!</p>
+          </div>
+          <div class="pro-card">
+            <span style="font-family:'JetBrains Mono';font-size:13px;font-weight:800;color:#dc2626;">TRUNCATE</span>
+            <div class="analogy-badge" style="margin:6px 0;">Limpiar</div>
+            <p style="font-size:12px;color:var(--texto-muted);">Saca todos los objetos del estante y déjalo como nuevo, pero conservando la estructura de madera.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 05: TIPOS DE DATOS COTIDIANOS -->
+    <section class="slide bg-alt" id="slide-5" data-slide="5">
+      <div class="slide-num-badge">SLIDE 05 / 13</div>
+      <div class="slide-inner">
+        <div class="slide-block-badge purpura">
+          <span class="dot"></span>
+          DECISIONES INTELIGENTES DE ALMACENAMIENTO
+        </div>
+        <h2 class="sec-title">Tipos de Datos: ¿Qué cajón le corresponde a cada valor?</h2>
+        <p class="sec-desc">
+          Elegir el tipo de dato correcto evita que tu base de datos consuma gigabytes de memoria innecesarios y previene pérdidas de dinero por redondeos incorrectos:
+        </p>
+
+        <div class="grid-3">
+          <div class="pro-card theme-naranja">
+            <div class="analogy-badge">¡Cuidado con el dinero!</div>
+            <h4 style="font-size:14.5px;color:var(--texto-main);margin-bottom:6px;">DECIMAL(12,2) vs FLOAT</h4>
+            <p style="font-size:12px;color:var(--texto-muted);line-height:1.6;">
+              Nunca uses <code>FLOAT</code> para precios. Los flotantes aproximan en binario y hacen que falten o sobren centavos. <code>DECIMAL(12,2)</code> guarda exactamente 10 dígitos enteros y 2 decimales para pesos colombianos ($14.500.000,00).
+            </p>
+          </div>
+
+          <div class="pro-card theme-verde">
+            <div class="analogy-badge">Nombres y Textos</div>
+            <h4 style="font-size:14.5px;color:var(--texto-main);margin-bottom:6px;">VARCHAR(N) vs TEXT</h4>
+            <p style="font-size:12px;color:var(--texto-muted);line-height:1.6;">
+              <code>VARCHAR(60)</code> es como una liga elástica: si un nombre mide 10 letras, solo ocupa 10 bytes en disco. Reserva <code>TEXT</code> exclusivamente para descripciones largas de productos donde no sabes si escribirán 3 párrafos.
+            </p>
+          </div>
+
+          <div class="pro-card theme-azul">
+            <div class="analogy-badge">Opciones Fijas</div>
+            <h4 style="font-size:14.5px;color:var(--texto-main);margin-bottom:6px;">ENUM('Activo', 'Inactivo')</h4>
+            <p style="font-size:12px;color:var(--texto-muted);line-height:1.6;">
+              Impide que alguien escriba por error 'activado', 'ACTIVO' o 'activoo'. Solo acepta exactamente una de las opciones predefinidas de la lista, ahorrando memoria interna.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 06: LAS 6 RESTRICCIONES CON ANALOGÍAS -->
+    <section class="slide" id="slide-6" data-slide="6">
+      <div class="slide-num-badge">SLIDE 06 / 13</div>
+      <div class="slide-inner">
+        <div class="slide-block-badge verde">
+          <span class="dot"></span>
+          LOS GUARDIAS DE SEGURIDAD DE TU INFORMACIÓN
+        </div>
+        <h2 class="sec-title">Las 6 Restricciones (Constraints) Explicadas con Analogías</h2>
+        <p class="sec-desc">
+          No pienses en las restricciones como código aburrido. Piensa en ellas como los guardias de control en la puerta de entrada:
+        </p>
+
+        <!-- CAJA DIDÁCTICA: DESMITIFICANDO LA PALABRA "CONSTRAINT" EN SQL -->
+        <div style="background:#ffffff;border:1.5px solid var(--borde-light);border-left:4px solid var(--sena-verde);border-radius:var(--radius-md);padding:14px 18px;margin-bottom:18px;box-shadow:var(--shadow-card);">
+          <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:8px;">
+            <span style="font-size:12.5px;font-weight:800;color:var(--sena-verde-dark);display:flex;align-items:center;gap:6px;">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg>
+              ¿Qué significa exactamente la palabra CONSTRAINT en SQL?
+            </span>
+            <span style="font-size:11px;font-weight:700;color:var(--texto-sub);background:#f1f5f9;padding:2px 8px;border-radius:12px;">
+              Traducción: "Restricción / Condición Obligatoria"
+            </span>
+          </div>
+
+          <p style="font-size:12px;color:var(--texto-muted);line-height:1.5;margin-bottom:10px;">
+            En bases de datos relacionales, una <strong>Constraint</strong> es una <strong>regla legal inquebrantable</strong>. Al escribir la sentencia completa en el script, le pones una <em>placa identificadora única</em> a esa regla para que si algún dato intenta romperla, MySQL te diga exactamente su nombre en la consola de error:
+          </p>
+
+          <!-- ANATOMÍA VISUAL DE LA SENTENCIA -->
+          <div style="background:#0f172a;border-radius:var(--radius-sm);padding:12px 14px;overflow-x:auto;font-family:'JetBrains Mono',monospace;font-size:11.5px;border:1px solid #1e293b;">
+            <div style="color:#94a3b8;margin-bottom:8px;font-size:10.5px;text-transform:uppercase;letter-spacing:0.5px;">
+              Anatomía de la Sentencia en la Tabla `pedidos`:
+            </div>
+            <div style="white-space:nowrap;line-height:1.8;">
+              <span style="color:#f43f5e;font-weight:700;">CONSTRAINT</span>
+              <span style="color:#fbbf24;font-weight:700;"> fk_pedidos_usuarios </span>
+              <span style="color:#38bdf8;font-weight:700;">FOREIGN KEY </span><span style="color:#e2e8f0;">(id_usuario) </span>
+              <span style="color:#4ade80;font-weight:700;">REFERENCES </span><span style="color:#e2e8f0;">usuarios(id_usuario) </span>
+              <span style="color:#c084fc;font-weight:700;">ON DELETE RESTRICT</span>
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(180px, 1fr));gap:8px;margin-top:10px;padding-top:10px;border-top:1px solid #1e293b;font-family:'Plus Jakarta Sans',sans-serif;font-size:11px;">
+              <div style="color:#fca5a5;">
+                <strong style="color:#f43f5e;">1. CONSTRAINT:</strong> "Declaro una regla de seguridad oficial..."
+              </div>
+              <div style="color:#fde68a;">
+                <strong style="color:#fbbf24;">2. fk_pedidos_usuarios:</strong> "...con esta placa única (para ubicarla si falla)."
+              </div>
+              <div style="color:#bae6fd;">
+                <strong style="color:#38bdf8;">3. FOREIGN KEY / REFERENCES:</strong> "...vigilando que el cliente exista en la tabla madre."
+              </div>
+              <div style="color:#e9d5ff;">
+                <strong style="color:#c084fc;">4. ON DELETE RESTRICT:</strong> "...¡y prohibiendo borrar al cliente si tiene pedidos!"
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid-3">
+          <div class="pro-card">
+            <div class="analogy-badge">Tu Cédula de Ciudadanía</div>
+            <h4 style="font-size:14px;color:var(--texto-main);margin-bottom:4px;">PRIMARY KEY (PK)</h4>
+            <p style="font-size:12px;color:var(--texto-muted);">Identifica de forma única e inconfundible a cada persona en el sistema. Nunca puede repetirse ni estar en blanco.</p>
+          </div>
+
+          <div class="pro-card">
+            <div class="analogy-badge">La Manilla de un Hotel</div>
+            <h4 style="font-size:14px;color:var(--texto-main);margin-bottom:4px;">FOREIGN KEY (FK)</h4>
+            <p style="font-size:12px;color:var(--texto-muted);">Demuestra que perteneces a ese lugar. Un pedido no puede ingresar al sistema si no tiene la manilla de un cliente válido.</p>
+          </div>
+
+          <div class="pro-card">
+            <div class="analogy-badge">Tu Número de Celular</div>
+            <h4 style="font-size:14px;color:var(--texto-main);margin-bottom:4px;">UNIQUE</h4>
+            <p style="font-size:12px;color:var(--texto-muted);">Dos personas no pueden compartir el mismo número de teléfono para recibir un código de banco ni el mismo email de login.</p>
+          </div>
+
+          <div class="pro-card">
+            <div class="analogy-badge">El Asterisco Rojo (*)</div>
+            <h4 style="font-size:14px;color:var(--texto-main);margin-bottom:4px;">NOT NULL</h4>
+            <p style="font-size:12px;color:var(--texto-muted);">Como los campos obligatorios de un formulario: no te dejan pasar si dejas tu contraseña o tu nombre en blanco.</p>
+          </div>
+
+          <div class="pro-card">
+            <div class="analogy-badge">El Guardia de la Entrada</div>
+            <h4 style="font-size:14px;color:var(--texto-main);margin-bottom:4px;">CHECK</h4>
+            <p style="font-size:12px;color:var(--texto-muted);">Pide la cédula para certificar la edad mínima. Si el precio es menor a cero o el stock es negativo, el guardia te expulsa.</p>
+          </div>
+
+          <div class="pro-card">
+            <div class="analogy-badge">El Valor Automático</div>
+            <h4 style="font-size:14px;color:var(--texto-main);margin-bottom:4px;">DEFAULT</h4>
+            <p style="font-size:12px;color:var(--texto-muted);">Si te registras hoy y no dices cuándo lo hiciste, el sistema automáticamente te pone la fecha y hora actual.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 07: LABORATORIO DE ERRORES VIVOS -->
+    <section class="slide bg-alt" id="slide-7" data-slide="7">
+      <div class="slide-num-badge">SLIDE 07 / 13</div>
+      <div class="slide-inner">
+        <div class="slide-block-badge naranja">
+          <span class="dot"></span>
+          APRENDIENDO DEL ERROR EN VIVO
+        </div>
+        <h2 class="sec-title">Laboratorio: ¿Qué pasa cuando la base de datos se defiende?</h2>
+        <p class="sec-desc">
+          Muchos aprendices entran en pánico cuando ven una línea roja en su entorno SQL (IDE Antigravity / Database Client o Workbench). ¡Pero esos errores son una victoria! Significan que tus restricciones funcionaron y evitaron un desastre en la tienda:
+        </p>
+
+        <div class="grid-2">
+          <div class="pro-card" style="border-left:4px solid #ef4444;">
+            <h4 style="color:#b91c1c;font-size:13.5px;display:flex;align-items:center;gap:6px;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg>
+              Error 3819: Check constraint violated
+            </h4>
+            <p style="font-size:12px;color:var(--texto-muted);margin:8px 0;">
+              <strong>¿Qué intentó hacer alguien?</strong> Insertar un producto con precio de <code>-10.000 COP</code>.
+            </p>
+            <div style="background:#fee2e2;padding:8px 12px;border-radius:6px;font-family:'JetBrains Mono';font-size:11px;color:#991b1b;">
+              INSERT INTO productos (precio) VALUES (-10000); ➔ ¡BLOQUEADO!
+            </div>
+            <p style="font-size:11.5px;color:var(--sena-verde-dark);margin-top:8px;">
+              <strong>¿Qué salvó el negocio?</strong> La restricción <code>CHECK (precio > 0)</code> impidió que regalaras productos gratis en internet.
+            </p>
+          </div>
+
+          <div class="pro-card" style="border-left:4px solid #ef4444;">
+            <h4 style="color:#b91c1c;font-size:13.5px;display:flex;align-items:center;gap:6px;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg>
+              Error 1062: Duplicate entry for key 'email'
+            </h4>
+            <p style="font-size:12px;color:var(--texto-muted);margin:8px 0;">
+              <strong>¿Qué intentó hacer alguien?</strong> Registrar un segundo usuario con el correo que ya pertenecía a otro cliente.
+            </p>
+            <div style="background:#fee2e2;padding:8px 12px;border-radius:6px;font-family:'JetBrains Mono';font-size:11px;color:#991b1b;">
+              email: 'carlos@email.com' ya existe ➔ ¡BLOQUEADO!
+            </div>
+            <p style="font-size:11.5px;color:var(--sena-verde-dark);margin-top:8px;">
+              <strong>¿Qué salvó el negocio?</strong> La restricción <code>UNIQUE (email)</code> evitó que una persona suplante la cuenta de otra.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 08: WHATSAPP VS DIAN (CASCADE VS RESTRICT) -->
+    <section class="slide" id="slide-8" data-slide="8">
+      <div class="slide-num-badge">SLIDE 08 / 13</div>
+      <div class="slide-inner">
+        <div class="slide-block-badge verde">
+          <span class="dot"></span>
+          DECISIONES CRÍTICAS DE BORRADO
+        </div>
+        <h2 class="sec-title">ON DELETE: ¿El Modelo WhatsApp o el Modelo DIAN?</h2>
+        <p class="sec-desc">
+          Cuando eliminas un dato en la vida real, a veces quieres que todo lo que dependía de él desaparezca, y otras veces la ley te lo prohíbe. Así se decide en SQL:
+        </p>
+
+        <div class="grid-2">
+          <div class="pro-card theme-verde">
+            <div class="analogy-badge">El Modelo WhatsApp (CASCADE)</div>
+            <h3 class="card-title" style="color:var(--sena-verde-dark);">ON DELETE CASCADE</h3>
+            <p class="card-desc" style="margin-bottom:10px;">
+              Cuando eliminas un chat completo en WhatsApp, ¿qué esperas que pase? Que se borren todos los audios y fotos de esa conversación.
+            </p>
+            <div style="background:var(--sena-verde-bg);padding:10px 12px;border-radius:6px;font-size:12px;color:var(--sena-verde-dark);border:1px solid var(--sena-verde-border);">
+              <strong>En TechStore Pro:</strong> Si eliminas un pedido de prueba en <code>pedidos</code>, sus líneas en <code>detalle_pedidos</code> se borran automáticamente en cascada.
+            </div>
+          </div>
+
+          <div class="pro-card theme-naranja">
+            <div class="analogy-badge">El Modelo Contable DIAN (RESTRICT)</div>
+            <h3 class="card-title" style="color:var(--sena-naranja-dark);">ON DELETE RESTRICT</h3>
+            <p class="card-desc" style="margin-bottom:10px;">
+              Si una empresa emitió una factura electrónica legal ante la DIAN, está estrictamente prohibido eliminar al cliente de la base de datos porque la factura quedaría en el limbo.
+            </p>
+            <div style="background:var(--sena-naranja-bg);padding:10px 12px;border-radius:6px;font-size:12px;color:var(--sena-naranja-dark);border:1px solid var(--sena-naranja-border);">
+              <strong>En TechStore Pro:</strong> Si intentas borrar un <code>usuario</code> o una <code>categoria</code> que ya tienen compras registradas, MySQL bloquea el borrado para proteger la contabilidad.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 09: TECHSTORE PRO TABLAS REALES -->
+    <section class="slide bg-alt" id="slide-9" data-slide="9">
+      <div class="slide-num-badge">SLIDE 09 / 13</div>
+      <div class="slide-inner">
+        <div class="slide-block-badge azul">
+          <span class="dot"></span>
+          EL MAPA DEL PROYECTO FORMATIVO
+        </div>
+        <h2 class="sec-title">TechStore Pro: Anatomía de las 6 Tablas del Ecosistema</h2>
+        <p class="sec-desc">
+          Este es el esquema que ya tienes activo en tu motor MySQL (<code>techstore_db</code>). Hoy analizaremos a fondo la estructura DDL, tipos de datos y restricciones de cada una:
+        </p>
+
+        <div class="grid-3">
+          <div class="pro-card">
+            <span style="font-family:'JetBrains Mono';font-size:11px;font-weight:700;color:var(--sena-verde-dark);display:flex;align-items:center;gap:6px;">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m2 4 3 12h14l3-12-6 7-4-7-4 7-6-7zm3 16h14"/></svg>
+              Nivel 1: usuarios & categorias
+            </span>
+            <p style="font-size:12px;color:var(--texto-muted);margin-top:6px;line-height:1.5;">
+              Tablas <strong>padres independientes</strong>. Almacenan los clientes/administradores (con rol <code>ENUM</code> y documento único) y los pasillos o categorías base de la tienda.
+            </p>
+          </div>
+          <div class="pro-card">
+            <span style="font-family:'JetBrains Mono';font-size:11px;font-weight:700;color:var(--azul-tech);display:flex;align-items:center;gap:6px;">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/><path d="M16 16h5v5"/></svg>
+              Nivel 2: productos & ordenes
+            </span>
+            <p style="font-size:12px;color:var(--texto-muted);margin-top:6px;line-height:1.5;">
+              Tablas <strong>hijas intermedias</strong>. Los productos validan precio positivo y stock no negativo (`CHECK`). Las órdenes registran la fecha, estado y se enlazan al cliente comprador.
+            </p>
+          </div>
+          <div class="pro-card">
+            <span style="font-family:'JetBrains Mono';font-size:11px;font-weight:700;color:var(--sena-naranja-dark);display:flex;align-items:center;gap:6px;">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 2v20"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+              Nivel 3: detalle_orden & transacciones
+            </span>
+            <p style="font-size:12px;color:var(--texto-muted);margin-top:6px;line-height:1.5;">
+              Tablas <strong>dependientes compuestas</strong>. <code>detalle_orden</code> resuelve la relación N:M guardando cada renglón del carrito, y <code>transacciones</code> almacena el pago bancario.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 10: STEPPER INTERACTIVO IDE & WORKBENCH -->
+    <section class="slide" id="slide-10" data-slide="10">
+      <div class="slide-num-badge">SLIDE 10 / 13</div>
+      <div class="slide-inner">
+        <div class="slide-block-badge naranja">
+          <span class="dot"></span>
+          PRÁCTICA EN VIVO GUIADA
+        </div>
+        <h2 class="sec-title">Taller en Vivo: Ejecuta tu DDL en el IDE Antigravity</h2>
+        <p class="sec-desc">
+          ¡Aprovechemos lo que ya tenemos listo! En la Sesión 1 configuraste tu <strong>IDE y la extensión Database Client</strong> conectada a XAMPP en el puerto <code>3306</code>. No requieres instalar programas pesados para ejecutar el DDL y aprobar tus evidencias. Selecciona un paso para ver el procedimiento:
+        </p>
+
+        <!-- BANNER HERRAMIENTA COMPLEMENTARIA (WORKBENCH) -->
+        <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:var(--radius-md);padding:14px 18px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+          <div style="display:flex;align-items:center;gap:10px;">
+            <span style="background:var(--azul-tech);color:#fff;padding:4px 8px;border-radius:6px;font-size:11px;font-weight:800;">OPCIONAL</span>
+            <div style="font-size:12.5px;color:var(--texto-muted);font-weight:600;">
+              ¿Quieres instalar <strong>MySQL Workbench</strong> para generar el diagrama EER visual para la evidencia EV02?
+            </div>
+          </div>
+          <button onclick="abrirModalWorkbench()" style="background:var(--azul-tech);color:#fff;border:none;padding:8px 16px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:6px;box-shadow:var(--shadow-sm);">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+            Guía Completa Workbench ↗
+          </button>
+        </div>
+
+        <div class="stepper-nav">
+          <button class="step-card-btn active" onclick="abrirModalPaso(1)">
+            <div class="step-num-circle">1</div>
+            <div>
+              <h4 style="font-size:13px;font-weight:700;">Conectar IDE & Crear Schema</h4>
+              <p style="font-size:11px;color:var(--texto-sub);">Abrir script en el IDE y conectar a localhost:3306.</p>
+            </div>
+          </button>
+
+          <button class="step-card-btn" onclick="abrirModalPaso(2)">
+            <div class="step-num-circle">2</div>
+            <div>
+              <h4 style="font-size:13px;font-weight:700;">Tablas Maestras (Padres)</h4>
+              <p style="font-size:11px;color:var(--texto-sub);">Ejecutar roles, usuarios y categorias con un clic.</p>
+            </div>
+          </button>
+
+          <button class="step-card-btn" onclick="abrirModalPaso(3)">
+            <div class="step-num-circle">3</div>
+            <div>
+              <h4 style="font-size:13px;font-weight:700;">Tablas Hijas & CHECKs</h4>
+              <p style="font-size:11px;color:var(--texto-sub);">Crear productos, pedidos y detalle con sus FKs.</p>
+            </div>
+          </button>
+
+          <button class="step-card-btn" onclick="abrirModalPaso(4)">
+            <div class="step-num-circle">4</div>
+            <div>
+              <h4 style="font-size:13px;font-weight:700;">Poblar Datos Semilla</h4>
+              <p style="font-size:11px;color:var(--texto-sub);">Insertar los 23 registros iniciales en las 6 tablas.</p>
+            </div>
+          </button>
+
+          <button class="step-card-btn" onclick="abrirModalPaso(5)">
+            <div class="step-num-circle">5</div>
+            <div>
+              <h4 style="font-size:13px;font-weight:700;">Consultas JOIN & CHECK</h4>
+              <p style="font-size:11px;color:var(--texto-sub);">Validar cruces multi-tabla y probar candados de error.</p>
+            </div>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 11: PASO A PASO EVIDENCIAS ZAJUNA -->
+    <section class="slide bg-alt" id="slide-11" data-slide="11">
+      <div class="slide-num-badge">SLIDE 11 / 13</div>
+      <div class="slide-inner">
+        <div class="slide-block-badge naranja">
+          <span class="dot"></span>
+          GUÍA CLARA DE TUS ENTREGABLES (CORTE 1)
+        </div>
+        <h2 class="sec-title">Paso a Paso: ¿Qué debes subir exactamente a Zajuna?</h2>
+        <p class="sec-desc">
+          En la Sesión 1 trabajamos el diseño lógico y conceptual. En esta <strong>Sesión 2 entregas la materialización en código SQL físico</strong>. A continuación tienes las diapositivas exactas de esta presentación que te sirven de apoyo y los requisitos detallados para aprobar con <strong>A</strong> sin reprocesos:
+        </p>
+
+        <!-- BANNER COMPARATIVO: SESIÓN 1 VS SESIÓN 2 -->
+        <div style="background:#ffffff;border:1px solid #e2e8f0;border-radius:12px;padding:14px 18px;margin-bottom:18px;display:grid;grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));gap:16px;box-shadow:var(--shadow-sm);">
+          <div style="border-left:3.5px solid var(--azul-tech);padding-left:12px;">
+            <div style="font-size:11px;font-weight:800;color:var(--azul-tech);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:3px;display:flex;align-items:center;gap:6px;">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"/></svg>
+              Lo que entregaste en la Sesión 1 (Diseño Lógico)
+            </div>
+            <div style="font-size:12px;color:var(--texto-muted);line-height:1.5;">
+              • <strong>AA1-EV01:</strong> Taller de normalización (1FN, 2FN, 3FN) y diccionario de datos en PDF.<br>
+              • <strong>AA1-EV02:</strong> Diagrama Entidad-Relación (DER) conceptual exportado en PDF o PNG.
+            </div>
+          </div>
+          <div style="border-left:3.5px solid var(--sena-verde);padding-left:12px;">
+            <div style="font-size:11px;font-weight:800;color:var(--sena-verde-dark);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:3px;display:flex;align-items:center;gap:6px;">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+              Lo que entregas en esta Sesión 2 (Código SQL Físico)
+            </div>
+            <div style="font-size:12px;color:var(--texto-muted);line-height:1.5;">
+              • <strong>AA2-EV01:</strong> Taller DDL/DML con capturas de tus consultas en el IDE (PDF).<br>
+              • <strong>AA2-EV02:</strong> Documento de restricciones, llaves y políticas de borrado (ZIP o PDF).<br>
+              • <strong>AA2-EV03:</strong> Script físico ejecutable <code>.sql</code> de <strong>tu propio proyecto</strong> (ZIP).
+            </div>
+          </div>
+        </div>
+
+        <!-- AVISO CLAVE SOBRE EL PROYECTO FORMATIVO -->
+        <div style="background:#eff6ff;border:1.5px solid #bfdbfe;border-left:4px solid var(--azul-tech);border-radius:8px;padding:12px 16px;margin-bottom:14px;display:flex;align-items:flex-start;gap:12px;">
+          <div style="background:var(--azul-tech);color:#ffffff;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+          </div>
+          <div style="font-size:12px;color:#1e3a8a;line-height:1.55;">
+            <strong style="color:var(--azul-tech);font-size:12.5px;">Regla de Oro sobre los Scripts de Base de Datos:</strong><br>
+            El script <code>techstore_db_completo.sql</code> que trabajamos en clase es la <strong>plantilla didáctica oficial del instructor</strong> para guiarte en el estándar técnico. Para la evidencia <strong>AA2-EV03</strong> debes construir el script SQL con las tablas, llaves y restricciones de <strong>tu propio proyecto formativo</strong> (el sistema que estás desarrollando en tu equipo o individualmente). Si tu proyecto formativo aún no tiene tablas definidas, utiliza la estructura de TechStore Pro como estándar mínimo requerido (mínimo 6 tablas relacionales normalizadas).
+          </div>
+        </div>
+
+        <!-- BARRA DE CONEXIÓN CON MATERIALES DE LA SESIÓN 1 -->
+        <div style="background:#f8fafc;border:1px solid #cbd5e1;border-left:4px solid var(--sena-verde);border-radius:8px;padding:12px 16px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;box-shadow:var(--shadow-sm);">
+          <div style="display:flex;align-items:center;gap:10px;">
+            <div style="background:var(--sena-verde-bg);color:var(--sena-verde-dark);width:32px;height:32px;border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"/><path d="M6 6h10"/><path d="M6 10h10"/></svg>
+            </div>
+            <div>
+              <div style="font-weight:800;font-size:12.5px;color:var(--texto-main);">¿Necesitas repasar el modelo conceptual y diagramas de la Sesión 1?</div>
+              <div style="font-size:11px;color:var(--texto-sub);">Consulta el Diccionario de Datos, las reglas de normalización (1FN-3FN) y el Diagrama DER para modelar tu proyecto:</div>
+            </div>
+          </div>
+          <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+            <a href="../Sesión 1/PRESENTACION_SESION01_MODELO_RELACIONAL.html" target="_blank" style="background:#ffffff;border:1px solid #cbd5e1;color:var(--texto-main);padding:6px 12px;border-radius:6px;font-size:11px;font-weight:700;text-decoration:none;display:inline-flex;align-items:center;gap:5px;box-shadow:var(--shadow-sm);">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+              Presentación Sesión 1 ↗
+            </a>
+            <a href="../Sesión 1/MANUAL_SESION01.html" target="_blank" style="background:var(--sena-verde-bg);border:1px solid var(--sena-verde-border);color:var(--sena-verde-dark);padding:6px 12px;border-radius:6px;font-size:11px;font-weight:700;text-decoration:none;display:inline-flex;align-items:center;gap:5px;">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+              Manual Web Sesión 1 ↗
+            </a>
+          </div>
+        </div>
+
+        <!-- GRILLA DE 3 TARJETAS DETALLADAS -->
+        <div class="grid-3" style="align-items:stretch;">
+
+          <!-- TARJETA 1: AA2-EV01 -->
+          <div class="pro-card theme-naranja" style="display:flex;flex-direction:column;justify-content:space-between;padding:18px;">
+            <div>
+              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
+                <span style="font-size:10.5px;font-weight:800;color:var(--sena-naranja-dark);background:var(--sena-naranja-bg);padding:3px 8px;border-radius:4px;border:1px solid var(--sena-naranja-border);">EVIDENCIA 1 · CONOCIMIENTO</span>
+                <span style="font-size:11px;font-weight:700;color:#9a3412;">PDF</span>
+              </div>
+              <h4 style="font-size:14.5px;font-weight:800;color:var(--texto-main);margin:2px 0 6px 0;">AA2-EV01: Taller DDL y DML de SQL</h4>
+              
+              <!-- PÍLDORAS DE DIAPOSITIVAS DE APOYO -->
+              <div style="margin-bottom:10px;">
+                <span style="font-size:10.5px;color:var(--texto-sub);font-weight:700;display:block;margin-bottom:4px;">Material de apoyo (Sesión 2 & Sesión 1):</span>
+                <div style="display:flex;gap:4px;flex-wrap:wrap;">
+                  <a href="#slide-4" style="background:#fff7ed;color:#c2410c;border:1px solid #fed7aa;padding:2px 7px;border-radius:4px;font-size:10px;font-weight:700;text-decoration:none;" title="Ver Vocabulario DDL">Slide 04</a>
+                  <a href="#slide-5" style="background:#fff7ed;color:#c2410c;border:1px solid #fed7aa;padding:2px 7px;border-radius:4px;font-size:10px;font-weight:700;text-decoration:none;" title="Ver Tipos de Datos">Slide 05</a>
+                  <a href="#slide-6" style="background:#fff7ed;color:#c2410c;border:1px solid #fed7aa;padding:2px 7px;border-radius:4px;font-size:10px;font-weight:700;text-decoration:none;" title="Ver Las 6 Restricciones">Slide 06</a>
+                  <a href="#slide-10" style="background:#ffedd5;color:#9a3412;border:1px solid #fdba74;padding:2px 7px;border-radius:4px;font-size:10px;font-weight:800;text-decoration:none;" title="Ver Taller Guiado en el IDE">Slide 10 (Capturas)</a>
+                  <a href="../Sesión 1/PRESENTACION_SESION01_MODELO_RELACIONAL.html#slide-11" target="_blank" style="background:#f1f5f9;color:#334155;border:1px solid #cbd5e1;padding:2px 7px;border-radius:4px;font-size:10px;font-weight:700;text-decoration:none;" title="Ver Diccionario en Sesión 1">Diccionario S1 ↗</a>
+                </div>
+              </div>
+
+              <div style="background:#fff7ed;border:1px solid #fed7aa;border-radius:6px;padding:10px 12px;margin-bottom:12px;">
+                <div style="font-size:11.5px;font-weight:800;color:#9a3412;margin-bottom:6px;">Contenido exacto a incluir en tu PDF:</div>
+                <ul style="font-size:11px;color:#7c2d12;margin:0;padding-left:16px;line-height:1.55;">
+                  <li><strong>1. Portada SENA:</strong> Nombre, Ficha 3389010 e Instructor.</li>
+                  <li><strong>2. Preguntas Teóricas:</strong> Diferencia entre sentencias DDL (estructuras) y DML (datos). Justifica por qué las tablas maestras se crean primero (Slide 03).</li>
+                  <li><strong>3. Cuatro Capturas de tu IDE (realizadas en el Slide 10):</strong>
+                    <ul style="padding-left:14px;margin-top:2px;">
+                      <li>Captura de las 6 tablas creadas en Database Client.</li>
+                      <li>Captura de la <strong>Consulta 4.1</strong> (Catálogo con JOIN).</li>
+                      <li>Captura de la <strong>Consulta 4.2</strong> (Multi-Join 4 tablas).</li>
+                      <li>Captura de la <strong>Prueba 4.3</strong> (Error 3819 CHECK).</li>
+                    </ul>
+                  </li>
+                  <li><strong>4. Conclusión:</strong> Qué aprendiste sobre integridad referencial.</li>
+                </ul>
+              </div>
+            </div>
+
+            <div style="font-size:11px;color:var(--texto-sub);border-top:1px dashed #fed7aa;padding-top:8px;">
+              <strong>Nombre sugerido del archivo:</strong><br>
+              <code style="font-size:10.5px;color:var(--sena-naranja-dark);">AA2_EV01_Nombre_Apellido.pdf</code>
+            </div>
+          </div>
+
+          <!-- TARJETA 2: AA2-EV02 -->
+          <div class="pro-card theme-verde" style="display:flex;flex-direction:column;justify-content:space-between;padding:18px;">
+            <div>
+              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
+                <span style="font-size:10.5px;font-weight:800;color:var(--sena-verde-dark);background:var(--sena-verde-bg);padding:3px 8px;border-radius:4px;border:1px solid var(--sena-verde-border);">EVIDENCIA 2 · PRODUCTO</span>
+                <span style="font-size:11px;font-weight:700;color:#166534;">ZIP o PDF</span>
+              </div>
+              <h4 style="font-size:14.5px;font-weight:800;color:var(--texto-main);margin:2px 0 6px 0;">AA2-EV02: Restricciones de la BD</h4>
+
+              <!-- PÍLDORAS DE DIAPOSITIVAS DE APOYO -->
+              <div style="margin-bottom:10px;">
+                <span style="font-size:10.5px;color:var(--texto-sub);font-weight:700;display:block;margin-bottom:4px;">Material de apoyo (Sesión 2 & Sesión 1):</span>
+                <div style="display:flex;gap:4px;flex-wrap:wrap;">
+                  <a href="#slide-3" style="background:#f0fdf4;color:#15803d;border:1px solid #bbf7d0;padding:2px 7px;border-radius:4px;font-size:10px;font-weight:700;text-decoration:none;" title="Ver Regla de Oro DDL">Slide 03</a>
+                  <a href="#slide-6" style="background:#f0fdf4;color:#15803d;border:1px solid #bbf7d0;padding:2px 7px;border-radius:4px;font-size:10px;font-weight:700;text-decoration:none;" title="Ver Restricciones">Slide 06</a>
+                  <a href="#slide-7" style="background:#f0fdf4;color:#15803d;border:1px solid #bbf7d0;padding:2px 7px;border-radius:4px;font-size:10px;font-weight:700;text-decoration:none;" title="Ver Errores Vivos">Slide 07</a>
+                  <a href="#slide-8" style="background:#dcfce7;color:#166534;border:1px solid #86efac;padding:2px 7px;border-radius:4px;font-size:10px;font-weight:800;text-decoration:none;" title="Ver CASCADE vs RESTRICT">Slide 08 (CASCADE)</a>
+                  <a href="../Sesión 1/PRESENTACION_SESION01_MODELO_RELACIONAL.html#slide-10" target="_blank" style="background:#f1f5f9;color:#334155;border:1px solid #cbd5e1;padding:2px 7px;border-radius:4px;font-size:10px;font-weight:700;text-decoration:none;" title="Ver DER en Sesión 1">DER Lógico S1 ↗</a>
+                </div>
+              </div>
+
+              <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:6px;padding:10px 12px;margin-bottom:12px;">
+                <div style="font-size:11.5px;font-weight:800;color:#166534;margin-bottom:6px;">Contenido exacto a incluir en tu informe:</div>
+                <ul style="font-size:11px;color:#14532d;margin:0;padding-left:16px;line-height:1.55;">
+                  <li><strong>1. Justificación de Llaves Primarias:</strong> Por qué cada entidad cuenta con un identificador entero autoincrementable.</li>
+                  <li><strong>2. Políticas de Borrado (FK):</strong> Justifica por qué usamos <code>CASCADE</code> en los renglones de pedidos y <code>RESTRICT</code> en clientes/categorías (basado en el Slide 08).</li>
+                  <li><strong>3. Restricciones de Campo:</strong> Explicación de los <code>UNIQUE</code> (email, documento, SKU) y del <code>CHECK (precio > 0.00)</code>.</li>
+                  <li><strong>4. Diagrama EER Físico:</strong> Imagen o PDF del diagrama relacional generado con Database Client, Workbench o dbdiagram.io.</li>
+                </ul>
+              </div>
+            </div>
+
+            <div style="font-size:11px;color:var(--texto-sub);border-top:1px dashed #bbf7d0;padding-top:8px;">
+              <strong>Nombre sugerido del archivo:</strong><br>
+              <code style="font-size:10.5px;color:var(--sena-verde-dark);">AA2_EV02_Nombre_Apellido.zip</code>
+            </div>
+          </div>
+
+          <!-- TARJETA 3: AA2-EV03 -->
+          <div class="pro-card theme-azul" style="display:flex;flex-direction:column;justify-content:space-between;padding:18px;">
+            <div>
+              <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
+                <span style="font-size:10.5px;font-weight:800;color:var(--azul-tech);background:var(--azul-bg);padding:3px 8px;border-radius:4px;border:1px solid var(--azul-border);">EVIDENCIA 3 · SCRIPT SQL</span>
+                <span style="font-size:11px;font-weight:700;color:#0369a1;">ZIP (.sql)</span>
+              </div>
+              <h4 style="font-size:14.5px;font-weight:800;color:var(--texto-main);margin:2px 0 6px 0;">AA2-EV03: Script Completo Ejecutable</h4>
+
+              <!-- PÍLDORAS DE DIAPOSITIVAS DE APOYO -->
+              <div style="margin-bottom:10px;">
+                <span style="font-size:10.5px;color:var(--texto-sub);font-weight:700;display:block;margin-bottom:4px;">Material de apoyo (Sesión 2 & Sesión 1):</span>
+                <div style="display:flex;gap:4px;flex-wrap:wrap;">
+                  <a href="#slide-9" style="background:#f0f9ff;color:#0284c7;border:1px solid #bae6fd;padding:2px 7px;border-radius:4px;font-size:10px;font-weight:700;text-decoration:none;" title="Ver Anatomía 6 Tablas">Slide 09</a>
+                  <a href="#slide-10" style="background:#e0f2fe;color:#0369a1;border:1px solid #7dd3fc;padding:2px 7px;border-radius:4px;font-size:10px;font-weight:800;text-decoration:none;" title="Ver Stepper de Ejecución">Slide 10 (Script en Vivo)</a>
+                  <a href="../Sesión 1/PRESENTACION_SESION01_MODELO_RELACIONAL.html#slide-12" target="_blank" style="background:#f1f5f9;color:#334155;border:1px solid #cbd5e1;padding:2px 7px;border-radius:4px;font-size:10px;font-weight:700;text-decoration:none;" title="Ver Estructura Lógica S1">Modelo S1 ↗</a>
+                </div>
+              </div>
+
+              <div style="background:#f0f9ff;border:1px solid #bae6fd;border-radius:6px;padding:10px 12px;margin-bottom:12px;">
+                <div style="font-size:11.5px;font-weight:800;color:#0369a1;margin-bottom:6px;">Criterio de Evaluación del Instructor:</div>
+                <div style="background:#ffffff;border:1px solid #e0f2fe;border-radius:4px;padding:6px 8px;margin-bottom:8px;font-size:10.5px;color:#0369a1;line-height:1.45;">
+                  <strong>¡Importante!</strong> Entrega el archivo <code>.sql</code> de <strong>tu propio proyecto de software</strong>. Si usas TechStore Pro de guía, adapta los nombres de tablas y campos al negocio que estás modelando.
+                </div>
+                <ul style="font-size:11px;color:#075985;margin:0;padding-left:16px;line-height:1.55;">
+                  <li>El archivo debe ejecutarse <strong>100% en verde</strong> en MySQL sin fallos de sintaxis ni de llaves foráneas.</li>
+                  <li>Debe crear las entidades de tu proyecto con sus tipos físicos y PKs.</li>
+                  <li>Debe incluir datos semilla (INSERT) y consultas de validación (SELECT con JOIN).</li>
+                </ul>
+              </div>
+            </div>
+
+            <div>
+              <a href="techstore_db_completo.sql" download style="display:flex;align-items:center;justify-content:center;gap:6px;background:var(--azul-tech);color:#ffffff;text-decoration:none;padding:8px 12px;border-radius:6px;font-size:11.5px;font-weight:700;margin-bottom:8px;box-shadow:var(--shadow-sm);">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                Descargar Script Guía (techstore_db_completo.sql)
+              </a>
+              <div style="font-size:11px;color:var(--texto-sub);border-top:1px dashed #bae6fd;padding-top:8px;">
+                <strong>Nombre sugerido del archivo:</strong><br>
+                <code style="font-size:10.5px;color:var(--azul-tech);">AA2_EV03_NombreProyecto_NombreApellido.zip</code>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- BARRA INFERIOR DE COMPROMISO Y FECHA LÍMITE -->
+        <div style="background:#fff7ed;border:1.5px solid #fed7aa;border-radius:10px;padding:12px 18px;margin-top:20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+          <div style="display:flex;align-items:center;gap:10px;">
+            <div style="background:#ea580c;color:#fff;width:30px;height:30px;border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>
+            </div>
+            <div>
+              <div style="font-weight:800;font-size:12.5px;color:#9a3412;">Fecha Límite en Plataforma Zajuna (Corte 1 — Bases de Datos):</div>
+              <div style="font-size:11.5px;color:#c2410c;">Domingo, 25 de Octubre de 2026 hasta las 11:59 PM (Aplica para AA1-EV01, EV02, AA2-EV01, EV02, EV03 y AA1-EV03).</div>
+            </div>
+          </div>
+          <a href="https://julianon2.github.io/seguimiento-adso-3389010/" target="_blank" rel="noopener noreferrer" style="background:#ea580c;color:#fff;text-decoration:none;padding:7px 14px;border-radius:6px;font-size:11.5px;font-weight:700;display:inline-flex;align-items:center;gap:6px;box-shadow:var(--shadow-sm);">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            Consultar Dashboard de Seguimiento ↗
+          </a>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- SLIDE 12: CHECKLIST ANTI-ERRORES 100% -->
+    <section class="slide" id="slide-12" data-slide="12">
+      <div class="slide-num-badge">SLIDE 12 / 13</div>
+      <div class="slide-inner">
+        <div class="slide-block-badge verde">
+          <span class="dot"></span>
+          TU ESCUDO DE CALIDAD
+        </div>
+        <h2 class="sec-title">Checklist Anti-Errores: Verifica antes de enviar</h2>
+        <p class="sec-desc">
+          Toca cada uno de los 5 requisitos para certificar que tu trabajo cumple con todos los criterios de la rúbrica del instructor:
+        </p>
+
+        <div class="checklist-container">
+          <div class="checklist-header">
+            <span style="font-size:13px;font-weight:800;color:var(--texto-main);">Criterios de Verificación SQL Físico</span>
+            <span class="checklist-counter" id="checklistCounter">0 / 5 Cumplidos</span>
+          </div>
+
+          <div class="checklist-item" onclick="toggleChecklist(this)">
+            <div class="check-box-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
+            <div>
+              <h4 style="font-size:13px;font-weight:700;">1. El script ejecuta en verde sin detenerse ante errores de clave foránea</h4>
+              <p style="font-size:12px;color:var(--texto-sub);">Creaste primero las tablas padres (roles, categorías) y de último las hijas.</p>
+            </div>
+          </div>
+
+          <div class="checklist-item" onclick="toggleChecklist(this)">
+            <div class="check-box-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
+            <div>
+              <h4 style="font-size:13px;font-weight:700;">2. Todas las tablas tienen PRIMARY KEY entera</h4>
+              <p style="font-size:12px;color:var(--texto-sub);">Cada entidad tiene su identificador único con `AUTO_INCREMENT`.</p>
+            </div>
+          </div>
+
+          <div class="checklist-item" onclick="toggleChecklist(this)">
+            <div class="check-box-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
+            <div>
+              <h4 style="font-size:13px;font-weight:700;">3. Restricciones CHECK para defender la tienda</h4>
+              <p style="font-size:12px;color:var(--texto-sub);">Validaste que los precios sean positivos y los stocks no sean negativos.</p>
+            </div>
+          </div>
+
+          <div class="checklist-item" onclick="toggleChecklist(this)">
+            <div class="check-box-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
+            <div>
+              <h4 style="font-size:13px;font-weight:700;">4. Sabes justificar cuándo usar CASCADE vs RESTRICT</h4>
+              <p style="font-size:12px;color:var(--texto-sub);">Cascada en los renglones de detalle de compras y restricción en el catálogo de clientes.</p>
+            </div>
+          </div>
+
+          <div class="checklist-item" onclick="toggleChecklist(this)">
+            <div class="check-box-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
+            <div>
+              <h4 style="font-size:13px;font-weight:700;">5. Datos de prueba INSERT y consulta SELECT INNER JOIN</h4>
+              <p style="font-size:12px;color:var(--texto-sub);">Probaste que se pueden consultar clientes, compras y productos en un solo reporte.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 13: RESUMEN & PRÓXIMO ENCUENTRO -->
+    <section class="slide bg-alt" id="slide-13" data-slide="13">
+      <div class="slide-num-badge">SLIDE 13 / 13</div>
+      <div class="slide-inner">
+        <div class="slide-block-badge purpura">
+          <span class="dot"></span>
+          ¡FELICITACIONES POR TU AVANCE!
+        </div>
+        <h2 class="sec-title">¡Has dominado el mundo de las Bases de Datos Relacionales!</h2>
+        <p class="sec-desc">
+          Ya sabes diseñar modelos conceptuales (Sesión 1) y construirlos físicamente en código SQL real (Sesión 2). En la próxima clase daremos el salto al mundo NoSQL con MongoDB:
+        </p>
+
+        <div class="grid-2">
+          <div class="pro-card theme-azul">
+            <h3 class="card-title" style="display:flex;align-items:center;gap:8px;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--azul-tech)" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              Próxima Sesión: Martes 20/10/2026 (6:30 PM)
+            </h3>
+            <p class="card-desc" style="margin-bottom:12px;">
+              <strong>Sesión 3 — NoSQL & MongoDB:</strong> ¿Qué pasa cuando los datos cambian constantemente? Aprenderemos sobre documentos JSON, colecciones y cuándo usar MongoDB en lugar de MySQL.
+            </p>
+            <div style="font-size:11.5px;color:var(--texto-sub);">Evidencia a cubrir: <code>AA1-EV03</code></div>
+          </div>
+
+          <div class="pro-card theme-naranja">
+            <h3 class="card-title" style="display:flex;align-items:center;gap:8px;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--sena-naranja)" stroke-width="2"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg>
+              Herramientas de Apoyo
+            </h3>
+            <p class="card-desc" style="margin-bottom:12px;">
+              Consulta el <strong>Dashboard en Vivo</strong> para verificar tus calificaciones y entra al Manual Web para repasar los comandos a tu propio ritmo:
+            </p>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;">
+              <a href="MANUAL_SESION02.html" class="sidebar-link-btn" style="flex:1;">Abrir Manual Web</a>
+              <a href="../explorar.html" class="sidebar-link-btn" style="flex:1;">Ir al Hub Central</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- MODAL STEPPER INTERACTIVO GUIADO -->
+  <div class="stepper-modal-overlay" id="stepperModal" onclick="cerrarModalAfuera(event)">
+    <div class="stepper-modal-card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+        <h3 id="modalPasoTitulo" style="font-family:'Syne';font-size:18px;color:var(--texto-main);">Paso 1: Conexión y Creación del Schema</h3>
+        <button onclick="cerrarModal()" style="background:#fee2e2;border:none;color:#b91c1c;width:28px;height:28px;border-radius:6px;cursor:pointer;font-weight:800;">✕</button>
+      </div>
+      <div id="modalPasoContenido" style="font-size:13px;color:var(--texto-muted);line-height:1.6;"></div>
     </div>
   </div>
-</header>
 
-<section class="slide">
-  <div class="slide-num-badge">SLIDE 01 / 06</div>
-  <h1 class="portada-titulo">Lenguaje DDL y Estructura SQL con Restricciones</h1>
-  <p style="font-size:18px;color:var(--texto-dim);margin-bottom:32px">Construcción práctica de bases de datos relacionales en MySQL Workbench (CREATE, ALTER, DROP, PK, FK y CONSTRAINTS).</p>
-  <div class="col-2">
-    <div class="card">
-      <h4>Objetivos de la Sesión</h4>
-      <p>Traducir el diagrama E-R a código DDL ejecutable y aplicar restricciones de integridad referencial.</p>
-    </div>
-    <div class="card" style="border-top-color:var(--azul)">
-      <h4>Evidencias Cubiertas</h4>
-      <p>GA6-220501096-AA2-EV01 & GA6-220501096-AA2-EV02</p>
-    </div>
+  <!-- TOAST FEEDBACK -->
+  <div class="toast-box" id="toastFeedback">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+    <span id="toastMsg">Código copiado al portapapeles</span>
   </div>
-</section>
 
-<section class="slide" style="background:var(--bg-alt)">
-  <div class="slide-num-badge">SLIDE 02 / 06</div>
-  <h2 style="font-family:'Syne';font-size:32px;margin-bottom:24px">Comandos DDL Principales</h2>
-  <div class="col-2">
-    <div class="card">
-      <h4>Sintaxis CREATE TABLE</h4>
-      <pre><code>CREATE TABLE productos (
-  id_producto INT AUTO_INCREMENT PRIMARY KEY,
-  nombre VARCHAR(100) NOT NULL,
-  precio DECIMAL(10,2) NOT NULL,
-  stock INT DEFAULT 0
-);</code></pre>
-    </div>
-    <div class="card" style="border-top-color:var(--sena-naranja)">
-      <h4>Sintaxis ALTER TABLE</h4>
-      <pre><code>ALTER TABLE productos
-ADD CONSTRAINT chk_precio 
-CHECK (precio > 0);</code></pre>
-    </div>
-  </div>
-</section>
+  <script>
+    function toggleSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      const main = document.getElementById('main-content');
+      const toggleBtn = document.getElementById('floatingToggle');
+      const backdrop = document.getElementById('sidebarBackdrop');
+      const isMobile = window.innerWidth <= 1024;
 
-<section class="slide">
-  <div class="slide-num-badge">SLIDE 03 / 06</div>
-  <h2 style="font-family:'Syne';font-size:32px;margin-bottom:24px">Restricciones de Integridad (Constraints)</h2>
-  <div class="card" style="margin-bottom:24px">
-    <h4>Llaves Foráneas y Acciones Referenciales</h4>
-    <pre><code>CREATE TABLE pedidos (
-  id_pedido INT PRIMARY KEY AUTO_INCREMENT,
-  id_cliente INT NOT NULL,
-  fecha DATETIME DEFAULT CURRENT_TIMESTAMP,
-  CONSTRAINT fk_pedido_cliente 
-    FOREIGN KEY (id_cliente) REFERENCES clientes(id_cliente)
-    ON DELETE CASCADE ON UPDATE CASCADE
-);</code></pre>
-  </div>
-</section>
+      if (isMobile) {
+        if (sidebar) {
+          const isOpen = sidebar.classList.toggle('mobile-open');
+          if (backdrop) backdrop.classList.toggle('active', isOpen);
+        }
+      } else {
+        if (sidebar && main) {
+          const isCollapsed = sidebar.classList.toggle('collapsed');
+          main.classList.toggle('expanded', isCollapsed);
+          if (toggleBtn) {
+            toggleBtn.classList.toggle('visible', isCollapsed);
+          }
+        }
+      }
+    }
 
+    document.querySelectorAll('.sidebar .nav-link').forEach(link => {
+      link.addEventListener('click', () => {
+        if (window.innerWidth <= 1024) {
+          const sidebar = document.getElementById('sidebar');
+          const backdrop = document.getElementById('sidebarBackdrop');
+          sidebar.classList.remove('mobile-open');
+          backdrop.classList.remove('active');
+        }
+      });
+    });
+
+    window.addEventListener('scroll', () => {
+      const scrollTop = window.scrollY;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = (scrollTop / docHeight) * 100;
+      document.getElementById('progressBar').style.width = progress + '%';
+
+      const slides = document.querySelectorAll('.slide');
+      const navLinks = document.querySelectorAll('.sidebar .nav-link');
+      let currentSlide = 1;
+
+      slides.forEach(slide => {
+        const rect = slide.getBoundingClientRect();
+        if (rect.top <= window.innerHeight * 0.45 && rect.bottom >= window.innerHeight * 0.15) {
+          currentSlide = slide.getAttribute('data-slide');
+        }
+      });
+
+      navLinks.forEach(link => {
+        if (link.getAttribute('data-slide') === currentSlide) {
+          link.classList.add('active');
+        } else {
+          link.classList.remove('active');
+        }
+      });
+    });
+
+    const pasosData = {
+      1: {
+        titulo: "Paso 1: Abrir el Script en el IDE Antigravity y Conectar a MySQL",
+        html: `
+          <!-- BARRA SUPERIOR: RECURSO Y ACCIONES DIRECTAS -->
+          <div style="background:#f8fafc;border:1px solid #cbd5e1;border-radius:8px;padding:10px 14px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:12px;">
+            <div style="display:flex;align-items:center;gap:10px;">
+              <div style="background:rgba(2,132,199,0.1);color:var(--azul-tech);width:32px;height:32px;border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+              </div>
+              <div>
+                <div style="font-weight:800;font-size:12.5px;color:var(--texto-main);font-family:'JetBrains Mono',monospace;">techstore_db_completo.sql</div>
+                <div style="font-size:11px;color:var(--texto-sub);">Script oficial DDL con la estructura completa del proyecto (204 líneas)</div>
+              </div>
+            </div>
+            <div style="display:flex;gap:8px;align-items:center;">
+              <a href="techstore_db_completo.sql" download style="background:var(--sena-verde);color:#fff;padding:6px 12px;border-radius:6px;font-size:11px;font-weight:700;text-decoration:none;display:inline-flex;align-items:center;gap:5px;box-shadow:var(--shadow-sm);">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                Descargar .SQL
+              </a>
+              
+            </div>
+          </div>
+
+          <!-- NOTA PEDAGÓGICA: ¿YA LA TIENES CREADA DE LA SESIÓN 1? -->
+          <div style="background:#eff6ff;border:1px solid #bfdbfe;border-left:4px solid var(--azul-tech);border-radius:6px;padding:9px 13px;font-size:11.5px;color:#1e3a8a;margin-bottom:12px;display:flex;align-items:flex-start;gap:10px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0284c7" stroke-width="2.2" style="flex-shrink:0;margin-top:2px;"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg>
+            <div>
+              <strong style="color:var(--azul-tech);">¿Ya tienes <code>techstore_db</code> creada desde la Sesión 1?</strong><br>
+              Si en tu Database Client ya ves <code>techstore_db (Tables: 6)</code>, ¡ya tienes la base construida! Ejecutar este paso 1 sirve para <strong>refrescarla y dejarla con la versión oficial definitiva</strong> (con todas las restricciones formales de las evidencias EV01, EV02 y EV03). Si faltaste a la Sesión 1 o tenías errores previos, este bloque te asegura empezar 100% limpio.
+            </div>
+          </div>
+
+          <!-- SECUENCIA CRONOLÓGICA DE 4 ACCIONES DIRECTAS -->
+          <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:14px;">
+
+            <!-- ACCIÓN 1 -->
+            <div style="background:#ffffff;border:1px solid #e2e8f0;border-left:4px solid var(--sena-verde);border-radius:8px;padding:10px 14px;display:flex;align-items:flex-start;gap:12px;">
+              <div style="background:var(--sena-verde-bg);color:var(--sena-verde-dark);font-weight:800;font-size:12.5px;width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;">1</div>
+              <div style="flex:1;">
+                <div style="font-weight:800;font-size:12.5px;color:var(--texto-main);margin-bottom:2px;">Abre el archivo del script en tu IDE</div>
+                <p style="font-size:11.5px;color:var(--texto-muted);margin:0;line-height:1.5;">
+                  En tu IDE Antigravity presiona <kbd>Ctrl + O</kbd> (o menú <em>Archivo ➔ Abrir archivo</em>) y abre <strong><code>techstore_db_completo.sql</code></strong> ubicado en tu carpeta <code>Sesión 2</code>.
+                </p>
+              </div>
+            </div>
+
+            <!-- ACCIÓN 2 -->
+            <div style="background:#ffffff;border:1px solid #e2e8f0;border-left:4px solid var(--azul-tech);border-radius:8px;padding:10px 14px;display:flex;align-items:flex-start;gap:12px;">
+              <div style="background:var(--azul-bg);color:var(--azul-tech);font-weight:800;font-size:12.5px;width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;">2</div>
+              <div style="flex:1;">
+                <div style="font-weight:800;font-size:12.5px;color:var(--texto-main);margin-bottom:2px;">Verifica que MySQL en XAMPP esté encendido</div>
+                <p style="font-size:11.5px;color:var(--texto-muted);margin:0;line-height:1.5;">
+                  Abre tu <strong>XAMPP Control Panel</strong> y confirma que el módulo <em>MySQL</em> esté en color <strong>verde</strong> (puerto <code>3306</code> con botón en <em>Stop</em>).
+                </p>
+              </div>
+            </div>
+
+            <!-- ACCIÓN 3 -->
+            <div style="background:#ffffff;border:1px solid #e2e8f0;border-left:4px solid var(--sena-naranja);border-radius:8px;padding:10px 14px;display:flex;align-items:flex-start;gap:12px;">
+              <div style="background:var(--sena-naranja-bg);color:var(--sena-naranja-dark);font-weight:800;font-size:12.5px;width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;">3</div>
+              <div style="flex:1;">
+                <div style="font-weight:800;font-size:12.5px;color:var(--texto-main);margin-bottom:2px;">Abre Database Client en la barra lateral del IDE</div>
+                <p style="font-size:11.5px;color:var(--texto-muted);margin:0;line-height:1.5;">
+                  En el borde izquierdo del IDE, haz clic en el ícono cilíndrico de base de datos. Verás la conexión configurada en la Sesión 1 conectada a <code>localhost:3306</code> con usuario <code>root</code>.
+                </p>
+              </div>
+            </div>
+
+            <!-- ACCIÓN 4 -->
+            <div style="background:#ffffff;border:1px solid #e2e8f0;border-left:4px solid #9333ea;border-radius:8px;padding:10px 14px;display:flex;align-items:flex-start;gap:12px;">
+              <div style="background:#faf5ff;color:#9333ea;font-weight:800;font-size:12.5px;width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;">4</div>
+              <div style="flex:1;">
+                <div style="font-weight:800;font-size:12.5px;color:var(--texto-main);margin-bottom:4px;">Ejecuta el bloque del PASO 1 (Líneas 13 a 18)</div>
+                <p style="font-size:11.5px;color:var(--texto-muted);margin:0 0 8px 0;line-height:1.5;">
+                  En el archivo <code>techstore_db_completo.sql</code>, ubica el encabezado <code>-- PASO 1: DEFINICIÓN DEL SCHEMA</code> (líneas 13 a 18), selecciona este bloque con el mouse y presiona <kbd>Ctrl + Enter</kbd> (o haz clic en el botón superior <code>Run SQL</code>):
+                </p>
+                <div style="background:#0f172a;color:#f8fafc;padding:8px 12px;border-radius:6px;font-family:'JetBrains Mono',monospace;font-size:11.5px;border:1px solid #1e293b;line-height:1.6;">
+                  <span style="color:#64748b;">-- Líneas 13 a 18 de tu archivo .sql:</span><br>
+                  <span style="color:#f43f5e;font-weight:700;">DROP DATABASE IF EXISTS </span><span style="color:#e2e8f0;">techstore_db;</span><br>
+                  <span style="color:#f43f5e;font-weight:700;">CREATE DATABASE </span><span style="color:#e2e8f0;">techstore_db</span><br>
+                  <span style="color:#38bdf8;font-weight:700;">    CHARACTER SET </span><span style="color:#e2e8f0;">utf8mb4</span><br>
+                  <span style="color:#38bdf8;font-weight:700;">    COLLATE </span><span style="color:#e2e8f0;">utf8mb4_unicode_ci;</span><br><br>
+                  <span style="color:#f43f5e;font-weight:700;">USE </span><span style="color:#e2e8f0;">techstore_db;</span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- EXPLICACIÓN PEDAGÓGICA TRANQUILIZADORA (DESPUÉS DEL PASO 4) -->
+          <div style="background:#fffbeb;border:1.5px solid #fef08a;border-left:4px solid #f59e0b;border-radius:8px;padding:12px 16px;margin-bottom:12px;">
+            <div style="font-weight:800;font-size:12.5px;color:#92400e;display:flex;align-items:center;gap:6px;margin-bottom:8px;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2.2"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              ¡Tranquilo, no te preocupes! Esto es exactamente lo que hace el Paso 1 y es completamente normal
+            </div>
+
+            <div style="margin-bottom:8px;">
+              <div style="font-size:11.5px;font-weight:800;color:#78350f;margin-bottom:4px;">
+                1. ¿Por qué se borraron las tablas que tenías?
+              </div>
+              <p style="font-size:11.5px;color:#92400e;margin:0 0 6px 0;line-height:1.5;">
+                Porque acabas de ejecutar exactamente estas tres sentencias de preparación:
+              </p>
+              <div style="background:#0f172a;color:#f8fafc;padding:8px 12px;border-radius:6px;font-family:'JetBrains Mono',monospace;font-size:11px;border:1px solid #1e293b;line-height:1.7;">
+                <span style="color:#f43f5e;font-weight:700;">DROP DATABASE IF EXISTS </span><span style="color:#e2e8f0;">techstore_db; </span><span style="color:#64748b;">-- Borró la versión previa para no dejar residuos</span><br>
+                <span style="color:#f43f5e;font-weight:700;">CREATE DATABASE </span><span style="color:#e2e8f0;">techstore_db;        </span><span style="color:#64748b;">-- Creó el contenedor nuevo, limpio y vacío</span><br>
+                <span style="color:#f43f5e;font-weight:700;">USE </span><span style="color:#e2e8f0;">techstore_db;                    </span><span style="color:#64748b;">-- Entró a la base de datos activa</span>
+              </div>
+            </div>
+
+            <div>
+              <div style="font-size:11.5px;font-weight:800;color:#78350f;margin-bottom:2px;">
+                2. ¿Qué logramos aquí y qué sigue?
+              </div>
+              <p style="font-size:11.5px;color:#92400e;margin:0;line-height:1.5;">
+                El <strong>Paso 1</strong> lo único que hace es dejar la casa limpia y la caja vacía. Las tablas aún no están porque se crean en orden en los siguientes pasos (el <strong>Paso 2</strong> creará las 3 tablas maestras y el <strong>Paso 3</strong> las 3 tablas hijas con sus llaves foráneas).
+              </p>
+            </div>
+          </div>
+
+          <!-- PÍLDORA DE VALIDACIÓN EXITOSA -->
+          <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:6px;padding:8px 12px;font-size:11.5px;color:#166534;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
+            <span style="display:inline-flex;align-items:center;gap:6px;">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+              <strong>Resultado:</strong> Al presionar <strong>Refresh ↻</strong> en Database Client, verás <code>techstore_db</code> vacía y limpia.
+            </span>
+            <button onclick="abrirModalPaso(2)" style="background:var(--sena-verde);color:#fff;border:none;padding:5px 12px;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:5px;">
+              Continuar al Paso 2 ➔
+            </button>
+          </div>
+        `
+      },
+      2: {
+        titulo: "Paso 2: Crear las Tablas Maestras (roles, usuarios, categorias)",
+        html: `
+          <!-- BARRA SUPERIOR: CONTEXTO JERÁRQUICO -->
+          <div style="background:#f8fafc;border:1px solid #cbd5e1;border-radius:8px;padding:10px 14px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:12px;">
+            <div style="display:flex;align-items:center;gap:10px;">
+              <div style="background:var(--sena-verde-bg);color:var(--sena-verde-dark);width:32px;height:32px;border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m2 4 3 12h14l3-12-6 7-4-7-4 7-6-7zm3 16h14"/></svg>
+              </div>
+              <div>
+                <div style="font-weight:800;font-size:12.5px;color:var(--texto-main);">Nivel 1: Tablas Padres (Sin Dependencias Externas)</div>
+                <div style="font-size:11px;color:var(--texto-sub);">Ubicadas en las <strong>líneas 23 a 63</strong> de <code>techstore_db_completo.sql</code></div>
+              </div>
+            </div>
+            <div style="font-size:11px;font-weight:700;background:var(--sena-verde-bg);color:var(--sena-verde-dark);padding:4px 10px;border-radius:20px;border:1px solid #bbf7d0;">
+              Regla de Oro: Se crean de primeras
+            </div>
+          </div>
+
+          <!-- TABLA ESTRUCTURADA DE PARÁMETROS -->
+          <table class="cweijan-params-table" style="margin-top:0;margin-bottom:14px;">
+            <thead>
+              <tr>
+                <th style="width:22%;">Tabla</th>
+                <th style="width:40%;">Función en el Negocio</th>
+                <th style="width:38%;">Llaves & Restricciones Clave</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>1. roles</strong><br><span style="font-size:10px;color:var(--texto-sub);">Líneas 27-34</span></td>
+                <td>Catálogo de perfiles (Cliente, Administrador, Operador). No depende de nadie.</td>
+                <td><code>id_rol (PK)</code><br><code>nombre VARCHAR(30) UNIQUE</code></td>
+              </tr>
+              <tr>
+                <td><strong>2. usuarios</strong><br><span style="font-size:10px;color:var(--texto-sub);">Líneas 37-52</span></td>
+                <td>Cuentas de clientes con password encriptado bcrypt y estado de login.</td>
+                <td><code>id_usuario (PK)</code><br><code>email UNIQUE</code> · <code>documento UNIQUE</code><br><code>CONSTRAINT fk_usuarios_roles</code></td>
+              </tr>
+              <tr>
+                <td><strong>3. categorias</strong><br><span style="font-size:10px;color:var(--texto-sub);">Líneas 55-63</span></td>
+                <td>Pasillos de la tienda (Portátiles, Periféricos Pro, etc.).</td>
+                <td><code>id_categoria (PK)</code><br><code>nombre UNIQUE</code> · <code>activo DEFAULT TRUE</code></td>
+              </tr>
+            </tbody>
+          </table>
+
+          <!-- INSTRUCCIÓN DE EJECUCIÓN -->
+          <div style="background:#ffffff;border:1px solid #e2e8f0;border-left:4px solid var(--sena-verde);border-radius:8px;padding:10px 14px;margin-bottom:12px;">
+            <div style="font-weight:800;font-size:12.5px;color:var(--texto-main);margin-bottom:3px;display:flex;align-items:center;gap:6px;">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+              ¿Cómo ejecutarlas en tu editor?
+            </div>
+            <p style="font-size:11.5px;color:var(--texto-muted);margin:0 0 8px 0;line-height:1.5;">
+              En el archivo <code>techstore_db_completo.sql</code>, selecciona con el mouse el bloque completo desde <code>-- 2.1. TABLA ROLES</code> hasta el final de <code>categorias</code> (líneas 27 a 63) y presiona <kbd>Ctrl + Enter</kbd> (o botón <code>Run SQL</code>):
+            </p>
+            <div style="background:#0f172a;color:#f8fafc;padding:8px 12px;border-radius:6px;font-family:'JetBrains Mono',monospace;font-size:11.5px;border:1px solid #1e293b;line-height:1.6;">
+              <span style="color:#64748b;">-- Bloque a seleccionar (Líneas 27 a 63):</span><br>
+              <span style="color:#f43f5e;font-weight:700;">CREATE TABLE </span><span style="color:#e2e8f0;">roles ( id_rol INT AUTO_INCREMENT PRIMARY KEY, ... );</span><br>
+              <span style="color:#f43f5e;font-weight:700;">CREATE TABLE </span><span style="color:#e2e8f0;">usuarios ( id_usuario INT AUTO_INCREMENT, ... CONSTRAINT fk_usuarios_roles ... );</span><br>
+              <span style="color:#f43f5e;font-weight:700;">CREATE TABLE </span><span style="color:#e2e8f0;">categorias ( id_categoria INT AUTO_INCREMENT PRIMARY KEY, ... );</span>
+            </div>
+          </div>
+
+          <!-- PASO DE RESULTADO Y VALIDACIÓN EXITOSA -->
+          <div style="background:#f0fdf4;border:1.5px solid #bbf7d0;border-left:4px solid var(--sena-verde);border-radius:8px;padding:12px 16px;margin-bottom:12px;box-shadow:0 1px 3px rgba(0,0,0,0.03);">
+            <div style="font-weight:800;font-size:12.5px;color:#166534;display:flex;align-items:center;gap:6px;margin-bottom:8px;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+              Resultado de la Ejecución del Paso 2: ¿Cómo saber si quedó bien?
+            </div>
+
+            <!-- GRILLA DE CONFIRMACIÓN VISUAL -->
+            <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(240px, 1fr));gap:10px;margin-bottom:10px;">
+              
+              <!-- TARJETA A: RESPUESTA DE CONSOLA -->
+              <div style="background:#ffffff;border:1px solid #dcfce7;border-radius:6px;padding:8px 12px;">
+                <div style="font-weight:700;font-size:11.5px;color:#15803d;margin-bottom:3px;display:flex;align-items:center;gap:5px;">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
+                  1. En la consola del IDE (Output Database Client)
+                </div>
+                <p style="font-size:11px;color:#166534;margin:0 0 6px 0;line-height:1.45;">
+                  Verás: <code>[INFO] Result: 6 rows retrieved in 74ms</code> (las 3 sentencias DROP + las 3 sentencias CREATE ejecutadas exitosamente en MySQL).
+                </p>
+                <div style="background:#fefce8;border:1px solid #fef08a;border-radius:4px;padding:6px 8px;font-size:10.5px;color:#854d0e;line-height:1.4;">
+                  <strong>¿Viste [ERROR] TypeError: Cannot read properties of undefined (reading 'name')?</strong><br>
+                  ¡Tranquilo! No es un error en tu SQL. Es una advertencia visual de la extensión porque los comandos <code>CREATE TABLE</code> no devuelven filas tabulares para pintar.
+                </div>
+              </div>
+
+              <!-- TARJETA B: ÁRBOL DATABASE CLIENT -->
+              <div style="background:#ffffff;border:1px solid #dcfce7;border-radius:6px;padding:8px 12px;">
+                <div style="font-weight:700;font-size:11.5px;color:#15803d;margin-bottom:3px;display:flex;align-items:center;gap:5px;">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+                  2. En el panel lateral Database Client
+                </div>
+                <p style="font-size:11px;color:#166534;margin:0 0 6px 0;line-height:1.45;">
+                  Haz clic en el botón <strong>Refresh ↻</strong> sobre <code>techstore_db</code>. Verás actualizarse el contador a <strong>(Tables: 3)</strong>:
+                </p>
+                <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:4px;padding:5px 8px;font-family:'JetBrains Mono',monospace;font-size:10.5px;color:#166534;margin-bottom:6px;">
+                  ✓ roles · ✓ usuarios · ✓ categorias
+                </div>
+                <p style="font-size:10.5px;color:#15803d;margin:0;line-height:1.35;">
+                  Tus 3 tablas maestras ya están creadas físicamente en MySQL con sus índices UNIQUE y PK.
+                </p>
+              </div>
+
+            </div>
+
+            <!-- PIE CON BOTÓN CONTINUAR AL PASO 3 -->
+            <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;padding-top:8px;border-top:1px solid #dcfce7;">
+              <span style="font-size:11.5px;color:#14532d;display:inline-flex;align-items:center;gap:5px;">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12.01" x2="12" y1="16" y2="16"/></svg>
+                <strong>¿Y las otras 3 tablas?</strong> Se crearán en el Paso 3 con sus restricciones de clave foránea (FK).
+              </span>
+              <button onclick="abrirModalPaso(3)" style="background:var(--sena-verde);color:#fff;border:none;padding:6px 14px;border-radius:6px;font-size:11.5px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:6px;box-shadow:var(--shadow-sm);">
+                Continuar al Paso 3 ➔
+              </button>
+            </div>
+          </div>
+        `
+      },
+      3: {
+        titulo: "Paso 3: Crear Tablas Hijas y Restricciones CHECK de Seguridad",
+        html: `
+          <!-- BARRA SUPERIOR: CONTEXTO JERÁRQUICO -->
+          <div style="background:#f8fafc;border:1px solid #cbd5e1;border-radius:8px;padding:10px 14px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:12px;">
+            <div style="display:flex;align-items:center;gap:10px;">
+              <div style="background:var(--azul-bg);color:var(--azul-tech);width:32px;height:32px;border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/><path d="M16 16h5v5"/></svg>
+              </div>
+              <div>
+                <div style="font-weight:800;font-size:12.5px;color:var(--texto-main);">Niveles 2 y 3: Tablas Hijas & Asociativas con Relaciones FK</div>
+                <div style="font-size:11px;color:var(--texto-sub);">Ubicadas en las <strong>líneas 64 a 122</strong> de <code>techstore_db_completo.sql</code></div>
+              </div>
+            </div>
+            <div style="font-size:11px;font-weight:700;background:var(--azul-bg);color:var(--azul-tech);padding:4px 10px;border-radius:20px;border:1px solid #bfdbfe;">
+              Requieren que los padres ya existan
+            </div>
+          </div>
+
+          <!-- TABLA ESTRUCTURADA DE PARÁMETROS -->
+          <table class="cweijan-params-table" style="margin-top:0;margin-bottom:14px;">
+            <thead>
+              <tr>
+                <th style="width:24%;">Tabla Hija</th>
+                <th style="width:38%;">Llave Foránea (FK) Hacia el Padre</th>
+                <th style="width:38%;">Candado de Negocio (CHECK)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>4. productos</strong><br><span style="font-size:10px;color:var(--texto-sub);">Líneas 65-82</span></td>
+                <td><code>CONSTRAINT fk_productos_categorias</code><br>Hacia tabla madre <code>categorias</code></td>
+                <td><code>CHECK (precio > 0.00)</code><br><code>CHECK (stock >= 0)</code></td>
+              </tr>
+              <tr>
+                <td><strong>5. pedidos</strong><br><span style="font-size:10px;color:var(--texto-sub);">Líneas 85-100</span></td>
+                <td><code>CONSTRAINT fk_pedidos_usuarios</code><br>Hacia cliente en <code>usuarios (RESTRICT)</code></td>
+                <td><code>CHECK (total >= 0.00)</code><br><code>numero_orden UNIQUE</code></td>
+              </tr>
+              <tr>
+                <td><strong>6. detalle_pedidos</strong><br><span style="font-size:10px;color:var(--texto-sub);">Líneas 103-120</span></td>
+                <td><code>FK pedidos (CASCADE)</code><br><code>FK productos (RESTRICT)</code></td>
+                <td><code>CHECK (cantidad > 0)</code><br><code>subtotal GENERATED STORED</code></td>
+              </tr>
+            </tbody>
+          </table>
+
+          <!-- INSTRUCCIÓN DE EJECUCIÓN -->
+          <div style="background:#ffffff;border:1px solid #e2e8f0;border-left:4px solid var(--azul-tech);border-radius:8px;padding:10px 14px;margin-bottom:12px;">
+            <div style="font-weight:800;font-size:12.5px;color:var(--texto-main);margin-bottom:3px;display:flex;align-items:center;gap:6px;">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+              ¿Cómo ejecutarlas en tu editor?
+            </div>
+            <p style="font-size:11.5px;color:var(--texto-muted);margin:0 0 8px 0;line-height:1.5;">
+              En el archivo <code>techstore_db_completo.sql</code>, selecciona con el mouse el bloque completo desde <code>-- 2.4. TABLA PRODUCTOS</code> hasta la línea <code>SET FOREIGN_KEY_CHECKS = 1;</code> (líneas 64 a 122) y presiona <kbd>Ctrl + Enter</kbd> (o botón <code>Run SQL</code>):
+            </p>
+            <div style="background:#0f172a;color:#f8fafc;padding:8px 12px;border-radius:6px;font-family:'JetBrains Mono',monospace;font-size:11px;border:1px solid #1e293b;line-height:1.6;">
+              <span style="color:#64748b;">-- Bloque a seleccionar (Líneas 64 a 122):</span><br>
+              <span style="color:#f43f5e;font-weight:700;">DROP TABLE IF EXISTS </span><span style="color:#e2e8f0;">productos; </span><span style="color:#f43f5e;font-weight:700;">CREATE TABLE </span><span style="color:#e2e8f0;">productos ( ... CONSTRAINT fk_productos_categorias ... );</span><br>
+              <span style="color:#f43f5e;font-weight:700;">DROP TABLE IF EXISTS </span><span style="color:#e2e8f0;">pedidos; </span><span style="color:#f43f5e;font-weight:700;">CREATE TABLE </span><span style="color:#e2e8f0;">pedidos ( ... CONSTRAINT fk_pedidos_usuarios ... );</span><br>
+              <span style="color:#f43f5e;font-weight:700;">DROP TABLE IF EXISTS </span><span style="color:#e2e8f0;">detalle_pedidos; </span><span style="color:#f43f5e;font-weight:700;">CREATE TABLE </span><span style="color:#e2e8f0;">detalle_pedidos ( ... );</span><br>
+              <span style="color:#38bdf8;font-weight:700;">SET FOREIGN_KEY_CHECKS = 1;</span>
+            </div>
+          </div>
+
+          <!-- PASO DE RESULTADO Y VALIDACIÓN EXITOSA -->
+          <div style="background:#f0fdf4;border:1.5px solid #bbf7d0;border-left:4px solid var(--azul-tech);border-radius:8px;padding:12px 16px;margin-bottom:12px;box-shadow:0 1px 3px rgba(0,0,0,0.03);">
+            <div style="font-weight:800;font-size:12.5px;color:#0369a1;display:flex;align-items:center;gap:6px;margin-bottom:8px;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0284c7" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+              Resultado de la Ejecución del Paso 3: ¿Cómo saber si quedó bien?
+            </div>
+
+            <!-- GRILLA DE CONFIRMACIÓN VISUAL -->
+            <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(240px, 1fr));gap:10px;margin-bottom:10px;">
+              
+              <!-- TARJETA A: RESPUESTA DE CONSOLA -->
+              <div style="background:#ffffff;border:1px solid #bfdbfe;border-radius:6px;padding:8px 12px;">
+                <div style="font-weight:700;font-size:11.5px;color:#0369a1;margin-bottom:3px;display:flex;align-items:center;gap:5px;">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
+                  1. En la consola del IDE (Output Database Client)
+                </div>
+                <p style="font-size:11px;color:#0f172a;margin:0 0 6px 0;line-height:1.45;">
+                  Verás: <code>[INFO] Result: 7 rows retrieved in XXms</code> (las 3 sentencias DROP + las 3 sentencias CREATE + la reactivación de foreign keys).
+                </p>
+                <div style="background:#fefce8;border:1px solid #fef08a;border-radius:4px;padding:6px 8px;font-size:10.5px;color:#854d0e;line-height:1.4;">
+                  <strong>¿Viste de nuevo [ERROR] TypeError: Cannot read properties...?</strong><br>
+                  ¡Recuerda que es normal! Es el visor visual de la extensión. El motor MySQL procesó las 7 sentencias con 100% de éxito.
+                </div>
+              </div>
+
+              <!-- TARJETA B: ÁRBOL DATABASE CLIENT -->
+              <div style="background:#ffffff;border:1px solid #bfdbfe;border-radius:6px;padding:8px 12px;">
+                <div style="font-weight:700;font-size:11.5px;color:#0369a1;margin-bottom:3px;display:flex;align-items:center;gap:5px;">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+                  2. En el panel lateral Database Client
+                </div>
+                <p style="font-size:11px;color:#0f172a;margin:0 0 6px 0;line-height:1.45;">
+                  Haz clic en el botón <strong>Refresh ↻</strong> sobre <code>techstore_db</code>. Verás actualizarse el contador a <strong>(Tables: 6)</strong>:
+                </p>
+                <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:4px;padding:5px 8px;font-family:'JetBrains Mono',monospace;font-size:10px;color:#166534;margin-bottom:6px;line-height:1.5;">
+                  ✓ roles · ✓ usuarios · ✓ categorias<br>
+                  ✓ productos · ✓ pedidos · ✓ detalle_pedidos
+                </div>
+                <p style="font-size:10.5px;color:#0369a1;margin:0;line-height:1.35;">
+                  ¡Tu arquitectura relacional completa está construida físicamente en MySQL con todas sus restricciones y llaves foráneas activas!
+                </p>
+              </div>
+
+            </div>
+
+            <!-- PIE CON BOTÓN CONTINUAR AL PASO 4 -->
+            <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;padding-top:8px;border-top:1px solid #bfdbfe;">
+              <span style="font-size:11.5px;color:#1e3a8a;display:inline-flex;align-items:center;gap:5px;">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#0284c7" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12.01" x2="12" y1="16" y2="16"/></svg>
+                <strong>¿Qué sigue?</strong> Las 6 tablas están creadas pero vacías. En el <strong>Paso 4</strong> cargaremos los datos semilla y en el <strong>Paso 5</strong> ejecutaremos los <code>INNER JOIN</code>.
+              </span>
+              <button onclick="abrirModalPaso(4)" style="background:var(--azul-tech);color:#fff;border:none;padding:6px 14px;border-radius:6px;font-size:11.5px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:6px;box-shadow:var(--shadow-sm);">
+                Continuar al Paso 4 ➔
+              </button>
+            </div>
+          </div>
+        `
+      },
+      4: {
+        titulo: "Paso 4: Poblar con Datos Semilla de Prueba (Líneas 124 a 168)",
+        html: `
+          <!-- BARRA SUPERIOR: CONTEXTO DML -->
+          <div style="background:#f8fafc;border:1px solid #cbd5e1;border-radius:8px;padding:10px 14px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:12px;">
+            <div style="display:flex;align-items:center;gap:10px;">
+              <div style="background:var(--sena-naranja-bg);color:var(--sena-naranja-dark);width:32px;height:32px;border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              </div>
+              <div>
+                <div style="font-weight:800;font-size:12.5px;color:var(--texto-main);">Paso 3 del Script: Poblamiento DML Transaccional</div>
+                <div style="font-size:11px;color:var(--texto-sub);">Ubicadas en las <strong>líneas 124 a 168</strong> de <code>techstore_db_completo.sql</code></div>
+              </div>
+            </div>
+            <div style="font-size:11px;font-weight:700;background:var(--sena-naranja-bg);color:var(--sena-naranja-dark);padding:4px 10px;border-radius:20px;border:1px solid #fed7aa;">
+              23 Registros Iniciales
+            </div>
+          </div>
+
+          <!-- TABLA ESTRUCTURADA DE REGISTROS -->
+          <table class="cweijan-params-table" style="margin-top:0;margin-bottom:14px;">
+            <thead>
+              <tr>
+                <th style="width:25%;">Tabla</th>
+                <th style="width:20%;">Líneas</th>
+                <th style="width:55%;">Registros Semilla Insertados</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>1. roles</strong></td>
+                <td><code style="color:var(--azul-tech);font-weight:700;">128-132</code></td>
+                <td>3 perfiles: Cliente, Administrador, Operador de bodega.</td>
+              </tr>
+              <tr>
+                <td><strong>2. usuarios</strong></td>
+                <td><code style="color:var(--azul-tech);font-weight:700;">134-139</code></td>
+                <td>4 cuentas con contraseñas seguras hash bcrypt y roles asignados.</td>
+              </tr>
+              <tr>
+                <td><strong>3. categorias</strong></td>
+                <td><code style="color:var(--azul-tech);font-weight:700;">141-146</code></td>
+                <td>4 categorías: Laptops Gaming, Periféricos Pro, Componentes PC, Audio.</td>
+              </tr>
+              <tr>
+                <td><strong>4. productos</strong></td>
+                <td><code style="color:var(--azul-tech);font-weight:700;">148-155</code></td>
+                <td>6 productos reales con precios en COP ($ 485.000 a $ 14.500.000) y stock.</td>
+              </tr>
+              <tr>
+                <td><strong>5. pedidos</strong></td>
+                <td><code style="color:var(--azul-tech);font-weight:700;">157-160</code></td>
+                <td>2 órdenes de compra (<code>ORD-2026-0001</code> y <code>ORD-2026-0002</code>).</td>
+              </tr>
+              <tr>
+                <td><strong>6. detalle_pedidos</strong></td>
+                <td><code style="color:var(--azul-tech);font-weight:700;">162-167</code></td>
+                <td>4 renglones asociando productos a pedidos con subtotales calculados.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <!-- INSTRUCCIÓN DE EJECUCIÓN -->
+          <div style="background:#ffffff;border:1px solid #e2e8f0;border-left:4px solid var(--sena-naranja);border-radius:8px;padding:10px 14px;margin-bottom:12px;">
+            <div style="font-weight:800;font-size:12.5px;color:var(--texto-main);margin-bottom:3px;display:flex;align-items:center;gap:6px;">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+              ¿Cómo ejecutar las inserciones en tu editor?
+            </div>
+            <p style="font-size:11.5px;color:var(--texto-muted);margin:0 0 8px 0;line-height:1.5;">
+              En el archivo <code>techstore_db_completo.sql</code>, selecciona con el mouse el bloque completo desde <code>-- 3.1. Insertar Roles</code> hasta el final de <code>detalle_pedidos</code> (líneas 128 a 168) y presiona <kbd>Ctrl + Enter</kbd> (o botón <code>Run SQL</code>):
+            </p>
+            <div style="background:#0f172a;color:#f8fafc;padding:8px 12px;border-radius:6px;font-family:'JetBrains Mono',monospace;font-size:11px;border:1px solid #1e293b;line-height:1.6;">
+              <span style="color:#64748b;">-- Bloque a seleccionar (Líneas 128 a 168):</span><br>
+              <span style="color:#f43f5e;font-weight:700;">INSERT INTO </span><span style="color:#e2e8f0;">roles ... ; </span><span style="color:#f43f5e;font-weight:700;">INSERT INTO </span><span style="color:#e2e8f0;">usuarios ... ;</span><br>
+              <span style="color:#f43f5e;font-weight:700;">INSERT INTO </span><span style="color:#e2e8f0;">categorias ... ; </span><span style="color:#f43f5e;font-weight:700;">INSERT INTO </span><span style="color:#e2e8f0;">productos ... ;</span><br>
+              <span style="color:#f43f5e;font-weight:700;">INSERT INTO </span><span style="color:#e2e8f0;">pedidos ... ; </span><span style="color:#f43f5e;font-weight:700;">INSERT INTO </span><span style="color:#e2e8f0;">detalle_pedidos ... ;</span>
+            </div>
+          </div>
+
+          <!-- PASO DE RESULTADO Y VALIDACIÓN EXITOSA -->
+          <div style="background:#f0fdf4;border:1.5px solid #bbf7d0;border-left:4px solid var(--sena-naranja);border-radius:8px;padding:12px 16px;margin-bottom:12px;box-shadow:0 1px 3px rgba(0,0,0,0.03);">
+            <div style="font-weight:800;font-size:12.5px;color:#c2410c;display:flex;align-items:center;gap:6px;margin-bottom:8px;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ea580c" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+              Resultado de la Ejecución del Paso 4: ¿Cómo verificar los datos poblados?
+            </div>
+
+            <!-- GRILLA DE CONFIRMACIÓN VISUAL -->
+            <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(240px, 1fr));gap:10px;margin-bottom:10px;">
+              
+              <!-- TARJETA A: RESPUESTA DE CONSOLA -->
+              <div style="background:#ffffff;border:1px solid #fed7aa;border-radius:6px;padding:8px 12px;">
+                <div style="font-weight:700;font-size:11.5px;color:#c2410c;margin-bottom:3px;display:flex;align-items:center;gap:5px;">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
+                  1. En la consola del IDE
+                </div>
+                <p style="font-size:11px;color:#7c2d12;margin:0;line-height:1.45;">
+                  Verás: <code>[INFO] Result: 6 rows retrieved</code> (las 6 inserciones masivas fueron aceptadas y guardadas por MySQL).
+                </p>
+              </div>
+
+              <!-- TARJETA B: ÁRBOL DATABASE CLIENT -->
+              <div style="background:#ffffff;border:1px solid #fed7aa;border-radius:6px;padding:8px 12px;">
+                <div style="font-weight:700;font-size:11.5px;color:#c2410c;margin-bottom:3px;display:flex;align-items:center;gap:5px;">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+                  2. En el panel lateral Database Client
+                </div>
+                <p style="font-size:11px;color:#7c2d12;margin:0 0 6px 0;line-height:1.45;">
+                  Al presionar <strong>Refresh ↻</strong>, verás las 6 tablas con su número exacto de filas:
+                </p>
+                <div style="background:#fff7ed;border:1px solid #fed7aa;border-radius:4px;padding:5px 8px;font-family:'JetBrains Mono',monospace;font-size:10px;color:#9a3412;line-height:1.5;">
+                  categorias (4) · detalle_pedidos (4) · pedidos (2)<br>
+                  productos (6) · roles (3) · usuarios (4)
+                </div>
+              </div>
+
+            </div>
+
+            <!-- PIE CON BOTÓN CONTINUAR AL PASO 5 -->
+            <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;padding-top:8px;border-top:1px solid #fed7aa;">
+              <span style="font-size:11.5px;color:#9a3412;display:inline-flex;align-items:center;gap:5px;">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ea580c" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12.01" x2="12" y1="16" y2="16"/></svg>
+                <strong>¡Datos listos!</strong> Ahora vamos a consultar la información combinando tablas con <code>INNER JOIN</code>.
+              </span>
+              <button onclick="abrirModalPaso(5)" style="background:var(--sena-naranja);color:#fff;border:none;padding:6px 14px;border-radius:6px;font-size:11.5px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:6px;box-shadow:var(--shadow-sm);">
+                Continuar al Paso 5: Consultas JOIN ➔
+              </button>
+            </div>
+          </div>
+        `
+      },
+      5: {
+        titulo: "Paso 5: Consultas de Validación JOIN y Restricción CHECK (Líneas 170 a 204)",
+        html: `
+          <!-- BARRA SUPERIOR: CONTEXTO CONSULTAS -->
+          <div style="background:#f8fafc;border:1px solid #cbd5e1;border-radius:8px;padding:10px 14px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:12px;">
+            <div style="display:flex;align-items:center;gap:10px;">
+              <div style="background:var(--sena-verde-bg);color:var(--sena-verde-dark);width:32px;height:32px;border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              </div>
+              <div>
+                <div style="font-weight:800;font-size:12.5px;color:var(--texto-main);">Paso 4 del Script: Consultas de Validación DML & Seguridad</div>
+                <div style="font-size:11px;color:var(--texto-sub);">Ubicadas en las <strong>líneas 170 a 204</strong> de <code>techstore_db_completo.sql</code></div>
+              </div>
+            </div>
+            <div style="font-size:11px;font-weight:700;background:var(--sena-verde-bg);color:var(--sena-verde-dark);padding:4px 10px;border-radius:20px;border:1px solid #bbf7d0;">
+              Clave Evidencias EV01 y EV02
+            </div>
+          </div>
+
+          <!-- TABLA ESTRUCTURADA DE CONSULTAS -->
+          <table class="cweijan-params-table" style="margin-top:0;margin-bottom:14px;">
+            <thead>
+              <tr>
+                <th style="width:25%;">Consulta / Prueba</th>
+                <th style="width:20%;">Líneas</th>
+                <th style="width:55%;">Objetivo y Utilidad en el Proyecto</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>4.1. Catálogo JOIN</strong></td>
+                <td><code style="color:var(--azul-tech);font-weight:700;">173 a 184</code></td>
+                <td>Une <code>productos</code> y <code>categorias</code> mostrando precios formateados en pesos COP (<code>$ 14.500.000,00</code>).</td>
+              </tr>
+              <tr>
+                <td><strong>4.2. Pedidos Multi-Join</strong></td>
+                <td><code style="color:var(--azul-tech);font-weight:700;">185 a 199</code></td>
+                <td>Cruce de 4 tablas (<code>pedidos + usuarios + detalle + productos</code>). Sábana de facturación para la evidencia <strong>AA2-EV01</strong>.</td>
+              </tr>
+              <tr>
+                <td><strong>4.3. Prueba Error CHECK</strong></td>
+                <td><code style="color:var(--azul-tech);font-weight:700;">201 a 204</code></td>
+                <td>Demostración en vivo de cómo MySQL rechaza precios negativos (-500.00 COP) con el <strong>Error 3819</strong>.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <!-- SECUENCIA DE CONSULTAS GUIADAS -->
+          <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:12px;">
+
+            <!-- ACCIÓN 5.1 -->
+            <div style="background:#ffffff;border:1px solid #e2e8f0;border-left:4px solid var(--azul-tech);border-radius:8px;padding:10px 14px;display:flex;align-items:flex-start;gap:12px;">
+              <div style="background:var(--azul-bg);color:var(--azul-tech);font-weight:800;font-size:12px;width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;">5.1</div>
+              <div style="flex:1;">
+                <div style="font-weight:800;font-size:12.5px;color:var(--texto-main);margin-bottom:2px;">Consulta 4.1: Catálogo con INNER JOIN (Líneas 173 a 184)</div>
+                <p style="font-size:11.5px;color:var(--texto-muted);margin:0 0 6px 0;line-height:1.5;">
+                  En tu editor selecciona la consulta <code>4.1</code> y presiona <kbd>Ctrl + Enter</kbd>:
+                </p>
+                <div style="background:#0f172a;color:#f8fafc;padding:8px 12px;border-radius:6px;font-family:'JetBrains Mono',monospace;font-size:11px;border:1px solid #1e293b;line-height:1.6;">
+                  <span style="color:#38bdf8;font-weight:700;">SELECT </span><span style="color:#e2e8f0;">p.sku, p.nombre AS producto, </span><span style="color:#fbbf24;font-weight:700;">CONCAT</span><span style="color:#e2e8f0;">('$ ', </span><span style="color:#fbbf24;font-weight:700;">FORMAT</span><span style="color:#e2e8f0;">(p.precio, 2, 'es_CO')) AS precio_formato, p.stock, c.nombre AS categoria, p.estado</span><br>
+                  <span style="color:#38bdf8;font-weight:700;">FROM </span><span style="color:#e2e8f0;">productos p </span><span style="color:#38bdf8;font-weight:700;">INNER JOIN </span><span style="color:#e2e8f0;">categorias c </span><span style="color:#38bdf8;font-weight:700;">ON </span><span style="color:#e2e8f0;">p.id_categoria = c.id_categoria</span><br>
+                  <span style="color:#38bdf8;font-weight:700;">ORDER BY </span><span style="color:#e2e8f0;">p.precio DESC;</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- ACCIÓN 5.2 -->
+            <div style="background:#ffffff;border:1px solid #e2e8f0;border-left:4px solid var(--sena-verde);border-radius:8px;padding:10px 14px;display:flex;align-items:flex-start;gap:12px;">
+              <div style="background:var(--sena-verde-bg);color:var(--sena-verde-dark);font-weight:800;font-size:12px;width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;">5.2</div>
+              <div style="flex:1;">
+                <div style="font-weight:800;font-size:12.5px;color:var(--texto-main);margin-bottom:2px;">Consulta 4.2: Auditoría de Pedidos Multi-Join (Líneas 185 a 199)</div>
+                <p style="font-size:11.5px;color:var(--texto-muted);margin:0 0 6px 0;line-height:1.5;">
+                  Esta es la consulta que cruza <strong>4 tablas simultáneamente</strong> para generar el reporte de facturación. Selecciona las líneas 185 a 199 y presiona <kbd>Ctrl + Enter</kbd>:
+                </p>
+                <div style="background:#0f172a;color:#f8fafc;padding:8px 12px;border-radius:6px;font-family:'JetBrains Mono',monospace;font-size:11px;border:1px solid #1e293b;line-height:1.6;">
+                  <span style="color:#38bdf8;font-weight:700;">SELECT </span><span style="color:#e2e8f0;">ped.numero_orden, </span><span style="color:#fbbf24;font-weight:700;">CONCAT</span><span style="color:#e2e8f0;">(u.nombres, ' ', u.apellidos) AS cliente, u.email, prod.nombre AS item_comprado, det.cantidad, </span><span style="color:#fbbf24;font-weight:700;">CONCAT</span><span style="color:#e2e8f0;">('$ ', </span><span style="color:#fbbf24;font-weight:700;">FORMAT</span><span style="color:#e2e8f0;">(det.precio_unitario, 2, 'es_CO')) AS precio_unitario, </span><span style="color:#fbbf24;font-weight:700;">CONCAT</span><span style="color:#e2e8f0;">('$ ', </span><span style="color:#fbbf24;font-weight:700;">FORMAT</span><span style="color:#e2e8f0;">(det.subtotal, 2, 'es_CO')) AS subtotal_calculado, ped.estado AS estado_orden</span><br>
+                  <span style="color:#38bdf8;font-weight:700;">FROM </span><span style="color:#e2e8f0;">pedidos ped</span><br>
+                  <span style="color:#38bdf8;font-weight:700;">INNER JOIN </span><span style="color:#e2e8f0;">usuarios u </span><span style="color:#38bdf8;font-weight:700;">ON </span><span style="color:#e2e8f0;">ped.id_usuario = u.id_usuario</span><br>
+                  <span style="color:#38bdf8;font-weight:700;">INNER JOIN </span><span style="color:#e2e8f0;">detalle_pedidos det </span><span style="color:#38bdf8;font-weight:700;">ON </span><span style="color:#e2e8f0;">ped.id_pedido = det.id_pedido</span><br>
+                  <span style="color:#38bdf8;font-weight:700;">INNER JOIN </span><span style="color:#e2e8f0;">productos prod </span><span style="color:#38bdf8;font-weight:700;">ON </span><span style="color:#e2e8f0;">det.id_producto = prod.id_producto</span><br>
+                  <span style="color:#38bdf8;font-weight:700;">ORDER BY </span><span style="color:#e2e8f0;">ped.id_pedido ASC, det.id_detalle ASC;</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- ACCIÓN 5.3 -->
+            <div style="background:#ffffff;border:1px solid #e2e8f0;border-left:4px solid #ef4444;border-radius:8px;padding:10px 14px;display:flex;align-items:flex-start;gap:12px;">
+              <div style="background:#fef2f2;color:#ef4444;font-weight:800;font-size:12px;width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;">5.3</div>
+              <div style="flex:1;">
+                <div style="font-weight:800;font-size:12.5px;color:var(--texto-main);margin-bottom:2px;">Prueba 4.3: Demostración de Restricción CHECK (Líneas 201 a 204)</div>
+                <p style="font-size:11.5px;color:var(--texto-muted);margin:0 0 6px 0;line-height:1.5;">
+                  En la línea 203, borra los dos guiones iniciales <code>--</code> para descomentar la sentencia y presiona <kbd>Ctrl + Enter</kbd>:
+                </p>
+                <div style="background:#0f172a;color:#f8fafc;padding:8px 12px;border-radius:6px;font-family:'JetBrains Mono',monospace;font-size:11px;border:1px solid #1e293b;line-height:1.6;margin-bottom:6px;">
+                  <span style="color:#f43f5e;font-weight:700;">INSERT INTO </span><span style="color:#e2e8f0;">productos (sku, nombre, precio, stock, id_categoria) </span><span style="color:#f43f5e;font-weight:700;">VALUES </span><span style="color:#e2e8f0;">('ERR-001', 'Error', -500.00, 5, 1);</span>
+                </div>
+                <div style="background:#fee2e2;border:1px solid #fecaca;border-radius:4px;padding:6px 10px;font-size:11px;color:#991b1b;line-height:1.4;">
+                  <strong>Resultado esperado:</strong> MySQL arrojará el <code>Error 3819: Check constraint 'chk_producto_precio_positivo' is violated</code>. ¡Tu base de datos impidió que se vendieran productos con precio negativo! Tómale captura a esta pantalla roja para incluirla en tu informe <strong>AA2-EV02</strong>.
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- PÍLDORA DE VALIDACIÓN FINAL -->
+          <div style="background:#f0fdf4;border:1.5px solid #bbf7d0;border-left:4px solid var(--sena-verde);border-radius:8px;padding:12px 16px;margin-bottom:12px;box-shadow:0 1px 3px rgba(0,0,0,0.03);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+            <span style="display:inline-flex;align-items:center;gap:8px;font-size:12px;color:#166534;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+              <span><strong>¡Taller SQL de la Sesión 2 Completado al 100%!</strong> Has ejecutado el DDL, las restricciones de seguridad, el DML semilla y las consultas multi-tabla necesarias para las evidencias EV01, EV02 y EV03.</span>
+            </span>
+            <button onclick="cerrarModal()" style="background:var(--sena-verde);color:#fff;border:none;padding:6px 16px;border-radius:6px;font-size:11.5px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:6px;box-shadow:var(--shadow-sm);">
+              Finalizar Taller ✓
+            </button>
+          </div>
+        `
+      }
+    };
+
+    function abrirModalPaso(num) {
+      document.querySelectorAll('.step-card-btn').forEach((btn, idx) => {
+        btn.classList.toggle('active', idx + 1 === num);
+      });
+      const data = pasosData[num];
+      document.getElementById('modalPasoTitulo').textContent = data.titulo;
+      document.getElementById('modalPasoContenido').innerHTML = data.html;
+      document.getElementById('stepperModal').classList.add('active');
+    }
+
+    function abrirModalWorkbench() {
+      document.getElementById('modalPasoTitulo').textContent = "Manual Completo: Descarga, Instalación y Uso de MySQL Workbench";
+      document.getElementById('modalPasoContenido').innerHTML = `
+        <div style="margin-bottom:16px;background:#eff6ff;padding:12px;border-radius:8px;border:1px solid #bfdbfe;font-size:12.5px;color:#1e3a8a;">
+          <strong>Nota para el aprendiz:</strong> Este paso es <strong>opcional</strong>. Puedes realizar y entregar todas tus evidencias utilizando el IDE Antigravity / Extensión Database Client. Si deseas generar el diagrama EER visual para la evidencia EV02, sigue estos 4 pasos:
+        </div>
+
+        <h4 style="font-size:13.5px;color:var(--texto-main);margin:12px 0 6px;">1. Requisito Obligatorio: Microsoft Visual C++</h4>
+        <p>Workbench requiere las librerías oficiales de Microsoft. Descarga e instala primero este paquete:</p>
+        <p><a href="https://aka.ms/vs/17/release/vc_redist.x64.exe" target="_blank" rel="noopener noreferrer" style="color:#0284c7;font-weight:700;text-decoration:none;">Descargar Microsoft Visual C++ 2015-2022 Redistributable (x64) ↗</a></p>
+
+        <h4 style="font-size:13.5px;color:var(--texto-main);margin:16px 0 6px;">2. Descarga Oficial de MySQL Workbench Community</h4>
+        <p>Ingresa al portal de MySQL Community y haz clic en el botón inferior que dice <em>«No thanks, just start my download»</em>:</p>
+        <p><a href="https://dev.mysql.com/downloads/workbench/" target="_blank" rel="noopener noreferrer" style="color:var(--sena-verde-dark);font-weight:700;text-decoration:none;">Ir a Descargas Oficiales de MySQL Workbench ↗</a></p>
+
+        <h4 style="font-size:13.5px;color:var(--texto-main);margin:16px 0 6px;">3. Instalación y Conexión con XAMPP</h4>
+        <p>Abre el instalador <code>.msi</code>, elige la opción <strong>Complete</strong> y finaliza el asistente. Luego abre MySQL Workbench:</p>
+        <ul style="margin-left:18px;margin-bottom:10px;">
+          <li>Asegúrate de que <strong>MySQL de XAMPP esté iniciado (verde)</strong>.</li>
+          <li>En Workbench, haz clic en el ícono <code>[+]</code> junto a <strong>MySQL Connections</strong>.</li>
+          <li>Configura: Connection Name: <code>XAMPP Localhost</code> | Hostname: <code>127.0.0.1</code> | Port: <code>3306</code> | Username: <code>root</code> | Password: <em>(Dejar vacío)</em>.</li>
+          <li>Haz clic en <strong>Test Connection</strong> y guarda con <strong>OK</strong>.</li>
+        </ul>
+
+        <h4 style="font-size:13.5px;color:var(--texto-main);margin:16px 0 6px;">4. Generar Diagrama EER Automático (Para Evidencia EV02)</h4>
+        <p>Entra a la conexión, presiona <kbd>Ctrl + Shift + O</kbd>, abre <code>techstore_db_completo.sql</code> y ejecútalo con el botón <strong>Execute SQL Script</strong> (o <kbd>Ctrl + Shift + Enter</kbd>). Luego ve al menú superior <code>Database ➔ Reverse Engineer...</code> (o presiona <kbd>Ctrl + R</kbd>), selecciona <code>techstore_db</code> y haz clic en <strong>Finish</strong>. ¡Tu diagrama relacional visual aparecerá dibujado automáticamente!</p>
+      `;
+      document.getElementById('stepperModal').classList.add('active');
+    }
+
+    function cerrarModal() {
+      document.getElementById('stepperModal').classList.remove('active');
+    }
+
+    function cerrarModalAfuera(e) {
+      if (e.target.id === 'stepperModal') cerrarModal();
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('toastFeedback');
+      const toastMsg = document.getElementById('toastMsg');
+      toastMsg.textContent = msg;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 2500);
+    }
+
+    function copiarScriptCompleto(btn) {
+      const scriptCode = `-- =============================================================================
+-- PROYECTO FORMATIVO: TECHSTORE PRO REACT (SQL DDL & DML)
+-- FICHA: ADSO 3389010 VIRTUAL — GUÍA 6 (GA6-220501096-AA2-EV01..03)
+-- =============================================================================
+CREATE DATABASE IF NOT EXISTS techstore_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE techstore_db;
+
+CREATE TABLE roles (
+    id_rol INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(30) NOT NULL UNIQUE,
+    descripcion VARCHAR(150),
+    fecha_creacion DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB;
+
+CREATE TABLE usuarios (
+    id_usuario INT AUTO_INCREMENT PRIMARY KEY,
+    documento VARCHAR(20) NOT NULL UNIQUE,
+    nombres VARCHAR(60) NOT NULL,
+    apellidos VARCHAR(60) NOT NULL,
+    email VARCHAR(120) NOT NULL UNIQUE,
+    password_hash VARCHAR(255) NOT NULL,
+    id_rol INT NOT NULL DEFAULT 1,
+    estado ENUM('Activo', 'Inactivo', 'Bloqueado') NOT NULL DEFAULT 'Activo',
+    fecha_registro DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_usuarios_roles FOREIGN KEY (id_rol) REFERENCES roles(id_rol) ON DELETE RESTRICT ON UPDATE CASCADE
+) ENGINE=InnoDB;
+
+CREATE TABLE categorias (
+    id_categoria INT AUTO_INCREMENT PRIMARY KEY,
+    slug VARCHAR(60) NOT NULL UNIQUE,
+    nombre VARCHAR(60) NOT NULL UNIQUE,
+    descripcion TEXT,
+    activo BOOLEAN NOT NULL DEFAULT TRUE
+) ENGINE=InnoDB;
+
+CREATE TABLE productos (
+    id_producto INT AUTO_INCREMENT PRIMARY KEY,
+    sku VARCHAR(35) NOT NULL UNIQUE,
+    nombre VARCHAR(120) NOT NULL,
+    precio DECIMAL(12,2) NOT NULL,
+    stock INT NOT NULL DEFAULT 0,
+    id_categoria INT NOT NULL,
+    estado ENUM('Disponible', 'Agotado', 'Descontinuado') NOT NULL DEFAULT 'Disponible',
+    CONSTRAINT chk_producto_precio CHECK (precio > 0.00),
+    CONSTRAINT chk_producto_stock CHECK (stock >= 0),
+    CONSTRAINT fk_productos_categorias FOREIGN KEY (id_categoria) REFERENCES categorias(id_categoria) ON DELETE RESTRICT ON UPDATE CASCADE
+) ENGINE=InnoDB;
+
+CREATE TABLE pedidos (
+    id_pedido INT AUTO_INCREMENT PRIMARY KEY,
+    numero_orden VARCHAR(30) NOT NULL UNIQUE,
+    id_usuario INT NOT NULL,
+    fecha_pedido DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    total DECIMAL(14,2) NOT NULL DEFAULT 0.00,
+    estado ENUM('Pendiente', 'Pagado', 'Enviado', 'Entregado') NOT NULL DEFAULT 'Pendiente',
+    CONSTRAINT fk_pedidos_usuarios FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario) ON DELETE RESTRICT ON UPDATE CASCADE
+) ENGINE=InnoDB;
+
+CREATE TABLE detalle_pedidos (
+    id_detalle INT AUTO_INCREMENT PRIMARY KEY,
+    id_pedido INT NOT NULL,
+    id_producto INT NOT NULL,
+    cantidad INT NOT NULL DEFAULT 1,
+    precio_unitario DECIMAL(12,2) NOT NULL,
+    subtotal DECIMAL(14,2) GENERATED ALWAYS AS (cantidad * precio_unitario) STORED,
+    CONSTRAINT chk_cantidad CHECK (cantidad > 0),
+    CONSTRAINT fk_detalle_pedidos FOREIGN KEY (id_pedido) REFERENCES pedidos(id_pedido) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT fk_detalle_productos FOREIGN KEY (id_producto) REFERENCES productos(id_producto) ON DELETE RESTRICT ON UPDATE CASCADE
+) ENGINE=InnoDB;`;
+      navigator.clipboard.writeText(scriptCode).then(() => {
+        showToast('¡Script techstore_db_completo.sql copiado con éxito!');
+      });
+    }
+
+    function copiarConsulta(btn) {
+      const q = `SELECT ped.numero_orden, CONCAT(u.nombres, ' ', u.apellidos) AS cliente, prod.nombre AS producto, det.cantidad, det.subtotal FROM pedidos ped INNER JOIN usuarios u ON ped.id_usuario = u.id_usuario INNER JOIN detalle_pedidos det ON ped.id_pedido = det.id_pedido INNER JOIN productos prod ON det.id_producto = prod.id_producto ORDER BY ped.fecha_pedido DESC;`;
+      navigator.clipboard.writeText(q).then(() => {
+        showToast('¡Consulta SELECT INNER JOIN copiada con éxito!');
+      });
+    }
+
+    const ANALOGIAS_DATA = {
+      1: {
+        tag: "R1 (1 : N) — usuarios ➔ pedidos",
+        analogia: "El Cliente y sus Facturas del Supermercado",
+        icono: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#39a900" stroke-width="2.2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>`,
+        vidaReal: "Tú tienes una sola cédula de ciudadanía (Llave Primaria), pero puedes ir a comprar 10 veces en el año a TechStore Pro y salir con 10 facturas diferentes. Cada factura física tiene impresa tu cédula para saber a quién entregarle y a quién cobrarle.",
+        enSql: "CONSTRAINT fk_pedidos_usuarios FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario) ON DELETE RESTRICT",
+        beneficio: "¡Cero compras fantasmas! Ningún cajero puede emitir una orden de compra si el cliente no existe previamente registrado en el sistema."
+      },
+      2: {
+        tag: "R2 (1 : N) — categorias ➔ productos",
+        analogia: "Los Pasillos y Estanterías del Almacén",
+        icono: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0284c7" stroke-width="2.2"><rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/></svg>`,
+        vidaReal: "En el almacén hay un pasillo llamado 'Portátiles Gaming' (id_categoria = 1). Dentro de ese pasillo hay 30 computadores exhibidos. Un computador físico no puede estar partido a la mitad en dos pasillos a la vez; pertenece estrictamente a una categoría.",
+        enSql: "CONSTRAINT fk_productos_categorias FOREIGN KEY (id_categoria) REFERENCES categorias(id_categoria) ON DELETE RESTRICT",
+        beneficio: "¡Catálogo 100% organizado! Evita que existan productos 'flotando en el limbo' sin saber en qué sección del e-commerce o menú mostrarlos al comprador."
+      },
+      3: {
+        tag: "R3 (1 : N) — pedidos ➔ detalle_pedidos",
+        analogia: "La Factura y sus Renglones de Compra",
+        icono: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ea580c" stroke-width="2.2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" x2="8" y1="13" y2="13"/><line x1="16" x2="8" y1="17" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>`,
+        vidaReal: "La factura es la hoja completa con el total y la fecha. Pero dentro de la hoja hay 3 renglones: 1 mouse, 2 cables HDMI y 1 teclado. Si anulas o destruyes la compra completa, no tiene ningún sentido guardar renglones sueltos en el aire.",
+        enSql: "CONSTRAINT fk_det_pedidos FOREIGN KEY (id_pedido) REFERENCES pedidos(id_pedido) ON DELETE CASCADE",
+        beneficio: "¡Limpieza automática con CASCADE! Si una orden de prueba se elimina, MySQL borra al instante todos sus renglones asociados sin dejar basura en el disco."
+      },
+      4: {
+        tag: "R4 (1 : N) — productos ➔ detalle_pedidos",
+        analogia: "El Código de Barras en las Bolsas de Muchos Clientes",
+        icono: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" stroke-width="2.2"><rect width="20" height="12" x="2" y="6" rx="2"/><circle cx="12" cy="12" r="2"/><path d="M6 12h.01M18 12h.01"/></svg>`,
+        vidaReal: "En la bodega existe un solo ítem 'Mouse Logitech MX'. Hoy 15 personas distintas compraron ese mouse. En la tirilla de cada una de esas 15 personas se anota el mismo código de barras. No creamos 15 mouses en el catálogo, sino que referenciamos el mismo producto.",
+        enSql: "CONSTRAINT fk_det_productos FOREIGN KEY (id_producto) REFERENCES productos(id_producto) ON DELETE RESTRICT",
+        beneficio: "¡Cero redundancia! El precio y el nombre del producto se editan en un solo lugar (productos) y el cambio se refleja en todo el historial sin duplicar datos."
+      },
+      5: {
+        tag: "R5 (1 : 1) — pedidos ➔ transacciones",
+        analogia: "El Voucher de Aprobación del Datáfono / PSE",
+        icono: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2.2"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/></svg>`,
+        vidaReal: "Cuando pagas un pedido en línea por PSE o tarjeta, la pasarela bancaria emite un único comprobante de pago electrónico. No puedes pagar dos veces la misma compra ni usar el mismo comprobante bancario para llevarte dos pedidos gratis.",
+        enSql: "id_pedido INT UNIQUE NOT NULL + CONSTRAINT fk_trans_ped FOREIGN KEY (id_pedido) REFERENCES pedidos(id_pedido)",
+        beneficio: "¡Seguridad anti-fraude con UNIQUE! Protege a la tienda contra pagos duplicados o intentos de hackeo reciclando números de aprobación bancaria."
+      },
+      6: {
+        tag: "R6 (N : M Resuelta) — pedidos ⟷ productos",
+        analogia: "El Carrito Físico del Supermercado",
+        icono: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2.2"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>`,
+        vidaReal: "Un cliente echa al carrito 4 productos distintos, y ese mismo producto es comprado por cientos de personas al día. Para cruzar esto sin que la base de datos colapse, creamos la tabla intermedia detalle_pedidos como el 'carrito físico' que anota: [¿Qué pedido?] + [¿Qué producto?] + [¿Cuántas unidades?].",
+        enSql: "PRIMARY KEY (id_pedido, id_producto) + FKs compuestas hacia ambas tablas padre",
+        beneficio: "¡Resuelve la regla de la 1FN y 3FN! Elimina listas separadas por comas en las columnas y permite calcular subtotales y descontar stock automáticamente."
+      }
+    };
+
+    function mostrarAnalogia(id, btn) {
+      if (btn) {
+        document.querySelectorAll('.rel-tab-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+      }
+      const data = ANALOGIAS_DATA[id];
+      const container = document.getElementById('analogiaContainer');
+      if (!data || !container) return;
+
+      container.innerHTML = `
+        <div style="display:flex;align-items:flex-start;gap:16px;flex-wrap:wrap;">
+          <div style="width:46px;height:46px;border-radius:12px;background:#ffffff;border:1px solid var(--borde-light);display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:var(--shadow-sm);">
+            ${data.icono}
+          </div>
+          <div style="flex:1;min-width:260px;">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;flex-wrap:wrap;">
+              <span style="font-size:11px;font-weight:800;color:var(--sena-verde-dark);background:var(--sena-verde-bg);padding:2px 8px;border-radius:4px;border:1px solid var(--sena-verde-border);">${data.tag}</span>
+              <h4 style="font-size:14px;font-weight:800;color:var(--texto-main);margin:0;">${data.analogia}</h4>
+            </div>
+            <p style="font-size:12.5px;color:var(--texto-muted);line-height:1.55;margin-bottom:10px;">${data.vidaReal}</p>
+            
+            <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(260px, 1fr));gap:10px;">
+              <div style="background:#ffffff;border:1px solid var(--borde-light);border-left:3px solid var(--azul-tech);border-radius:6px;padding:8px 12px;">
+                <span style="font-size:10px;font-weight:800;color:var(--azul-tech);text-transform:uppercase;">En Código SQL Físico:</span>
+                <div style="font-family:'JetBrains Mono';font-size:11px;color:var(--texto-main);margin-top:2px;"><code>${data.enSql}</code></div>
+              </div>
+              <div style="background:#ffffff;border:1px solid var(--borde-light);border-left:3px solid var(--sena-verde);border-radius:6px;padding:8px 12px;">
+                <span style="font-size:10px;font-weight:800;color:var(--sena-verde-dark);text-transform:uppercase;">¿Qué Desastre Evita en la Tienda?</span>
+                <div style="font-size:11.5px;color:var(--texto-muted);margin-top:2px;">${data.beneficio}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function toggleChecklist(item) {
+      item.classList.toggle('checked');
+      const total = document.querySelectorAll('.checklist-item').length;
+      const checked = document.querySelectorAll('.checklist-item.checked').length;
+      const counter = document.getElementById('checklistCounter');
+      counter.textContent = `${checked} / ${total} Cumplidos`;
+      if (checked === total) {
+        counter.style.background = 'var(--sena-verde)';
+        counter.style.color = '#ffffff';
+        showToast('¡Felicitaciones! Has completado el 100% de la verificación para el Bloque SQL.');
+      } else {
+        counter.style.background = 'var(--sena-verde-bg)';
+        counter.style.color = 'var(--sena-verde-dark)';
+      }
+    }
+
+    function toggleSimuladorError1215() {
+      const box = document.getElementById('simuladorError1215');
+      if (box) {
+        box.style.display = (box.style.display === 'none' || box.style.display === '') ? 'block' : 'none';
+      }
+    }
+
+    function abrirModalImagen(src, title) {
+      document.getElementById('modalPasoTitulo').textContent = title;
+      document.getElementById('modalPasoContenido').innerHTML = `
+        <div style="text-align:center;">
+          <img src="${src}" style="max-width:100%;height:auto;border-radius:8px;border:1px solid var(--borde-light);box-shadow:0 8px 30px rgba(0,0,0,0.15);" alt="${title}">
+          <p style="margin-top:12px;font-size:12px;color:var(--texto-sub);">Esquema relacional genealógico de TechStore Pro exportado desde dbdiagram.io.</p>
+        </div>
+      `;
+      document.getElementById('stepperModal').classList.add('active');
+    }
+
+    // Inicializar primera analogía en Slide 2
+    document.addEventListener('DOMContentLoaded', () => {
+      mostrarAnalogia(1);
+    });
+    mostrarAnalogia(1);
+  </script>
 </body>
 </html>

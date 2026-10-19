@@ -1,0 +1,1456 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manual de Estudio — Sesión 2: SQL Completo (DDL & DML) | SENA ADSO 3389010</title>
+
+  <!-- Tipografías Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Outfit:wght@600;700;800&family=Syne:wght@700;800&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --sena-verde: #39a900;
+      --sena-verde-dark: #236b00;
+      --sena-verde-light: #52c41a;
+      --sena-verde-bg: #f0fdf4;
+      --sena-verde-border: #bbf7d0;
+
+      --sena-naranja: #ff6b00;
+      --sena-naranja-dark: #c2410c;
+      --sena-naranja-bg: #fff7ed;
+      --sena-naranja-border: #fed7aa;
+
+      --azul-tech: #0284c7;
+      --azul-tech-dark: #0369a1;
+      --azul-bg: #eff6ff;
+      --azul-border: #bfdbfe;
+
+      --bg-page: #f8fafc;
+      --bg-card: #ffffff;
+      --borde-light: #e2e8f0;
+      --borde-active: #cbd5e1;
+
+      --texto-main: #0f172a;
+      --texto-muted: #334155;
+      --texto-sub: #64748b;
+      --texto-dimmer: #94a3b8;
+
+      --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.04);
+      --shadow-md: 0 4px 14px rgba(0, 0, 0, 0.05);
+      --shadow-card: 0 10px 30px -10px rgba(15, 23, 42, 0.06);
+
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 18px;
+    }
+
+    * { margin:0; padding:0; box-sizing:border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: var(--bg-page);
+      color: var(--texto-main);
+      line-height: 1.65;
+      overflow-x: hidden;
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* Backdrop para Móviles */
+    .sidebar-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.5);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      z-index: 1099;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+    }
+    .sidebar-backdrop.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    /* Barra de Progreso Superior */
+    .progress-bar-top {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 3.5px;
+      background: linear-gradient(90deg, var(--sena-naranja), var(--sena-verde));
+      z-index: 2000;
+      width: 0%;
+      transition: width 0.1s ease;
+    }
+
+    /* Botón Flotante Reactivo Móvil */
+    .floating-sidebar-toggle {
+      position: fixed;
+      top: 14px;
+      left: 14px;
+      z-index: 1050;
+      background: #ffffff;
+      border: 1px solid var(--borde-active);
+      color: var(--texto-main);
+      height: 38px;
+      padding: 0 14px;
+      border-radius: 10px;
+      box-shadow: var(--shadow-md);
+      display: none;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      font-family: 'Outfit', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      transition: all 0.2s ease;
+    }
+    .floating-sidebar-toggle:hover {
+      border-color: var(--sena-verde);
+      color: var(--sena-verde-dark);
+    }
+
+    /* ==========================================================
+       SIDEBAR UNIFICADO OFICIAL SENA (PATRÓN SESIÓN 1)
+       ========================================================== */
+    .sidebar {
+      width: 290px;
+      min-width: 290px;
+      height: 100vh;
+      position: sticky;
+      top: 0;
+      background: #ffffff;
+      border-right: 1px solid #e2e8f0;
+      display: flex;
+      flex-direction: column;
+      z-index: 1000;
+      box-shadow: 2px 0 20px rgba(15, 23, 42, 0.04);
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .sidebar-header {
+      padding: 20px 18px;
+      border-bottom: 1px solid var(--borde-light);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .sena-logo-box {
+      width: 40px;
+      height: 40px;
+      background: var(--sena-verde);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+      flex-shrink: 0;
+      box-shadow: 0 4px 10px rgba(57, 169, 0, 0.25);
+    }
+
+    .sidebar-header-info h2 {
+      font-family: 'Syne', sans-serif;
+      font-size: 13.5px;
+      font-weight: 800;
+      color: var(--texto-main);
+      line-height: 1.2;
+    }
+
+    .sidebar-header-info p {
+      font-size: 11px;
+      color: var(--texto-sub);
+      font-weight: 600;
+    }
+
+    .sidebar-scroll {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px 12px;
+    }
+
+    .nav-group-label {
+      font-size: 9.5px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--texto-dimmer);
+      padding: 0 10px 8px;
+      margin-top: 14px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .nav-group-label:first-child { margin-top: 0; }
+
+    .nav-item-link {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 12px;
+      border-radius: var(--radius-sm);
+      color: #475569;
+      text-decoration: none;
+      font-size: 12px;
+      font-weight: 600;
+      transition: all 0.2s ease;
+      position: relative;
+      margin-bottom: 3px;
+    }
+
+    .nav-item-link:hover {
+      background: #f1f5f9;
+      color: var(--texto-main);
+    }
+
+    .nav-item-link.active {
+      background: rgba(57, 169, 0, 0.1);
+      color: var(--sena-verde-dark);
+      font-weight: 700;
+    }
+
+    .nav-item-link.active::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 6px;
+      bottom: 6px;
+      width: 3.5px;
+      background: var(--sena-verde);
+      border-radius: 0 4px 4px 0;
+    }
+
+    .sidebar-footer {
+      padding: 14px 16px;
+      border-top: 1px solid var(--borde-light);
+      background: #f8fafc;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .sidebar-corte-badge {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--sena-naranja-bg);
+      border: 1px solid var(--sena-naranja-border);
+      padding: 6px 10px;
+      border-radius: var(--radius-sm);
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--sena-naranja-dark);
+    }
+
+    .btn-sidebar-return {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background: #ffffff;
+      border: 1px solid var(--borde-active);
+      color: var(--texto-muted);
+      text-decoration: none;
+      font-size: 11.5px;
+      font-weight: 700;
+      padding: 8px 12px;
+      border-radius: var(--radius-sm);
+      transition: all 0.2s ease;
+    }
+
+    .btn-sidebar-return:hover {
+      background: #f1f5f9;
+      color: var(--texto-main);
+      border-color: #94a3b8;
+    }
+
+    /* ==========================================================
+       ÁREA DE CONTENIDO PRINCIPAL (.main-content)
+       ========================================================== */
+    .main-content {
+      flex: 1;
+      min-width: 0;
+      padding: 40px 48px 80px;
+      max-width: 1040px;
+      margin: 0 auto;
+    }
+
+    .doc-header-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--sena-naranja-bg);
+      border: 1px solid var(--sena-naranja-border);
+      padding: 5px 14px;
+      border-radius: 30px;
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--sena-naranja-dark);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 14px;
+    }
+
+    .doc-main-title {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(26px, 3.8vw, 38px);
+      font-weight: 800;
+      color: var(--texto-main);
+      line-height: 1.2;
+      margin-bottom: 12px;
+      letter-spacing: -0.5px;
+    }
+
+    .doc-main-desc {
+      font-size: 15.5px;
+      color: var(--texto-muted);
+      margin-bottom: 24px;
+      line-height: 1.6;
+    }
+
+    /* Meta Panel de Ficha */
+    .doc-meta-card {
+      background: #ffffff;
+      border: 1px solid var(--borde-light);
+      border-radius: var(--radius-md);
+      padding: 16px 20px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 14px;
+      margin-bottom: 36px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .meta-item-label {
+      font-size: 10.5px;
+      font-weight: 800;
+      text-transform: uppercase;
+      color: var(--texto-sub);
+      margin-bottom: 2px;
+    }
+
+    .meta-item-value {
+      font-size: 12.5px;
+      font-weight: 700;
+      color: var(--texto-main);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Secciones del Documento */
+    .doc-section {
+      margin-bottom: 48px;
+      scroll-margin-top: 40px;
+    }
+
+    .sec-h2 {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(20px, 2.5vw, 26px);
+      font-weight: 800;
+      color: var(--texto-main);
+      margin-bottom: 16px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--borde-light);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .sec-h3 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 16.5px;
+      font-weight: 700;
+      color: var(--texto-main);
+      margin: 20px 0 10px;
+    }
+
+    .doc-p {
+      font-size: 14px;
+      color: var(--texto-muted);
+      line-height: 1.65;
+      margin-bottom: 14px;
+    }
+
+    /* Callouts y Cajas Informativas */
+    .callout-box {
+      border-radius: var(--radius-md);
+      padding: 16px 20px;
+      margin: 18px 0;
+      border: 1px solid transparent;
+      display: flex;
+      gap: 14px;
+      font-size: 13.5px;
+      line-height: 1.6;
+    }
+
+    .callout-box.info {
+      background: var(--azul-bg);
+      border-color: var(--azul-border);
+      color: var(--azul-tech-dark);
+    }
+
+    .callout-box.warning {
+      background: var(--sena-naranja-bg);
+      border-color: var(--sena-naranja-border);
+      color: var(--sena-naranja-dark);
+    }
+
+    .callout-box.success {
+      background: var(--sena-verde-bg);
+      border-color: var(--sena-verde-border);
+      color: var(--sena-verde-dark);
+    }
+
+    /* Tablas Estructuradas Responsivas */
+    .table-card {
+      background: #ffffff;
+      border: 1px solid var(--borde-light);
+      border-radius: var(--radius-md);
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      margin: 20px 0;
+      box-shadow: var(--shadow-sm);
+      width: 100%;
+    }
+
+    .doc-table {
+      width: 100%;
+      min-width: 640px;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 13px;
+    }
+
+    .doc-table th {
+      background: #f8fafc;
+      padding: 12px 16px;
+      font-weight: 700;
+      color: var(--texto-main);
+      border-bottom: 2px solid var(--borde-light);
+      text-transform: uppercase;
+      font-size: 11px;
+      letter-spacing: 0.5px;
+    }
+
+    .doc-table td {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--borde-light);
+      color: var(--texto-muted);
+      vertical-align: middle;
+    }
+
+    .doc-table tr:last-child td { border-bottom: none; }
+    .doc-table tr:hover td { background: #fbfcfe; }
+
+    /* Cajas de Código Copiables Tipo IDE */
+    .codebox-container {
+      background: #1e1e2e;
+      border-radius: var(--radius-md);
+      border: 1px solid #313244;
+      margin: 18px 0;
+      overflow: hidden;
+      box-shadow: 0 10px 24px rgba(0,0,0,0.2);
+    }
+
+    .codebox-topbar {
+      background: #181825;
+      padding: 8px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid #313244;
+    }
+
+    .codebox-title {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 700;
+      color: #a6adc8;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .codebox-copy-btn {
+      background: #313244;
+      border: 1px solid #45475a;
+      color: #cdd6f4;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+    }
+
+    .codebox-copy-btn:hover {
+      background: var(--sena-verde);
+      border-color: var(--sena-verde);
+      color: #ffffff;
+    }
+
+    .codebox-pre {
+      padding: 16px;
+      overflow-x: auto;
+      font-family: 'JetBrains Mono', Consolas, monospace;
+      font-size: 12.5px;
+      color: #cdd6f4;
+      line-height: 1.6;
+    }
+
+    /* Checklist Interactivo */
+    .checklist-wrapper {
+      background: #ffffff;
+      border: 1px solid var(--borde-light);
+      border-radius: var(--radius-md);
+      padding: 20px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .checklist-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--borde-light);
+    }
+
+    .checklist-counter {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      font-weight: 700;
+      background: var(--sena-verde-bg);
+      color: var(--sena-verde-dark);
+      padding: 4px 10px;
+      border-radius: 20px;
+      border: 1px solid var(--sena-verde-border);
+    }
+
+    .checklist-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 10px 12px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: background 0.2s ease;
+      margin-bottom: 6px;
+      border: 1px solid transparent;
+    }
+
+    .checklist-item:hover {
+      background: #f8fafc;
+      border-color: var(--borde-light);
+    }
+
+    .checklist-item.checked {
+      background: var(--sena-verde-bg);
+      border-color: var(--sena-verde-border);
+    }
+
+    .check-box-icon {
+      width: 18px;
+      height: 18px;
+      border-radius: 5px;
+      border: 2px solid #cbd5e1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 2px;
+      transition: all 0.2s ease;
+      background: #ffffff;
+    }
+
+    .checklist-item.checked .check-box-icon {
+      background: var(--sena-verde);
+      border-color: var(--sena-verde);
+      color: #ffffff;
+    }
+
+    .checklist-text h4 {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--texto-main);
+      margin-bottom: 2px;
+    }
+
+    .checklist-text p {
+      font-size: 12px;
+      color: var(--texto-sub);
+      line-height: 1.45;
+    }
+
+    /* Toast Flotante */
+    .toast-feedback {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: #0f172a;
+      color: #ffffff;
+      padding: 10px 18px;
+      border-radius: 10px;
+      font-size: 12.5px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+      transform: translateY(80px);
+      opacity: 0;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: 3000;
+    }
+
+    .toast-feedback.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    /* ==========================================================
+       RESPONSIVIDAD MULTIDISPOSITIVO (MÓVIL / TABLET)
+       ========================================================== */
+    @media (max-width: 1024px) {
+      .sidebar {
+        position: fixed;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        transform: translateX(-100%);
+        z-index: 1200;
+      }
+      .sidebar.mobile-open {
+        transform: translateX(0);
+        box-shadow: 10px 0 35px rgba(0, 0, 0, 0.25);
+      }
+      .floating-sidebar-toggle {
+        display: inline-flex;
+      }
+      .main-content {
+        padding: 60px 24px 60px;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .main-content {
+        padding: 56px 16px 50px;
+      }
+      .doc-meta-card {
+        grid-template-columns: 1fr;
+      }
+      .doc-main-title {
+        font-size: clamp(22px, 6vw, 28px);
+      }
+      .sec-h2 {
+        font-size: 19px;
+      }
+      .callout-box {
+        flex-direction: column;
+        gap: 8px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- BARRA DE PROGRESO SUPERIOR -->
+  <div class="progress-bar-top" id="progressBar"></div>
+
+  <!-- TELÓN OVERLAY MÓVIL -->
+  <div class="sidebar-backdrop" id="sidebarBackdrop" onclick="toggleSidebar()"></div>
+
+  <!-- BOTÓN FLOTANTE MÓVIL -->
+  <button class="floating-sidebar-toggle" id="floatingToggle" onclick="toggleSidebar()" aria-label="Abrir Menú de Contenidos">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="3" x2="21" y1="6" y2="6"/><line x1="3" x2="21" y1="12" y2="12"/><line x1="3" x2="21" y1="18" y2="18"/></svg>
+    <span>Contenido del Manual</span>
+  </button>
+
+  <!-- SIDEBAR INSTITUCIONAL OFICIAL (PATRÓN SESIÓN 1) -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="sena-logo-box" title="Servicio Nacional de Aprendizaje SENA">
+        <svg width="24" height="24" viewBox="0 0 64 62" fill="currentColor">
+          <path d="M32 0C28.2 0 25.1 3.1 25.1 6.9C25.1 10.7 28.2 13.8 32 13.8C35.8 13.8 38.9 10.7 38.9 6.9C38.9 3.1 35.8 0 32 0ZM32 16.2C23.2 16.2 16.2 23.2 16.2 32C16.2 40.8 23.2 47.8 32 47.8C40.8 47.8 47.8 40.8 47.8 32C47.8 23.2 40.8 16.2 32 16.2ZM32 20.8C38.2 20.8 43.2 25.8 43.2 32C43.2 38.2 38.2 43.2 32 43.2C25.8 43.2 20.8 38.2 20.8 32C20.8 25.8 25.8 20.8 32 20.8ZM8.5 28.5L0 47.8H9.8L12.5 41.5H20.2L8.5 28.5ZM55.5 28.5L43.8 41.5H51.5L54.2 47.8H64L55.5 28.5ZM26.2 50.8L21.5 61.5H29.8L32 56.5L34.2 61.5H42.5L37.8 50.8H26.2Z"/>
+        </svg>
+      </div>
+      <div class="sidebar-header-info">
+        <h2>ADSO 3389010</h2>
+        <p>Manual — Sesión 2: SQL DDL/DML</p>
+      </div>
+    </div>
+
+    <nav class="sidebar-scroll">
+      <div class="nav-group-label">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><line x1="3" x2="21" y1="9" y2="9"/><line x1="9" x2="9" y1="21" y2="9"/></svg>
+        <span>Contenido Temático</span>
+      </div>
+      <a href="#sec-1" class="nav-item-link active" data-sec="sec-1">
+        <span>1. Introducción: DDL vs DML</span>
+      </a>
+      <a href="#sec-2" class="nav-item-link" data-sec="sec-2">
+        <span>2. Sentencias DDL Esenciales</span>
+      </a>
+      <a href="#sec-3" class="nav-item-link" data-sec="sec-3">
+        <span>3. Restricciones de Integridad</span>
+      </a>
+      <a href="#sec-4" class="nav-item-link" data-sec="sec-4">
+        <span>4. Caso TechStore Pro React</span>
+      </a>
+      <a href="#sec-5" class="nav-item-link" data-sec="sec-5">
+        <span>5. Manipulación Transaccional DML</span>
+      </a>
+      <a href="#sec-6" class="nav-item-link" data-sec="sec-6">
+        <span>6. Matriz de Errores Comunes</span>
+      </a>
+
+      <div class="nav-group-label" style="margin-top:16px;">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg>
+        <span>Evidencias & Alistamiento</span>
+      </div>
+      <a href="#sec-7" class="nav-item-link" data-sec="sec-7">
+        <span>7. Rúbricas Oficiales Zajuna</span>
+      </a>
+      <a href="#sec-8" class="nav-item-link" data-sec="sec-8">
+        <span>8. Checklist del Aprendiz (100%)</span>
+      </a>
+      <a href="#sec-9" class="nav-item-link" data-sec="sec-9">
+        <span>9. Anexo: Guía Completa Workbench</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="sidebar-corte-badge">
+        <span style="display:inline-flex;align-items:center;gap:6px;"><svg width="9" height="9" viewBox="0 0 24 24" fill="#ea580c"><circle cx="12" cy="12" r="10"/></svg> Corte 1 (Bases de Datos)</span>
+        <span>25 / Oct</span>
+      </div>
+      <a href="../explorar.html" class="btn-sidebar-return">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+        Volver al Hub
+      </a>
+      <a href="https://julianon2.github.io/seguimiento-adso-3389010/" target="_blank" class="btn-sidebar-return" style="background:#eff6ff;color:#0284c7;border-color:#bfdbfe;">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg>
+        Dashboard en Vivo ↗
+      </a>
+    </div>
+  </aside>
+
+  <!-- CONTENIDO DEL MANUAL -->
+  <main class="main-content">
+
+    <div class="doc-header-pill">
+      GUÍA DE APRENDIZAJE 6 (GA6-220501096) — SESIÓN 2
+    </div>
+
+    <h1 class="doc-main-title">
+      Manual de Estudio: Implementación Física Relacional (SQL DDL & DML)
+    </h1>
+
+    <p class="doc-main-desc">
+      Guía técnica y pedagógica para la creación, parametrización y manipulación de bases de datos relacionales en MySQL Workbench, aplicando restricciones de integridad estricta para el proyecto formativo <strong>TechStore Pro React</strong>.
+    </p>
+
+    <div class="doc-meta-card">
+      <div>
+        <div class="meta-item-label">Competencia</div>
+        <div class="meta-item-value">220501096 (Construcción Software)</div>
+      </div>
+      <div>
+        <div class="meta-item-label">Resultado de Aprendizaje</div>
+        <div class="meta-item-value">RAP 220501096-02 (Bases de Datos)</div>
+      </div>
+      <div>
+        <div class="meta-item-label">Evidencias Cubiertas</div>
+        <div class="meta-item-value">AA2-EV01, AA2-EV02, AA2-EV03</div>
+      </div>
+      <div>
+        <div class="meta-item-label">Corte de Entrega Zajuna</div>
+        <div class="meta-item-value" style="color:var(--sena-naranja-dark);">Domingo 25 de Octubre de 2026</div>
+      </div>
+    </div>
+
+    <!-- SECCIÓN 1: DDL VS DML -->
+    <section id="sec-1" class="doc-section">
+      <h2 class="sec-h2">1. Introducción al Lenguaje SQL: Arquitectura DDL vs DML</h2>
+      <p class="doc-p">
+        El lenguaje estándar <strong>SQL (Structured Query Language)</strong> se estructura en dos subconjuntos fundamentales para garantizar la separación de responsabilidades entre la arquitectura física del almacén de datos y la gestión transaccional de registros:
+      </p>
+
+      <div class="table-card">
+        <table class="doc-table">
+          <thead>
+            <tr>
+              <th>Subconjunto</th>
+              <th>Propósito Central</th>
+              <th>Sentencias Clave</th>
+              <th>Impacto en el SGBD</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>DDL (Data Definition Language)</strong></td>
+              <td>Crea, altera y elimina metadatos y estructuras físicas (tablas, columnas, restricciones, esquemas).</td>
+              <td><code>CREATE</code>, <code>ALTER</code>, <code>DROP</code>, <code>TRUNCATE</code></td>
+              <td>Afecta el catálogo del sistema. Es auto-commit (no reversible por rollback tradicional).</td>
+            </tr>
+            <tr>
+              <td><strong>DML (Data Manipulation Language)</strong></td>
+              <td>Inserta, consulta, modifica y elimina los datos alojados en las filas de las tablas.</td>
+              <td><code>INSERT</code>, <code>SELECT</code>, <code>UPDATE</code>, <code>DELETE</code></td>
+              <td>Opera dentro de transacciones ACID (`COMMIT` / `ROLLBACK`).</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout-box info">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="16" y2="12"/><line x1="12" x2="12.01" y1="8" y2="8"/></svg>
+        <div>
+          <strong>Regla de Oro de la Arquitectura DDL:</strong> Siempre debes crear primero las tablas maestras o padres (aquellas que no tienen llaves foráneas, ej: <code>roles</code>, <code>categorias</code>) antes de crear las tablas hijas dependientes (ej: <code>usuarios</code>, <code>productos</code>, <code>pedidos</code>). Intentar crear una FK hacia una tabla inexistente provocará el error de MySQL <code>Error Code: 1215 - Cannot add foreign key constraint</code>.
+        </div>
+      </div>
+    </section>
+
+    <!-- SECCIÓN 2: SENTENCIAS DDL -->
+    <section id="sec-2" class="doc-section">
+      <h2 class="sec-h2">2. Sentencias DDL Esenciales en MySQL</h2>
+      <p class="doc-p">
+        A continuación se detallan las sentencias fundamentales para crear y gobernar la base de datos con codificación internacional completa:
+      </p>
+
+      <h3 class="sec-h3">2.1. Creación del Schema con UTF8MB4</h3>
+      <p class="doc-p">
+        La codificación <code>utf8mb4</code> es el estándar actual en el desarrollo web profesional, pues admite caracteres especiales, acentos y emojis en 4 bytes:
+      </p>
+
+      <div class="codebox-container">
+        <div class="codebox-topbar">
+          <span class="codebox-title">sql/01_crear_schema.sql</span>
+          <button class="codebox-copy-btn" onclick="copiarCodigo(this)">Copiar</button>
+        </div>
+        <pre class="codebox-pre"><code>-- Crear base de datos si no existe con codificación moderna
+CREATE DATABASE IF NOT EXISTS techstore_db
+    CHARACTER SET utf8mb4
+    COLLATE utf8mb4_unicode_ci;
+
+-- Seleccionar la base de datos para trabajar
+USE techstore_db;</code></pre>
+      </div>
+
+      <h3 class="sec-h3">2.2. Modificación de Estructura con ALTER TABLE</h3>
+      <p class="doc-p">
+        Permite alterar columnas, tipos de datos o agregar restricciones a tablas que ya contienen información sin necesidad de recrearlas:
+      </p>
+
+      <div class="codebox-container">
+        <div class="codebox-topbar">
+          <span class="codebox-title">sql/02_alter_table.sql</span>
+          <button class="codebox-copy-btn" onclick="copiarCodigo(this)">Copiar</button>
+        </div>
+        <pre class="codebox-pre"><code>-- Agregar una columna con posición controlada
+ALTER TABLE usuarios 
+ADD COLUMN telefono VARCHAR(20) NULL AFTER email;
+
+-- Modificar el tipo de dato o nulabilidad
+ALTER TABLE usuarios 
+MODIFY COLUMN nombres VARCHAR(70) NOT NULL;
+
+-- Agregar una restricción UNIQUE nombrada
+ALTER TABLE usuarios 
+ADD CONSTRAINT uq_usuario_documento UNIQUE (documento);</code></pre>
+      </div>
+    </section>
+
+    <!-- SECCIÓN 3: RESTRICCIONES DE INTEGRIDAD -->
+    <section id="sec-3" class="doc-section">
+      <h2 class="sec-h2">3. Restricciones de Integridad (Constraints) en Motores Relacionales</h2>
+      <p class="doc-p">
+        Las restricciones son las reglas de negocio codificadas a nivel del motor relacional. Evitan la corrupción de datos incluso si el aplicativo Front-End o Back-End falla:
+      </p>
+
+      <div class="table-card">
+        <table class="doc-table">
+          <thead>
+            <tr>
+              <th>Restricción</th>
+              <th>Función Técnica</th>
+              <th>Ejemplo de Negocio en TechStore Pro</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>PRIMARY KEY (PK)</code></td>
+              <td>Identificador único no nulo que crea un índice clustered físico.</td>
+              <td><code>id_producto INT AUTO_INCREMENT PRIMARY KEY</code></td>
+            </tr>
+            <tr>
+              <td><code>FOREIGN KEY (FK)</code></td>
+              <td>Establece relación de dependencia referencial con la PK de otra tabla.</td>
+              <td><code>FOREIGN KEY (id_categoria) REFERENCES categorias(id_categoria)</code></td>
+            </tr>
+            <tr>
+              <td><code>UNIQUE</code></td>
+              <td>Impide duplicidad de valores en una columna distinta de la PK.</td>
+              <td><code>sku VARCHAR(35) NOT NULL UNIQUE</code>, <code>email UNIQUE</code></td>
+            </tr>
+            <tr>
+              <td><code>CHECK</code></td>
+              <td>Valida una expresión booleana antes de aceptar la fila.</td>
+              <td><code>CONSTRAINT chk_precio CHECK (precio > 0.00)</code></td>
+            </tr>
+            <tr>
+              <td><code>NOT NULL</code></td>
+              <td>Exige que la celda tenga un valor asignado (sin estados vacíos).</td>
+              <td><code>nombre VARCHAR(120) NOT NULL</code></td>
+            </tr>
+            <tr>
+              <td><code>DEFAULT</code></td>
+              <td>Inyecta un valor automático si el cliente no lo especifica.</td>
+              <td><code>stock INT DEFAULT 0</code>, <code>fecha DEFAULT CURRENT_TIMESTAMP</code></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 class="sec-h3">3.1. Acciones Referenciales: ON DELETE CASCADE vs RESTRICT</h3>
+      <div class="callout-box warning">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" x2="12" y1="9" y2="13"/><line x1="12" x2="12.01" y1="17" y2="17"/></svg>
+        <div>
+          <strong>Criterio de Arquitectura en Producción:</strong>
+          <br>• Usa <code>ON DELETE CASCADE</code> exclusivamente en relaciones donde el registro hijo no tiene sentido sin el padre (ej: borrar una orden elimina automáticamente sus renglones en <code>detalle_pedidos</code>).
+          <br>• Usa <code>ON DELETE RESTRICT</code> en tablas maestras críticas (ej: impedir borrar una <code>categoria</code> si aún existen <code>productos</code> vinculados a ella).
+        </div>
+      </div>
+    </section>
+
+    <!-- SECCIÓN 4: TECHSTORE PRO CASO COMPLETO -->
+    <section id="sec-4" class="doc-section">
+      <h2 class="sec-h2">4. Caso Práctico TechStore Pro React: Estructura Completa</h2>
+      <p class="doc-p">
+        Script DDL profesional y probado que implementa las 6 tablas relacionales del proyecto formativo:
+      </p>
+
+      <div class="codebox-container">
+        <div class="codebox-topbar">
+          <span class="codebox-title">sql/techstore_db_completo.sql</span>
+          <button class="codebox-copy-btn" onclick="copiarCodigo(this)">Copiar Script</button>
+        </div>
+        <pre class="codebox-pre"><code>-- Tabla Categorías
+CREATE TABLE categorias (
+    id_categoria INT AUTO_INCREMENT PRIMARY KEY,
+    slug VARCHAR(60) NOT NULL UNIQUE,
+    nombre VARCHAR(60) NOT NULL UNIQUE,
+    descripcion TEXT,
+    activo BOOLEAN NOT NULL DEFAULT TRUE
+) ENGINE=InnoDB;
+
+-- Tabla Productos con Llave Foránea y Restricción CHECK
+CREATE TABLE productos (
+    id_producto INT AUTO_INCREMENT PRIMARY KEY,
+    sku VARCHAR(35) NOT NULL UNIQUE,
+    nombre VARCHAR(120) NOT NULL,
+    precio DECIMAL(12,2) NOT NULL,
+    stock INT NOT NULL DEFAULT 0,
+    id_categoria INT NOT NULL,
+    estado ENUM('Disponible', 'Agotado', 'Descontinuado') NOT NULL DEFAULT 'Disponible',
+    CONSTRAINT chk_precio_positivo CHECK (precio > 0.00),
+    CONSTRAINT chk_stock_valido CHECK (stock >= 0),
+    CONSTRAINT fk_productos_categorias
+        FOREIGN KEY (id_categoria) REFERENCES categorias(id_categoria)
+        ON DELETE RESTRICT ON UPDATE CASCADE
+) ENGINE=InnoDB;
+
+-- Tabla Pedidos (Cabecera)
+CREATE TABLE pedidos (
+    id_pedido INT AUTO_INCREMENT PRIMARY KEY,
+    numero_orden VARCHAR(30) NOT NULL UNIQUE,
+    id_usuario INT NOT NULL,
+    fecha_pedido DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    total DECIMAL(14,2) NOT NULL DEFAULT 0.00,
+    estado ENUM('Pendiente', 'Pagado', 'Enviado', 'Entregado') DEFAULT 'Pendiente',
+    CONSTRAINT fk_pedidos_usuarios
+        FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario)
+        ON DELETE RESTRICT ON UPDATE CASCADE
+) ENGINE=InnoDB;
+
+-- Tabla Detalle de Pedidos (N:M con cálculo de subtotal)
+CREATE TABLE detalle_pedidos (
+    id_detalle INT AUTO_INCREMENT PRIMARY KEY,
+    id_pedido INT NOT NULL,
+    id_producto INT NOT NULL,
+    cantidad INT NOT NULL DEFAULT 1,
+    precio_unitario DECIMAL(12,2) NOT NULL,
+    subtotal DECIMAL(14,2) GENERATED ALWAYS AS (cantidad * precio_unitario) STORED,
+    CONSTRAINT chk_cantidad_minima CHECK (cantidad > 0),
+    CONSTRAINT fk_detalle_pedidos
+        FOREIGN KEY (id_pedido) REFERENCES pedidos(id_pedido)
+        ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT fk_detalle_productos
+        FOREIGN KEY (id_producto) REFERENCES productos(id_producto)
+        ON DELETE RESTRICT ON UPDATE CASCADE
+) ENGINE=InnoDB;</code></pre>
+      </div>
+    </section>
+
+    <!-- SECCIÓN 5: DML TRANSACCIONAL -->
+    <section id="sec-5" class="doc-section">
+      <h2 class="sec-h2">5. Manipulación Transaccional DML (INSERT, SELECT, UPDATE, DELETE)</h2>
+      <p class="doc-p">
+        Una vez levantada la estructura física, procedemos a poblar datos semilla y consultar la base de datos:
+      </p>
+
+      <h3 class="sec-h3">5.1. Consulta Multitabla con INNER JOIN</h3>
+      <p class="doc-p">
+        Permite consolidar la información normalizada en reportes legibles para el usuario o la API en Node.js/Express:
+      </p>
+
+      <div class="codebox-container">
+        <div class="codebox-topbar">
+          <span class="codebox-title">sql/03_select_inner_join.sql</span>
+          <button class="codebox-copy-btn" onclick="copiarCodigo(this)">Copiar</button>
+        </div>
+        <pre class="codebox-pre"><code>-- Consulta de Órdenes detalladas con datos de Cliente y Producto
+SELECT 
+    ped.numero_orden,
+    CONCAT(u.nombres, ' ', u.apellidos) AS cliente,
+    prod.nombre AS item_comprado,
+    det.cantidad,
+    det.precio_unitario,
+    det.subtotal,
+    ped.estado AS estado_orden
+FROM pedidos ped
+INNER JOIN usuarios u ON ped.id_usuario = u.id_usuario
+INNER JOIN detalle_pedidos det ON ped.id_pedido = det.id_pedido
+INNER JOIN productos prod ON det.id_producto = prod.id_producto
+ORDER BY ped.fecha_pedido DESC;</code></pre>
+      </div>
+
+      <h3 class="sec-h3">5.2. Actualizaciones y Eliminaciones Seguras</h3>
+      <div class="callout-box warning">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" x2="12" y1="9" y2="13"/><line x1="12" x2="12.01" y1="17" y2="17"/></svg>
+        <div>
+          <strong>Alerta de Seguridad en Producción:</strong> Jamás ejecutes una sentencia <code>UPDATE</code> o <code>DELETE</code> sin la cláusula <code>WHERE</code> filtrada por la clave primaria (`PRIMARY KEY`). Omitir el `WHERE` afectará o destruirá todas las filas de la tabla de forma irreversible.
+        </div>
+      </div>
+    </section>
+
+    <!-- SECCIÓN 6: MATRIZ DE ERRORES COMUNES -->
+    <section id="sec-6" class="doc-section">
+      <h2 class="sec-h2">6. Matriz de Errores Técnicos Frecuentes y Cómo Prevenirlos</h2>
+      
+      <div class="table-card">
+        <table class="doc-table">
+          <thead>
+            <tr>
+              <th>Error Técnico / Síntoma</th>
+              <th>Causa Raíz</th>
+              <th>Solución Estándar Aplicada</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>Error Code: 1215 - Cannot add FK</code></td>
+              <td>Incompatibilidad de tipos entre la PK padre y la FK hija (ej: <code>INT</code> vs <code>BIGINT</code> o <code>UNSIGNED</code> desigual).</td>
+              <td>Asegurar que la columna foránea tenga exactamente el mismo tipo de dato y signo que la llave primaria.</td>
+            </tr>
+            <tr>
+              <td><code>Error Code: 3819 - Check violated</code></td>
+              <td>El valor a insertar no satisface la regla matemática (ej. precio negativo o stock < 0).</td>
+              <td>Validar los datos en el aplicativo antes de enviar la sentencia `INSERT`/`UPDATE`.</td>
+            </tr>
+            <tr>
+              <td><code>Error Code: 1451 - Cannot delete row</code></td>
+              <td>Se intenta borrar una fila padre con `ON DELETE RESTRICT` que todavía tiene hijos asociados.</td>
+              <td>Eliminar o reasignar primero los registros hijos antes de suprimir el registro padre.</td>
+            </tr>
+            <tr>
+              <td>Pérdida de acentos o caracteres '??'</td>
+              <td>Base de datos creada con `latin1` o `utf8` de 3 bytes obsoleto.</td>
+              <td>Usar siempre <code>utf8mb4</code> con cotejamiento <code>utf8mb4_unicode_ci</code>.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- SECCIÓN 7: RÚBRICA DE EVIDENCIAS -->
+    <section id="sec-7" class="doc-section">
+      <h2 class="sec-h2">7. Rúbricas Oficiales Zajuna — Evidencias del Bloque SQL</h2>
+      <p class="doc-p">
+        Estructura requerida para aprobar las 3 evidencias evaluadas en la plataforma Zajuna para el <strong>Corte 1 (25 de Octubre de 2026)</strong>:
+      </p>
+
+      <div class="table-card">
+        <table class="doc-table">
+          <thead>
+            <tr>
+              <th>Evidencia</th>
+              <th>Tipo de Producto</th>
+              <th>Parámetros y Contenido Obligatorio</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>GA6-220501096-AA2-EV01</strong></td>
+              <td>Documento PDF (Taller DDL/DML)</td>
+              <td>Respuestas teóricas y capturas de ejecución de sentencias `CREATE`, `ALTER`, `INSERT` y `SELECT` con explicaciones técnicas.</td>
+            </tr>
+            <tr>
+              <td><strong>GA6-220501096-AA2-EV02</strong></td>
+              <td>Archivo comprimido ZIP</td>
+              <td>Informe de arquitectura relacional, diccionario de datos de restricciones y diagrama E-R sincronizado de MySQL Workbench.</td>
+            </tr>
+            <tr>
+              <td><strong>GA6-220501096-AA2-EV03</strong></td>
+              <td>Archivo comprimido ZIP</td>
+              <td>Script ejecutable <code>techstore_db_completo.sql</code> estructurado sin fallas de sintaxis ni dependencias circulares.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- SECCIÓN 8: CHECKLIST DEL APRENDIZ -->
+    <section id="sec-8" class="doc-section">
+      <h2 class="sec-h2">8. Checklist de Alistamiento Técnico (100% Interactivo)</h2>
+      <p class="doc-p">
+        Verifica cada uno de los siguientes requisitos antes de empaquetar y entregar tus evidencias en plataforma Zajuna:
+      </p>
+
+      <div class="checklist-wrapper">
+        <div class="checklist-header">
+          <span style="font-size:13px;font-weight:700;color:var(--texto-main);">Criterios de Verificación DDL / DML</span>
+          <span class="checklist-counter" id="checklistCounter">0 / 6 Verificados</span>
+        </div>
+
+        <div class="checklist-item" onclick="toggleChecklist(this)">
+          <div class="check-box-icon">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+          <div class="checklist-text">
+            <h4>1. Motor InnoDB y Codificación UTF8MB4</h4>
+            <p>El script declara explícitamente <code>ENGINE=InnoDB</code> y <code>CHARACTER SET utf8mb4</code> en todas las tablas.</p>
+          </div>
+        </div>
+
+        <div class="checklist-item" onclick="toggleChecklist(this)">
+          <div class="check-box-icon">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+          <div class="checklist-text">
+            <h4>2. Orden de Creación DDL Jerárquico</h4>
+            <p>Las tablas maestras se ejecutan primero (padres) y las dependientes (hijos) después para no generar error 1215.</p>
+          </div>
+        </div>
+
+        <div class="checklist-item" onclick="toggleChecklist(this)">
+          <div class="check-box-icon">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+          <div class="checklist-text">
+            <h4>3. Restricciones CHECK Implementadas</h4>
+            <p>Precios y cantidades cuentan con validaciones lógicas positivas (ej. <code>CHECK (precio > 0.00)</code>).</p>
+          </div>
+        </div>
+
+        <div class="checklist-item" onclick="toggleChecklist(this)">
+          <div class="check-box-icon">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+          <div class="checklist-text">
+            <h4>4. Acciones Referenciales ON DELETE Definidas</h4>
+            <p>Se distinguió claramente entre <code>CASCADE</code> (detalles de pedido) y <code>RESTRICT</code> (catálogo maestro).</p>
+          </div>
+        </div>
+
+        <div class="checklist-item" onclick="toggleChecklist(this)">
+          <div class="check-box-icon">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+          <div class="checklist-text">
+            <h4>5. Datos Semilla DML de Prueba Insertados</h4>
+            <p>El script ejecuta sentencias <code>INSERT INTO</code> para probar la funcionalidad de todas las tablas.</p>
+          </div>
+        </div>
+
+        <div class="checklist-item" onclick="toggleChecklist(this)">
+          <div class="check-box-icon">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+          <div class="checklist-text">
+            <h4>6. Consultas SELECT con INNER JOIN Validadas</h4>
+            <p>Se incluyen consultas de prueba que relacionan múltiples tablas para verificar la integridad referencial.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECCIÓN 9: ANEXO OPCIONAL - GUÍA COMPLETA MYSQL WORKBENCH -->
+    <section class="doc-section" id="sec-9">
+      <div class="sec-badge azul">
+        <span class="dot"></span>
+        HERRAMIENTA GRÁFICA COMPLEMENTARIA (OPCIONAL)
+      </div>
+      <h2 class="sec-h2">9. Anexo Opcional: Guía Completa de MySQL Workbench</h2>
+      <p class="sec-desc">
+        Recuerda que en el programa ADSO puedes realizar y aprobar toda la práctica ejecutando directamente tu script en el <strong>IDE Antigravity / Extensión Database Client</strong> conectado a XAMPP. Sin embargo, si deseas generar los <strong>Diagramas EER visuales</strong> para enriquecer tu informe de la evidencia <strong>AA2-EV02</strong> o prefieres utilizar una herramienta de escritorio dedicada, sigue esta guía paso a paso:
+      </p>
+
+      <div class="callout-box info" style="margin-bottom:24px;">
+        <div class="callout-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg>
+        </div>
+        <div class="callout-body">
+          <h4>¿Por qué MySQL Workbench es opcional pero valioso?</h4>
+          <p>
+            Ambas herramientas se conectan exactamente al mismo servicio local de MySQL (puerto <code>3306</code>). La gran ventaja de MySQL Workbench es su motor de <strong>Ingeniería Inversa (Reverse Engineer)</strong>, el cual lee tus tablas SQL físicas y dibuja automáticamente el diagrama relacional completo con todas sus llaves foráneas.
+          </p>
+        </div>
+      </div>
+
+      <div class="table-responsive" style="margin-bottom:28px;">
+        <table class="doc-table">
+          <thead>
+            <tr>
+              <th style="width:18%;">Criterio</th>
+              <th style="width:41%;">IDE Antigravity / Extensión SQL (Recomendado en Clase)</th>
+              <th style="width:41%;">MySQL Workbench Community (Opcional para EER)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Instalación</strong></td>
+              <td>Inmediata desde el marketplace del editor (0 MB adicionales de instalador).</td>
+              <td>Requiere instalador <code>.msi</code> (~45 MB) y paquetes Visual C++ de Windows.</td>
+            </tr>
+            <tr>
+              <td><strong>Flujo de Desarrollo</strong></td>
+              <td>Escribes, ejecutas y versionas con Git en la misma ventana de código.</td>
+              <td>Aplicación de escritorio externa separada del código fuente del proyecto.</td>
+            </tr>
+            <tr>
+              <td><strong>Poder de Diagramación</strong></td>
+              <td>Visor tabular y árbol de base de datos.</td>
+              <td>Modelador visual EER avanzado con exportación a PDF y PNG.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- PASO A PASO WORKBENCH -->
+      <h3 style="font-size:17px;font-weight:800;color:var(--texto-main);margin-bottom:14px;display:flex;align-items:center;gap:8px;">
+        <span style="background:var(--azul-tech);color:#fff;width:24px;height:24px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:12px;">1</span>
+        Requisito Previo Obligatorio: Microsoft Visual C++
+      </h3>
+      <p style="font-size:13.5px;color:var(--texto-muted);margin-bottom:12px;">
+        MySQL Workbench está compilado en C++ y <strong>fallará al instalarse o abrirse</strong> si Windows no cuenta con las librerías redistribuibles oficiales.
+      </p>
+      <div style="background:#ffffff;border:1px solid var(--borde-light);border-radius:var(--radius-md);padding:14px 18px;margin-bottom:24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+        <div>
+          <div style="font-weight:700;font-size:13px;color:var(--texto-main);">Microsoft Visual C++ 2015-2022 Redistributable (x64)</div>
+          <div style="font-size:11.5px;color:var(--texto-sub);">Instalador oficial de Microsoft para sistemas operativos de 64 bits</div>
+        </div>
+        <a href="https://aka.ms/vs/17/release/vc_redist.x64.exe" target="_blank" rel="noopener noreferrer" style="background:#0284c7;color:#ffffff;text-decoration:none;padding:8px 16px;border-radius:8px;font-size:12px;font-weight:700;display:inline-flex;align-items:center;gap:6px;">
+          Descargar VC++ Redist (x64) ↗
+        </a>
+      </div>
+
+      <h3 style="font-size:17px;font-weight:800;color:var(--texto-main);margin-bottom:14px;display:flex;align-items:center;gap:8px;">
+        <span style="background:var(--azul-tech);color:#fff;width:24px;height:24px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:12px;">2</span>
+        Descarga Oficial de MySQL Workbench
+      </h3>
+      <p style="font-size:13.5px;color:var(--texto-muted);margin-bottom:12px;">
+        Ingresa a la página oficial de descargas de MySQL Community. En la parte inferior, verás un enlace que dice <em>«No thanks, just start my download»</em> para iniciar la descarga sin necesidad de crear una cuenta en Oracle:
+      </p>
+      <div style="background:#ffffff;border:1px solid var(--borde-light);border-radius:var(--radius-md);padding:14px 18px;margin-bottom:24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+        <div>
+          <div style="font-weight:700;font-size:13px;color:var(--texto-main);">MySQL Workbench 8.0 CE (Windows x86, 64-bit, MSI Installer)</div>
+          <div style="font-size:11.5px;color:var(--texto-sub);">Sitio web oficial de Oracle MySQL Downloads</div>
+        </div>
+        <a href="https://dev.mysql.com/downloads/workbench/" target="_blank" rel="noopener noreferrer" style="background:var(--sena-verde);color:#ffffff;text-decoration:none;padding:8px 16px;border-radius:8px;font-size:12px;font-weight:700;display:inline-flex;align-items:center;gap:6px;">
+          Ir a Descargas MySQL Workbench ↗
+        </a>
+      </div>
+
+      <h3 style="font-size:17px;font-weight:800;color:var(--texto-main);margin-bottom:14px;display:flex;align-items:center;gap:8px;">
+        <span style="background:var(--azul-tech);color:#fff;width:24px;height:24px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:12px;">3</span>
+        Instalación y Conexión con XAMPP
+      </h3>
+      <ol style="margin-left:20px;font-size:13.5px;color:var(--texto-muted);line-height:1.7;margin-bottom:20px;">
+        <li>Abre el instalador <code>mysql-workbench-community-8.0.x-winx64.msi</code>. Presiona <strong>Next</strong>, selecciona la instalación <strong>Complete</strong> y haz clic en <strong>Install</strong>.</li>
+        <li>Asegúrate de que en el <strong>Panel de Control de XAMPP</strong> el módulo de <strong>MySQL esté iniciado en verde (puerto 3306)</strong>.</li>
+        <li>Abre MySQL Workbench. En la pantalla inicial verás un recuadro gris llamado <strong>MySQL Connections</strong>.</li>
+        <li>Haz clic en el ícono de suma <code>[+]</code> junto a "MySQL Connections" para configurar tu acceso local:</li>
+      </ol>
+
+      <div class="table-responsive" style="margin-bottom:24px;">
+        <table class="doc-table">
+          <thead>
+            <tr>
+              <th>Parámetro</th>
+              <th>Valor a Escribir</th>
+              <th>Propósito</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>Connection Name</code></td>
+              <td><code>XAMPP Localhost</code></td>
+              <td>Nombre identificador para tu panel de conexiones.</td>
+            </tr>
+            <tr>
+              <td><code>Connection Method</code></td>
+              <td><code>Standard (TCP/IP)</code></td>
+              <td>Protocolo de red estándar local.</td>
+            </tr>
+            <tr>
+              <td><code>Hostname</code></td>
+              <td><code>127.0.0.1</code></td>
+              <td>Apunta a tu propia máquina (localhost).</td>
+            </tr>
+            <tr>
+              <td><code>Port</code></td>
+              <td><code>3306</code></td>
+              <td>Puerto asignado por defecto en XAMPP para MySQL.</td>
+            </tr>
+            <tr>
+              <td><code>Username</code></td>
+              <td><code>root</code></td>
+              <td>Superusuario administrador de MySQL.</td>
+            </tr>
+            <tr>
+              <td><code>Password</code></td>
+              <td><em>(Vacío)</em></td>
+              <td>En XAMPP el usuario root viene sin contraseña por defecto.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p style="font-size:13.5px;color:var(--texto-muted);margin-bottom:24px;">
+        Haz clic en el botón <strong>Test Connection</strong> en la esquina inferior derecha. Verás una ventana emergente que confirma: <code style="color:var(--sena-verde-dark);font-weight:700;">Successfully made the MySQL connection</code>. Presiona <strong>OK</strong> para guardar.
+      </p>
+
+      <h3 style="font-size:17px;font-weight:800;color:var(--texto-main);margin-bottom:14px;display:flex;align-items:center;gap:8px;">
+        <span style="background:var(--azul-tech);color:#fff;width:24px;height:24px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:12px;">4</span>
+        Ejecución del Script y Generación del Diagrama EER (Para EV02)
+      </h3>
+      <ol style="margin-left:20px;font-size:13.5px;color:var(--texto-muted);line-height:1.7;margin-bottom:24px;">
+        <li>Entra a la conexión <strong>XAMPP Localhost</strong> recién creada.</li>
+        <li>Presiona <kbd>Ctrl + Shift + O</kbd> (o ve al menú <code>File ➔ Open SQL Script...</code>) y selecciona el archivo <code>techstore_db_completo.sql</code>.</li>
+        <li>Haz clic en el botón <strong>Execute SQL Script</strong> (icono de ejecución en la barra de herramientas, o presiona <kbd>Ctrl + Shift + Enter</kbd>) para ejecutar todo el script. Verás una hilera de checks verdes en el panel inferior de <em>Action Output</em>.</li>
+        <li>Para generar el diagrama relacional automático: ve al menú superior <code>Database ➔ Reverse Engineer...</code> (o presiona <kbd>Ctrl + R</kbd>).</li>
+        <li>Haz clic en <strong>Next</strong>, selecciona la base de datos <code>techstore_db</code>, y presiona <strong>Next ➔ Execute ➔ Next ➔ Finish</strong>.</li>
+        <li>Se abrirá una pestaña visual con el <strong>Diagrama EER</strong> mostrando las tablas, sus columnas y las líneas de unión con patas de gallo. Ve a <code>File ➔ Export ➔ Export as PNG...</code> para guardar la imagen que adjuntarás en tu informe de la evidencia <strong>AA2-EV02</strong>.</li>
+      </ol>
+    </section>
+
+  </main>
+
+  <!-- NOTIFICACIÓN TOAST -->
+  <div class="toast-feedback" id="toastBox">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+    <span id="toastMsg">Código copiado al portapapeles</span>
+  </div>
+
+  <script>
+    // Manejo de Menú Lateral en Móviles
+    function toggleSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      const backdrop = document.getElementById('sidebarBackdrop');
+      const isOpen = sidebar.classList.toggle('mobile-open');
+      backdrop.classList.toggle('active', isOpen);
+    }
+
+    // Cerrar sidebar al hacer clic en un enlace (móvil)
+    document.querySelectorAll('.sidebar .nav-item-link').forEach(link => {
+      link.addEventListener('click', () => {
+        if (window.innerWidth <= 1024) {
+          const sidebar = document.getElementById('sidebar');
+          const backdrop = document.getElementById('sidebarBackdrop');
+          sidebar.classList.remove('mobile-open');
+          backdrop.classList.remove('active');
+        }
+      });
+    });
+
+    // Barra de Progreso y ScrollSpy
+    window.addEventListener('scroll', () => {
+      const scrollTop = window.scrollY;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = (scrollTop / docHeight) * 100;
+      document.getElementById('progressBar').style.width = progress + '%';
+
+      // Detección de Sección Activa
+      const sections = document.querySelectorAll('.doc-section');
+      const navLinks = document.querySelectorAll('.sidebar .nav-item-link');
+      let currentSecId = '';
+
+      sections.forEach(sec => {
+        const rect = sec.getBoundingClientRect();
+        if (rect.top <= window.innerHeight * 0.35 && rect.bottom >= window.innerHeight * 0.15) {
+          currentSecId = sec.getAttribute('id');
+        }
+      });
+
+      if (currentSecId) {
+        navLinks.forEach(link => {
+          if (link.getAttribute('data-sec') === currentSecId) {
+            link.classList.add('active');
+          } else {
+            link.classList.remove('active');
+          }
+        });
+      }
+    });
+
+    // Copiar Código al Portapapeles
+    function copiarCodigo(btn) {
+      const codeBlock = btn.closest('.codebox-container').querySelector('.codebox-pre code');
+      if (codeBlock) {
+        navigator.clipboard.writeText(codeBlock.innerText).then(() => {
+          showToast('¡Script copiado al portapapeles con éxito!');
+        });
+      }
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('toastBox');
+      const toastMsg = document.getElementById('toastMsg');
+      toastMsg.textContent = msg;
+      toast.classList.add('show');
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 2500);
+    }
+
+    // Checklist Interactivo con Contador
+    function toggleChecklist(item) {
+      item.classList.toggle('checked');
+      const total = document.querySelectorAll('.checklist-item').length;
+      const checked = document.querySelectorAll('.checklist-item.checked').length;
+      const counter = document.getElementById('checklistCounter');
+      counter.textContent = `${checked} / ${total} Verificados`;
+      if (checked === total) {
+        counter.style.background = 'var(--sena-verde)';
+        counter.style.color = '#ffffff';
+        showToast('¡Excelente! Has completado el 100% de la verificación técnica para el Bloque SQL.');
+      } else {
+        counter.style.background = 'var(--sena-verde-bg)';
+        counter.style.color = 'var(--sena-verde-dark)';
+      }
+    }
+  </script>
+</body>
+</html>

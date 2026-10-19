@@ -1455,10 +1455,9 @@
                       <svg class="sidebar-nav-icon theme-verde" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="16" y="16" width="6" height="6" rx="1"/><rect x="2" y="16" width="6" height="6" rx="1"/><rect x="9" y="2" width="6" height="6" rx="1"/><path d="M5 16v-3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3"/><path d="M12 12V8"/></svg>
                       <span>Sesión 1 · Modelo Relacional</span>
                     </button>
-                    <button type="button" class="sidebar-nav-item sub locked" onclick="irASeccion('card-sesion-2', this)" title="Disponible el 19 de Octubre">
+                    <button type="button" class="sidebar-nav-item sub" onclick="irASeccion('card-sesion-2', this)">
                       <svg class="sidebar-nav-icon theme-naranja" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5V19A9 3 0 0 0 21 19V5"/><path d="M3 12A9 3 0 0 0 21 12"/></svg>
                       <span>Sesión 2 · SQL (DDL)</span>
-                      <svg class="sidebar-nav-lock" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
                     </button>
                     <button type="button" class="sidebar-nav-item sub locked" onclick="irASeccion('card-sesion-3', this)" title="Disponible el 20 de Octubre">
                       <svg class="sidebar-nav-icon theme-azul" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M8 3H7a2 2 0 0 0-2 2v5a2 2 0 0 1-2 2 2 2 0 0 1 2 2v5c0 1.1.9 2 2 2h1"/><path d="M16 3h1a2 2 0 0 1 2 2v5a2 2 0 0 0 2 2 2 2 0 0 0-2 2v5a2 2 0 0 1-2 2h-1"/></svg>
@@ -1732,9 +1731,9 @@
         <div>
           <div class="card-pro-header">
             <span class="folder-tag-badge">📁 Sesión 2/</span>
-            <span class="status-pill-indicator proxima">
+            <span class="status-pill-indicator hoy">
               <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-              Próxima Sesión
+              Sesión Activa (Hoy)
             </span>
           </div>
           <h3 class="card-pro-title">SQL Completo (DDL & DML en MySQL Workbench)</h3>
@@ -1755,10 +1754,26 @@
         </div>
 
         <div class="card-pro-actions">
-          <button class="btn-card-action disabled-locked" title="El material se activará en la fecha programada">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-            Disponible el 19 de Octubre
-          </button>
+          <div style="display:grid;grid-template-columns:1fr auto;gap:6px;">
+            <a href="./Sesión 2/PRESENTACION_SESION02_DDL_RESTRICCIONES.html" target="_blank" class="btn-card-action primary-orange" style="font-size:12.5px;padding:9px 12px;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+              Abrir Presentación ↗
+            </a>
+            <button type="button" class="btn-card-action preview-btn" style="padding:9px 14px;font-size:12px;gap:5px;" onclick="abrirVisorCinema('./Sesión 2/PRESENTACION_SESION02_DDL_RESTRICCIONES.html', 'Sesión 2 — SQL Completo (DDL & Restricciones)')" title="Previsualizar Presentación en Pantalla">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+              <span>Ver</span>
+            </button>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:6px;">
+            <a href="./Sesión 2/MANUAL_SESION02.html" target="_blank" class="btn-card-action secondary-neutral" style="font-size:11.5px;padding:7px 10px;">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"/><path d="M6 6h10"/><path d="M6 10h10"/></svg>
+              Guía de Estudio ↗
+            </a>
+            <a href="./Sesión 2/techstore_db_completo.sql" download="techstore_db_completo.sql" class="btn-card-action secondary-neutral" style="font-size:11.5px;padding:7px 10px;background:#f0fdf4;color:#166534;border-color:#bbf7d0;font-weight:700;" title="Descargar Script SQL Oficial">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
+              Script .sql ⤓
+            </a>
+          </div>
         </div>
       </article>
 
