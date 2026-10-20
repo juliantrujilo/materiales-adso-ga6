@@ -1769,6 +1769,10 @@
               Script .sql ⤓
             </a>
           </div>
+          <a href="https://youtu.be/Y_tWjlr625k" target="_blank" id="btnGrabacionSesion2" class="btn-card-action secondary-neutral" style="font-size:11.5px;padding:8px 10px;background:#fef2f2;color:#b91c1c;border-color:#fecaca;font-weight:700;margin-top:6px;width:100%;justify-content:center;" onclick="event.preventDefault(); abrirVisorCinema('https://www.youtube.com/embed/Y_tWjlr625k?autoplay=1', 'Grabación Sesión 2 — SQL Completo (DDL y DML en MySQL Workbench)')" title="Ver grabación en video de la sesión 2">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="23 7 16 12 23 17 23 7"/><rect width="14" height="14" x="1" y="5" rx="2" ry="2"/></svg>
+            Ver Grabación en Video ↗
+          </a>
         </div>
       </article>
 
@@ -2072,7 +2076,12 @@
           : `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--sena-verde)" stroke-width="2.5"><polygon points="5 3 19 12 5 21 5 3"/></svg>`;
         if (titleEl) titleEl.innerHTML = `${iconSvg} ${titulo}`;
         if (extLink) {
-          extLink.href = url.includes('youtube.com/embed/cQpXbkvWcME') ? 'https://youtu.be/cQpXbkvWcME' : url;
+          if (url.includes('youtube.com/embed/')) {
+            const vidId = url.split('youtube.com/embed/')[1].split('?')[0];
+            extLink.href = `https://youtu.be/${vidId}`;
+          } else {
+            extLink.href = url;
+          }
         }
 
         modal.classList.add('active');
