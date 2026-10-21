@@ -1,0 +1,2899 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sesión 3 — Bases de Datos NoSQL & Esquemas JSON/BSON en MongoDB | SENA ADSO GA6</title>
+
+  <!-- Tipografías Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Syne:wght@700;800;900&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --sena-verde: #39a900;
+      --sena-verde-dark: #236b00;
+      --sena-verde-soft: #44c702;
+      --sena-verde-bg: rgba(57, 169, 0, 0.08);
+      --sena-verde-border: rgba(57, 169, 0, 0.28);
+      --sena-verde-glow: rgba(57, 169, 0, 0.15);
+
+      --sena-naranja: #ff6b00;
+      --sena-naranja-dark: #c2410c;
+      --sena-naranja-bg: rgba(255, 107, 0, 0.08);
+      --sena-naranja-border: rgba(255, 107, 0, 0.28);
+
+      --azul-tech: #0284c7;
+      --azul-tech-dark: #0369a1;
+      --azul-bg: rgba(2, 132, 199, 0.08);
+      --azul-border: rgba(2, 132, 199, 0.28);
+      --azul-glow: rgba(2, 132, 199, 0.15);
+
+      --mongo-verde: #00ed64;
+      --mongo-verde-dark: #00684a;
+      --mongo-verde-bg: rgba(0, 237, 100, 0.08);
+      --mongo-verde-border: rgba(0, 104, 74, 0.28);
+
+      --purpura: #7c3aed;
+      --purpura-bg: rgba(124, 58, 237, 0.08);
+      --purpura-border: rgba(124, 58, 237, 0.28);
+
+      --bg-main: #f8fafc;
+      --bg-card: #ffffff;
+      --borde-light: #e2e8f0;
+      --borde-focus: #cbd5e1;
+
+      --texto-main: #0f172a;
+      --texto-muted: #334155;
+      --texto-sub: #64748b;
+      --texto-dimmer: #94a3b8;
+
+      --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.04);
+      --shadow-card: 0 10px 30px rgba(15, 23, 42, 0.05), 0 1px 3px rgba(0, 0, 0, 0.03);
+      --shadow-hover: 0 20px 40px rgba(2, 132, 199, 0.12), 0 4px 12px rgba(0, 0, 0, 0.05);
+
+      --radius-xl: 20px;
+      --radius-lg: 16px;
+      --radius-md: 12px;
+      --radius-sm: 8px;
+    }
+
+    * { margin:0; padding:0; box-sizing:border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: var(--bg-main);
+      color: var(--texto-main);
+      line-height: 1.6;
+      overflow-x: hidden;
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* ==========================================================================
+       SIDEBAR INSTITUCIONAL 280PX (PATRÓN OFICIAL)
+       ========================================================================== */
+    .sidebar {
+      width: 280px;
+      background: #ffffff;
+      border-right: 1px solid var(--borde-light);
+      position: fixed;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 2px 0 16px rgba(15, 23, 42, 0.04);
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .sidebar.collapsed {
+      transform: translateX(-100%);
+    }
+
+    .sidebar-logo {
+      width: 40px;
+      height: 40px;
+      background: var(--sena-verde, #39a900);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+      flex-shrink: 0;
+      box-shadow: 0 4px 10px rgba(57, 169, 0, 0.25);
+    }
+    .sidebar-header {
+      padding: 18px 20px;
+      border-bottom: 1px solid var(--borde-light);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .brand-link {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .brand-logo-svg {
+      width: 36px;
+      height: 36px;
+      flex-shrink: 0;
+    }
+
+    .brand-info h1 {
+      font-family: 'Syne', sans-serif;
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--texto-main);
+      line-height: 1.2;
+    }
+
+    .brand-info p {
+      font-size: 11px;
+      color: var(--azul-tech);
+      font-weight: 600;
+      letter-spacing: 0.3px;
+    }
+
+    .sidebar-toggle-btn {
+      background: transparent;
+      border: 1px solid var(--borde-light);
+      border-radius: 8px;
+      padding: 6px;
+      cursor: pointer;
+      color: var(--texto-sub);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+
+    .sidebar-toggle-btn:hover {
+      background: var(--bg-main);
+      color: var(--azul-tech);
+      border-color: var(--azul-border);
+    }
+
+    .sidebar-nav {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .nav-group-title {
+      font-size: 10.5px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--texto-dimmer);
+      padding: 0 10px 6px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nav-links-list {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .nav-link {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 12px;
+      border-radius: 8px;
+      color: var(--texto-muted);
+      text-decoration: none;
+      font-size: 12.5px;
+      font-weight: 600;
+      transition: all 0.2s ease;
+      position: relative;
+    }
+
+    .nav-link:hover {
+      background: var(--azul-bg);
+      color: var(--azul-tech-dark);
+    }
+
+    .nav-link.active {
+      background: rgba(2, 132, 199, 0.1);
+      color: var(--azul-tech-dark);
+      font-weight: 700;
+    }
+
+    .nav-link.active::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 6px;
+      bottom: 6px;
+      width: 3.5px;
+      background: var(--azul-tech);
+      border-radius: 0 4px 4px 0;
+    }
+
+    .nav-link-num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--texto-dimmer);
+      min-width: 18px;
+    }
+
+    .nav-link.active .nav-link-num {
+      color: var(--azul-tech);
+      font-weight: 700;
+    }
+
+    .nav-link-title {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .sidebar-footer {
+      padding: 14px 16px;
+      border-top: 1px solid var(--borde-light);
+      background: #fafbfe;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .sidebar-footer-pill {
+      background: var(--azul-bg);
+      border: 1px solid var(--azul-border);
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 11px;
+      color: var(--azul-tech-dark);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 600;
+    }
+
+    .btn-return-hub {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 8px 12px;
+      background: #ffffff;
+      border: 1px solid var(--borde-light);
+      border-radius: 8px;
+      color: var(--texto-muted);
+      font-size: 12px;
+      font-weight: 700;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+
+    .btn-return-hub:hover {
+      background: var(--sena-verde-bg);
+      color: var(--sena-verde-dark);
+      border-color: var(--sena-verde-border);
+    }
+
+    /* BOTÓN FLOTANTE DE REAPERTURA DEL SIDEBAR */
+    .floating-sidebar-toggle {
+      position: fixed;
+      top: 18px;
+      left: 20px;
+      z-index: 999;
+      height: 38px;
+      padding: 0 14px 0 10px;
+      background: #ffffff;
+      border: 1px solid var(--borde-focus);
+      border-radius: 10px;
+      box-shadow: 0 6px 18px rgba(15, 23, 42, 0.08);
+      color: var(--texto-main);
+      font-size: 12.5px;
+      font-weight: 700;
+      display: none;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      transition: all 0.25s ease;
+    }
+
+    .floating-sidebar-toggle:hover {
+      border-color: var(--azul-tech);
+      color: var(--azul-tech);
+      box-shadow: 0 8px 24px rgba(2, 132, 199, 0.2);
+    }
+
+    .sidebar.collapsed ~ .floating-sidebar-toggle,
+    .floating-sidebar-toggle.visible {
+      display: inline-flex !important;
+      animation: fadeInToggle 0.25s ease-out forwards;
+    }
+
+    @keyframes fadeInToggle {
+      from { opacity: 0; transform: translateX(-12px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    /* ==========================================================================
+       MAIN CONTENT CONTAINER
+       ========================================================================== */
+    .main-content {
+      margin-left: 280px;
+      flex: 1;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      transition: margin-left 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .main-content.expanded {
+      margin-left: 0;
+    }
+
+    .slide-section {
+      padding: 64px 54px;
+      border-bottom: 1px solid var(--borde-light);
+      position: relative;
+      scroll-margin-top: 0px;
+    }
+
+    .slide-container {
+      max-width: 1140px;
+      margin: 0 auto;
+    }
+
+    /* HEADER DE CADA SLIDE */
+    .slide-badge-category {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 11.5px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      padding: 4px 12px;
+      border-radius: 20px;
+      margin-bottom: 12px;
+    }
+
+    .badge-blue { background: var(--azul-bg); color: var(--azul-tech-dark); border: 1px solid var(--azul-border); }
+    .badge-green { background: var(--sena-verde-bg); color: var(--sena-verde-dark); border: 1px solid var(--sena-verde-border); }
+    .badge-mongo { background: var(--mongo-verde-bg); color: var(--mongo-verde-dark); border: 1px solid var(--mongo-verde-border); }
+    .badge-orange { background: var(--sena-naranja-bg); color: var(--sena-naranja-dark); border: 1px solid var(--sena-naranja-border); }
+
+    .slide-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 32px;
+      font-weight: 800;
+      color: var(--texto-main);
+      line-height: 1.25;
+      margin-bottom: 12px;
+      letter-spacing: -0.5px;
+    }
+
+    .slide-subtitle {
+      font-size: 15.5px;
+      color: var(--texto-muted);
+      line-height: 1.6;
+      max-width: 880px;
+      margin-bottom: 28px;
+    }
+
+    /* ==========================================================================
+       TARJETAS Y GRIDS PREMIUM
+       ========================================================================== */
+    .cards-grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+
+    .cards-grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    .card-pro {
+      background: linear-gradient(175deg, #ffffff 0%, #fbfcfe 65%, #f8fafc 100%);
+      border: 1px solid var(--borde-light);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      box-shadow: var(--shadow-card);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: all 0.25s ease;
+    }
+
+    .card-pro:hover {
+      box-shadow: var(--shadow-hover);
+      transform: translateY(-2px);
+    }
+
+    .card-pro.top-azul { border-top: 4px solid var(--azul-tech); }
+    .card-pro.top-verde { border-top: 4px solid var(--sena-verde); }
+    .card-pro.top-mongo { border-top: 4px solid #13aa52; }
+    .card-pro.top-naranja { border-top: 4px solid var(--sena-naranja); }
+    .card-pro.top-purpura { border-top: 4px solid var(--purpura); }
+
+    .card-header-flex {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+
+    .card-icon-badge {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .icon-badge-blue { background: var(--azul-bg); color: var(--azul-tech); }
+    .icon-badge-green { background: var(--sena-verde-bg); color: var(--sena-verde); }
+    .icon-badge-mongo { background: rgba(19, 170, 82, 0.1); color: #13aa52; }
+    .icon-badge-orange { background: var(--sena-naranja-bg); color: var(--sena-naranja); }
+    .icon-badge-purpura { background: var(--purpura-bg); color: var(--purpura); }
+
+    .card-pill-tag {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 20px;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .card-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--texto-main);
+      margin-bottom: 8px;
+      line-height: 1.3;
+    }
+
+    .card-desc {
+      font-size: 13.5px;
+      color: var(--texto-muted);
+      line-height: 1.6;
+    }
+
+    /* ==========================================================================
+       TABLA COMPARATIVA SQL VS NOSQL MONGODB
+       ========================================================================== */
+    .table-container-card {
+      background: #ffffff;
+      border: 1px solid var(--borde-light);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: var(--shadow-card);
+      margin-top: 16px;
+    }
+
+    .table-comparativa {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      text-align: left;
+    }
+
+    .table-comparativa th {
+      background: #f1f5f9;
+      color: var(--texto-main);
+      font-weight: 800;
+      padding: 14px 18px;
+      border-bottom: 2px solid var(--borde-light);
+      font-family: 'Syne', sans-serif;
+      font-size: 13.5px;
+    }
+
+    .table-comparativa td {
+      padding: 13px 18px;
+      border-bottom: 1px solid var(--borde-light);
+      color: var(--texto-muted);
+      vertical-align: middle;
+    }
+
+    .table-comparativa tr:hover td {
+      background: #fafcfe;
+    }
+
+    .concept-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 700;
+      color: var(--texto-main);
+    }
+
+    .badge-sql {
+      background: #fef2f2;
+      color: #991b1b;
+      border: 1px solid #fecaca;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .badge-nosql {
+      background: #f0fdf4;
+      color: #166534;
+      border: 1px solid #bbf7d0;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    /* ==========================================================================
+       ESTÁNDAR DE CODEBOXES VS CODE (ESTRICTO CON GUTTER VERTICAL 22PX)
+       ========================================================================== */
+    .editor-window {
+      background: #1e1e1e;
+      border-radius: 10px;
+      border: 1px solid #333333;
+      box-shadow: 0 10px 28px rgba(0,0,0,0.25);
+      overflow: hidden;
+      font-family: 'JetBrains Mono', Consolas, 'Courier New', monospace;
+      margin: 14px auto;
+      max-width: 760px;
+      width: 100%;
+    }
+
+    .editor-titlebar {
+      background: #252526;
+      border-bottom: 1px solid #2d2d2d;
+      padding: 7px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 36px;
+      box-sizing: border-box;
+    }
+
+    .editor-dots {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .editor-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+
+    .dot-red { background: #ff5f56; }
+    .dot-yellow { background: #ffbd2e; }
+    .dot-green { background: #27c93f; }
+
+    .editor-tabs-group {
+      display: flex;
+      gap: 4px;
+    }
+
+    .editor-tab {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      color: #cccccc;
+      background: #1e1e1e;
+      padding: 4px 12px;
+      border-radius: 4px 4px 0 0;
+      border-top: 2px solid #0284c7;
+      cursor: pointer;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 600;
+    }
+
+    .editor-tab.active-mongo {
+      border-top-color: #00ed64;
+      color: #ffffff;
+    }
+
+    .editor-badge-tool {
+      font-size: 9.5px;
+      color: #9cdcfe;
+      background: rgba(156,220,254,0.1);
+      border: 1px solid rgba(156,220,254,0.25);
+      padding: 2px 7px;
+      border-radius: 10px;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 700;
+    }
+
+    .editor-body {
+      display: flex;
+      padding: 8px 0;
+      font-size: 12px;
+      line-height: 22px;
+      overflow-x: auto;
+      background: #1e1e1e;
+      font-family: 'JetBrains Mono', Consolas, 'Courier New', monospace;
+      box-sizing: border-box;
+    }
+
+    .editor-gutter {
+      display: flex;
+      flex-direction: column;
+      padding: 0 6px 0 12px;
+      color: #858585;
+      user-select: none;
+      font-size: 11.5px;
+      border-right: 1px solid #2d2d2d;
+      min-width: 44px;
+      background: #1e1e1e;
+      flex-shrink: 0;
+      box-sizing: border-box;
+    }
+
+    .gutter-row {
+      height: 22px;
+      line-height: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 5px;
+      box-sizing: border-box;
+    }
+
+    .gutter-num {
+      color: #6e7681;
+      font-size: 11.5px;
+      min-width: 16px;
+      text-align: right;
+      display: inline-block;
+      font-family: 'JetBrains Mono', Consolas, monospace;
+    }
+
+    .gutter-fold {
+      color: #858585;
+      font-size: 10px;
+      width: 10px;
+      text-align: center;
+      display: inline-block;
+      cursor: pointer;
+    }
+
+    .gutter-fold-space {
+      width: 10px;
+      display: inline-block;
+    }
+
+    .editor-code {
+      padding: 0 14px;
+      color: #d4d4d4;
+      flex: 1;
+      font-size: 12px;
+      line-height: 22px;
+      overflow-x: auto;
+      font-family: 'JetBrains Mono', Consolas, 'Courier New', monospace;
+      box-sizing: border-box;
+    }
+
+    .code-line {
+      height: 22px;
+      line-height: 22px;
+      white-space: pre;
+      display: block;
+      font-family: 'JetBrains Mono', Consolas, 'Courier New', monospace;
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* TOKENS DE SINTAXIS JSON / BSON / MONGODB */
+    .tok-key { color: #9cdcfe; font-weight: 600; }
+    .tok-str { color: #ce9178; }
+    .tok-num { color: #b5cea8; }
+    .tok-bool { color: #569cd6; font-weight: 700; }
+    .tok-bson { color: #4ec9b0; font-weight: 700; }
+    .tok-comment { color: #6a9955; font-style: italic; }
+    .tok-op { color: #d4d4d4; }
+    .tok-id-badge { background: rgba(78, 201, 176, 0.2); color: #4ec9b0; border: 1px solid rgba(78, 201, 176, 0.4); font-size: 9px; font-weight: 800; padding: 0 5px; border-radius: 3px; height: 16px; line-height: 14px; display: inline-block; vertical-align: middle; margin-left: 6px; }
+    .tok-embed-badge { background: rgba(255, 107, 0, 0.2); color: #ff9800; border: 1px solid rgba(255, 107, 0, 0.4); font-size: 9px; font-weight: 800; padding: 0 5px; border-radius: 3px; height: 16px; line-height: 14px; display: inline-block; vertical-align: middle; margin-left: 6px; }
+    .tok-ref-badge { background: rgba(59, 130, 246, 0.2); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.4); font-size: 9px; font-weight: 800; padding: 0 5px; border-radius: 3px; height: 16px; line-height: 14px; display: inline-block; vertical-align: middle; margin-left: 6px; }
+
+    /* ==========================================================================
+       STEPPER DIDÁCTICO & MODALES GUIADOS
+       ========================================================================== */
+    .stepper-steps-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 16px;
+      margin-top: 18px;
+    }
+
+    .stepper-card-btn {
+      background: #ffffff;
+      border: 1px solid var(--borde-light);
+      border-radius: var(--radius-md);
+      padding: 18px;
+      text-align: left;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      transition: all 0.2s ease;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .stepper-card-btn:hover {
+      border-color: var(--azul-tech);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-card);
+    }
+
+    .step-pill-number {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--azul-bg);
+      color: var(--azul-tech-dark);
+      font-size: 12px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .step-card-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 14.5px;
+      font-weight: 700;
+      color: var(--texto-main);
+      line-height: 1.3;
+    }
+
+    .step-card-action-hint {
+      font-size: 11.5px;
+      color: var(--azul-tech);
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      margin-top: auto;
+    }
+
+    /* TABLA ESTRUCTURADA DE PARÁMETROS (.cweijan-params-table) */
+    .cweijan-params-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      background: #ffffff;
+      border: 1px solid var(--borde-light);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      margin: 14px 0;
+    }
+
+    .cweijan-params-table th {
+      background: #f8fafc;
+      padding: 12px 16px;
+      font-weight: 800;
+      color: var(--texto-main);
+      border-bottom: 2px solid var(--borde-light);
+      font-family: 'Syne', sans-serif;
+    }
+
+    .cpt-row td {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--borde-light);
+      color: var(--texto-muted);
+    }
+
+    .cpt-row.highlight {
+      background: #fffbeb;
+    }
+
+    .cpt-row.highlight td:first-child {
+      border-left: 4px solid var(--sena-naranja);
+      font-weight: 700;
+      color: #92400e;
+    }
+
+    /* MODALES DE STEPPER */
+    .ddl-modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(15, 23, 42, 0.75);
+      backdrop-filter: blur(6px);
+      z-index: 2000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .ddl-modal-overlay.active {
+      display: flex;
+      animation: modalFadeIn 0.25s ease-out forwards;
+    }
+
+    @keyframes modalFadeIn {
+      from { opacity: 0; transform: scale(0.96); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .ddl-modal-box {
+      background: #ffffff;
+      border-radius: var(--radius-lg);
+      width: 100%;
+      max-width: 860px;
+      max-height: 90vh;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.25);
+      overflow: hidden;
+    }
+
+    .modal-header-nav {
+      padding: 16px 22px;
+      border-bottom: 1px solid var(--borde-light);
+      background: #f8fafc;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .modal-nav-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .modal-pill-btn {
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 11.5px;
+      font-weight: 700;
+      background: #ffffff;
+      border: 1px solid var(--borde-light);
+      color: var(--texto-sub);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .modal-pill-btn.active {
+      background: var(--azul-tech);
+      color: #ffffff;
+      border-color: var(--azul-tech);
+    }
+
+    .col-tab-pill {
+      background: #2d2d30;
+      color: #94a3b8;
+      border: 1px solid #475569;
+      border-radius: 6px;
+      padding: 5px 12px;
+      font-size: 11.5px;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .col-tab-pill:hover {
+      background: #3e3e42;
+      color: #ffffff;
+      border-color: #64748b;
+    }
+
+    .col-tab-pill.active {
+      background: rgba(0, 237, 100, 0.15);
+      color: #00ed64;
+      border-color: #00ed64;
+      box-shadow: 0 0 8px rgba(0, 237, 100, 0.2);
+    }
+
+    .modal-close-btn {
+      background: transparent;
+      border: none;
+      font-size: 20px;
+      color: var(--texto-sub);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+    }
+
+    .modal-close-btn:hover {
+      background: #fee2e2;
+      color: #ef4444;
+    }
+
+    .modal-body-scroll {
+      padding: 24px;
+      overflow-y: auto;
+      flex: 1;
+    }
+
+    /* ==========================================================================
+       CHECKLIST INTERACTIVO EV03 (CORTES & RÚBRICA)
+       ========================================================================== */
+    .checklist-card {
+      background: #ffffff;
+      border: 1px solid var(--borde-light);
+      border-radius: var(--radius-lg);
+      padding: 28px;
+      box-shadow: var(--shadow-card);
+      margin-top: 18px;
+    }
+
+    .checklist-progress-bar-wrap {
+      background: #e2e8f0;
+      border-radius: 10px;
+      height: 10px;
+      overflow: hidden;
+      margin: 14px 0 20px 0;
+    }
+
+    .checklist-progress-bar {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--azul-tech) 0%, #00ed64 100%);
+      transition: width 0.3s ease;
+    }
+
+    .checklist-items-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .check-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 12px 14px;
+      border-radius: var(--radius-md);
+      background: #f8fafc;
+      border: 1px solid var(--borde-light);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .check-item:hover {
+      background: #f1f5f9;
+    }
+
+    .check-item.completed {
+      background: #f0fdf4;
+      border-color: #bbf7d0;
+    }
+
+    .check-checkbox {
+      margin-top: 3px;
+      width: 18px;
+      height: 18px;
+      accent-color: var(--azul-tech);
+      cursor: pointer;
+    }
+
+    .check-text h4 {
+      font-size: 13.5px;
+      font-weight: 700;
+      color: var(--texto-main);
+      margin-bottom: 2px;
+    }
+
+    .check-text p {
+      font-size: 12px;
+      color: var(--texto-sub);
+      line-height: 1.5;
+    }
+
+    /* BOTONES DE ACCIÓN */
+    .btn-action-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--azul-tech);
+      color: #ffffff;
+      padding: 10px 18px;
+      border-radius: 10px;
+      font-size: 13.5px;
+      font-weight: 700;
+      text-decoration: none;
+      transition: all 0.2s;
+      box-shadow: 0 4px 12px rgba(2, 132, 199, 0.25);
+    }
+
+    .btn-action-primary:hover {
+      background: var(--azul-tech-dark);
+      transform: translateY(-1px);
+    }
+
+    .btn-copy-code {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #333333;
+      color: #ffffff;
+      border: 1px solid #444444;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 11px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-copy-code:hover {
+      background: #444444;
+      border-color: #555555;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 992px) {
+      .sidebar { transform: translateX(-100%); }
+      .main-content { margin-left: 0; }
+      .floating-sidebar-toggle { display: inline-flex !important; }
+      .cards-grid-2, .cards-grid-3, .stepper-steps-grid { grid-template-columns: 1fr; }
+      .slide-section { padding: 40px 20px; }
+      .slide-title { font-size: 26px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ==========================================================================
+       SIDEBAR LATERAL IZQUIERDO (ESTÁNDAR UNIFICADO SESIÓN 1 Y 2)
+       ========================================================================== -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <a href="../explorar.html" class="brand-link" title="Ir al Portal de Materiales">
+        <!-- Logo Vectorial Oficial SENA -->
+        <div class="sidebar-logo" title="Servicio Nacional de Aprendizaje SENA">
+          <svg width="24" height="24" viewBox="0 0 64 62" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
+            <g transform="translate(-377 -19)">
+              <path d="M409.164 19C412.922 19 415.992 22.09 415.992 25.8778 415.992 29.6656 412.932 32.7556 409.164 32.7556 405.397 32.7556 402.336 29.6656 402.336 25.8778 402.336 22.09 405.407 19 409.164 19"/>
+              <path d="M384.305 41.1884 384.305 41.2183C384.285 41.3379 384.275 41.4177 384.275 41.4675 384.275 41.8264 384.474 42.0855 384.873 42.265 385.282 42.4344 385.9 42.5241 386.747 42.5241 387.395 42.5241 387.893 42.4543 388.262 42.3148 388.631 42.1752 388.81 41.9759 388.81 41.7267 388.81 41.3479 388.082 41.0489 386.647 40.8096 386.478 40.7797 386.348 40.7598 386.268 40.7498 386.179 40.7299 386.039 40.71 385.86 40.6801 383.567 40.3013 382.092 39.8926 381.434 39.454 381.115 39.2347 380.876 38.9855 380.706 38.6965 380.547 38.4074 380.467 38.0785 380.467 37.7096 380.467 36.8125 380.995 36.1248 382.052 35.6563 383.109 35.1878 384.654 34.9486 386.677 34.9486 388.7 34.9486 390.166 35.1678 391.133 35.6064 392.1 36.045 392.578 36.7228 392.578 37.6399L392.578 37.7495 388.78 37.7495 388.78 37.7096C388.78 37.3907 388.591 37.1614 388.202 36.992 387.813 36.8325 387.255 36.7428 386.508 36.7428 385.929 36.7428 385.481 36.8026 385.182 36.9122 384.863 37.0318 384.713 37.1913 384.713 37.4006 384.713 37.7794 385.541 38.1084 387.195 38.3675 387.514 38.4174 387.764 38.4572 387.943 38.4871 389.119 38.6865 389.966 38.8559 390.465 38.9955 390.963 39.135 391.392 39.3045 391.761 39.4939 392.159 39.7132 392.478 39.9923 392.698 40.3312 392.917 40.6701 393.027 41.0389 393.027 41.4476 393.027 42.3746 392.448 43.0823 391.302 43.5907 390.156 44.0891 388.501 44.3383 386.348 44.3383 384.195 44.3383 382.67 44.099 381.723 43.6206 380.766 43.1421 380.298 42.3746 380.298 41.308L380.298 41.1685 384.305 41.1685ZM394.711 44.1987 394.711 35.0881 405.546 35.0881 405.546 37.0518 398.778 37.0518 398.778 38.5071 405.028 38.5071 405.028 40.4508 398.778 40.4508 398.778 42.2151 405.795 42.2151 405.795 44.2087 394.711 44.2087ZM407.5 44.1987 407.5 35.0881 412.643 35.0881 418.155 41.2084 418.155 35.0881 422.063 35.0881 422.063 44.1987 416.72 44.1987 411.387 38.0585 411.387 44.1987 407.49 44.1987ZM432.569 40.5604 430.625 37.2511 428.572 40.5604 432.579 40.5604ZM426.369 44.1987 422.292 44.1987 428.592 35.0881 433.107 35.0881 439.118 44.1987 434.592 44.1987 433.675 42.554 427.366 42.554 426.389 44.1987Z"/>
+              <path d="M389.309 76.3351 385.67 72.9161 396.735 53.6881C397.333 52.6415 396.585 51.3257 395.379 51.3257L377.267 51.3257 377.267 46.5113 406.413 46.5113 389.309 76.3351Z"/>
+              <path d="M428.701 76.3351 432.34 72.9161 421.275 53.6881C420.677 52.6415 421.425 51.3257 422.631 51.3257L440.743 51.3257 440.743 46.5113 411.597 46.5113 428.701 76.3351Z"/>
+              <path d="M408.965 51.5949C408.965 51.5949 409.005 51.5251 409.005 51.5251L425.432 78.7174 421.066 80.99 410.48 63.2373C409.852 62.1907 408.347 62.1907 407.729 63.2373 404.2 69.1981 397.213 80.99 397.213 80.99L392.947 78.8768C392.947 78.8768 408.088 53.09 408.965 51.5949"/>
+            </g>
+          </svg>
+        </div>
+        <div class="brand-info">
+          <h1>ADSO 3389010</h1>
+          <p>Sesión 4 · CRUD en MongoDB</p>
+        </div>
+      </a>
+      <button type="button" class="sidebar-toggle-btn" onclick="toggleSidebar()" title="Contraer panel lateral">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><line x1="9" x2="9" y1="3" y2="21"/><path d="m14 9-3 3 3 3"/></svg>
+      </button>
+    </div>
+
+    <!-- Navegación ScrollSpy Organizada en 4 Bloques Temáticos -->
+    <nav class="sidebar-nav" id="sidebarNav">
+      
+      <!-- BLOQUE 1 -->
+      <div class="nav-group">
+        <div class="nav-group-title">Bloque 1 · Fundamentos & Entorno</div>
+        <div class="nav-links-list">
+          <a href="#slide-01" class="nav-link active">
+            <span class="nav-link-num">01</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            <span class="nav-link-title">Portada & Metadatos</span>
+          </a>
+          <a href="#slide-02" class="nav-link">
+            <span class="nav-link-num">02</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><path d="m4.93 4.93 4.24 4.24"/></svg>
+            <span class="nav-link-title">El Ciclo CRUD en NoSQL</span>
+          </a>
+          <a href="#slide-03" class="nav-link">
+            <span class="nav-link-num">03</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect width="20" height="14" x="2" y="5" rx="2"/></svg>
+            <span class="nav-link-title">Compass Local & Consola Shell</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- BLOQUE 2 -->
+      <div class="nav-group">
+        <div class="nav-group-title">Bloque 2 · Las 4 Operaciones MQL</div>
+        <div class="nav-links-list">
+          <a href="#slide-04" class="nav-link">
+            <span class="nav-link-num">04</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
+            <span class="nav-link-title">Create: Inserción de Documentos</span>
+          </a>
+          <a href="#slide-05" class="nav-link">
+            <span class="nav-link-num">05</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+            <span class="nav-link-title">Read: Filtros Avanzados MQL</span>
+          </a>
+          <a href="#slide-06" class="nav-link">
+            <span class="nav-link-num">06</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg>
+            <span class="nav-link-title">Update & Delete: Mutación Segura</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- BLOQUE 3 -->
+      <div class="nav-group">
+        <div class="nav-group-title">Bloque 3 · Lab en Vivo & Codeboxes</div>
+        <div class="nav-links-list">
+          <a href="#slide-07" class="nav-link">
+            <span class="nav-link-num">07</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="4 17 10 11 4 5"/><line x1="12" x2="20" y1="19" y2="19"/></svg>
+            <span class="nav-link-title">Codebox 1: Inserción (Create)</span>
+          </a>
+          <a href="#slide-08" class="nav-link">
+            <span class="nav-link-num">08</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+            <span class="nav-link-title">Codebox 2: Consultas (Read)</span>
+          </a>
+          <a href="#slide-09" class="nav-link">
+            <span class="nav-link-num">09</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/></svg>
+            <span class="nav-link-title">Codebox 3: Update & Delete</span>
+          </a>
+          <a href="#slide-10" class="nav-link">
+            <span class="nav-link-num">10</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>
+            <span class="nav-link-title">Stepper en Vivo: Compass</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- BLOQUE 4 -->
+      <div class="nav-group">
+        <div class="nav-group-title">Bloque 4 · Video EV04 & Cierre</div>
+        <div class="nav-links-list">
+          <a href="#slide-11" class="nav-link">
+            <span class="nav-link-num">11</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m22 8-6 4 6 4V8Z"/><rect width="14" height="12" x="2" y="6" rx="2"/></svg>
+            <span class="nav-link-title">Guía Oficial Video AA1-EV04</span>
+          </a>
+          <a href="#slide-12" class="nav-link">
+            <span class="nav-link-num">12</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+            <span class="nav-link-title">Checklist Anti-Error 100%</span>
+          </a>
+        </div>
+      </div>
+
+    </nav>
+
+    <!-- Footer del Sidebar -->
+    <div class="sidebar-footer">
+      <div class="sidebar-footer-pill">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        <span>Corte 2: Miércoles 04/Nov (11:59 PM)</span>
+      </div>
+      <a href="../explorar.html" class="btn-return-hub">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m15 18-6-6 6-6"/></svg>
+        Volver al Hub
+      </a>
+    </div>
+  </aside>
+
+  <!-- BOTÓN FLOTANTE REACTIVO PARA MOSTRAR EL SIDEBAR -->
+  <button type="button" class="floating-sidebar-toggle" id="floatingToggle" onclick="toggleSidebar()" title="Abrir Menú de Navegación">
+    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><line x1="9" x2="9" y1="3" y2="21"/><path d="m10 9 3 3-3 3"/></svg>
+    <span>Menú (12 Slides)</span>
+  </button>
+
+  <!-- ==========================================================================
+       CONTENIDO PRINCIPAL (SLIDES EDUCATIVOS)
+       ========================================================================== -->
+  <main class="main-content" id="mainContent">
+
+    <!-- SLIDE 01: PORTADA & ENCUADRE INSTITUCIONAL -->
+    <section class="slide-section" id="slide-01">
+      <div class="slide-container">
+        <span class="slide-badge-category badge-green">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          Sesión Sincrónica 4 de 7 · Base de Datos NoSQL
+        </span>
+        <h1 class="slide-title">Operaciones CRUD en MongoDB (Compass & Shell)</h1>
+        <p class="slide-subtitle">
+          Manipulación profesional de documentos BSON mediante la interfaz gráfica de MongoDB Compass y la consola integrada Mongosh sobre el proyecto formativo TechStore.
+        </p>
+
+        <div class="cards-grid-3">
+          <div class="card-pro top-azul">
+            <div class="card-header-flex">
+              <div class="card-icon-badge icon-badge-blue">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>
+              </div>
+              <span class="card-pill-tag badge-blue">Sincrónico</span>
+            </div>
+            <h3 class="card-title">Datos de la Sesión</h3>
+            <p class="card-desc">
+              <strong>Fecha:</strong> Lunes, 26 de Octubre de 2026<br>
+              <strong>Horario:</strong> 6:30 PM - 8:30 PM (Teams)<br>
+              <strong>Instructor:</strong> Julián Andrés Trujillo Morales<br>
+              <strong>Regional:</strong> Huila | CADPH Garzón
+            </p>
+          </div>
+
+          <div class="card-pro top-mongo">
+            <div class="card-header-flex">
+              <div class="card-icon-badge icon-badge-mongo">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/></svg>
+              </div>
+              <span class="card-pill-tag badge-mongo">Entorno Local</span>
+            </div>
+            <h3 class="card-title">Stack Tecnológico Local</h3>
+            <p class="card-desc">
+              <strong>Motor:</strong> MongoDB Community Server 7.x<br>
+              <strong>Herramienta GUI:</strong> MongoDB Compass (Local)<br>
+              <strong>CLI:</strong> >_ MONGOSH Integrado<br>
+              <strong>Conexión:</strong> mongodb://localhost:27017
+            </p>
+          </div>
+
+          <div class="card-pro top-naranja">
+            <div class="card-header-flex">
+              <div class="card-icon-badge icon-badge-orange">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m22 8-6 4 6 4V8Z"/><rect width="14" height="12" x="2" y="6" rx="2"/></svg>
+              </div>
+              <span class="card-pill-tag badge-orange">SLA Corte 2</span>
+            </div>
+            <h3 class="card-title">Evidencia AA1-EV04</h3>
+            <p class="card-desc">
+              <strong>Evidencia:</strong> Video demostrativo manipulando MongoDB Compass en local.<br>
+              <strong>Cierre Corte 2:</strong> Miércoles 04 de Noviembre (11:59 PM)<br>
+              <strong>Formato:</strong> Video MP4 o PDF con enlace público/unlisted
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 02: EL CICLO CRUD EN NOSQL -->
+    <section class="slide-section" id="slide-02">
+      <div class="slide-container">
+        <span class="slide-badge-category badge-blue">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="m4.93 4.93 4.24 4.24"/></svg>
+          Bloque 1 · Fundamento Conceptual
+        </span>
+        <h2 class="slide-title">El Ciclo CRUD en Bases de Datos Documentales</h2>
+        <p class="slide-subtitle">
+          Cómo se traduce el ciclo universal de manipulación de información al modelo NoSQL de MongoDB.
+        </p>
+
+        <div style="background:#ffffff;border:1px solid var(--borde-light);border-radius:12px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.04);margin-bottom:20px;">
+          <table class="cweijan-params-table" style="width:100%;border-collapse:collapse;font-size:13px;">
+            <thead>
+              <tr style="background:#f8fafc;border-bottom:1px solid var(--borde-light);text-align:left;">
+                <th style="padding:12px 16px;color:var(--texto-main);font-weight:700;">Operación CRUD</th>
+                <th style="padding:12px 16px;color:var(--texto-main);font-weight:700;">Equivalente MySQL (Sesión 2)</th>
+                <th style="padding:12px 16px;color:var(--texto-main);font-weight:700;">Método MQL en Mongosh</th>
+                <th style="padding:12px 16px;color:var(--texto-main);font-weight:700;">Acción en Compass (GUI)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr style="border-bottom:1px solid var(--borde-light);">
+                <td style="padding:12px 16px;"><strong style="color:#16a34a;">C · Create (Crear)</strong></td>
+                <td style="padding:12px 16px;color:var(--texto-muted);"><code>INSERT INTO productos (...)</code></td>
+                <td style="padding:12px 16px;font-family:'JetBrains Mono',monospace;color:#0284c7;">db.productos.insertOne({...})</td>
+                <td style="padding:12px 16px;">Botón verde <strong>ADD DATA ▾ -> Insert</strong></td>
+              </tr>
+              <tr style="border-bottom:1px solid var(--borde-light);">
+                <td style="padding:12px 16px;"><strong style="color:#0284c7;">R · Read (Leer/Consultar)</strong></td>
+                <td style="padding:12px 16px;color:var(--texto-muted);"><code>SELECT * FROM productos WHERE...</code></td>
+                <td style="padding:12px 16px;font-family:'JetBrains Mono',monospace;color:#0284c7;">db.productos.find({ activo: true })</td>
+                <td style="padding:12px 16px;">Barra superior <strong>Filter { }</strong></td>
+              </tr>
+              <tr style="border-bottom:1px solid var(--borde-light);">
+                <td style="padding:12px 16px;"><strong style="color:#d97706;">U · Update (Actualizar)</strong></td>
+                <td style="padding:12px 16px;color:var(--texto-muted);"><code>UPDATE productos SET precio = ...</code></td>
+                <td style="padding:12px 16px;font-family:'JetBrains Mono',monospace;color:#0284c7;">db.productos.updateOne(..., { $set: {...} })</td>
+                <td style="padding:12px 16px;">Icono del lápiz <strong>Edit Document</strong></td>
+              </tr>
+              <tr>
+                <td style="padding:12px 16px;"><strong style="color:#dc2626;">D · Delete (Eliminar)</strong></td>
+                <td style="padding:12px 16px;color:var(--texto-muted);"><code>DELETE FROM productos WHERE ...</code></td>
+                <td style="padding:12px 16px;font-family:'JetBrains Mono',monospace;color:#0284c7;">db.productos.deleteOne({ sku: "..." })</td>
+                <td style="padding:12px 16px;">Icono de papelera <strong>Delete Document</strong></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div style="background:linear-gradient(135deg, #f0fdf4 0%, #e0f2fe 100%);border:1.5px solid #86efac;border-radius:12px;padding:16px 20px;">
+          <strong style="color:#166534;font-size:14px;display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+            💡 Atomicidad a Nivel de Documento (Ventaja de MongoDB):
+          </strong>
+          <p style="margin:0;font-size:13px;color:#334155;line-height:1.6;">
+            A diferencia de SQL donde actualizar una orden y sus ítems requiere abrir transacciones sobre múltiples tablas (<code>ordenes</code> e <code>items_orden</code>), en MongoDB la orden almacena sus ítems embebidos en un solo documento BSON. Por tanto, cualquier inserción o actualización es <strong>100% atómica por defecto</strong>, sin overhead de bloqueos relacionales.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 03: EL ENTORNO COMPASS LOCAL & SHELL -->
+    <section class="slide-section" id="slide-03">
+      <div class="slide-container">
+        <span class="slide-badge-category badge-green">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect width="20" height="14" x="2" y="5" rx="2"/></svg>
+          Bloque 1 · Entorno de Trabajo Local
+        </span>
+        <h2 class="slide-title">MongoDB Compass Local & Consola Integrada Mongosh</h2>
+        <p class="slide-subtitle">
+          Trabajamos 100% en tu máquina local sin depender de internet ni de servicios cloud externos.
+        </p>
+
+        <div class="cards-grid-2">
+          <div class="card-pro top-verde">
+            <div class="card-header-flex">
+              <div class="card-icon-badge icon-badge-green">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20 7h-9"/><path d="M14 17H5"/><circle cx="17" cy="17" r="3"/><circle cx="7" cy="7" r="3"/></svg>
+              </div>
+              <span class="card-pill-tag badge-green">Vía 1 · Interfaz Gráfica (GUI)</span>
+            </div>
+            <h3 class="card-title">1. MongoDB Compass Visual</h3>
+            <p class="card-desc" style="line-height:1.6;margin-bottom:12px;">
+              Ideal para visualización inmediata y exploración interactiva de datos:
+            </p>
+            <ul style="font-size:13px;color:var(--texto-muted);line-height:1.7;padding-left:18px;margin:0;">
+              <li><strong>Barra de Filtros:</strong> Escribe objetos de consulta <code>{ stock: { $gt: 10 } }</code> y presiona <em>Find</em>.</li>
+              <li><strong>Modo Edición:</strong> Pasar el cursor sobre el documento y hacer clic en el lápiz para cambiar valores en caliente.</li>
+              <li><strong>Gestión de Esquemas:</strong> Pestaña <em>Schema</em> para auditar tipos BSON y valores atípicos.</li>
+            </ul>
+          </div>
+
+          <div class="card-pro top-azul">
+            <div class="card-header-flex">
+              <div class="card-icon-badge icon-badge-blue">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="4 17 10 11 4 5"/><line x1="12" x2="20" y1="19" y2="19"/></svg>
+              </div>
+              <span class="card-pill-tag badge-blue">Vía 2 · Consola de Comandos (MQL)</span>
+            </div>
+            <h3 class="card-title">2. Consola Integrada >_ MONGOSH</h3>
+            <p class="card-desc" style="line-height:1.6;margin-bottom:12px;">
+              Ubicada en el panel inferior de la misma ventana de Compass:
+            </p>
+            <ul style="font-size:13px;color:var(--texto-muted);line-height:1.7;padding-left:18px;margin:0;">
+              <li><strong>Cero Instalaciones Extra:</strong> Viene embebida en Compass sin abrir terminales de Windows.</li>
+              <li><strong>Sentencias MQL Directas:</strong> Permite ejecutar <code>db.productos.updateOne(...)</code> con autocompletado interactivo.</li>
+              <li><strong>Retorno Técnico Inmediato:</strong> Verás confirmaciones exactas como <code>{ acknowledged: true, modifiedCount: 1 }</code>.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div style="margin-top:20px;background:#1e293b;border:1px solid #334155;border-radius:10px;padding:14px 18px;display:flex;align-items:center;justify-content:space-between;">
+          <div style="display:flex;align-items:center;gap:12px;">
+            <span style="font-family:'JetBrains Mono',monospace;font-size:12px;background:#0f172a;color:#38bdf8;padding:4px 10px;border-radius:6px;border:1px solid #1e293b;">
+              Cadena de Conexión Local:
+            </span>
+            <code style="font-family:'JetBrains Mono',monospace;font-size:13px;color:#00ed64;font-weight:700;">
+              mongodb://localhost:27017
+            </code>
+          </div>
+          <span style="font-size:12px;color:#94a3b8;">Base de datos activa: <strong>techstore_db</strong></span>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 04: CREATE (C) -->
+    <section class="slide-section" id="slide-04">
+      <div class="slide-container">
+        <span class="slide-badge-category badge-green">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
+          Bloque 2 · Operaciones MQL
+        </span>
+        <h2 class="slide-title">Operación Create: Inserción Individual y por Lote</h2>
+        <p class="slide-subtitle">
+          Cómo incorporar nuevos documentos en colecciones existentes sin alterar esquemas previos.
+        </p>
+
+        <div class="cards-grid-2">
+          <div class="card-pro top-verde">
+            <div class="card-header-flex">
+              <span class="card-pill-tag badge-green">db.collection.insertOne()</span>
+            </div>
+            <h3 class="card-title">Inserción Unitaria (1 Documento)</h3>
+            <p class="card-desc" style="line-height:1.6;margin-bottom:10px;">
+              Inserta un único objeto BSON. Si no se especifica el campo <code>_id</code>, MongoDB genera automáticamente un <code>ObjectId</code> de 12 bytes único en el cluster.
+            </p>
+            <pre style="margin:0;background:#0f172a;color:#f8fafc;padding:12px;border-radius:8px;font-family:'JetBrains Mono',monospace;font-size:12px;line-height:1.5;">db.productos.insertOne({
+  sku: "TAB-PRO-06",
+  titulo: "Tablet Digitalizadora 2K Pro",
+  precio: 1450000.00,
+  stock: 20,
+  activo: true
+});</pre>
+          </div>
+
+          <div class="card-pro top-azul">
+            <div class="card-header-flex">
+              <span class="card-pill-tag badge-blue">db.collection.insertMany()</span>
+            </div>
+            <h3 class="card-title">Inserción en Lote (Arreglo [])</h3>
+            <p class="card-desc" style="line-height:1.6;margin-bottom:10px;">
+              Recibe un arreglo de múltiples documentos JSON <code>[{...}, {...}]</code>. Es el método más eficiente para cargas iniciales o migraciones de datos.
+            </p>
+            <pre style="margin:0;background:#0f172a;color:#f8fafc;padding:12px;border-radius:8px;font-family:'JetBrains Mono',monospace;font-size:12px;line-height:1.5;">db.productos.insertMany([
+  { sku: "CAM-4K-07", precio: 480000 },
+  { sku: "HUB-USB-08", precio: 120000 }
+]);</pre>
+          </div>
+        </div>
+
+        <div style="margin-top:20px;background:#fefce8;border:1px solid #fef08a;border-radius:10px;padding:14px 18px;">
+          <strong style="color:#854d0e;font-size:13px;display:flex;align-items:center;gap:6px;">
+            ⚠️ Regla de Oro en Inserciones NoSQL:
+          </strong>
+          <span style="font-size:12.5px;color:#713f12;line-height:1.5;display:block;margin-top:4px;">
+            Asegúrate de que los valores numéricos de precio y stock se escriban <strong>sin comillas</strong> (ej: <code>1450000.00</code> en lugar de <code>"1450000.00"</code>). De lo contrario, MongoDB los almacenará como Strings y fallarán las consultas de rango numérico ($gt, $lt).
+          </span>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 05: READ (R) -->
+    <section class="slide-section" id="slide-05">
+      <div class="slide-container">
+        <span class="slide-badge-category badge-blue">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          Bloque 2 · Operaciones MQL
+        </span>
+        <h2 class="slide-title">Operación Read: Consultas con Operadores MQL</h2>
+        <p class="slide-subtitle">
+          El lenguaje de consultas MQL reemplaza las cláusulas WHERE y JOIN de SQL mediante objetos JSON.
+        </p>
+
+        <div class="cards-grid-3">
+          <div class="card-pro top-azul">
+            <h3 class="card-title" style="font-size:14px;">1. Operadores de Rango</h3>
+            <p class="card-desc" style="font-size:12px;line-height:1.5;">
+              Filtran valores mayores, menores o iguales sin conversiones:
+            </p>
+            <pre style="background:#0f172a;color:#f8fafc;padding:10px;border-radius:6px;font-family:'JetBrains Mono',monospace;font-size:11.5px;margin:8px 0 0;">// Precios > 1.000.000 COP:
+{ precio: { $gt: 1000000 } }
+
+// Entre 300k y 1M COP:
+{ precio: { 
+  $gte: 300000, 
+  $lte: 1000000 
+} }</pre>
+          </div>
+
+          <div class="card-pro top-verde">
+            <h3 class="card-title" style="font-size:14px;">2. Notación de Punto</h3>
+            <p class="card-desc" style="font-size:12px;line-height:1.5;">
+              Permite inspeccionar campos dentro de subdocumentos embebidos:
+            </p>
+            <pre style="background:#0f172a;color:#f8fafc;padding:10px;border-radius:6px;font-family:'JetBrains Mono',monospace;font-size:11.5px;margin:8px 0 0;">// RAM de 32GB en specs:
+{ "especificaciones.ram_gb": 32 }
+
+// Clientes en Garzón:
+{ "direccion_envio.ciudad": "Garzón" }</pre>
+          </div>
+
+          <div class="card-pro top-naranja">
+            <h3 class="card-title" style="font-size:14px;">3. Consultas en Arreglos</h3>
+            <p class="card-desc" style="font-size:12px;line-height:1.5;">
+              Evalúa si un elemento existe dentro de un array de strings:
+            </p>
+            <pre style="background:#0f172a;color:#f8fafc;padding:10px;border-radius:6px;font-family:'JetBrains Mono',monospace;font-size:11.5px;margin:8px 0 0;">// Productos con tag gamer:
+{ etiquetas: "gamer" }
+
+// Múltiples tags con $in:
+{ etiquetas: { 
+  $in: ["diseno", "gamer"] 
+} }</pre>
+          </div>
+        </div>
+
+        <div style="margin-top:20px;background:#f8fafc;border:1px solid var(--borde-light);border-radius:10px;padding:14px 18px;">
+          <strong style="color:var(--texto-main);font-size:13px;">Diferencia Clave con SQL:</strong>
+          <span style="font-size:12.5px;color:var(--texto-muted);line-height:1.5;display:block;margin-top:4px;">
+            En SQL, consultar la ciudad de un cliente requería <code>SELECT * FROM clientes c JOIN direcciones d ON c.id = d.cliente_id WHERE d.ciudad = 'Garzón'</code>. En MongoDB, gracias a los subdocumentos embebidos, se consulta directamente con <code>{ "direccion_envio.ciudad": "Garzón" }</code> en un único acceso a disco.
+          </span>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 06: UPDATE & DELETE (U & D) -->
+    <section class="slide-section" id="slide-06">
+      <div class="slide-container">
+        <span class="slide-badge-category badge-orange">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg>
+          Bloque 2 · Operaciones MQL
+        </span>
+        <h2 class="slide-title">Operaciones Update & Delete: Mutación Segura</h2>
+        <p class="slide-subtitle">
+          Reglas técnicas para evitar la pérdida accidental de datos en bases de datos NoSQL.
+        </p>
+
+        <div class="cards-grid-2">
+          <!-- UPDATE -->
+          <div class="card-pro top-azul">
+            <div class="card-header-flex">
+              <span class="card-pill-tag badge-blue">db.collection.updateOne()</span>
+            </div>
+            <h3 class="card-title">Actualización con Operador $set</h3>
+            <p class="card-desc" style="line-height:1.6;margin-bottom:10px;">
+              <strong>¡La Regla de Oro de MongoDB!</strong> Para modificar atributos específicos siempre debes usar el operador <code>$set</code>. Si pasas un objeto sin <code>$set</code>, MongoDB reemplazará el documento completo, eliminando todos los demás campos.
+            </p>
+            <pre style="margin:0;background:#0f172a;color:#f8fafc;padding:12px;border-radius:8px;font-family:'JetBrains Mono',monospace;font-size:12px;line-height:1.5;">db.productos.updateOne(
+  { sku: "LAP-PRO-01" },
+  { 
+    $set: { 
+      precio: 4990000.00,
+      stock: 12 
+    },
+    $currentDate: { ultima_modificacion: true }
+  }
+);</pre>
+          </div>
+
+          <!-- DELETE -->
+          <div class="card-pro top-naranja">
+            <div class="card-header-flex">
+              <span class="card-pill-tag badge-orange">db.collection.deleteOne()</span>
+            </div>
+            <h3 class="card-title">Eliminación Segura y Restrictiva</h3>
+            <p class="card-desc" style="line-height:1.6;margin-bottom:10px;">
+              Elimina el primer documento que coincida con el filtro de búsqueda. Se recomienda filtrar siempre por campos de identidad única como <code>_id</code> o <code>sku</code> para evitar eliminar registros equivocados.
+            </p>
+            <pre style="margin:0;background:#0f172a;color:#f8fafc;padding:12px;border-radius:8px;font-family:'JetBrains Mono',monospace;font-size:12px;line-height:1.5;">// Elimina producto descontinuado:
+db.productos.deleteOne({ 
+  sku: "HUB-USB-08" 
+});
+
+// Retorno esperado:
+// { acknowledged: true, deletedCount: 1 }</pre>
+          </div>
+        </div>
+
+        <div style="margin-top:20px;background:#fef2f2;border:1.5px solid #fecaca;border-radius:10px;padding:14px 18px;">
+          <strong style="color:#991b1b;font-size:13px;display:flex;align-items:center;gap:6px;">
+            🛑 Peligro Técnico: ¿Por qué deleteMany({}) está prohibido en producción?
+          </strong>
+          <span style="font-size:12.5px;color:#7f1d1d;line-height:1.5;display:block;margin-top:4px;">
+            Ejecutar <code>db.productos.deleteMany({})</code> sin un objeto de filtro eliminará <strong>absolutamente todos los documentos</strong> de la colección de manera instantánea e irreversible. Usa siempre filtros precisos.
+          </span>
+        </div>
+      </div>
+    </section>
+<!-- SLIDE 07: CODEBOX COLECCIÓN USUARIOS (ESTÁNDAR VS CODE) -->
+    <section class="slide-section" id="slide-07">
+      <div class="slide-container">
+        <span class="slide-badge-category badge-green">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="4 17 10 11 4 5"/></svg>
+          Bloque 3 · Laboratorio de Código
+        </span>
+        <h2 class="slide-title">Codebox 1: Inserción de Nuevos Productos (Create)</h2>
+        <p class="slide-subtitle">
+          Script de adición de productos con especificaciones BSON para expandir el catálogo de TechStore.
+        </p>
+
+        <!-- CODEBOX VS CODE SEGÚN ESTÁNDAR 22PX -->
+        <div class="code-editor-box">
+          <div class="editor-header">
+            <div class="editor-dots">
+              <span class="dot dot-red"></span>
+              <span class="dot dot-yellow"></span>
+              <span class="dot dot-green"></span>
+            </div>
+            <div class="editor-title">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+              <span>01_insert_productos_crud.js</span>
+            </div>
+            <div class="editor-badge">MQL · MongoDB</div>
+          </div>
+          <div class="editor-body">
+            <div class="editor-gutter">
+              <div class="gutter-row"><span class="fold-arrow">⌄</span><span class="gutter-num">1</span></div>
+              <div class="gutter-row"><span class="fold-arrow"></span><span class="gutter-num">2</span></div>
+              <div class="gutter-row"><span class="fold-arrow">⌄</span><span class="gutter-num">3</span></div>
+              <div class="gutter-row"><span class="fold-arrow"></span><span class="gutter-num">4</span></div>
+              <div class="gutter-row"><span class="fold-arrow"></span><span class="gutter-num">5</span></div>
+              <div class="gutter-row"><span class="fold-arrow"></span><span class="gutter-num">6</span></div>
+              <div class="gutter-row"><span class="fold-arrow">⌄</span><span class="gutter-num">7</span></div>
+              <div class="gutter-row"><span class="fold-arrow"></span><span class="gutter-num">8</span></div>
+              <div class="gutter-row"><span class="fold-arrow"></span><span class="gutter-num">9</span></div>
+              <div class="gutter-row"><span class="fold-arrow"></span><span class="gutter-num">10</span></div>
+              <div class="gutter-row"><span class="fold-arrow"></span><span class="gutter-num">11</span></div>
+              <div class="gutter-row"><span class="fold-arrow"></span><span class="gutter-num">12</span></div>
+              <div class="gutter-row"><span class="fold-arrow"></span><span class="gutter-num">13</span></div>
+              <div class="gutter-row"><span class="fold-arrow"></span><span class="gutter-num">14</span></div>
+              <div class="gutter-row"><span class="fold-arrow">⌄</span><span class="gutter-num">15</span></div>
+              <div class="gutter-row"><span class="fold-arrow"></span><span class="gutter-num">16</span></div>
+              <div class="gutter-row"><span class="fold-arrow"></span><span class="gutter-num">17</span></div>
+              <div class="gutter-row"><span class="fold-arrow"></span><span class="gutter-num">18</span></div>
+              <div class="gutter-row"><span class="fold-arrow">⌄</span><span class="gutter-num">19</span></div>
+              <div class="gutter-row"><span class="fold-arrow"></span><span class="gutter-num">20</span></div>
+              <div class="gutter-row"><span class="fold-arrow"></span><span class="gutter-num">21</span></div>
+              <div class="gutter-row"><span class="fold-arrow"></span><span class="gutter-num">22</span></div>
+              <div class="gutter-row"><span class="fold-arrow"></span><span class="gutter-num">23</span></div>
+              <div class="gutter-row"><span class="fold-arrow"></span><span class="gutter-num">24</span></div>
+              <div class="gutter-row"><span class="fold-arrow"></span><span class="gutter-num">25</span></div>
+            </div>
+            <div class="editor-code">
+              <div class="code-line"><span class="syn-comment">// Inserción en lote de 2 nuevos productos para TechStore:</span></div>
+              <div class="code-line"><span class="syn-method">db</span>.<span class="syn-prop">productos</span>.<span class="syn-func">insertMany</span>([</div>
+              <div class="code-line">&nbsp;&nbsp;{</div>
+              <div class="code-line">&nbsp;&nbsp;&nbsp;&nbsp;<span class="syn-key">"sku"</span>: <span class="syn-str">"TAB-PRO-06"</span>,</div>
+              <div class="code-line">&nbsp;&nbsp;&nbsp;&nbsp;<span class="syn-key">"titulo"</span>: <span class="syn-str">"Tablet Gráfica Digitalizadora 2K 11 Pulgadas"</span>,</div>
+              <div class="code-line">&nbsp;&nbsp;&nbsp;&nbsp;<span class="syn-key">"categoria"</span>: <span class="syn-str">"Equipos de Cómputo"</span>,</div>
+              <div class="code-line">&nbsp;&nbsp;&nbsp;&nbsp;<span class="syn-key">"precio"</span>: <span class="syn-num">1450000.00</span>,</div>
+              <div class="code-line">&nbsp;&nbsp;&nbsp;&nbsp;<span class="syn-key">"especificaciones"</span>: {</div>
+              <div class="code-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="syn-key">"pantalla"</span>: <span class="syn-str">"11 Pulgadas IPS 2K"</span>,</div>
+              <div class="code-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="syn-key">"niveles_presion_lapiz"</span>: <span class="syn-num">8192</span>,</div>
+              <div class="code-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="syn-key">"conectividad"</span>: <span class="syn-str">"USB-C / Bluetooth 5.2"</span></div>
+              <div class="code-line">&nbsp;&nbsp;&nbsp;&nbsp;},</div>
+              <div class="code-line">&nbsp;&nbsp;&nbsp;&nbsp;<span class="syn-key">"etiquetas"</span>: [<span class="syn-str">"diseno"</span>, <span class="syn-str">"ilustracion"</span>, <span class="syn-str">"adso"</span>],</div>
+              <div class="code-line">&nbsp;&nbsp;&nbsp;&nbsp;<span class="syn-key">"stock"</span>: <span class="syn-num">12</span>,</div>
+              <div class="code-line">&nbsp;&nbsp;&nbsp;&nbsp;<span class="syn-key">"activo"</span>: <span class="syn-keyword">true</span></div>
+              <div class="code-line">&nbsp;&nbsp;},</div>
+              <div class="code-line">&nbsp;&nbsp;{</div>
+              <div class="code-line">&nbsp;&nbsp;&nbsp;&nbsp;<span class="syn-key">"sku"</span>: <span class="syn-str">"CAM-PRO-07"</span>,</div>
+              <div class="code-line">&nbsp;&nbsp;&nbsp;&nbsp;<span class="syn-key">"titulo"</span>: <span class="syn-str">"Cámara Web Pro 4K UHD con Micrófono Estéreo"</span>,</div>
+              <div class="code-line">&nbsp;&nbsp;&nbsp;&nbsp;<span class="syn-key">"categoria"</span>: <span class="syn-str">"Accesorios"</span>,</div>
+              <div class="code-line">&nbsp;&nbsp;&nbsp;&nbsp;<span class="syn-key">"precio"</span>: <span class="syn-num">480000.00</span>,</div>
+              <div class="code-line">&nbsp;&nbsp;&nbsp;&nbsp;<span class="syn-key">"especificaciones"</span>: {</div>
+              <div class="code-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="syn-key">"resolucion"</span>: <span class="syn-str">"3840x2160 @ 30fps"</span>,</div>
+              <div class="code-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="syn-key">"enfoque"</span>: <span class="syn-str">"Autofocus Inteligente"</span></div>
+              <div class="code-line">&nbsp;&nbsp;&nbsp;&nbsp;},</div>
+              <div class="code-line">&nbsp;&nbsp;&nbsp;&nbsp;<span class="syn-key">"etiquetas"</span>: [<span class="syn-str">"streaming"</span>, <span class="syn-str">"oficina"</span>, <span class="syn-str">"accesorios"</span>],</div>
+              <div class="code-line">&nbsp;&nbsp;&nbsp;&nbsp;<span class="syn-key">"stock"</span>: <span class="syn-num">25</span>,</div>
+              <div class="code-line">&nbsp;&nbsp;&nbsp;&nbsp;<span class="syn-key">"activo"</span>: <span class="syn-keyword">true</span></div>
+              <div class="code-line">&nbsp;&nbsp;}</div>
+              <div class="code-line">]);</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 08: CODEBOX PRODUCTOS DINÁMICOS -->
+    <section class="slide-section" id="slide-08">
+      <div class="slide-container">
+        <span class="slide-badge-category badge-blue">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          Bloque 3 · Laboratorio de Código
+        </span>
+        <h2 class="slide-title">Codebox 2: Consultas Avanzadas y Filtros MQL (Read)</h2>
+        <p class="slide-subtitle">
+          Sentencias MQL listas para ejecutar en la consola integrada >_ MONGOSH o en la barra Filter.
+        </p>
+
+        <!-- CODEBOX VS CODE 22PX -->
+        <div class="code-editor-box">
+          <div class="editor-header">
+            <div class="editor-dots">
+              <span class="dot dot-red"></span>
+              <span class="dot dot-yellow"></span>
+              <span class="dot dot-green"></span>
+            </div>
+            <div class="editor-title">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+              <span>02_read_queries_mql.js</span>
+            </div>
+            <div class="editor-badge">MQL · MongoDB</div>
+          </div>
+          <div class="editor-body">
+            <div class="editor-gutter">
+              <div class="gutter-row"><span class="fold-arrow">⌄</span><span class="gutter-num">1</span></div>
+              <div class="gutter-row"><span class="fold-arrow"></span><span class="gutter-num">2</span></div>
+              <div class="gutter-row"><span class="fold-arrow"></span><span class="gutter-num">3</span></div>
+              <div class="gutter-row"><span class="fold-arrow">⌄</span><span class="gutter-num">4</span></div>
+              <div class="gutter-row"><span class="fold-arrow"></span><span class="gutter-num">5</span></div>
+              <div class="gutter-row"><span class="fold-arrow"></span><span class="gutter-num">6</span></div>
+              <div class="gutter-row"><span class="fold-arrow">⌄</span><span class="gutter-num">7</span></div>
+              <div class="gutter-row"><span class="fold-arrow"></span><span class="gutter-num">8</span></div>
+              <div class="gutter-row"><span class="fold-arrow"></span><span class="gutter-num">9</span></div>
+              <div class="gutter-row"><span class="fold-arrow">⌄</span><span class="gutter-num">10</span></div>
+              <div class="gutter-row"><span class="fold-arrow"></span><span class="gutter-num">11</span></div>
+              <div class="gutter-row"><span class="fold-arrow"></span><span class="gutter-num">12</span></div>
+              <div class="gutter-row"><span class="fold-arrow">⌄</span><span class="gutter-num">13</span></div>
+              <div class="gutter-row"><span class="fold-arrow"></span><span class="gutter-num">14</span></div>
+              <div class="gutter-row"><span class="fold-arrow"></span><span class="gutter-num">15</span></div>
+              <div class="gutter-row"><span class="fold-arrow">⌄</span><span class="gutter-num">16</span></div>
+              <div class="gutter-row"><span class="fold-arrow"></span><span class="gutter-num">17</span></div>
+              <div class="gutter-row"><span class="fold-arrow"></span><span class="gutter-num">18</span></div>
+              <div class="gutter-row"><span class="fold-arrow"></span><span class="gutter-num">19</span></div>
+              <div class="gutter-row"><span class="fold-arrow"></span><span class="gutter-num">20</span></div>
+            </div>
+            <div class="editor-code">
+              <div class="code-line"><span class="syn-comment">// 1. Consultar todos los productos con stock disponible:</span></div>
+              <div class="code-line"><span class="syn-method">db</span>.<span class="syn-prop">productos</span>.<span class="syn-func">find</span>({ <span class="syn-key">stock</span>: { <span class="syn-func">$gt</span>: <span class="syn-num">0</span> } });</div>
+              <div class="code-line"></div>
+              <div class="code-line"><span class="syn-comment">// 2. Filtrar productos de gama intermedia (entre 400k y 2M COP):</span></div>
+              <div class="code-line"><span class="syn-method">db</span>.<span class="syn-prop">productos</span>.<span class="syn-func">find</span>({</div>
+              <div class="code-line">&nbsp;&nbsp;<span class="syn-key">precio</span>: { <span class="syn-func">$gte</span>: <span class="syn-num">400000.00</span>, <span class="syn-func">$lte</span>: <span class="syn-num">2000000.00</span> }</div>
+              <div class="code-line">});</div>
+              <div class="code-line"></div>
+              <div class="code-line"><span class="syn-comment">// 3. Buscar dentro del subdocumento embebido (Notación de punto):</span></div>
+              <div class="code-line"><span class="syn-method">db</span>.<span class="syn-prop">productos</span>.<span class="syn-func">find</span>({</div>
+              <div class="code-line">&nbsp;&nbsp;<span class="syn-str">"especificaciones.ram_gb"</span>: <span class="syn-num">32</span></div>
+              <div class="code-line">});</div>
+              <div class="code-line"></div>
+              <div class="code-line"><span class="syn-comment">// 4. Buscar productos que tengan la etiqueta 'diseno' en su arreglo:</span></div>
+              <div class="code-line"><span class="syn-method">db</span>.<span class="syn-prop">productos</span>.<span class="syn-func">find</span>({</div>
+              <div class="code-line">&nbsp;&nbsp;<span class="syn-key">etiquetas</span>: <span class="syn-str">"diseno"</span></div>
+              <div class="code-line">});</div>
+              <div class="code-line"></div>
+              <div class="code-line"><span class="syn-comment">// 5. Proyección (mostrar solo sku, titulo y precio, ocultando _id):</span></div>
+              <div class="code-line"><span class="syn-method">db</span>.<span class="syn-prop">productos</span>.<span class="syn-func">find</span>({}, { <span class="syn-key">sku</span>: <span class="syn-num">1</span>, <span class="syn-key">titulo</span>: <span class="syn-num">1</span>, <span class="syn-key">precio</span>: <span class="syn-num">1</span>, <span class="syn-key">_id</span>: <span class="syn-num">0</span> });</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 09: CODEBOX ORDENES EMBEBIDAS -->
+    <section class="slide-section" id="slide-09">
+      <div class="slide-container">
+        <span class="slide-badge-category badge-orange">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg>
+          Bloque 3 · Laboratorio de Código
+        </span>
+        <h2 class="slide-title">Codebox 3: Modificación y Eliminación Segura (Update & Delete)</h2>
+        <p class="slide-subtitle">
+          Operadores de mutación atómica ($set, $inc) y eliminación selectiva con comprobación de estado.
+        </p>
+
+        <!-- CODEBOX VS CODE 22PX -->
+        <div class="code-editor-box">
+          <div class="editor-header">
+            <div class="editor-dots">
+              <span class="dot dot-red"></span>
+              <span class="dot dot-yellow"></span>
+              <span class="dot dot-green"></span>
+            </div>
+            <div class="editor-title">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+              <span>03_update_delete_mql.js</span>
+            </div>
+            <div class="editor-badge">MQL · MongoDB</div>
+          </div>
+          <div class="editor-body">
+            <div class="editor-gutter">
+              <div class="gutter-row"><span class="fold-arrow">⌄</span><span class="gutter-num">1</span></div>
+              <div class="gutter-row"><span class="fold-arrow"></span><span class="gutter-num">2</span></div>
+              <div class="gutter-row"><span class="fold-arrow"></span><span class="gutter-num">3</span></div>
+              <div class="gutter-row"><span class="fold-arrow"></span><span class="gutter-num">4</span></div>
+              <div class="gutter-row"><span class="fold-arrow"></span><span class="gutter-num">5</span></div>
+              <div class="gutter-row"><span class="fold-arrow"></span><span class="gutter-num">6</span></div>
+              <div class="gutter-row"><span class="fold-arrow"></span><span class="gutter-num">7</span></div>
+              <div class="gutter-row"><span class="fold-arrow"></span><span class="gutter-num">8</span></div>
+              <div class="gutter-row"><span class="fold-arrow">⌄</span><span class="gutter-num">9</span></div>
+              <div class="gutter-row"><span class="fold-arrow"></span><span class="gutter-num">10</span></div>
+              <div class="gutter-row"><span class="fold-arrow"></span><span class="gutter-num">11</span></div>
+              <div class="gutter-row"><span class="fold-arrow"></span><span class="gutter-num">12</span></div>
+              <div class="gutter-row"><span class="fold-arrow"></span><span class="gutter-num">13</span></div>
+              <div class="gutter-row"><span class="fold-arrow">⌄</span><span class="gutter-num">14</span></div>
+              <div class="gutter-row"><span class="fold-arrow"></span><span class="gutter-num">15</span></div>
+              <div class="gutter-row"><span class="fold-arrow"></span><span class="gutter-num">16</span></div>
+              <div class="gutter-row"><span class="fold-arrow"></span><span class="gutter-num">17</span></div>
+              <div class="gutter-row"><span class="fold-arrow">⌄</span><span class="gutter-num">18</span></div>
+              <div class="gutter-row"><span class="fold-arrow"></span><span class="gutter-num">19</span></div>
+              <div class="gutter-row"><span class="fold-arrow"></span><span class="gutter-num">20</span></div>
+            </div>
+            <div class="editor-code">
+              <div class="code-line"><span class="syn-comment">// 1. UPDATE: Actualizar precio y stock del Portátil:</span></div>
+              <div class="code-line"><span class="syn-method">db</span>.<span class="syn-prop">productos</span>.<span class="syn-func">updateOne</span>(</div>
+              <div class="code-line">&nbsp;&nbsp;{ <span class="syn-key">sku</span>: <span class="syn-str">"LAP-PRO-01"</span> },</div>
+              <div class="code-line">&nbsp;&nbsp;{ </div>
+              <div class="code-line">&nbsp;&nbsp;&nbsp;&nbsp;<span class="syn-func">$set</span>: { <span class="syn-key">precio</span>: <span class="syn-num">4990000.00</span>, <span class="syn-key">stock</span>: <span class="syn-num">12</span> },</div>
+              <div class="code-line">&nbsp;&nbsp;&nbsp;&nbsp;<span class="syn-func">$inc</span>: { <span class="syn-key">veces_actualizado</span>: <span class="syn-num">1</span> }</div>
+              <div class="code-line">&nbsp;&nbsp;}</div>
+              <div class="code-line">);</div>
+              <div class="code-line"></div>
+              <div class="code-line"><span class="syn-comment">// 2. UPDATE: Reactivar producto agotado (Monitor):</span></div>
+              <div class="code-line"><span class="syn-method">db</span>.<span class="syn-prop">productos</span>.<span class="syn-func">updateOne</span>(</div>
+              <div class="code-line">&nbsp;&nbsp;{ <span class="syn-key">sku</span>: <span class="syn-str">"MON-GAM-03"</span> },</div>
+              <div class="code-line">&nbsp;&nbsp;{ <span class="syn-func">$set</span>: { <span class="syn-key">stock</span>: <span class="syn-num">8</span>, <span class="syn-key">activo</span>: <span class="syn-keyword">true</span> } }</div>
+              <div class="code-line">);</div>
+              <div class="code-line"></div>
+              <div class="code-line"><span class="syn-comment">// 3. DELETE: Eliminar producto descontinuado de prueba:</span></div>
+              <div class="code-line"><span class="syn-method">db</span>.<span class="syn-prop">productos</span>.<span class="syn-func">deleteOne</span>({ <span class="syn-key">sku</span>: <span class="syn-str">"CAM-PRO-07"</span> });</div>
+              <div class="code-line"></div>
+              <div class="code-line"><span class="syn-comment">// 4. READ FINAL: Verificar conteo de la colección:</span></div>
+              <div class="code-line"><span class="syn-method">db</span>.<span class="syn-prop">productos</span>.<span class="syn-func">countDocuments</span>();</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 10: STEPPER DIDÁCTICO COMPASS & MONGOSH -->
+    <section class="slide-section" id="slide-10">
+      <div class="slide-container">
+        <span class="slide-badge-category badge-mongo">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="12 2 2 7 12 12 22 7 12 2"/></svg>
+          Bloque 3 · Taller Práctico en Vivo
+        </span>
+        <h2 class="slide-title">Stepper en Vivo: Dominio de Operaciones CRUD en MongoDB Compass & Mongosh</h2>
+        <p class="slide-subtitle">
+          Guía interactiva paso a paso diseñada para que domines el ciclo CRUD completo en <strong>MongoDB Compass</strong> y la terminal integrada <strong>Mongosh</strong>: conexión local a <code>techstore_db</code>, inserción visual y por MQL (<code>insertOne</code> / <code>insertMany</code>), consultas estratégicas con operadores de filtro (<code>$gt</code>, <code>$in</code>), actualizaciones atómicas (<code>$set</code>, <code>$inc</code>), eliminaciones seguras con filtro estricto y la grabación del video demostrativo para la evidencia <strong>AA1-EV04</strong>. Haz clic en cada paso para ver la guía didáctica completa.
+        </p>
+
+        <div class="stepper-steps-grid">
+          <button type="button" class="stepper-card-btn" onclick="abrirModalStepper(1)">
+            <span class="step-pill-number">01</span>
+            <div class="step-card-title">Conexión & Base techstore_db</div>
+            <div class="step-card-action-hint">
+              Ver Conexión Local 27017
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+            </div>
+          </button>
+
+          <button type="button" class="stepper-card-btn" onclick="abrirModalStepper(2)">
+            <span class="step-pill-number">02</span>
+            <div class="step-card-title">Create: Inserción Individual y por Lote</div>
+            <div class="step-card-action-hint">
+              Ver insertOne / insertMany
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+            </div>
+          </button>
+
+          <button type="button" class="stepper-card-btn" onclick="abrirModalStepper(3)">
+            <span class="step-pill-number">03</span>
+            <div class="step-card-title">Read: Filtros MQL & Barra Filter</div>
+            <div class="step-card-action-hint">
+              Ver Operadores & Proyección
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+            </div>
+          </button>
+
+          <button type="button" class="stepper-card-btn" onclick="abrirModalStepper(4)">
+            <span class="step-pill-number">04</span>
+            <div class="step-card-title">Update: Mutación Atómica ($set / $inc)</div>
+            <div class="step-card-action-hint">
+              Ver updateOne en Mongosh & GUI
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+            </div>
+          </button>
+
+          <button type="button" class="stepper-card-btn" onclick="abrirModalStepper(5)">
+            <span class="step-pill-number">05</span>
+            <div class="step-card-title">Delete: Eliminación Segura con Filtro</div>
+            <div class="step-card-action-hint">
+              Ver deleteOne & Papelera
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+            </div>
+          </button>
+
+          <button type="button" class="stepper-card-btn" onclick="abrirModalStepper(6)">
+            <span class="step-pill-number">06</span>
+            <div class="step-card-title">Video Demostrativo EV04 (7 Minutos)</div>
+            <div class="step-card-action-hint">
+              Ver Guión de Grabación OBS
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+            </div>
+          </button>
+        </div>
+
+        <!-- TABLA ESTRUCTURADA DE PARÁMETROS OFICIAL (.cweijan-params-table) -->
+        <div style="margin-top:24px;">
+          <h4 style="font-family: 'Syne', sans-serif;font-size:15px;color:var(--texto-main);margin-bottom:8px;">
+            Tabla de Parámetros de Operaciones CRUD en MongoDB:
+          </h4>
+          <table class="cweijan-params-table">
+            <thead>
+              <tr>
+                <th style="width:25%;">Operación CRUD</th>
+                <th style="width:40%;">Sintaxis MQL / Interfaz Compass</th>
+                <th style="width:35%;">Efecto en la Base de Datos</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="cpt-row highlight">
+                <td><strong>Create (Crear)</strong></td>
+                <td><code>db.productos.insertOne({ ... })</code> o botón <strong>ADD DATA ▾</strong></td>
+                <td>Inserta nuevo documento generando un <code>_id</code> ObjectId único e inmutable.</td>
+              </tr>
+              <tr class="cpt-row">
+                <td><strong>Read (Leer)</strong></td>
+                <td><code>db.productos.find({ precio: { $gt: 500000 } })</code> o barra <strong>FILTER</strong></td>
+                <td>Recupera un cursor con documentos coincidentes sin alterar el almacenamiento en disco.</td>
+              </tr>
+              <tr class="cpt-row">
+                <td><strong>Update (Modificar)</strong></td>
+                <td><code>db.productos.updateOne({ codigo: "..." }, { $set: { ... } })</code></td>
+                <td>Mutación atómica in-place del documento seleccionado mediante operadores <code>$set</code> o <code>$inc</code>.</td>
+              </tr>
+              <tr class="cpt-row">
+                <td><strong>Delete (Eliminar)</strong></td>
+                <td><code>db.productos.deleteOne({ codigo: "..." })</code> o ícono papelera Compass</td>
+                <td>Remueve físicamente el documento de la colección. Requiere filtro específico para evitar borrados masivos.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 11: GUÍA PASO A PASO EVIDENCIA AA1-EV03 CON EJEMPLOS CONCRETOS -->
+    <section class="slide-section" id="slide-11">
+      <div class="slide-container">
+        <span class="slide-badge-category badge-green">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="m9 12 2 2 4-4"/></svg>
+          Bloque 4 · Orientación Zajuna
+        </span>
+        <h2 class="slide-title">Preparación y Entrega: Evidencia GA6-220501096-AA1-EV04</h2>
+        <p class="slide-subtitle">
+          Guía metodológica oficial para la preparación, grabación y entrega del <strong>Video demostrativo de operaciones CRUD sobre base de datos NoSQL</strong>. Esta evidencia pertenece al <strong>Corte 2 de la Guía 6</strong> con fecha límite de cierre en Zajuna: <strong>Miércoles, 04 de Noviembre de 2026 (11:59 PM)</strong>.
+        </p>
+
+        <!-- BANNER DE DUALIDAD DE RUTA -->
+        <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:10px;padding:14px 18px;margin-bottom:20px;display:flex;align-items:flex-start;gap:12px;">
+          <div style="background:#0284c7;color:#fff;border-radius:6px;padding:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+          </div>
+          <div style="font-size:13px;color:#1e3a8a;line-height:1.6;">
+            <strong>Flexibilidad Temática de Entrega (Dualidad A/B):</strong> Para tu video demostrativo puedes optar por:
+            <br>• <strong>Ruta A (Literal Guía SENA):</strong> Base de datos de vehículos/concesionario demostrando CRUD sobre automóviles, marcas y clientes.
+            <br>• <strong>Ruta B (Proyecto Formativo Continuado - Recomendada):</strong> Base de datos <code>techstore_db</code> trabajada en la Sesión 3 y 4, realizando el CRUD sobre las colecciones <code>productos</code>, <code>usuarios</code> u <code>ordenes</code>.
+            <br><em>Ambas rutas son 100% válidas y evaluadas con el máximo puntaje.</em>
+          </div>
+        </div>
+
+        <div class="cards-grid-2col">
+          <!-- CARD 1: GUIÓN DEL VIDEO (7 MINUTOS) -->
+          <div class="card-pro top-green">
+            <div class="card-header-flex">
+              <div class="card-icon-badge icon-badge-green">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="23 7 16 12 23 17 23 7"/><rect width="14" height="14" x="1" y="5" rx="2"/></svg>
+              </div>
+              <span class="card-pill-tag badge-green">Parte 1 · Grabación del Video (5 a 7 min)</span>
+            </div>
+            <h3 class="card-title">1. Estructura Cronometrada del Video</h3>
+            <p class="card-desc" style="line-height:1.6;margin-bottom:12px;">
+              Graba tu pantalla usando <strong>OBS Studio</strong>, <strong>Loom</strong> o el grabador de Windows (Win+Alt+R) asegurando buena calidad de audio y resolución legible:
+            </p>
+            <div style="display: flex; flex-direction: column; gap: 8px; font-size: 12.5px; color: var(--texto-muted); line-height: 1.5;">
+              <div style="background: #f8fafc; border: 1px solid var(--borde-light); border-radius: 6px; padding: 8px 10px;">
+                <strong style="color:var(--texto-main);">Minuto 0:00 - 1:00 · Portada & Conexión:</strong><br>
+                Presentación verbal (nombre, ficha 3389010) y conexión exitosa en MongoDB Compass a <code>mongodb://localhost:27017</code> mostrando la base de datos seleccionada.
+              </div>
+              <div style="background: #f8fafc; border: 1px solid var(--borde-light); border-radius: 6px; padding: 8px 10px;">
+                <strong style="color:var(--texto-main);">Minuto 1:00 - 2:30 · Operación Create (Inserción):</strong><br>
+                Demostración de inserción individual con <code>insertOne()</code> en Mongosh o botón <em>Insert Document</em> en Compass, y posterior inserción masiva (2+ documentos).
+              </div>
+              <div style="background: #f8fafc; border: 1px solid var(--borde-light); border-radius: 6px; padding: 8px 10px;">
+                <strong style="color:var(--texto-main);">Minuto 2:30 - 4:00 · Operación Read (Consultas Filtradas):</strong><br>
+                Uso de la barra FILTER en Compass o <code>db.collection.find()</code> en Mongosh aplicando filtros lógicos (ej. <code>{ precio: { $gt: 500000 } }</code>) y proyección.
+              </div>
+              <div style="background: #f8fafc; border: 1px solid var(--borde-light); border-radius: 6px; padding: 8px 10px;">
+                <strong style="color:var(--texto-main);">Minuto 4:00 - 5:30 · Operación Update (Mutación):</strong><br>
+                Actualización de precio o stock usando <code>updateOne()</code> con el operador <code>$set</code> y verificación inmediata del cambio reflejado en Compass.
+              </div>
+              <div style="background: #f8fafc; border: 1px solid var(--borde-light); border-radius: 6px; padding: 8px 10px;">
+                <strong style="color:var(--texto-main);">Minuto 5:30 - 7:00 · Delete & Conclusión:</strong><br>
+                Eliminación controlada con <code>deleteOne()</code> mediante filtro por código/ID, verificación de que el documento ya no existe y cierre formal del video.
+              </div>
+            </div>
+          </div>
+
+          <!-- CARD 2: DOCUMENTO PDF Y SUBIDA A ZAJUNA -->
+          <div class="card-pro top-mongo">
+            <div class="card-header-flex">
+              <div class="card-icon-badge icon-badge-mongo">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg>
+              </div>
+              <span class="card-pill-tag badge-mongo">Parte 2 · Documento de Entrega & Carga</span>
+            </div>
+            <h3 class="card-title">2. Documento PDF & Enlace de Video</h3>
+            <p class="card-desc" style="line-height:1.6;margin-bottom:12px;">
+              En Zajuna se sube un documento PDF con portada formal y el enlace público del video:
+            </p>
+            <div style="display: flex; flex-direction: column; gap: 10px; font-size: 13px; color: var(--texto-muted); line-height: 1.5;">
+              <div style="background: #f8fafc; border: 1px solid var(--borde-light); border-radius: 8px; padding: 10px 12px;">
+                <strong style="color:var(--texto-main);">Dónde Alojar el Video:</strong><br>
+                Sube el video a <strong>YouTube</strong> en modo <em>No listado / Oculto</em> (recomendado para reproducción fluida) o a <strong>Google Drive</strong> con permisos configurados en <em>"Cualquier persona con el enlace puede ver"</em>.
+              </div>
+              <div style="background: #f8fafc; border: 1px solid var(--borde-light); border-radius: 8px; padding: 10px 12px;">
+                <strong style="color:var(--texto-main);">Estructura del Informe PDF:</strong><br>
+                • Portada con datos del aprendiz, ficha 3389010 y Centro CADPH Garzón.<br>
+                • Enlace hipervinculado y visible del video demostrativo.<br>
+                • Tabla resumen de las sentencias MQL ejecutadas en cada fase del CRUD.<br>
+                • Capturas de pantalla de respaldo tomadas durante la sesión.
+              </div>
+              <div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 10px 12px;">
+                <strong style="color:#166534;">Ruta de Envío en Zajuna LMS (Corte 2):</strong><br>
+                <div style="font-size: 12px; color: #15803d; margin-top: 4px; line-height: 1.6;">
+                  1. Ingresa a <strong>Zajuna LMS</strong> → Ficha <strong>3389010</strong>.<br>
+                  2. Menú <strong>Contenido del Curso</strong> → <strong>Fase 3: Ejecución</strong>.<br>
+                  3. Abre <strong>Actividad de Proyecto 6 (AP6)</strong> → <strong>AA1</strong>.<br>
+                  4. Clic en el enlace <strong>Evidencia GA6-220501096-AA1-EV04</strong>.<br>
+                  5. Adjunta tu informe PDF y pulsa <strong>Enviar</strong>.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide-section" id="slide-12">
+      <div class="slide-container">
+        <span class="slide-badge-category badge-green">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 11 12 14 22 4"/></svg>
+          Bloque 4 · Aseguramiento de Calidad
+        </span>
+        <h2 class="slide-title">Lista de Cotejo Anti-Error (Checklist 100%)</h2>
+        <p class="slide-subtitle">
+          Marca cada casilla antes de subir tu entrega a la plataforma Zajuna. Este checklist autoevalúa en tiempo real si tu evidencia <strong>GA6-220501096-AA1-EV04</strong> cumple con todos los criterios de evaluación de la rúbrica institucional.
+        </p>
+
+        <div class="checklist-card">
+          <div style="display:flex;align-items:center;justify-content:space-between;">
+            <div style="font-family: 'Syne', sans-serif;font-size:16px;font-weight:800;color:var(--texto-main);">
+              Progreso de Verificación de tu Evidencia AA1-EV04:
+            </div>
+            <div id="checklistScoreText" style="font-family:'JetBrains Mono',monospace;font-size:15px;font-weight:800;color:var(--azul-tech);">
+              0% (0 de 5 ítems)
+            </div>
+          </div>
+
+          <div class="checklist-progress-bar-wrap">
+            <div class="checklist-progress-bar" id="checklistBar"></div>
+          </div>
+
+          <div class="checklist-items-list">
+            <label class="check-item" onclick="toggleCheckItem(this)">
+              <input type="checkbox" class="check-checkbox">
+              <div class="check-text">
+                <h4>1. Enlace de Video 100% Funcional y con Permisos Abiertos</h4>
+                <p>El enlace de YouTube (Oculto) o Google Drive abre perfectamente en una ventana de incógnito sin solicitar inicio de sesión ni permisos restrictivos.</p>
+              </div>
+            </label>
+
+            <label class="check-item" onclick="toggleCheckItem(this)">
+              <input type="checkbox" class="check-checkbox">
+              <div class="check-text">
+                <h4>2. Operación Create (Inserción) Explicada y Verificada</h4>
+                <p>En el video se aprecia con claridad la inserción de documentos nuevos mediante <code>insertOne()</code> / <code>insertMany()</code> en Mongosh o interfaz gráfica de Compass.</p>
+              </div>
+            </label>
+
+            <label class="check-item" onclick="toggleCheckItem(this)">
+              <input type="checkbox" class="check-checkbox">
+              <div class="check-text">
+                <h4>3. Operación Read (Lectura) con Filtros Específicos Demostrada</h4>
+                <p>Se demuestran consultas filtradas utilizando operadores de comparación (como <code>$gt</code>, <code>$in</code>) o proyecciones de campos en lugar de un find plano sin criterio.</p>
+              </div>
+            </label>
+
+            <label class="check-item" onclick="toggleCheckItem(this)">
+              <input type="checkbox" class="check-checkbox">
+              <div class="check-text">
+                <h4>4. Operación Update Atómica Ejecutada con Operador $set</h4>
+                <p>Se evidencia la modificación de campos existentes sin sobreescribir el documento completo, verificando en tiempo real el cambio reflejado en la colección.</p>
+              </div>
+            </label>
+
+            <label class="check-item" onclick="toggleCheckItem(this)">
+              <input type="checkbox" class="check-checkbox">
+              <div class="check-text">
+                <h4>5. Operación Delete Controlada y Conteo Final Confirmado</h4>
+                <p>Se elimina un documento específico mediante su clave única (evitando borrados accidentales de toda la colección) y se valida la disminución del conteo total.</p>
+              </div>
+            </label>
+          </div>
+
+          <!-- BOTONES FINALES DE CIERRE -->
+          <div style="margin-top:24px;padding-top:20px;border-top:1px solid var(--borde-light);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+            <div style="font-size:12.5px;color:var(--texto-sub);">
+              Recuerda: Fecha límite de entrega en Zajuna: <strong>Miércoles, 04 de Noviembre de 2026 (11:59 PM) - Corte 2</strong>
+            </div>
+            <div style="display:flex;gap:10px;">
+              <a href="https://julianon2.github.io/seguimiento-adso-3389010/" target="_blank" class="btn-action-primary">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="m10 15 5-3-5-3v6Z"/></svg>
+                Dashboard de Calificaciones ↗
+              </a>
+              <a href="../explorar.html" class="btn-return-hub">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m15 18-6-6 6-6"/></svg>
+                Volver al Hub
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ==========================================================================
+       MODAL GUIADO DE STEPPER INTERACTIVO (5 PASOS EN MONGODB COMPASS)
+       ========================================================================== -->
+  <div class="ddl-modal-overlay" id="stepperModal" onclick="cerrarModalStepperOnBackdrop(event)">
+    <div class="ddl-modal-box">
+      <div class="modal-header-nav">
+        <div class="modal-nav-pills">
+          <button type="button" class="modal-pill-btn active" id="modalPill1" onclick="cambiarPasoModal(1)">Paso 1: ¿Qué es & Descarga?</button>
+          <button type="button" class="modal-pill-btn" id="modalPill2" onclick="cambiarPasoModal(2)">Paso 2: Conexión Local</button>
+          <button type="button" class="modal-pill-btn" id="modalPill3" onclick="cambiarPasoModal(3)">Paso 3: Crear Base & Colecciones</button>
+          <button type="button" class="modal-pill-btn" id="modalPill4" onclick="cambiarPasoModal(4)">Paso 4: Inserción JSON</button>
+          <button type="button" class="modal-pill-btn" id="modalPill5" onclick="cambiarPasoModal(5)">Paso 5: Filtros & Consultas</button>
+          <button type="button" class="modal-pill-btn" id="modalPill6" onclick="cambiarPasoModal(6)">Paso 6: Exportar JSON</button>
+        </div>
+        <button type="button" class="modal-close-btn" onclick="cerrarModalStepper()" title="Cerrar ventana">✕</button>
+      </div>
+
+      <div class="modal-body-scroll" id="modalStepperContent">
+        <!-- Contenido dinámico inyectado por JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       SCRIPTS INTERACTIVOS (SCROLLSPY, MODAL, CHECKLIST, CLIPBOARD)
+       ========================================================================== -->
+  <script>
+    // 1. CONTROL DE SIDEBAR (COLAPSO Y REAPERTURA)
+    function toggleSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      const mainContent = document.getElementById('mainContent');
+      const floatingToggle = document.getElementById('floatingToggle');
+
+      if (sidebar && mainContent) {
+        sidebar.classList.toggle('collapsed');
+        mainContent.classList.toggle('expanded');
+        if (floatingToggle) {
+          floatingToggle.classList.toggle('visible', sidebar.classList.contains('collapsed'));
+        }
+      }
+    }
+
+    // 2. SCROLLSPY REACTIVO CON INTERSECTION OBSERVER
+    const sections = document.querySelectorAll('.slide-section');
+    const navLinks = document.querySelectorAll('.nav-link');
+
+    const observerOptions = {
+      root: null,
+      rootMargin: '-20% 0px -70% 0px',
+      threshold: 0
+    };
+
+    const spyObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const currentId = entry.target.getAttribute('id');
+          navLinks.forEach(link => {
+            const href = link.getAttribute('href').substring(1);
+            if (href === currentId) {
+              link.classList.add('active');
+              link.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+            } else {
+              link.classList.remove('active');
+            }
+          });
+        }
+      });
+    }, observerOptions);
+
+    sections.forEach(sec => spyObserver.observe(sec));
+
+    // 3. CHECKLIST INTERACTIVO CON BARRA DE PROGRESO EN VIVO
+    function toggleCheckItem(labelEl) {
+      const checkbox = labelEl.querySelector('.check-checkbox');
+      // Pequeño timeout para sincronizar con el evento nativo del checkbox
+      setTimeout(() => {
+        if (checkbox.checked) {
+          labelEl.classList.add('completed');
+        } else {
+          labelEl.classList.remove('completed');
+        }
+        actualizarProgresoChecklist();
+      }, 10);
+    }
+
+    function actualizarProgresoChecklist() {
+      const checkboxes = document.querySelectorAll('.check-checkbox');
+      const total = checkboxes.length;
+      let checkedCount = 0;
+
+      checkboxes.forEach(cb => {
+        if (cb.checked) checkedCount++;
+      });
+
+      const percentage = Math.round((checkedCount / total) * 100);
+      const bar = document.getElementById('checklistBar');
+      const text = document.getElementById('checklistScoreText');
+
+      if (bar) bar.style.width = percentage + '%';
+      if (text) text.innerText = `${percentage}% (${checkedCount} de ${total} ítems)`;
+    }
+
+    // 4. COPIAR CÓDIGO AL PORTAPAPELES
+    function copiarAlPortapapeles(elementId) {
+      const el = document.getElementById(elementId);
+      if (el) {
+        const text = el.innerText;
+        navigator.clipboard.writeText(text).then(() => {
+          alert('¡Esquema JSON/BSON copiado exitosamente al portapapeles!');
+        }).catch(err => {
+          console.error('Error al copiar: ', err);
+        });
+      }
+    }
+
+    // 5. MODALES GUIADOS DEL STEPPER (5 PASOS OFICIALES EN MONGODB COMPASS)
+    let coleccionModalActiva = 'usuarios';
+
+    const pasosData = {
+      1: {
+        titulo: "Paso 1: ¿Qué es MongoDB Compass? Descarga e Instalación Guiada",
+        badge: "Fundamento GUI NoSQL",
+        badgeColor: "#0284c7",
+        desc: "Para entender MongoDB Compass, piensa en la experiencia que tuviste en la Sesión 2 con la extensión de VS Code (<strong>Database Client de Cweijan</strong>). En lugar de escribir comandos ciegos por consola, tenías una interfaz visual para interactuar con tus datos. <strong>MongoDB Compass</strong> es la herramienta gráfica oficial (GUI) creada por MongoDB para que puedas ver tus colecciones, documentos JSON y realizar consultas visualmente con clics de ratón.",
+        analogia: "<strong>Analogía para ti:</strong> Así como en la Sesión 2 usaste la extensión de Cweijan en VS Code para explorar gráficamente tus tablas y filas de MySQL, en NoSQL usas MongoDB Compass para explorar tus colecciones y documentos JSON.",
+        pasos: [
+          "<strong>Descarga del Portal Oficial:</strong> Abre tu navegador e ingresa a <a href='https://www.mongodb.com/try/download/compass' target='_blank' style='color:#0284c7;font-weight:700;text-decoration:underline;'>mongodb.com/try/download/compass</a>.",
+          "<strong>Selección del Instalador para Windows:</strong> En el selector de versión elige la versión estable más reciente (ej. <em>1.44+</em>), plataforma <strong>Windows 64-bit (MSI o EXE)</strong> y pulsa el botón verde <strong>Download</strong>.",
+          "<strong>Ejecución del Asistente:</strong> Abre el archivo descargado en tu carpeta de descargas. En Windows se instalará de forma automática y creará el acceso directo en tu Escritorio y Menú Inicio.",
+          "<strong>Primer Lanzamiento:</strong> Abre MongoDB Compass. Aparecerá una pantalla de bienvenida con la barra superior de conexión <code>mongodb://localhost:27017</code> lista para usar."
+        ],
+        tablaParams: [
+          { campo: "Herramienta", valor: "MongoDB Compass (GUI Oficial)", accion: "Descargar desde el sitio oficial de MongoDB" },
+          { campo: "Tipo de Paquete", valor: "Windows 64-bit (EXE o MSI)", accion: "Ejecutar con doble clic en tu PC" },
+          { campo: "Motor de Base de Datos", valor: "MongoDB Community Server", accion: "Debe estar instalado para que Compass tenga a dónde conectarse" },
+          { campo: "Servicio de Windows", valor: "MongoDB Server (services.msc)", accion: "Verificar que su estado sea 'En ejecución' (Running)" }
+        ],
+        code: `// Si deseas comprobar por consola de PowerShell que MongoDB esté corriendo:\nGet-Service -Name MongoDB`,
+        note: "<strong>¡Clave de Oro para no frustrarse!</strong> MongoDB Compass es el CLIENTE VISUAL (la pantalla con la que interactúas). Compass no almacena datos por sí solo: se conecta al SERVIDOR LOCAL de MongoDB (puerto 27017). Si tu servicio no está iniciado, Compass mostrará un error de conexión."
+      },
+      2: {
+        titulo: "Paso 2: Conexión Local en Compass (Secuencia Visual Completa)",
+        badge: "Conexión URI",
+        badgeColor: "#16a34a",
+        desc: "Al abrir MongoDB Compass te encontrarás primero con la pantalla de bienvenida (<strong>Welcome to MongoDB Compass</strong>). Al pulsar el botón verde <strong>'+ Add new connection'</strong> se desplegará la ventana modal <strong>'New Connection'</strong> donde confirmarás la conexión al puerto local 27017.",
+        analogia: "<strong>¿Qué significa el puerto 27017?</strong> Así como en la extensión de Cweijan en VS Code configuraste el puerto 3306 para comunicarte con MySQL, en MongoDB Compass nos comunicamos con el motor a través del puerto estándar 27017.",
+        imagenes: [
+          {
+            src: "img/compass_welcome.png",
+            titulo: "1. Pantalla de Bienvenida: Clic en '+ Add new connection'",
+            pie: "Al abrir Compass te recibirá esta pantalla. Haz clic en el botón verde central '+ Add new connection' o en el ícono '+' de la sección CONNECTIONS a la izquierda."
+          },
+          {
+            src: "img/compass_modal_connection.png",
+            titulo: "2. Ventana Modal 'New Connection': Formulario de Conexión",
+            pie: "El campo URI ya viene auto-completado con mongodb://localhost:27017/. Escribe 'TechStore Local' en Name y pulsa el botón verde Save & Connect."
+          }
+        ],
+        pasos: [
+          "<strong>Identificar la Pantalla de Bienvenida (Captura 1):</strong> Al abrir Compass verás la pantalla <em>'Welcome to MongoDB Compass'</em> con la ilustración de la lupa.",
+          "<strong>Desplegar la Ventana de Conexión:</strong> Haz clic en el botón verde central <strong>'+ Add new connection'</strong> (o en el ícono con el signo más <strong>'+'</strong> situado al lado de <em>CONNECTIONS</em> en la columna lateral izquierda).",
+          "<strong>Ventana Emergente 'New Connection' (Captura 2):</strong> Se abrirá el modal para configurar los parámetros de tu servidor local.",
+          "<strong>Verificar el Campo URI (Pre-llenado):</strong> Comprueba que ya contiene automáticamente: <code>mongodb://localhost:27017/</code>. ¡No necesitas modificarlo!",
+          "<strong>Asignar un Nombre Amigable (Name):</strong> En el campo de texto <strong>'Name'</strong> escribe: <code>TechStore Local</code> para identificarla fácilmente en tu panel lateral.",
+          "<strong>Guardar y Conectar:</strong> Haz clic en el botón verde oscuro inferior derecho: <strong>'Save & Connect'</strong>. Compass guardará tu servidor en la lista y abrirá la sesión de trabajo de inmediato.",
+          "<strong>Confirmación de Éxito & ¿Bases desconocidas?:</strong> Verás un círculo verde junto al nombre de tu conexión. En el panel lateral aparecerán las bases internas del sistema (<code>admin</code>, <code>config</code>, <code>local</code>) y cualquier proyecto previo de tu PC. <em>¡Esto es completamente normal!</em> Aún no has creado la base de datos de tu tienda; ese es exactamente el siguiente paso (Paso 3)."
+        ],
+        tablaParams: [
+          { campo: "URI", valor: "mongodb://localhost:27017/", accion: "Pre-llenado automático; no requiere cambios" },
+          { campo: "Name", valor: "TechStore Local", accion: "Escribir nombre amigable para tu lista de conexiones" },
+          { campo: "Color", valor: "Verde / No Color", accion: "Opcional para identificar visualmente la pestaña" },
+          { campo: "Favorite this connection", valor: "Checkbox opcional", accion: "Márcalo si deseas anclarla siempre arriba en la lista" },
+          { campo: "Advanced Connection Options", valor: "Colapsadas", accion: "No modificar en entorno local de desarrollo" },
+          { campo: "Botón de Confirmación", valor: "Save & Connect (Verde)", accion: "Guarda la conexión en el panel lateral y se conecta al instante" }
+        ],
+        code: `// Cadena URI predeterminada que ya viene escrita en el modal:\nmongodb://localhost:27017/`,
+        note: "<strong>⚠️ ¿Ves bases de datos en la lista que no reconoces?</strong> ¡Tranquilo, es totalmente normal! Al conectarte, Compass se enlaza con todo tu motor local y lista todas las bases existentes en tu PC (incluidas las 3 del sistema: admin, config, local). En el Paso 3 crearemos tu base de datos propia <code>techstore_nosql</code>. (Si te sale 'connect ECONNREFUSED', inicia el servicio con <code>net start MongoDB</code> en CMD)."
+      },
+      3: {
+        titulo: "Paso 3: Creación de la Base de Datos con el Atajo (+) en Compass",
+        badge: "Estructura NoSQL",
+        badgeColor: "#ea580c",
+        desc: "Para crear tu base de datos no necesitas navegar por menús complejos. MongoDB Compass te ofrece un <strong>atajo contextual rápido</strong> directamente en el panel lateral izquierdo.",
+        analogia: "<strong>Equivalencia directa:</strong> Base de Datos = Catálogo general; Colección = Tabla; Documento = Fila.",
+        imagenes: [
+          {
+            src: "img/compass_create_db_sidebar.png",
+            titulo: "1. Atajo Contextual en Panel Lateral: Ícono (+) 'Create database'",
+            pie: "Pasa el cursor sobre tu conexión 'TechStore Local' en la barra lateral y haz clic en el botón circular (+) que muestra el mensaje flotante 'Create database'."
+          },
+          {
+            src: "img/compass_modal_create_db.png",
+            titulo: "2. Ventana Modal 'Create Database': Parámetros Base y Primera Colección",
+            pie: "Ingresa Database Name: techstore_nosql y Collection Name: usuarios. Luego pulsa el botón verde Create Database para crearlas de inmediato."
+          }
+        ],
+        pasos: [
+          "<strong>Ubicar el Atajo en la Barra Lateral (Captura 1):</strong> En la columna lateral izquierda de Compass, pasa el ratón por encima del nombre de tu conexión activa (<strong>TechStore Local</strong>).",
+          "<strong>Pulsar el Ícono Circular (+):</strong> Notarás que aparecen 4 herramientas contextuales; haz clic en el botón circular con el signo más <strong>(+)</strong> que muestra el mensaje emergente <strong>'Create database'</strong> (como ves en la captura 1).",
+          "<strong>Llenar el Formulario Emergente (Captura 2):</strong> En la ventana modal ingresa:<br>• <strong>Database Name:</strong> <code>techstore_nosql</code> (en minúsculas, sin espacios ni caracteres especiales).<br>• <strong>Collection Name:</strong> <code>usuarios</code> (el nombre de tu primera colección documental obligatoria).",
+          "<strong>Confirmar la Creación:</strong> Haz clic en el botón verde inferior <strong>'Create Database'</strong>. ¡Listo! Tu base de datos aparecerá inmediatamente en la lista.",
+          "<strong>Agregar las 2 Colecciones Restantes:</strong> Haz clic sobre el nombre <code>techstore_nosql</code> en la lista y pulsa el botón <strong>'Create collection'</strong> para agregar <code>productos</code>, y repite el proceso para <code>ordenes</code>."
+        ],
+        tablaParams: [
+          { campo: "Atajo en Panel Lateral", valor: "Ícono circular (+) junto a TechStore Local", accion: "Clic para abrir la ventana directa de creación" },
+          { campo: "Database Name", valor: "techstore_nosql", accion: "Contenedor principal de la tienda virtual" },
+          { campo: "Colección 1 (Inicial)", valor: "usuarios", accion: "Colección obligatoria para habilitar la creación de la base" },
+          { campo: "Colección 2", valor: "productos", accion: "Crear con el botón 'Create collection' dentro de techstore_nosql" },
+          { campo: "Colección 3", valor: "ordenes", accion: "Crear con el botón 'Create collection' dentro de techstore_nosql" }
+        ],
+        code: `// En Compass todo se hace visualmente con clics.\n// Las 3 colecciones requeridas para tu entrega son:\n- usuarios\n- productos\n- ordenes`,
+        note: "<strong>Regla de Nomenclatura Profesional:</strong> Las bases de datos y colecciones siempre deben nombrarse en minúsculas y en plural (ej: <code>usuarios</code>, no <code>Usuario</code> ni <code>TB_USUARIOS</code>), siguiendo las convenciones de la industria para APIs RESTful y microservicios."
+      },
+      4: {
+        titulo: "Paso 4: Inserción de Colecciones en Lote (JSON Completo)",
+        badge: "Carga de Datos",
+        badgeColor: "#39a900",
+        desc: "Inserta los lotes de <strong>5 documentos organizados</strong> en cada colección (<code>usuarios</code>, <code>productos</code>, <code>ordenes</code>). Con 5 documentos reales por colección cumples y superas el requisito de la Guía 6 (mínimo 5 registros) y dejas habilitadas las pruebas reales de filtrado y actualización del Paso 5.",
+        analogia: "Equivalente a ejecutar sentencias <code>INSERT INTO</code> en MySQL, pero aquí pegas arreglos de objetos JSON completos en Compass sin preocuparte por tipos fijos de columnas.",
+        pasos: [
+          "<strong>Seleccionar la Colección:</strong> En la barra lateral izquierda de Compass, haz clic sobre la colección a poblar (ej: <code>usuarios</code>).",
+          "<strong>Abrir el Asistente de Inserción:</strong> Haz clic en el botón verde <strong>ADD DATA ▾</strong> y selecciona la opción <strong>'Insert document'</strong>.",
+          "<strong>Cambiar a Modo Texto/JSON:</strong> En la esquina superior derecha del cuadro emergente, haz clic en el icono de llaves <strong>{ }</strong> (Modo JSON / Raw Text).",
+          "<strong>Limpiar y Pegar el Lote de 5:</strong> Borra cualquier contenido que aparezca (incluso las llaves por defecto) y pega exactamente el arreglo JSON con los 5 documentos de la pestaña correspondiente abajo.",
+          "<strong>Confirmar Inserción:</strong> Haz clic en el botón azul <strong>'Insert'</strong>. Compass procesará los 5 documentos y mostrará el contador <em>'1-5 of 5'</em>.",
+          "<strong>Repetir para las Demás Colecciones:</strong> Repite este mismo proceso con <code>productos</code> (5 documentos) y con <code>ordenes</code> (5 documentos)."
+        ],
+        coleccionesCode: {
+          usuarios: {
+            label: "1. usuarios.json (Lote de 5)",
+            badge: "Subdocumentos Embebidos (5 Ciudades Huila)",
+            desc: "Lote de 5 usuarios reales de municipios del Huila con direcciones embebidas, roles en arreglos y estados activos/inactivos.",
+            json: `[
+  {
+    "email": "carlos.perez@techstore.co",
+    "nombre_completo": "Carlos Andrés Pérez Sterling",
+    "telefono": "+57 312 456 7890",
+    "roles": ["CLIENTE", "COMPRADOR_VIP"],
+    "direccion_envio": {
+      "calle": "Calle 7 # 12-45 Barrio Nazareth",
+      "ciudad": "Garzón",
+      "departamento": "Huila",
+      "codigo_postal": "414020",
+      "pais": "Colombia"
+    },
+    "activo": true,
+    "fecha_registro": "2026-02-15T09:30:00Z"
+  },
+  {
+    "email": "laura.gomez@techstore.co",
+    "nombre_completo": "Laura Marcela Gómez Quintero",
+    "telefono": "+57 320 890 1234",
+    "roles": ["CLIENTE"],
+    "direccion_envio": {
+      "calle": "Carrera 5 # 22-10 Barrio Quirinal",
+      "ciudad": "Neiva",
+      "departamento": "Huila",
+      "codigo_postal": "410001",
+      "pais": "Colombia"
+    },
+    "activo": true,
+    "fecha_registro": "2026-03-01T14:15:00Z"
+  },
+  {
+    "email": "julian.morales@techstore.co",
+    "nombre_completo": "Julián David Morales Rivera",
+    "telefono": "+57 315 234 5678",
+    "roles": ["CLIENTE"],
+    "direccion_envio": {
+      "calle": "Avenida Pastrana # 8-32 Barrio Centro",
+      "ciudad": "Pitalito",
+      "departamento": "Huila",
+      "codigo_postal": "417030",
+      "pais": "Colombia"
+    },
+    "activo": false,
+    "fecha_registro": "2026-01-20T11:00:00Z"
+  },
+  {
+    "email": "diana.rojas@techstore.co",
+    "nombre_completo": "Diana Carolina Rojas Peña",
+    "telefono": "+57 318 765 4321",
+    "roles": ["CLIENTE", "COMPRADOR_FRECUENTE"],
+    "direccion_envio": {
+      "calle": "Calle 4 # 6-18 Barrio San Antonio",
+      "ciudad": "La Plata",
+      "departamento": "Huila",
+      "codigo_postal": "415060",
+      "pais": "Colombia"
+    },
+    "activo": true,
+    "fecha_registro": "2026-03-12T16:45:00Z"
+  },
+  {
+    "email": "andres.cabrera@techstore.co",
+    "nombre_completo": "Andrés Felipe Cabrera Medina",
+    "telefono": "+57 310 345 6789",
+    "roles": ["CLIENTE"],
+    "direccion_envio": {
+      "calle": "Carrera 9 # 11-04 Barrio La Gaitana",
+      "ciudad": "Campoalegre",
+      "departamento": "Huila",
+      "codigo_postal": "413020",
+      "pais": "Colombia"
+    },
+    "activo": true,
+    "fecha_registro": "2026-04-05T10:20:00Z"
+  }
+]`
+          },
+          productos: {
+            label: "2. productos.json (Lote de 5)",
+            badge: "Polimórfico (5 Ítems Catálogo TechStore)",
+            desc: "Lote de 5 productos con especificaciones variables, precios diferenciados ($180k a $5.2M) y estados para pruebas de filtrado y actualización.",
+            json: `[
+  {
+    "sku": "LAP-PRO-01",
+    "titulo": "Portátil Developer Extreme 16 Pulgadas",
+    "categoria": "Equipos de Cómputo",
+    "precio": 5200000.00,
+    "especificaciones": {
+      "procesador": "AMD Ryzen 7 7840HS",
+      "ram_gb": 32,
+      "almacenamiento_ssd": "1TB NVMe Gen4",
+      "pantalla": "16 Pulgadas WQXGA 165Hz"
+    },
+    "etiquetas": ["desarrollo", "adso", "gamer"],
+    "stock": 15,
+    "activo": true
+  },
+  {
+    "sku": "TEC-MEC-02",
+    "titulo": "Teclado Mecánico RGB Switch Brown",
+    "categoria": "Accesorios",
+    "precio": 350000.00,
+    "especificaciones": {
+      "tipo_switch": "Gateron Brown Táctil",
+      "conectividad": "Bluetooth 5.1 / USB-C",
+      "idioma": "Español ISO con Ñ"
+    },
+    "etiquetas": ["accesorios", "ergonomia", "rgb"],
+    "stock": 40,
+    "activo": true
+  },
+  {
+    "sku": "MON-GAM-03",
+    "titulo": "Monitor Curvo 27 Pulgadas QHD 165Hz",
+    "categoria": "Monitores",
+    "precio": 1850000.00,
+    "especificaciones": {
+      "panel": "Fast IPS Curvo 1500R",
+      "tasa_refresco_hz": 165,
+      "resolucion": "2560x1440 QHD",
+      "puertos": ["DisplayPort 1.4", "HDMI 2.0 x2"]
+    },
+    "etiquetas": ["monitores", "gamer", "productividad"],
+    "stock": 0,
+    "activo": false
+  },
+  {
+    "sku": "MOU-ERG-04",
+    "titulo": "Mouse Inalámbrico Ergonómico Vertical",
+    "categoria": "Accesorios",
+    "precio": 180000.00,
+    "especificaciones": {
+      "sensor": "Óptico 4000 DPI",
+      "conectividad": "Receptor 2.4GHz + Bluetooth",
+      "bateria": "Recargable 500mAh USB-C"
+    },
+    "etiquetas": ["accesorios", "ergonomia", "oficina"],
+    "stock": 25,
+    "activo": true
+  },
+  {
+    "sku": "AUD-ANC-05",
+    "titulo": "Auriculares Inalámbricos ANC Cancelación Activa",
+    "categoria": "Audio Profesional",
+    "precio": 620000.00,
+    "especificaciones": {
+      "cancelacion_ruido": "Híbrida Activa 35dB",
+      "autonomia_horas": 40,
+      "conectividad": "Bluetooth 5.3 + Jack 3.5mm"
+    },
+    "etiquetas": ["audio", "gamer", "bluetooth", "productividad"],
+    "stock": 18,
+    "activo": true
+  }
+]`
+          },
+          ordenes: {
+            label: "3. ordenes.json (Lote de 5)",
+            badge: "Modelo Híbrido (5 Transacciones)",
+            desc: "Lote de 5 órdenes de compra con diversos estados ('PAGADA', 'ENVIADA', 'PENDIENTE', 'CANCELADA') e ítems embebidos.",
+            json: `[
+  {
+    "numero_orden": "ORD-2026-0091",
+    "fecha_orden": "2026-10-18T14:20:00Z",
+    "email_cliente": "carlos.perez@techstore.co",
+    "items": [
+      {
+        "sku": "LAP-PRO-01",
+        "titulo": "Portátil Developer Extreme 16 Pulgadas",
+        "precio_unitario": 5200000.00,
+        "cantidad": 1,
+        "subtotal": 5200000.00
+      }
+    ],
+    "total": 5200000.00,
+    "metodo_pago": "PSE_BANCOLOMBIA",
+    "estado": "PAGADA"
+  },
+  {
+    "numero_orden": "ORD-2026-0092",
+    "fecha_orden": "2026-10-19T10:15:00Z",
+    "email_cliente": "laura.gomez@techstore.co",
+    "items": [
+      {
+        "sku": "TEC-MEC-02",
+        "titulo": "Teclado Mecánico RGB Switch Brown",
+        "precio_unitario": 350000.00,
+        "cantidad": 2,
+        "subtotal": 700000.00
+      }
+    ],
+    "total": 700000.00,
+    "metodo_pago": "TARJETA_CREDITO",
+    "estado": "ENVIADA"
+  },
+  {
+    "numero_orden": "ORD-2026-0093",
+    "fecha_orden": "2026-10-19T16:40:00Z",
+    "email_cliente": "julian.morales@techstore.co",
+    "items": [
+      {
+        "sku": "MON-GAM-03",
+        "titulo": "Monitor Curvo 27 Pulgadas QHD 165Hz",
+        "precio_unitario": 1850000.00,
+        "cantidad": 1,
+        "subtotal": 1850000.00
+      }
+    ],
+    "total": 1850000.00,
+    "metodo_pago": "NEQUI",
+    "estado": "PENDIENTE"
+  },
+  {
+    "numero_orden": "ORD-2026-0094",
+    "fecha_orden": "2026-10-20T09:10:00Z",
+    "email_cliente": "diana.rojas@techstore.co",
+    "items": [
+      {
+        "sku": "MOU-ERG-04",
+        "titulo": "Mouse Inalámbrico Ergonómico Vertical",
+        "precio_unitario": 180000.00,
+        "cantidad": 1,
+        "subtotal": 180000.00
+      },
+      {
+        "sku": "AUD-ANC-05",
+        "titulo": "Auriculares Inalámbricos ANC",
+        "precio_unitario": 620000.00,
+        "cantidad": 1,
+        "subtotal": 620000.00
+      }
+    ],
+    "total": 800000.00,
+    "metodo_pago": "DAVIPLATA",
+    "estado": "PAGADA"
+  },
+  {
+    "numero_orden": "ORD-2026-0095",
+    "fecha_orden": "2026-10-20T11:55:00Z",
+    "email_cliente": "andres.cabrera@techstore.co",
+    "items": [
+      {
+        "sku": "TEC-MEC-02",
+        "titulo": "Teclado Mecánico RGB Switch Brown",
+        "precio_unitario": 350000.00,
+        "cantidad": 1,
+        "subtotal": 350000.00
+      }
+    ],
+    "total": 350000.00,
+    "metodo_pago": "EFECTY",
+    "estado": "CANCELADA"
+  }
+]`
+          }
+        },
+        note: "<strong>¡Cumplimiento Oficial Garantizado (Guía 6):</strong> Pegar estos lotes de 5 documentos por colección en Compass te asegura cumplir con creces el requisito de la evidencia (mínimo 5 registros) y habilita la prueba real de consultas con filtros y actualización en el Paso 5."
+      },
+      5: {
+        titulo: "Paso 5: Consultas con Filtros y Actualización de Datos (MQL)",
+        badge: "Consultas & Actualización",
+        badgeColor: "#0284c7",
+        desc: "La barra superior <strong>'Filter'</strong> de MongoDB Compass es el equivalente visual directo a la cláusula <code>WHERE</code> de SQL. Con los 5 productos insertados en el Paso 4, ahora podrás comprobar visualmente cómo cada filtro discrimina y reduce el conjunto de resultados. Además, aprenderás a <strong>actualizar datos</strong> (<code>updateOne</code>) tal como exige la Guía 6.",
+        analogia: "En SQL: <code>SELECT * FROM productos WHERE activo = true;</code>. En Compass escribes: <code>{ activo: true }</code> y observas cómo el contador cambia de 5 a 4 documentos.",
+        pasos: [
+          "<strong>Filtro 1 - Booleano ({ activo: true }):</strong> En la barra Filter de <code>productos</code>, escribe <code>{ activo: true }</code> y pulsa <strong>Find</strong>.<br>🎯 <strong>Resultado:</strong> Muestra <strong>4 de 5 productos</strong> (el Monitor inactivo queda excluido de la vista).",
+          "<strong>Filtro 2 - Rango Superior ({ precio: { $gt: 2000000 } }):</strong> Escribe <code>{ precio: { $gt: 2000000 } }</code> y pulsa <strong>Find</strong>.<br>🎯 <strong>Resultado:</strong> Muestra <strong>1 de 5 productos</strong> (solo el Portátil supera los 2M COP; los otros 4 quedan excluidos).",
+          "<strong>Filtro 3 - Rango Intermedio ({ precio: { $gte: 300000, $lte: 1000000 } }):</strong> Escribe <code>{ precio: { $gte: 300000, $lte: 1000000 } }</code> y pulsa <strong>Find</strong>.<br>🎯 <strong>Resultado:</strong> Muestra <strong>2 de 5 productos</strong> (el Teclado de $350k y los Auriculares de $620k).",
+          "<strong>Filtro 4 - Notación de Punto ({ \"especificaciones.ram_gb\": 32 }):</strong> Escribe <code>{ \"especificaciones.ram_gb\": 32 }</code> y pulsa <strong>Find</strong>.<br>🎯 <strong>Resultado:</strong> Muestra <strong>1 producto</strong> (comprueba cómo navegas al objeto anidado sin hacer ningún JOIN).",
+          "<strong>Filtro 5 - Búsqueda en Arreglos ({ etiquetas: \"gamer\" }):</strong> Escribe <code>{ etiquetas: \"gamer\" }</code> y pulsa <strong>Find</strong>.<br>🎯 <strong>Resultado:</strong> Muestra <strong>3 de 5 productos</strong> (Portátil, Monitor y Auriculares contienen 'gamer' en su arreglo).",
+          "<strong>Operación de Actualización (updateOne / Edición en Compass):</strong><br>• <strong>Vía Visual en Compass:</strong> Pasa el cursor sobre el documento del Portátil (<code>LAP-PRO-01</code>), haz clic en el icono del lápiz <em>'Edit Document'</em>, cambia el precio a <code>4990000.00</code> y el stock a <code>12</code>, luego pulsa <strong>Update</strong>.<br>• <strong>Vía Mongosh (Consola inferior de Compass):</strong> Abre la pestaña <code>>_ MONGOSH</code> y ejecuta:<br><code>db.productos.updateOne({ sku: \"LAP-PRO-01\" }, { $set: { precio: 4990000.00, stock: 12 } })</code>."
+        ],
+        tablaParams: [
+          { campo: "{ activo: true }", valor: "Filtro Booleano (WHERE)", accion: "Resultado: 4 de 5 productos (oculta inactivos)" },
+          { campo: "{ precio: { $gt: 2000000 } }", valor: "Operador de Rango ($gt)", accion: "Resultado: 1 de 5 productos (solo Portátil > 2M COP)" },
+          { campo: "{ precio: { $gte: 300000, $lte: 1000000 } }", valor: "Rango Intermedio ($gte / $lte)", accion: "Resultado: 2 de 5 productos (Teclado y Auriculares)" },
+          { campo: "{ \"especificaciones.ram_gb\": 32 }", valor: "Notación de Punto", accion: "Resultado: 1 producto (filtra en subdocumento embebido)" },
+          { campo: "{ etiquetas: \"gamer\" }", valor: "Filtro en Arreglos", accion: "Resultado: 3 productos (coincidencia de elemento en array)" },
+          { campo: "db.productos.updateOne(...)", valor: "Actualización MQL ($set)", accion: "Actualiza precio y stock del Portátil (cumple Guía 6)" }
+        ],
+        code: `// ========================================================
+// 1. CONSULTAS CON FILTROS (BARRA FILTER DE COMPASS)
+// ========================================================
+
+// 1.1. Mostrar productos activos (Resultado: 4 de 5):
+{ activo: true }
+
+// 1.2. Filtrar productos de gama alta mayores a 2 millones (Resultado: 1 de 5):
+{ precio: { $gt: 2000000 } }
+
+// 1.3. Rango de precio intermedio entre 300k y 1M COP (Resultado: 2 de 5):
+{ precio: { $gte: 300000, $lte: 1000000 } }
+
+// 1.4. Buscar por subdocumento técnico con notación de punto (Resultado: 1 de 5):
+{ "especificaciones.ram_gb": 32 }
+
+// 1.5. Buscar productos con la etiqueta 'gamer' en su arreglo (Resultado: 3 de 5):
+{ etiquetas: "gamer" }
+
+// ========================================================
+// 2. SENTENCIA DE ACTUALIZACIÓN (REQUISITO GUÍA 6)
+// ========================================================
+// Ejecutar en la pestaña inferior >_ MONGOSH de Compass:
+db.productos.updateOne(
+  { sku: "LAP-PRO-01" },
+  { 
+    $set: { 
+      precio: 4990000.00,
+      stock: 12
+    } 
+  }
+);
+// Retorno esperado en consola: { acknowledged: true, modifiedCount: 1 }`,
+        note: "<strong>Requisito Oficial de la Guía 6:</strong> Toma captura de pantalla de MongoDB Compass aplicando al menos dos de las consultas con filtros (evidenciando el cambio en el contador superior) y la captura de la actualización del documento (mostrando los nuevos valores actualizados)."
+      },
+      6: {
+        titulo: "Paso 6: Exportación de Colecciones a Archivos JSON (.json)",
+        badge: "Exportación de Datos",
+        badgeColor: "#16a34a",
+        desc: "Para adjuntar los esquemas en la plataforma Zajuna (Evidencia AA1-EV03), debes exportar tus colecciones desde MongoDB Compass hacia archivos físicos <code>.json</code> en tu computador. Compass incluye un asistente visual nativo que extrae los datos limpios en segundos.",
+        analogia: "<strong>¿Por qué se exporta colección por colección?:</strong> En MongoDB no existe un botón para 'exportar toda la base junta en un solo archivo'. Cada colección es independiente y genera su propio archivo (<code>usuarios.json</code>, <code>productos.json</code>, <code>ordenes.json</code>) para armar la carpeta <code>esquemas_json/</code>.",
+        pasos: [
+          "<strong>Seleccionar la Colección en el Panel Lateral:</strong> En la barra lateral izquierda de Compass, haz clic sobre la colección que vas a exportar (comienza por <code>usuarios</code>).",
+          "<strong>Clic en el Botón 'EXPORT DATA' (O Menú Superior):</strong> En la barra de herramientas, ubica el botón <strong>'EXPORT DATA ▾'</strong> (es el tercer botón, dos casillas a la derecha del botón verde <em>ADD DATA</em>). Haz clic en él y selecciona <strong>'Export the full collection'</strong>.<br><em>(Ruta alternativa igualmente válida: menú superior de la ventana: <strong>Collection</strong> → <strong>Export Collection</strong>).</em>",
+          "<strong>Confirmar Selección de Campos:</strong> En la ventana emergente que se abre, deja seleccionados todos los campos y pulsa el botón azul <strong>'Select output'</strong>.",
+          "<strong>Seleccionar Formato JSON:</strong> En el selector de tipo de archivo (<em>Select export file type</em>), asegúrate de que esté marcado <strong>JSON</strong> (¡nunca CSV, la evidencia exige formato JSON!).",
+          "<strong>Elegir Carpeta y Guardar:</strong> Haz clic en <strong>'Browse'</strong> (Examinar), navega hasta tu carpeta de proyecto (ej: <code>esquemas_json/</code>), nombra el archivo como <code>usuarios.json</code> y pulsa el botón verde <strong>'Export'</strong>.",
+          "<strong>Repetir para las 3 Colecciones:</strong> Repite este mismo procedimiento rápido seleccionando <code>productos</code> (guardando como <code>productos.json</code>) y luego <code>ordenes</code> (guardando como <code>ordenes.json</code>)."
+        ],
+        tablaParams: [
+          { campo: "Botón en Barra de Herramientas", valor: "EXPORT DATA ▾ (junto a BULK)", accion: "Abre el menú con la opción 'Export the full collection'" },
+          { campo: "Menú Superior Alternativo", valor: "Collection -> Export Collection", accion: "Ruta equivalente desde el menú de la ventana de Compass" },
+          { campo: "Diferencia con ADD DATA", valor: "ADD DATA es solo para insertar/importar", accion: "Para exportar siempre se usa el botón EXPORT DATA" },
+          { campo: "Formato de Salida Obligatorio", valor: "JSON (No CSV)", accion: "Requisito estricto de la rúbrica GA6-220501096-AA1-EV03" },
+          { campo: "Resultado Final", valor: "3 archivos .json en carpeta esquemas_json/", accion: "Se comprimen junto al PDF en el archivo ZIP final para Zajuna" }
+        ],
+        code: `// Si prefieres exportar por terminal de comandos (MongoDB Database Tools):\n\n// 1. Exportar colección usuarios:\nmongoexport --db=techstore_nosql --collection=usuarios --out=usuarios.json --pretty --jsonArray\n\n// 2. Exportar colección productos:\nmongoexport --db=techstore_nosql --collection=productos --out=productos.json --pretty --jsonArray\n\n// 3. Exportar colección ordenes:\nmongoexport --db=techstore_nosql --collection=ordenes --out=ordenes.json --pretty --jsonArray`,
+        note: "<strong>⚠️ Aclaración para no confundirse:</strong> Los tres puntos <code>...</code> que aparecen junto a <em>CONNECTIONS</em> en el panel lateral son para exportar cadenas de conexión del servidor, no datos. Y el botón verde <code>ADD DATA</code> es únicamente para ingresar datos (<em>Insert document</em>). Para extraer tus datos a archivo, usa siempre el botón <strong>EXPORT DATA ▾</strong> o el menú <strong>Collection → Export Collection</strong>."
+      }
+    };
+
+    function abrirModalStepper(pasoNum) {
+      const modal = document.getElementById('stepperModal');
+      cambiarPasoModal(pasoNum);
+      if (modal) modal.classList.add('active');
+    }
+
+    function cambiarPlantillaColeccion(key) {
+      coleccionModalActiva = key;
+      const info = pasosData[4];
+      if (!info || !info.coleccionesCode || !info.coleccionesCode[key]) return;
+      const data = info.coleccionesCode[key];
+
+      Object.keys(info.coleccionesCode).forEach(k => {
+        const btn = document.getElementById(`tabColBtn_${k}`);
+        if (btn) btn.classList.toggle('active', k === key);
+      });
+
+      const badge = document.getElementById('tabColBadge');
+      if (badge) badge.innerText = data.badge;
+
+      const desc = document.getElementById('tabColDesc');
+      if (desc) desc.innerHTML = `💡 ${data.desc}`;
+
+      const block = document.getElementById('tabColCodeBlock');
+      if (block) block.innerText = data.json;
+    }
+
+    function copiarPlantillaColeccionActiva() {
+      const info = pasosData[4];
+      if (!info || !info.coleccionesCode || !info.coleccionesCode[coleccionModalActiva]) return;
+      const text = info.coleccionesCode[coleccionModalActiva].json;
+      navigator.clipboard.writeText(text).then(() => {
+        alert(`¡Plantilla JSON de la colección '${coleccionModalActiva}' copiada exitosamente al portapapeles!`);
+      }).catch(err => {
+        console.error('Error al copiar: ', err);
+      });
+    }
+
+    function cambiarPasoModal(pasoNum) {
+      for (let i = 1; i <= 6; i++) {
+        const pill = document.getElementById(`modalPill${i}`);
+        if (pill) pill.classList.toggle('active', i === pasoNum);
+      }
+
+      const info = pasosData[pasoNum];
+      const content = document.getElementById('modalStepperContent');
+      if (content && info) {
+        let tablaHtml = '';
+        if (info.tablaParams && info.tablaParams.length > 0) {
+          tablaHtml = `
+            <div style="margin: 16px 0;">
+              <h4 style="font-family:'Syne',sans-serif;font-size:14px;color:var(--texto-main);margin-bottom:8px;">Parámetros Clave en Pantalla (Compass):</h4>
+              <table class="cweijan-params-table" style="margin:0;">
+                <thead>
+                  <tr>
+                    <th style="width:28%;">Elemento / Campo</th>
+                    <th style="width:36%;">Valor / Configuración</th>
+                    <th style="width:36%;">Acción Requerida</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${info.tablaParams.map(row => `
+                    <tr class="cpt-row">
+                      <td style="font-weight:700;color:var(--texto-main);">${row.campo}</td>
+                      <td><code>${row.valor}</code></td>
+                      <td style="color:var(--texto-sub);">${row.accion}</td>
+                    </tr>
+                  `).join('')}
+                </tbody>
+              </table>
+            </div>
+          `;
+        }
+
+        let pasosListHtml = '';
+        if (info.pasos && info.pasos.length > 0) {
+          pasosListHtml = `
+            <div style="background:#f8fafc;border:1px solid var(--borde-light);border-radius:10px;padding:16px 18px;margin:16px 0;">
+              <h4 style="font-family:'Syne',sans-serif;font-size:14px;color:var(--texto-main);margin-bottom:10px;">Procedimiento Guiado Paso a Paso:</h4>
+              <ol style="margin:0;padding-left:18px;display:flex;flex-direction:column;gap:10px;font-size:13.5px;color:var(--texto-muted);line-height:1.6;">
+                ${info.pasos.map(step => `<li>${step}</li>`).join('')}
+              </ol>
+            </div>
+          `;
+        }
+
+        let codeHtml = '';
+        if (info.coleccionesCode) {
+          const keys = Object.keys(info.coleccionesCode);
+          const firstKey = coleccionModalActiva && info.coleccionesCode[coleccionModalActiva] ? coleccionModalActiva : keys[0];
+          codeHtml = `
+            <div style="margin:16px 0;">
+              <div style="display:flex;align-items:center;justify-content:space-between;background:#252526;padding:8px 12px;border-radius:8px 8px 0 0;border:1px solid #333;border-bottom:none;flex-wrap:wrap;gap:8px;">
+                <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+                  ${keys.map(k => `
+                    <button type="button" id="tabColBtn_${k}" class="col-tab-pill ${k === firstKey ? 'active' : ''}" onclick="cambiarPlantillaColeccion('${k}')">
+                      📄 ${info.coleccionesCode[k].label}
+                    </button>
+                  `).join('')}
+                </div>
+                <div style="display:flex;align-items:center;gap:8px;">
+                  <span id="tabColBadge" style="font-size:10.5px;color:#00ed64;font-weight:700;background:rgba(0,237,100,0.1);padding:2px 8px;border-radius:10px;">
+                    ${info.coleccionesCode[firstKey].badge}
+                  </span>
+                  <button type="button" class="btn-copy-code" style="padding:4px 10px;font-size:11px;" onclick="copiarPlantillaColeccionActiva()">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+                    Copiar JSON
+                  </button>
+                </div>
+              </div>
+              <div id="tabColDesc" style="background:#1e1e1e;border-left:1px solid #333;border-right:1px solid #333;padding:6px 14px;font-size:11.5px;color:#94a3b8;font-family:'Plus Jakarta Sans',sans-serif;">
+                💡 ${info.coleccionesCode[firstKey].desc}
+              </div>
+              <div id="tabColCodeBlock" style="background:#18181b;border:1px solid #333;border-radius:0 0 8px 8px;padding:14px;font-family:'JetBrains Mono',monospace;font-size:12.5px;color:#a7f3d0;white-space:pre-wrap;overflow-x:auto;max-height:220px;">${info.coleccionesCode[firstKey].json}</div>
+            </div>
+          `;
+        } else if (info.code) {
+          codeHtml = `
+            <div style="margin:16px 0;">
+              <div style="display:flex;align-items:center;justify-content:space-between;background:#252526;padding:6px 14px;border-radius:8px 8px 0 0;border:1px solid #333;border-bottom:none;">
+                <span style="font-size:11.5px;color:#cccccc;font-family:'Plus Jakarta Sans',sans-serif;font-weight:600;">💻 Código / Plantilla JSON de Referencia</span>
+                <span style="font-size:10px;color:#00ed64;font-weight:700;background:rgba(0,237,100,0.1);padding:2px 8px;border-radius:10px;">Listo para Compass</span>
+              </div>
+              <div style="background:#1e1e1e;border:1px solid #333;border-radius:0 0 8px 8px;padding:14px;font-family:'JetBrains Mono',monospace;font-size:12.5px;color:#a7f3d0;white-space:pre-wrap;overflow-x:auto;max-height:220px;">${info.code}</div>
+            </div>
+          `;
+        }
+
+        let imagenHtml = '';
+        const listaImagenes = info.imagenes || (info.imagen ? [info.imagen] : []);
+        if (listaImagenes.length > 0) {
+          imagenHtml = listaImagenes.map((img, idx) => `
+            <div style="margin: 16px 0; border: 1px solid var(--borde-light); border-radius: 10px; overflow: hidden; background: #ffffff; box-shadow: 0 4px 14px rgba(0,0,0,0.06);">
+              <div style="background: #f8fafc; padding: 8px 14px; border-bottom: 1px solid var(--borde-light); display: flex; align-items: center; justify-content: space-between;">
+                <span style="font-size: 12px; font-weight: 700; color: var(--texto-main); display: flex; align-items: center; gap: 6px;">
+                  📸 ${img.titulo}
+                </span>
+                <span style="font-size: 10.5px; color: #16a34a; font-weight: 700; background: #f0fdf4; padding: 2px 8px; border-radius: 12px; border: 1px solid #bbf7d0;">
+                  Captura ${idx + 1} de ${listaImagenes.length}
+                </span>
+              </div>
+              <div style="padding: 10px; text-align: center; background: #fafafa;">
+                <img src="${img.src}" alt="${img.titulo}" style="max-width: 100%; height: auto; border-radius: 6px; border: 1px solid #e2e8f0; display: block; margin: 0 auto; max-height: 320px; object-fit: contain;">
+              </div>
+              <div style="padding: 8px 14px; font-size: 12px; color: var(--texto-sub); background: #f8fafc; border-top: 1px solid var(--borde-light);">
+                💡 <em>${img.pie}</em>
+              </div>
+            </div>
+          `).join('');
+        }
+
+        content.innerHTML = `
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+            <span style="background:${info.badgeColor}18;color:${info.badgeColor};border:1px solid ${info.badgeColor}35;font-size:11px;font-weight:800;padding:3px 10px;border-radius:20px;text-transform:uppercase;">
+              ${info.badge}
+            </span>
+          </div>
+          <h3 style="font-family: 'Syne', sans-serif;font-size:20px;font-weight:800;color:var(--texto-main);margin-bottom:8px;line-height:1.3;">
+            ${info.titulo}
+          </h3>
+          <p style="font-size:14px;color:var(--texto-muted);line-height:1.6;margin-bottom:12px;">
+            ${info.desc}
+          </p>
+          <div style="background:#f0fdf4;border-left:4px solid #16a34a;padding:10px 14px;border-radius:6px;font-size:13px;color:#166534;margin-bottom:14px;line-height:1.5;">
+            ${info.analogia}
+          </div>
+          ${imagenHtml}
+          ${pasosListHtml}
+          ${tablaHtml}
+          ${codeHtml}
+          <div style="background:#fff7ed;border-left:4px solid #ea580c;padding:12px 16px;border-radius:6px;font-size:13px;color:#9a3412;line-height:1.6;margin-top:14px;">
+            ${info.note}
+          </div>
+        `;
+      }
+    }
+
+    function cerrarModalStepper() {
+      const modal = document.getElementById('stepperModal');
+      if (modal) modal.classList.remove('active');
+    }
+
+    function cerrarModalStepperOnBackdrop(e) {
+      if (e.target.id === 'stepperModal') {
+        cerrarModalStepper();
+      }
+    }
+
+    // Cerrar con tecla Escape
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') cerrarModalStepper();
+    });
+  </script>
+</body>
+</html>

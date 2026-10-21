@@ -4,6 +4,11 @@
 
 ---
 
+* **Enlace de YouTube Publicado:** https://youtu.be/yfwXmcHpVjk
+* **Estado:** Publicado en Hub Central (Card Sesión 3)
+
+---
+
 ### TÍTULO DEL VIDEO (Copiar y pegar en YouTube)
 ```text
 ADSO 3389010 | Sesión 3: Modelado NoSQL y Documentos JSON en MongoDB (Guía 6)
