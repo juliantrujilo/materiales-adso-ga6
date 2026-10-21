@@ -707,7 +707,7 @@
 
     .progress-bar-fill {
       height: 100%;
-      width: 28.5%;
+      width: 57.1%;
       background: linear-gradient(90deg, var(--sena-verde), var(--sena-naranja));
       border-radius: 10px;
       transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
@@ -1589,11 +1589,11 @@
       <!-- WIDGET DE AVANCE FORMATIVO -->
       <div class="hero-progress-widget">
         <div class="progress-widget-header">
-          <span class="progress-widget-title">Avance del Cronograma Sincrónico</span>
-          <span class="progress-percentage">28.5%</span>
+          <span class="progress-widget-title">Avance del Cronograma Sincrónico (4 de 7 Sesiones)</span>
+          <span class="progress-percentage" id="cronogramaProgressPercentage">57.1%</span>
         </div>
         <div class="progress-bar-track">
-          <div class="progress-bar-fill"></div>
+          <div class="progress-bar-fill" id="cronogramaProgressBarFill" style="width: 57.1%;"></div>
         </div>
         <div class="progress-kpis-grid">
           <div class="kpi-card">
@@ -1685,9 +1685,9 @@
         <div>
           <div class="card-pro-header">
             <span class="folder-tag-badge"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/></svg> Sesión 1/</span>
-            <span class="status-pill-indicator hoy">
-              <span class="pulse-dot" style="background:#ea580c"></span>
-              Realizada Hoy
+            <span class="status-pill-indicator completada">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+              Completada
             </span>
           </div>
           <h3 class="card-pro-title">Modelo Relacional & Normalización (1FN, 2FN, 3FN)</h3>
@@ -1737,9 +1737,9 @@
         <div>
           <div class="card-pro-header">
             <span class="folder-tag-badge"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/></svg> Sesión 2/</span>
-            <span class="status-pill-indicator hoy">
-              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-              Sesión Activa (Hoy)
+            <span class="status-pill-indicator completada">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+              Completada
             </span>
           </div>
           <h3 class="card-pro-title">SQL Completo (DDL & DML en MySQL Workbench)</h3>
@@ -1796,9 +1796,9 @@
         <div>
           <div class="card-pro-header">
             <span class="folder-tag-badge"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/></svg> Sesión 3/</span>
-            <span class="status-pill-indicator hoy">
-              <span class="pulse-dot" style="background:#ea580c"></span>
-              Grabación Disponible
+            <span class="status-pill-indicator completada">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+              Completada
             </span>
           </div>
           <h3 class="card-pro-title">Bases de Datos NoSQL & Documentos JSON</h3>
@@ -1848,9 +1848,9 @@
         <div>
           <div class="card-pro-header">
             <span class="folder-tag-badge"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/></svg> Sesión 4/</span>
-            <span class="status-pill-indicator programada">
-              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/></svg>
-              Programada
+            <span class="status-pill-indicator proxima">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              Próxima Sesión (Lunes 26/Oct)
             </span>
           </div>
           <h3 class="card-pro-title">Operaciones CRUD MongoDB & Sustentación Video</h3>
@@ -2216,6 +2216,26 @@
       sidebar.classList.toggle('mobile-open', shouldOpen);
       if (backdrop) backdrop.classList.toggle('active', shouldOpen);
     }
+
+    // Auto-cálculo de avance del cronograma
+    function actualizarAvanceCronograma() {
+      const cards = document.querySelectorAll('#sessionsContainer .session-card-pro');
+      const total = cards.length || 7;
+      let completadas = 0;
+      cards.forEach(card => {
+        const pill = card.querySelector('.status-pill-indicator');
+        if (pill && (pill.classList.contains('completada') || card.querySelector('[id^="btnGrabacion"]'))) {
+          completadas++;
+        }
+      });
+      const pct = ((completadas / total) * 100).toFixed(1);
+      const textEl = document.getElementById('cronogramaProgressPercentage');
+      const barEl = document.getElementById('cronogramaProgressBarFill');
+      if (textEl) textEl.textContent = `${pct}%`;
+      if (barEl) barEl.style.width = `${pct}%`;
+    }
+
+    document.addEventListener('DOMContentLoaded', actualizarAvanceCronograma);
   </script>
 
 </body>
