@@ -549,171 +549,93 @@
     }
 
     /* ==========================================================================
-       ESTÁNDAR DE CODEBOXES VS CODE (ESTRICTO CON GUTTER VERTICAL 22PX)
+       ESTÁNDAR DE CODEBOXES (ESTILO TERMINAL CON SEMÁFORO - PATRÓN SESIÓN 19)
        ========================================================================== */
-    .editor-window {
-      background: #1e1e1e;
-      border-radius: 10px;
-      border: 1px solid #333333;
-      box-shadow: 0 10px 28px rgba(0,0,0,0.25);
+    .code-editor-box {
+      background: #1a1a2e;
+      border-radius: 14px;
       overflow: hidden;
+      box-shadow: 0 20px 50px rgba(0,0,0,.25);
       font-family: 'JetBrains Mono', Consolas, 'Courier New', monospace;
       margin: 14px auto;
       max-width: 760px;
       width: 100%;
+      display: flex;
+      flex-direction: column;
     }
 
-    .editor-titlebar {
-      background: #252526;
-      border-bottom: 1px solid #2d2d2d;
-      padding: 7px 14px;
+    .editor-header {
+      background: #12121f;
+      padding: 10px 16px;
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      height: 36px;
+      gap: 8px;
       box-sizing: border-box;
     }
 
-    .editor-dots {
-      display: flex;
-      gap: 6px;
-      align-items: center;
-    }
+    .editor-dot { width: 11px; height: 11px; border-radius: 50%; }
+    .editor-dot.r { background: #ff5f57; }
+    .editor-dot.y { background: #febc2e; }
+    .editor-dot.g { background: #28c840; }
 
-    .editor-dot {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-    }
-
-    .dot-red { background: #ff5f56; }
-    .dot-yellow { background: #ffbd2e; }
-    .dot-green { background: #27c93f; }
-
-    .editor-tabs-group {
-      display: flex;
-      gap: 4px;
-    }
-
-    .editor-tab {
-      display: flex;
-      align-items: center;
-      gap: 6px;
+    .editor-title {
+      margin-left: 8px;
+      font-family: 'JetBrains Mono', Consolas, monospace;
       font-size: 11px;
-      color: #cccccc;
-      background: #1e1e1e;
-      padding: 4px 12px;
-      border-radius: 4px 4px 0 0;
-      border-top: 2px solid #0284c7;
-      cursor: pointer;
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      font-weight: 600;
+      color: #8892a4;
+      flex: 1;
     }
 
-    .editor-tab.active-mongo {
-      border-top-color: #00ed64;
-      color: #ffffff;
-    }
-
-    .editor-badge-tool {
-      font-size: 9.5px;
-      color: #9cdcfe;
-      background: rgba(156,220,254,0.1);
-      border: 1px solid rgba(156,220,254,0.25);
-      padding: 2px 7px;
-      border-radius: 10px;
-      font-family: 'Plus Jakarta Sans', sans-serif;
+    .editor-badge {
+      font-size: 9px;
       font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 3px 9px;
+      border-radius: 5px;
+      background: rgba(74,222,128,.15);
+      color: #4ade80;
     }
 
     .editor-body {
-      display: flex;
-      padding: 8px 0;
-      font-size: 12px;
-      line-height: 22px;
-      overflow-x: auto;
-      background: #1e1e1e;
+      padding: 10px 0;
       font-family: 'JetBrains Mono', Consolas, 'Courier New', monospace;
-      box-sizing: border-box;
-    }
-
-    .editor-gutter {
-      display: flex;
-      flex-direction: column;
-      padding: 0 6px 0 12px;
-      color: #858585;
-      user-select: none;
-      font-size: 11.5px;
-      border-right: 1px solid #2d2d2d;
-      min-width: 44px;
-      background: #1e1e1e;
-      flex-shrink: 0;
-      box-sizing: border-box;
-    }
-
-    .gutter-row {
-      height: 22px;
-      line-height: 22px;
-      display: flex;
-      align-items: center;
-      justify-content: flex-end;
-      gap: 5px;
-      box-sizing: border-box;
-    }
-
-    .gutter-num {
-      color: #6e7681;
-      font-size: 11.5px;
-      min-width: 16px;
-      text-align: right;
-      display: inline-block;
-      font-family: 'JetBrains Mono', Consolas, monospace;
-    }
-
-    .gutter-fold {
-      color: #858585;
-      font-size: 10px;
-      width: 10px;
-      text-align: center;
-      display: inline-block;
-      cursor: pointer;
-    }
-
-    .gutter-fold-space {
-      width: 10px;
-      display: inline-block;
-    }
-
-    .editor-code {
-      padding: 0 14px;
-      color: #d4d4d4;
+      font-size: 12.5px;
+      line-height: 1.9;
       flex: 1;
-      font-size: 12px;
-      line-height: 22px;
       overflow-x: auto;
-      font-family: 'JetBrains Mono', Consolas, 'Courier New', monospace;
+      background: #1a1a2e;
       box-sizing: border-box;
     }
 
-    .code-line {
-      height: 22px;
-      line-height: 22px;
+    .cl {
+      display: grid;
+      grid-template-columns: 34px 1fr;
+      column-gap: 12px;
+      padding: 0 20px;
       white-space: pre;
-      display: block;
-      font-family: 'JetBrains Mono', Consolas, 'Courier New', monospace;
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
     }
 
-    /* TOKENS DE SINTAXIS JSON / BSON / MONGODB */
-    .tok-key { color: #9cdcfe; font-weight: 600; }
-    .tok-str { color: #ce9178; }
-    .tok-num { color: #b5cea8; }
-    .tok-bool { color: #569cd6; font-weight: 700; }
-    .tok-bson { color: #4ec9b0; font-weight: 700; }
-    .tok-comment { color: #6a9955; font-style: italic; }
-    .tok-op { color: #d4d4d4; }
+    .cl .ln {
+      color: #4a5178;
+      user-select: none;
+      text-align: right;
+    }
+
+    .cl .code { color: #e2e8f0; }
+    .cl.indent-1 .code { padding-left: 18px; }
+    .cl.indent-2 .code { padding-left: 36px; }
+
+    /* TOKENS DE SINTAXIS JSON / BSON / MONGODB (paleta Tokyo Night, patrón Sesión 19) */
+    .tok-key, .sel, .syn-key, .syn-prop { color: #7dcfff; }
+    .tok-str, .str, .prop, .syn-str { color: #9ece6a; }
+    .tok-num, .val, .syn-num { color: #e2e8f0; }
+    .tok-bool, .syn-keyword { color: #f7768e; font-weight: 700; }
+    .tok-bson, .var, .syn-method, .syn-func { color: #e0af68; }
+    .tok-comment, .cm, .syn-comment { color: #565f89; font-style: italic; }
+    .tok-op, .punc { color: #8892a4; }
+    .tag { color: #f7768e; }
+    .attr { color: #e0af68; }
     .tok-id-badge { background: rgba(78, 201, 176, 0.2); color: #4ec9b0; border: 1px solid rgba(78, 201, 176, 0.4); font-size: 9px; font-weight: 800; padding: 0 5px; border-radius: 3px; height: 16px; line-height: 14px; display: inline-block; vertical-align: middle; margin-left: 6px; }
     .tok-embed-badge { background: rgba(255, 107, 0, 0.2); color: #ff9800; border: 1px solid rgba(255, 107, 0, 0.4); font-size: 9px; font-weight: 800; padding: 0 5px; border-radius: 3px; height: 16px; line-height: 14px; display: inline-block; vertical-align: middle; margin-left: 6px; }
     .tok-ref-badge { background: rgba(59, 130, 246, 0.2); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.4); font-size: 9px; font-weight: 800; padding: 0 5px; border-radius: 3px; height: 16px; line-height: 14px; display: inline-block; vertical-align: middle; margin-left: 6px; }
@@ -837,6 +759,39 @@
       animation: modalFadeIn 0.25s ease-out forwards;
     }
 
+    /* TOAST INSTITUCIONAL (reemplaza alert() nativo) */
+    .app-toast {
+      position: fixed;
+      bottom: 28px;
+      left: 50%;
+      transform: translateX(-50%) translateY(16px);
+      background: #ffffff;
+      color: var(--texto-main, #1a1a2e);
+      border: 1px solid #bbf7d0;
+      border-left: 4px solid #39a900;
+      border-radius: 10px;
+      padding: 12px 18px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 13.5px;
+      font-weight: 600;
+      box-shadow: 0 12px 32px rgba(15, 23, 42, 0.18);
+      z-index: 9999;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease, transform 0.25s ease;
+      max-width: 90vw;
+    }
+
+    .app-toast svg { color: #39a900; }
+
+    .app-toast.visible {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
     @keyframes modalFadeIn {
       from { opacity: 0; transform: scale(0.96); }
       to { opacity: 1; transform: scale(1); }
@@ -846,8 +801,8 @@
       background: #ffffff;
       border-radius: var(--radius-lg);
       width: 100%;
-      max-width: 860px;
-      max-height: 90vh;
+      max-width: 1080px;
+      max-height: 94vh;
       display: flex;
       flex-direction: column;
       box-shadow: 0 25px 60px rgba(0, 0, 0, 0.25);
@@ -1330,10 +1285,13 @@
 
         <div style="background:linear-gradient(135deg, #f0fdf4 0%, #e0f2fe 100%);border:1.5px solid #86efac;border-radius:12px;padding:16px 20px;">
           <strong style="color:#166534;font-size:14px;display:flex;align-items:center;gap:8px;margin-bottom:6px;">
-            💡 Atomicidad a Nivel de Documento (Ventaja de MongoDB):
+            💡 ¿Por qué no se te "rompe" una orden a la mitad? (Ventaja de MongoDB):
           </strong>
+          <p style="margin:0 0 10px 0;font-size:13px;color:#334155;line-height:1.6;">
+            Imagina que una orden con 3 productos fuera como una <strong>carpeta con hojas sueltas</strong>: la cabecera en una tabla <code>ordenes</code> y cada producto en hojas separadas dentro de <code>items_orden</code>. Si la luz se va justo cuando ya guardaste la cabecera pero aún faltaba guardar el tercer producto, te queda una orden coja: existe, pero le falta una pieza. En SQL, para evitar eso, tienes que "amarrar" esas dos tablas con una transacción antes de guardar.
+          </p>
           <p style="margin:0;font-size:13px;color:#334155;line-height:1.6;">
-            A diferencia de SQL donde actualizar una orden y sus ítems requiere abrir transacciones sobre múltiples tablas (<code>ordenes</code> e <code>items_orden</code>), en MongoDB la orden almacena sus ítems embebidos en un solo documento BSON. Por tanto, cualquier inserción o actualización es <strong>100% atómica por defecto</strong>, sin overhead de bloqueos relacionales.
+            En MongoDB tú guardas esa misma orden como <strong>un solo sobre cerrado</strong>: la cabecera y los 3 productos van embebidos dentro de un único documento BSON. Como es un solo objeto, Mongo lo escribe de un solo golpe — o queda guardado completo, o no queda guardado nada; nunca a medias. Eso es lo que significa <strong>"atómico por defecto"</strong>: no es un término abstracto, es la garantía concreta de que jamás vas a encontrar una orden con 2 de 3 productos. Y como no hay nada que "amarrar" entre tablas, tampoco pagas el costo (overhead) de esos bloqueos que SQL necesita para sincronizar varias tablas a la vez.
           </p>
         </div>
       </div>
@@ -1398,7 +1356,7 @@
               mongodb://localhost:27017
             </code>
           </div>
-          <span style="font-size:12px;color:#94a3b8;">Base de datos activa: <strong>techstore_db</strong></span>
+          <span style="font-size:12px;color:#94a3b8;">Base de datos activa: <strong>techstore_nosql</strong></span>
         </div>
       </div>
     </section>
@@ -1601,11 +1559,7 @@ db.productos.deleteOne({
         <!-- CODEBOX VS CODE SEGÚN ESTÁNDAR 22PX -->
         <div class="code-editor-box">
           <div class="editor-header">
-            <div class="editor-dots">
-              <span class="dot dot-red"></span>
-              <span class="dot dot-yellow"></span>
-              <span class="dot dot-green"></span>
-            </div>
+            <div class="editor-dot r"></div><div class="editor-dot y"></div><div class="editor-dot g"></div>
             <div class="editor-title">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
               <span>01_insert_productos_crud.js</span>
@@ -1613,66 +1567,55 @@ db.productos.deleteOne({
             <div class="editor-badge">MQL · MongoDB</div>
           </div>
           <div class="editor-body">
-            <div class="editor-gutter">
-              <div class="gutter-row"><span class="fold-arrow">⌄</span><span class="gutter-num">1</span></div>
-              <div class="gutter-row"><span class="fold-arrow"></span><span class="gutter-num">2</span></div>
-              <div class="gutter-row"><span class="fold-arrow">⌄</span><span class="gutter-num">3</span></div>
-              <div class="gutter-row"><span class="fold-arrow"></span><span class="gutter-num">4</span></div>
-              <div class="gutter-row"><span class="fold-arrow"></span><span class="gutter-num">5</span></div>
-              <div class="gutter-row"><span class="fold-arrow"></span><span class="gutter-num">6</span></div>
-              <div class="gutter-row"><span class="fold-arrow">⌄</span><span class="gutter-num">7</span></div>
-              <div class="gutter-row"><span class="fold-arrow"></span><span class="gutter-num">8</span></div>
-              <div class="gutter-row"><span class="fold-arrow"></span><span class="gutter-num">9</span></div>
-              <div class="gutter-row"><span class="fold-arrow"></span><span class="gutter-num">10</span></div>
-              <div class="gutter-row"><span class="fold-arrow"></span><span class="gutter-num">11</span></div>
-              <div class="gutter-row"><span class="fold-arrow"></span><span class="gutter-num">12</span></div>
-              <div class="gutter-row"><span class="fold-arrow"></span><span class="gutter-num">13</span></div>
-              <div class="gutter-row"><span class="fold-arrow"></span><span class="gutter-num">14</span></div>
-              <div class="gutter-row"><span class="fold-arrow">⌄</span><span class="gutter-num">15</span></div>
-              <div class="gutter-row"><span class="fold-arrow"></span><span class="gutter-num">16</span></div>
-              <div class="gutter-row"><span class="fold-arrow"></span><span class="gutter-num">17</span></div>
-              <div class="gutter-row"><span class="fold-arrow"></span><span class="gutter-num">18</span></div>
-              <div class="gutter-row"><span class="fold-arrow">⌄</span><span class="gutter-num">19</span></div>
-              <div class="gutter-row"><span class="fold-arrow"></span><span class="gutter-num">20</span></div>
-              <div class="gutter-row"><span class="fold-arrow"></span><span class="gutter-num">21</span></div>
-              <div class="gutter-row"><span class="fold-arrow"></span><span class="gutter-num">22</span></div>
-              <div class="gutter-row"><span class="fold-arrow"></span><span class="gutter-num">23</span></div>
-              <div class="gutter-row"><span class="fold-arrow"></span><span class="gutter-num">24</span></div>
-              <div class="gutter-row"><span class="fold-arrow"></span><span class="gutter-num">25</span></div>
-            </div>
-            <div class="editor-code">
-              <div class="code-line"><span class="syn-comment">// Inserción en lote de 2 nuevos productos para TechStore:</span></div>
-              <div class="code-line"><span class="syn-method">db</span>.<span class="syn-prop">productos</span>.<span class="syn-func">insertMany</span>([</div>
-              <div class="code-line">&nbsp;&nbsp;{</div>
-              <div class="code-line">&nbsp;&nbsp;&nbsp;&nbsp;<span class="syn-key">"sku"</span>: <span class="syn-str">"TAB-PRO-06"</span>,</div>
-              <div class="code-line">&nbsp;&nbsp;&nbsp;&nbsp;<span class="syn-key">"titulo"</span>: <span class="syn-str">"Tablet Gráfica Digitalizadora 2K 11 Pulgadas"</span>,</div>
-              <div class="code-line">&nbsp;&nbsp;&nbsp;&nbsp;<span class="syn-key">"categoria"</span>: <span class="syn-str">"Equipos de Cómputo"</span>,</div>
-              <div class="code-line">&nbsp;&nbsp;&nbsp;&nbsp;<span class="syn-key">"precio"</span>: <span class="syn-num">1450000.00</span>,</div>
-              <div class="code-line">&nbsp;&nbsp;&nbsp;&nbsp;<span class="syn-key">"especificaciones"</span>: {</div>
-              <div class="code-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="syn-key">"pantalla"</span>: <span class="syn-str">"11 Pulgadas IPS 2K"</span>,</div>
-              <div class="code-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="syn-key">"niveles_presion_lapiz"</span>: <span class="syn-num">8192</span>,</div>
-              <div class="code-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="syn-key">"conectividad"</span>: <span class="syn-str">"USB-C / Bluetooth 5.2"</span></div>
-              <div class="code-line">&nbsp;&nbsp;&nbsp;&nbsp;},</div>
-              <div class="code-line">&nbsp;&nbsp;&nbsp;&nbsp;<span class="syn-key">"etiquetas"</span>: [<span class="syn-str">"diseno"</span>, <span class="syn-str">"ilustracion"</span>, <span class="syn-str">"adso"</span>],</div>
-              <div class="code-line">&nbsp;&nbsp;&nbsp;&nbsp;<span class="syn-key">"stock"</span>: <span class="syn-num">12</span>,</div>
-              <div class="code-line">&nbsp;&nbsp;&nbsp;&nbsp;<span class="syn-key">"activo"</span>: <span class="syn-keyword">true</span></div>
-              <div class="code-line">&nbsp;&nbsp;},</div>
-              <div class="code-line">&nbsp;&nbsp;{</div>
-              <div class="code-line">&nbsp;&nbsp;&nbsp;&nbsp;<span class="syn-key">"sku"</span>: <span class="syn-str">"CAM-PRO-07"</span>,</div>
-              <div class="code-line">&nbsp;&nbsp;&nbsp;&nbsp;<span class="syn-key">"titulo"</span>: <span class="syn-str">"Cámara Web Pro 4K UHD con Micrófono Estéreo"</span>,</div>
-              <div class="code-line">&nbsp;&nbsp;&nbsp;&nbsp;<span class="syn-key">"categoria"</span>: <span class="syn-str">"Accesorios"</span>,</div>
-              <div class="code-line">&nbsp;&nbsp;&nbsp;&nbsp;<span class="syn-key">"precio"</span>: <span class="syn-num">480000.00</span>,</div>
-              <div class="code-line">&nbsp;&nbsp;&nbsp;&nbsp;<span class="syn-key">"especificaciones"</span>: {</div>
-              <div class="code-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="syn-key">"resolucion"</span>: <span class="syn-str">"3840x2160 @ 30fps"</span>,</div>
-              <div class="code-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="syn-key">"enfoque"</span>: <span class="syn-str">"Autofocus Inteligente"</span></div>
-              <div class="code-line">&nbsp;&nbsp;&nbsp;&nbsp;},</div>
-              <div class="code-line">&nbsp;&nbsp;&nbsp;&nbsp;<span class="syn-key">"etiquetas"</span>: [<span class="syn-str">"streaming"</span>, <span class="syn-str">"oficina"</span>, <span class="syn-str">"accesorios"</span>],</div>
-              <div class="code-line">&nbsp;&nbsp;&nbsp;&nbsp;<span class="syn-key">"stock"</span>: <span class="syn-num">25</span>,</div>
-              <div class="code-line">&nbsp;&nbsp;&nbsp;&nbsp;<span class="syn-key">"activo"</span>: <span class="syn-keyword">true</span></div>
-              <div class="code-line">&nbsp;&nbsp;}</div>
-              <div class="code-line">]);</div>
-            </div>
+              <div class="cl"><span class="ln">1</span><span class="code"><span class="syn-comment">// Inserción en lote de 2 nuevos productos para TechStore:</span></span></div>
+              <div class="cl"><span class="ln">2</span><span class="code"><span class="syn-method">db</span>.<span class="syn-prop">productos</span>.<span class="syn-func">insertMany</span>([</span></div>
+              <div class="cl"><span class="ln">3</span><span class="code">&nbsp;&nbsp;{</span></div>
+              <div class="cl"><span class="ln">4</span><span class="code">&nbsp;&nbsp;&nbsp;&nbsp;<span class="syn-key">"sku"</span>: <span class="syn-str">"TAB-PRO-06"</span>,</span></div>
+              <div class="cl"><span class="ln">5</span><span class="code">&nbsp;&nbsp;&nbsp;&nbsp;<span class="syn-key">"titulo"</span>: <span class="syn-str">"Tablet Gráfica Digitalizadora 2K 11 Pulgadas"</span>,</span></div>
+              <div class="cl"><span class="ln">6</span><span class="code">&nbsp;&nbsp;&nbsp;&nbsp;<span class="syn-key">"categoria"</span>: <span class="syn-str">"Equipos de Cómputo"</span>,</span></div>
+              <div class="cl"><span class="ln">7</span><span class="code">&nbsp;&nbsp;&nbsp;&nbsp;<span class="syn-key">"precio"</span>: <span class="syn-num">1450000.00</span>,</span></div>
+              <div class="cl"><span class="ln">8</span><span class="code">&nbsp;&nbsp;&nbsp;&nbsp;<span class="syn-key">"especificaciones"</span>: {</span></div>
+              <div class="cl"><span class="ln">9</span><span class="code">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="syn-key">"pantalla"</span>: <span class="syn-str">"11 Pulgadas IPS 2K"</span>,</span></div>
+              <div class="cl"><span class="ln">10</span><span class="code">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="syn-key">"niveles_presion_lapiz"</span>: <span class="syn-num">8192</span>,</span></div>
+              <div class="cl"><span class="ln">11</span><span class="code">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="syn-key">"conectividad"</span>: <span class="syn-str">"USB-C / Bluetooth 5.2"</span></span></div>
+              <div class="cl"><span class="ln">12</span><span class="code">&nbsp;&nbsp;&nbsp;&nbsp;},</span></div>
+              <div class="cl"><span class="ln">13</span><span class="code">&nbsp;&nbsp;&nbsp;&nbsp;<span class="syn-key">"etiquetas"</span>: [<span class="syn-str">"diseno"</span>, <span class="syn-str">"ilustracion"</span>, <span class="syn-str">"adso"</span>],</span></div>
+              <div class="cl"><span class="ln">14</span><span class="code">&nbsp;&nbsp;&nbsp;&nbsp;<span class="syn-key">"stock"</span>: <span class="syn-num">12</span>,</span></div>
+              <div class="cl"><span class="ln">15</span><span class="code">&nbsp;&nbsp;&nbsp;&nbsp;<span class="syn-key">"activo"</span>: <span class="syn-keyword">true</span></span></div>
+              <div class="cl"><span class="ln">16</span><span class="code">&nbsp;&nbsp;},</span></div>
+              <div class="cl"><span class="ln">17</span><span class="code">&nbsp;&nbsp;{</span></div>
+              <div class="cl"><span class="ln">18</span><span class="code">&nbsp;&nbsp;&nbsp;&nbsp;<span class="syn-key">"sku"</span>: <span class="syn-str">"CAM-PRO-07"</span>,</span></div>
+              <div class="cl"><span class="ln">19</span><span class="code">&nbsp;&nbsp;&nbsp;&nbsp;<span class="syn-key">"titulo"</span>: <span class="syn-str">"Cámara Web Pro 4K UHD con Micrófono Estéreo"</span>,</span></div>
+              <div class="cl"><span class="ln">20</span><span class="code">&nbsp;&nbsp;&nbsp;&nbsp;<span class="syn-key">"categoria"</span>: <span class="syn-str">"Accesorios"</span>,</span></div>
+              <div class="cl"><span class="ln">21</span><span class="code">&nbsp;&nbsp;&nbsp;&nbsp;<span class="syn-key">"precio"</span>: <span class="syn-num">480000.00</span>,</span></div>
+              <div class="cl"><span class="ln">22</span><span class="code">&nbsp;&nbsp;&nbsp;&nbsp;<span class="syn-key">"especificaciones"</span>: {</span></div>
+              <div class="cl"><span class="ln">23</span><span class="code">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="syn-key">"resolucion"</span>: <span class="syn-str">"3840x2160 @ 30fps"</span>,</span></div>
+              <div class="cl"><span class="ln">24</span><span class="code">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="syn-key">"enfoque"</span>: <span class="syn-str">"Autofocus Inteligente"</span></span></div>
+              <div class="cl"><span class="ln">25</span><span class="code">&nbsp;&nbsp;&nbsp;&nbsp;},</span></div>
+              <div class="cl"><span class="ln">26</span><span class="code">&nbsp;&nbsp;&nbsp;&nbsp;<span class="syn-key">"etiquetas"</span>: [<span class="syn-str">"streaming"</span>, <span class="syn-str">"oficina"</span>, <span class="syn-str">"accesorios"</span>],</span></div>
+              <div class="cl"><span class="ln">27</span><span class="code">&nbsp;&nbsp;&nbsp;&nbsp;<span class="syn-key">"stock"</span>: <span class="syn-num">25</span>,</span></div>
+              <div class="cl"><span class="ln">28</span><span class="code">&nbsp;&nbsp;&nbsp;&nbsp;<span class="syn-key">"activo"</span>: <span class="syn-keyword">true</span></span></div>
+              <div class="cl"><span class="ln">29</span><span class="code">&nbsp;&nbsp;}</span></div>
+              <div class="cl"><span class="ln">30</span><span class="code">]);</span></div>
           </div>
+        </div>
+
+        <div style="margin-top:20px;background:linear-gradient(135deg, #f0fdf4 0%, #e0f2fe 100%);border:1.5px solid #86efac;border-radius:12px;padding:16px 20px;">
+          <strong style="color:#166534;font-size:14px;display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+            💡 Este script es de referencia — ¿quieres ejecutarlo de verdad? Así se usa insertMany():
+          </strong>
+          <p style="margin:0 0 10px 0;font-size:13px;color:#334155;line-height:1.6;">
+            Este codebox no es obligatorio para tu video (la rúbrica solo exige 5 documentos, y tú ya los tienes). Pero si quieres aprovecharlo y dejar tu colección <code>productos</code> con 7 documentos en vez de 5, así se ejecuta <code>insertMany()</code> paso a paso:
+          </p>
+          <ul style="margin:0 0 10px 0;padding-left:20px;font-size:13px;color:#334155;line-height:1.7;">
+            <li><strong>¿Qué hace insertMany()?</strong> A diferencia de <code>insertOne()</code> (que guarda un solo documento), <code>insertMany()</code> recibe un <strong>arreglo <code>[ ]</code> de varios objetos <code>{ }</code></strong> y los inserta todos en una sola operación. Por eso el script abre con <code>[</code> y cada producto va separado por coma dentro de sus propias llaves.</li>
+            <li><strong>Vía Mongosh (terminal o consola &gt;_ MONGOSH de Compass):</strong> Asegúrate de estar en tu base con <code>use techstore_nosql</code>, copia el bloque completo desde <code>db.productos.insertMany([</code> hasta el <code>]);</code> final (tal como aparece en el codebox) y pégalo directo en la consola, luego Enter.</li>
+            <li><strong>Vía Compass (visual):</strong> Entra a la colección <code>productos</code> → botón verde <strong>ADD DATA ▾</strong> → <strong>'Insert document'</strong> → clic en el ícono <code>{ }</code> (modo JSON) → pega <strong>solo el arreglo</strong> (desde el primer <code>[</code> hasta el último <code>]</code>, sin el <code>db.productos.insertMany(...)</code> que lo envuelve) → botón <strong>'Insert'</strong>.</li>
+            <li><strong>Resultado esperado:</strong> Mongosh responde <code>{ acknowledged: true, insertedIds: { '0': ObjectId(...), '1': ObjectId(...) } }</code> — los 2 nuevos <code>_id</code> generados automáticamente. Verifica con <code>db.productos.countDocuments()</code>: debe mostrar <strong>7</strong> si partiste de tus 5 originales.</li>
+          </ul>
+          <p style="margin:0;font-size:12.5px;color:#475569;line-height:1.6;font-style:italic;">
+            Nota: si ya borraste el Monitor (<code>MON-GAM-03</code>) en el Paso 6 del stepper, el conteo final sería 6, no 7 — ambos son correctos, solo depende del orden en que practiques.
+          </p>
         </div>
       </div>
     </section>
@@ -1692,11 +1635,7 @@ db.productos.deleteOne({
         <!-- CODEBOX VS CODE 22PX -->
         <div class="code-editor-box">
           <div class="editor-header">
-            <div class="editor-dots">
-              <span class="dot dot-red"></span>
-              <span class="dot dot-yellow"></span>
-              <span class="dot dot-green"></span>
-            </div>
+            <div class="editor-dot r"></div><div class="editor-dot y"></div><div class="editor-dot g"></div>
             <div class="editor-title">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
               <span>02_read_queries_mql.js</span>
@@ -1704,51 +1643,43 @@ db.productos.deleteOne({
             <div class="editor-badge">MQL · MongoDB</div>
           </div>
           <div class="editor-body">
-            <div class="editor-gutter">
-              <div class="gutter-row"><span class="fold-arrow">⌄</span><span class="gutter-num">1</span></div>
-              <div class="gutter-row"><span class="fold-arrow"></span><span class="gutter-num">2</span></div>
-              <div class="gutter-row"><span class="fold-arrow"></span><span class="gutter-num">3</span></div>
-              <div class="gutter-row"><span class="fold-arrow">⌄</span><span class="gutter-num">4</span></div>
-              <div class="gutter-row"><span class="fold-arrow"></span><span class="gutter-num">5</span></div>
-              <div class="gutter-row"><span class="fold-arrow"></span><span class="gutter-num">6</span></div>
-              <div class="gutter-row"><span class="fold-arrow">⌄</span><span class="gutter-num">7</span></div>
-              <div class="gutter-row"><span class="fold-arrow"></span><span class="gutter-num">8</span></div>
-              <div class="gutter-row"><span class="fold-arrow"></span><span class="gutter-num">9</span></div>
-              <div class="gutter-row"><span class="fold-arrow">⌄</span><span class="gutter-num">10</span></div>
-              <div class="gutter-row"><span class="fold-arrow"></span><span class="gutter-num">11</span></div>
-              <div class="gutter-row"><span class="fold-arrow"></span><span class="gutter-num">12</span></div>
-              <div class="gutter-row"><span class="fold-arrow">⌄</span><span class="gutter-num">13</span></div>
-              <div class="gutter-row"><span class="fold-arrow"></span><span class="gutter-num">14</span></div>
-              <div class="gutter-row"><span class="fold-arrow"></span><span class="gutter-num">15</span></div>
-              <div class="gutter-row"><span class="fold-arrow">⌄</span><span class="gutter-num">16</span></div>
-              <div class="gutter-row"><span class="fold-arrow"></span><span class="gutter-num">17</span></div>
-              <div class="gutter-row"><span class="fold-arrow"></span><span class="gutter-num">18</span></div>
-              <div class="gutter-row"><span class="fold-arrow"></span><span class="gutter-num">19</span></div>
-              <div class="gutter-row"><span class="fold-arrow"></span><span class="gutter-num">20</span></div>
-            </div>
-            <div class="editor-code">
-              <div class="code-line"><span class="syn-comment">// 1. Consultar todos los productos con stock disponible:</span></div>
-              <div class="code-line"><span class="syn-method">db</span>.<span class="syn-prop">productos</span>.<span class="syn-func">find</span>({ <span class="syn-key">stock</span>: { <span class="syn-func">$gt</span>: <span class="syn-num">0</span> } });</div>
-              <div class="code-line"></div>
-              <div class="code-line"><span class="syn-comment">// 2. Filtrar productos de gama intermedia (entre 400k y 2M COP):</span></div>
-              <div class="code-line"><span class="syn-method">db</span>.<span class="syn-prop">productos</span>.<span class="syn-func">find</span>({</div>
-              <div class="code-line">&nbsp;&nbsp;<span class="syn-key">precio</span>: { <span class="syn-func">$gte</span>: <span class="syn-num">400000.00</span>, <span class="syn-func">$lte</span>: <span class="syn-num">2000000.00</span> }</div>
-              <div class="code-line">});</div>
-              <div class="code-line"></div>
-              <div class="code-line"><span class="syn-comment">// 3. Buscar dentro del subdocumento embebido (Notación de punto):</span></div>
-              <div class="code-line"><span class="syn-method">db</span>.<span class="syn-prop">productos</span>.<span class="syn-func">find</span>({</div>
-              <div class="code-line">&nbsp;&nbsp;<span class="syn-str">"especificaciones.ram_gb"</span>: <span class="syn-num">32</span></div>
-              <div class="code-line">});</div>
-              <div class="code-line"></div>
-              <div class="code-line"><span class="syn-comment">// 4. Buscar productos que tengan la etiqueta 'diseno' en su arreglo:</span></div>
-              <div class="code-line"><span class="syn-method">db</span>.<span class="syn-prop">productos</span>.<span class="syn-func">find</span>({</div>
-              <div class="code-line">&nbsp;&nbsp;<span class="syn-key">etiquetas</span>: <span class="syn-str">"diseno"</span></div>
-              <div class="code-line">});</div>
-              <div class="code-line"></div>
-              <div class="code-line"><span class="syn-comment">// 5. Proyección (mostrar solo sku, titulo y precio, ocultando _id):</span></div>
-              <div class="code-line"><span class="syn-method">db</span>.<span class="syn-prop">productos</span>.<span class="syn-func">find</span>({}, { <span class="syn-key">sku</span>: <span class="syn-num">1</span>, <span class="syn-key">titulo</span>: <span class="syn-num">1</span>, <span class="syn-key">precio</span>: <span class="syn-num">1</span>, <span class="syn-key">_id</span>: <span class="syn-num">0</span> });</div>
-            </div>
+              <div class="cl"><span class="ln">1</span><span class="code"><span class="syn-comment">// 1. Consultar todos los productos con stock disponible:</span></span></div>
+              <div class="cl"><span class="ln">2</span><span class="code"><span class="syn-method">db</span>.<span class="syn-prop">productos</span>.<span class="syn-func">find</span>({ <span class="syn-key">stock</span>: { <span class="syn-func">$gt</span>: <span class="syn-num">0</span> } });</span></div>
+              <div class="cl"><span class="ln">3</span><span class="code"></span></div>
+              <div class="cl"><span class="ln">4</span><span class="code"><span class="syn-comment">// 2. Filtrar productos de gama intermedia (entre 400k y 2M COP):</span></span></div>
+              <div class="cl"><span class="ln">5</span><span class="code"><span class="syn-method">db</span>.<span class="syn-prop">productos</span>.<span class="syn-func">find</span>({</span></div>
+              <div class="cl"><span class="ln">6</span><span class="code">&nbsp;&nbsp;<span class="syn-key">precio</span>: { <span class="syn-func">$gte</span>: <span class="syn-num">400000.00</span>, <span class="syn-func">$lte</span>: <span class="syn-num">2000000.00</span> }</span></div>
+              <div class="cl"><span class="ln">7</span><span class="code">});</span></div>
+              <div class="cl"><span class="ln">8</span><span class="code"></span></div>
+              <div class="cl"><span class="ln">9</span><span class="code"><span class="syn-comment">// 3. Buscar dentro del subdocumento embebido (Notación de punto):</span></span></div>
+              <div class="cl"><span class="ln">10</span><span class="code"><span class="syn-method">db</span>.<span class="syn-prop">productos</span>.<span class="syn-func">find</span>({</span></div>
+              <div class="cl"><span class="ln">11</span><span class="code">&nbsp;&nbsp;<span class="syn-str">"especificaciones.ram_gb"</span>: <span class="syn-num">32</span></span></div>
+              <div class="cl"><span class="ln">12</span><span class="code">});</span></div>
+              <div class="cl"><span class="ln">13</span><span class="code"></span></div>
+              <div class="cl"><span class="ln">14</span><span class="code"><span class="syn-comment">// 4. Buscar productos que tengan la etiqueta 'diseno' en su arreglo:</span></span></div>
+              <div class="cl"><span class="ln">15</span><span class="code"><span class="syn-method">db</span>.<span class="syn-prop">productos</span>.<span class="syn-func">find</span>({</span></div>
+              <div class="cl"><span class="ln">16</span><span class="code">&nbsp;&nbsp;<span class="syn-key">etiquetas</span>: <span class="syn-str">"diseno"</span></span></div>
+              <div class="cl"><span class="ln">17</span><span class="code">});</span></div>
+              <div class="cl"><span class="ln">18</span><span class="code"></span></div>
+              <div class="cl"><span class="ln">19</span><span class="code"><span class="syn-comment">// 5. Proyección (mostrar solo sku, titulo y precio, ocultando _id):</span></span></div>
+              <div class="cl"><span class="ln">20</span><span class="code"><span class="syn-method">db</span>.<span class="syn-prop">productos</span>.<span class="syn-func">find</span>({}, { <span class="syn-key">sku</span>: <span class="syn-num">1</span>, <span class="syn-key">titulo</span>: <span class="syn-num">1</span>, <span class="syn-key">precio</span>: <span class="syn-num">1</span>, <span class="syn-key">_id</span>: <span class="syn-num">0</span> });</span></div>
           </div>
+        </div>
+
+        <div style="margin-top:20px;background:linear-gradient(135deg, #f0fdf4 0%, #e0f2fe 100%);border:1.5px solid #86efac;border-radius:12px;padding:16px 20px;">
+          <strong style="color:#166534;font-size:14px;display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+            💡 ¿Cómo ejecutas tú cada una de estas 5 consultas find()?
+          </strong>
+          <p style="margin:0 0 10px 0;font-size:13px;color:#334155;line-height:1.6;">
+            Este codebox es de referencia, pero son las mismas consultas que ya usaste en el Paso 5 del stepper — aquí te explicamos la diferencia clave entre ejecutarlas en Mongosh y en la barra Filter de Compass:
+          </p>
+          <ul style="margin:0 0 10px 0;padding-left:20px;font-size:13px;color:#334155;line-height:1.7;">
+            <li><strong>Vía Mongosh (terminal o consola &gt;_ MONGOSH de Compass):</strong> Copia la línea completa tal como está en el codebox, incluyendo <code>db.productos.find(...)</code> y el punto y coma final, y pégala directo en la consola.</li>
+            <li><strong>Vía barra Filter de Compass (visual):</strong> La barra Filter <strong>ya asume</strong> que estás dentro de <code>db.productos.find()</code>, así que <strong>nunca</strong> escribas <code>db.productos.find(...)</code> ahí — solo pega el objeto que va <em>entre los paréntesis</em>. Por ejemplo, para la consulta 1 solo escribes <code>{ stock: { $gt: 0 } }</code> y pulsas <strong>Find</strong>.</li>
+            <li><strong>Consultas 2, 3 y 4 (mismo truco):</strong> Toma solo el contenido entre <code>find({ ... })</code> y pégalo en la barra Filter: <code>{ precio: { $gte: 400000.00, $lte: 2000000.00 } }</code>, <code>{ "especificaciones.ram_gb": 32 }</code>, <code>{ etiquetas: "diseno" }</code> respectivamente.</li>
+            <li><strong>Consulta 5 (proyección, caso especial):</strong> La barra Filter de Compass tiene un segundo campo aparte llamado <strong>'Project'</strong> (debajo o al lado de Filter). Ahí es donde va <code>{ sku: 1, titulo: 1, precio: 1, _id: 0 }</code>; el campo Filter en este caso se deja vacío <code>{}</code> porque no estás filtrando, solo eligiendo qué campos mostrar.</li>
+            <li><strong>Resultado esperado:</strong> cada consulta reduce visualmente el contador de documentos en Compass (o la lista impresa en Mongosh) según cuántos de tus 5 productos cumplen la condición — compáralo con lo que ya viste en el Paso 5 del stepper para verificar que coincide.</li>
+          </ul>
         </div>
       </div>
     </section>
@@ -1768,11 +1699,7 @@ db.productos.deleteOne({
         <!-- CODEBOX VS CODE 22PX -->
         <div class="code-editor-box">
           <div class="editor-header">
-            <div class="editor-dots">
-              <span class="dot dot-red"></span>
-              <span class="dot dot-yellow"></span>
-              <span class="dot dot-green"></span>
-            </div>
+            <div class="editor-dot r"></div><div class="editor-dot y"></div><div class="editor-dot g"></div>
             <div class="editor-title">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
               <span>03_update_delete_mql.js</span>
@@ -1780,51 +1707,43 @@ db.productos.deleteOne({
             <div class="editor-badge">MQL · MongoDB</div>
           </div>
           <div class="editor-body">
-            <div class="editor-gutter">
-              <div class="gutter-row"><span class="fold-arrow">⌄</span><span class="gutter-num">1</span></div>
-              <div class="gutter-row"><span class="fold-arrow"></span><span class="gutter-num">2</span></div>
-              <div class="gutter-row"><span class="fold-arrow"></span><span class="gutter-num">3</span></div>
-              <div class="gutter-row"><span class="fold-arrow"></span><span class="gutter-num">4</span></div>
-              <div class="gutter-row"><span class="fold-arrow"></span><span class="gutter-num">5</span></div>
-              <div class="gutter-row"><span class="fold-arrow"></span><span class="gutter-num">6</span></div>
-              <div class="gutter-row"><span class="fold-arrow"></span><span class="gutter-num">7</span></div>
-              <div class="gutter-row"><span class="fold-arrow"></span><span class="gutter-num">8</span></div>
-              <div class="gutter-row"><span class="fold-arrow">⌄</span><span class="gutter-num">9</span></div>
-              <div class="gutter-row"><span class="fold-arrow"></span><span class="gutter-num">10</span></div>
-              <div class="gutter-row"><span class="fold-arrow"></span><span class="gutter-num">11</span></div>
-              <div class="gutter-row"><span class="fold-arrow"></span><span class="gutter-num">12</span></div>
-              <div class="gutter-row"><span class="fold-arrow"></span><span class="gutter-num">13</span></div>
-              <div class="gutter-row"><span class="fold-arrow">⌄</span><span class="gutter-num">14</span></div>
-              <div class="gutter-row"><span class="fold-arrow"></span><span class="gutter-num">15</span></div>
-              <div class="gutter-row"><span class="fold-arrow"></span><span class="gutter-num">16</span></div>
-              <div class="gutter-row"><span class="fold-arrow"></span><span class="gutter-num">17</span></div>
-              <div class="gutter-row"><span class="fold-arrow">⌄</span><span class="gutter-num">18</span></div>
-              <div class="gutter-row"><span class="fold-arrow"></span><span class="gutter-num">19</span></div>
-              <div class="gutter-row"><span class="fold-arrow"></span><span class="gutter-num">20</span></div>
-            </div>
-            <div class="editor-code">
-              <div class="code-line"><span class="syn-comment">// 1. UPDATE: Actualizar precio y stock del Portátil:</span></div>
-              <div class="code-line"><span class="syn-method">db</span>.<span class="syn-prop">productos</span>.<span class="syn-func">updateOne</span>(</div>
-              <div class="code-line">&nbsp;&nbsp;{ <span class="syn-key">sku</span>: <span class="syn-str">"LAP-PRO-01"</span> },</div>
-              <div class="code-line">&nbsp;&nbsp;{ </div>
-              <div class="code-line">&nbsp;&nbsp;&nbsp;&nbsp;<span class="syn-func">$set</span>: { <span class="syn-key">precio</span>: <span class="syn-num">4990000.00</span>, <span class="syn-key">stock</span>: <span class="syn-num">12</span> },</div>
-              <div class="code-line">&nbsp;&nbsp;&nbsp;&nbsp;<span class="syn-func">$inc</span>: { <span class="syn-key">veces_actualizado</span>: <span class="syn-num">1</span> }</div>
-              <div class="code-line">&nbsp;&nbsp;}</div>
-              <div class="code-line">);</div>
-              <div class="code-line"></div>
-              <div class="code-line"><span class="syn-comment">// 2. UPDATE: Reactivar producto agotado (Monitor):</span></div>
-              <div class="code-line"><span class="syn-method">db</span>.<span class="syn-prop">productos</span>.<span class="syn-func">updateOne</span>(</div>
-              <div class="code-line">&nbsp;&nbsp;{ <span class="syn-key">sku</span>: <span class="syn-str">"MON-GAM-03"</span> },</div>
-              <div class="code-line">&nbsp;&nbsp;{ <span class="syn-func">$set</span>: { <span class="syn-key">stock</span>: <span class="syn-num">8</span>, <span class="syn-key">activo</span>: <span class="syn-keyword">true</span> } }</div>
-              <div class="code-line">);</div>
-              <div class="code-line"></div>
-              <div class="code-line"><span class="syn-comment">// 3. DELETE: Eliminar producto descontinuado de prueba:</span></div>
-              <div class="code-line"><span class="syn-method">db</span>.<span class="syn-prop">productos</span>.<span class="syn-func">deleteOne</span>({ <span class="syn-key">sku</span>: <span class="syn-str">"CAM-PRO-07"</span> });</div>
-              <div class="code-line"></div>
-              <div class="code-line"><span class="syn-comment">// 4. READ FINAL: Verificar conteo de la colección:</span></div>
-              <div class="code-line"><span class="syn-method">db</span>.<span class="syn-prop">productos</span>.<span class="syn-func">countDocuments</span>();</div>
-            </div>
+              <div class="cl"><span class="ln">1</span><span class="code"><span class="syn-comment">// 1. UPDATE: Actualizar precio y stock del Portátil:</span></span></div>
+              <div class="cl"><span class="ln">2</span><span class="code"><span class="syn-method">db</span>.<span class="syn-prop">productos</span>.<span class="syn-func">updateOne</span>(</span></div>
+              <div class="cl"><span class="ln">3</span><span class="code">&nbsp;&nbsp;{ <span class="syn-key">sku</span>: <span class="syn-str">"LAP-PRO-01"</span> },</span></div>
+              <div class="cl"><span class="ln">4</span><span class="code">&nbsp;&nbsp;{ </span></div>
+              <div class="cl"><span class="ln">5</span><span class="code">&nbsp;&nbsp;&nbsp;&nbsp;<span class="syn-func">$set</span>: { <span class="syn-key">precio</span>: <span class="syn-num">4990000.00</span>, <span class="syn-key">stock</span>: <span class="syn-num">12</span> },</span></div>
+              <div class="cl"><span class="ln">6</span><span class="code">&nbsp;&nbsp;&nbsp;&nbsp;<span class="syn-func">$inc</span>: { <span class="syn-key">veces_actualizado</span>: <span class="syn-num">1</span> }</span></div>
+              <div class="cl"><span class="ln">7</span><span class="code">&nbsp;&nbsp;}</span></div>
+              <div class="cl"><span class="ln">8</span><span class="code">);</span></div>
+              <div class="cl"><span class="ln">9</span><span class="code"></span></div>
+              <div class="cl"><span class="ln">10</span><span class="code"><span class="syn-comment">// 2. UPDATE: Reactivar producto agotado (Monitor):</span></span></div>
+              <div class="cl"><span class="ln">11</span><span class="code"><span class="syn-method">db</span>.<span class="syn-prop">productos</span>.<span class="syn-func">updateOne</span>(</span></div>
+              <div class="cl"><span class="ln">12</span><span class="code">&nbsp;&nbsp;{ <span class="syn-key">sku</span>: <span class="syn-str">"MON-GAM-03"</span> },</span></div>
+              <div class="cl"><span class="ln">13</span><span class="code">&nbsp;&nbsp;{ <span class="syn-func">$set</span>: { <span class="syn-key">stock</span>: <span class="syn-num">8</span>, <span class="syn-key">activo</span>: <span class="syn-keyword">true</span> } }</span></div>
+              <div class="cl"><span class="ln">14</span><span class="code">);</span></div>
+              <div class="cl"><span class="ln">15</span><span class="code"></span></div>
+              <div class="cl"><span class="ln">16</span><span class="code"><span class="syn-comment">// 3. DELETE: Eliminar producto descontinuado de prueba:</span></span></div>
+              <div class="cl"><span class="ln">17</span><span class="code"><span class="syn-method">db</span>.<span class="syn-prop">productos</span>.<span class="syn-func">deleteOne</span>({ <span class="syn-key">sku</span>: <span class="syn-str">"TEC-MEC-02"</span> });</span></div>
+              <div class="cl"><span class="ln">18</span><span class="code"></span></div>
+              <div class="cl"><span class="ln">19</span><span class="code"><span class="syn-comment">// 4. READ FINAL: Verificar conteo de la colección:</span></span></div>
+              <div class="cl"><span class="ln">20</span><span class="code"><span class="syn-method">db</span>.<span class="syn-prop">productos</span>.<span class="syn-func">countDocuments</span>();</span></div>
           </div>
+        </div>
+
+        <div style="margin-top:20px;background:linear-gradient(135deg, #f0fdf4 0%, #e0f2fe 100%);border:1.5px solid #86efac;border-radius:12px;padding:16px 20px;">
+          <strong style="color:#166534;font-size:14px;display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+            💡 Este script es de referencia — así se ejecutan $set, $inc y deleteOne() en la vida real:
+          </strong>
+          <p style="margin:0 0 10px 0;font-size:13px;color:#334155;line-height:1.6;">
+            Igual que los codeboxes anteriores, este no es obligatorio para tu video (ya hiciste update y delete en el Paso 5 y 6 del stepper). Pero si quieres practicarlo aparte sobre tu colección real, así funciona cada operador:
+          </p>
+          <ul style="margin:0 0 10px 0;padding-left:20px;font-size:13px;color:#334155;line-height:1.7;">
+            <li><strong>$set vs $inc (la diferencia clave):</strong> <code>$set</code> <strong>reemplaza</strong> el valor de un campo por uno nuevo que tú escribes (ej: <code>precio: 4990000.00</code> deja el precio exactamente en ese número). <code>$inc</code> en cambio <strong>suma</strong> al valor que ya existía (ej: <code>veces_actualizado: 1</code> toma el número actual de ese campo y le suma 1 — si el campo no existe aún, MongoDB lo crea empezando en 1).</li>
+            <li><strong>Vía Mongosh:</strong> Copia cada bloque completo (desde <code>db.productos.updateOne(...)</code> o <code>deleteOne(...)</code> hasta su punto y coma) y pégalo en la consola. Puedes combinar <code>$set</code> e <code>$inc</code> en la misma operación, como ves en la consulta 1.</li>
+            <li><strong>Vía Compass (updateOne visual):</strong> Compass no tiene un botón directo para "$set/$inc" — para lograr el mismo efecto visualmente, ubica el documento, clic en el lápiz <em>'Edit Document'</em>, cambia el valor del campo a mano (eso equivale a <code>$set</code>) y pulsa <strong>Update</strong>. Para sumar un contador (<code>$inc</code>) tendrías que calcular tú el nuevo número y escribirlo — por eso <code>$inc</code> es más cómodo desde Mongosh.</li>
+            <li><strong>Vía Compass (deleteOne visual):</strong> Ubica el documento con <code>sku: "TEC-MEC-02"</code>, pasa el cursor sobre él, clic en el ícono de la papelera 🗑️ y confirma en el recuadro rojo.</li>
+            <li><strong>countDocuments() al final:</strong> Siempre que elimines algo, cierra con <code>db.productos.countDocuments()</code> para dejar evidencia de que el conteo bajó exactamente en 1 — ese hábito de verificación es justo lo que pide la rúbrica.</li>
+          </ul>
         </div>
       </div>
     </section>
@@ -1836,62 +1755,62 @@ db.productos.deleteOne({
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="12 2 2 7 12 12 22 7 12 2"/></svg>
           Bloque 3 · Taller Práctico en Vivo
         </span>
-        <h2 class="slide-title">Stepper en Vivo: Dominio de Operaciones CRUD en MongoDB Compass & Mongosh</h2>
+        <h2 class="slide-title">Stepper en Vivo: Ciclo CRUD Completo desde MongoDB Shell (Mongosh)</h2>
         <p class="slide-subtitle">
-          Guía interactiva paso a paso diseñada para que domines el ciclo CRUD completo en <strong>MongoDB Compass</strong> y la terminal integrada <strong>Mongosh</strong>: conexión local a <code>techstore_db</code>, inserción visual y por MQL (<code>insertOne</code> / <code>insertMany</code>), consultas estratégicas con operadores de filtro (<code>$gt</code>, <code>$in</code>), actualizaciones atómicas (<code>$set</code>, <code>$inc</code>), eliminaciones seguras con filtro estricto y la grabación del video demostrativo para la evidencia <strong>AA1-EV04</strong>. Haz clic en cada paso para ver la guía didáctica completa.
+          Ya instalaste Mongosh, te conectaste a <code>localhost:27017</code> y creaste <code>techstore_nosql</code> con sus 3 colecciones en la <strong>Sesión 3</strong> — hoy no repetimos eso. El instructor ejecuta en vivo, comando por comando desde la terminal <strong>Mongosh</strong>, el ciclo CRUD completo: inserción (<code>insertMany</code>), consultas con filtros (<code>find</code>, <code>$gt</code>), actualizaciones atómicas (<code>updateOne</code>, <code>$set</code> / <code>$inc</code>), eliminación segura (<code>deleteOne</code>), exportación (<code>mongoexport</code>) y el guion del video de entrega <strong>AA1-EV04</strong>. Replica cada comando exactamente igual para tu video.
         </p>
 
         <div class="stepper-steps-grid">
           <button type="button" class="stepper-card-btn" onclick="abrirModalStepper(1)">
             <span class="step-pill-number">01</span>
-            <div class="step-card-title">Conexión & Base techstore_db</div>
+            <div class="step-card-title">Create: Inserción con insertMany()</div>
             <div class="step-card-action-hint">
-              Ver Conexión Local 27017
+              Ver comando en Mongosh
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
             </div>
           </button>
 
           <button type="button" class="stepper-card-btn" onclick="abrirModalStepper(2)">
             <span class="step-pill-number">02</span>
-            <div class="step-card-title">Create: Inserción Individual y por Lote</div>
+            <div class="step-card-title">Read: Consultas con Filtros MQL</div>
             <div class="step-card-action-hint">
-              Ver insertOne / insertMany
+              Ver find() en Mongosh
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
             </div>
           </button>
 
           <button type="button" class="stepper-card-btn" onclick="abrirModalStepper(3)">
             <span class="step-pill-number">03</span>
-            <div class="step-card-title">Read: Filtros MQL & Barra Filter</div>
+            <div class="step-card-title">Update: Atomicidad con $set / $inc</div>
             <div class="step-card-action-hint">
-              Ver Operadores & Proyección
+              Ver updateOne() en Mongosh
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
             </div>
           </button>
 
           <button type="button" class="stepper-card-btn" onclick="abrirModalStepper(4)">
             <span class="step-pill-number">04</span>
-            <div class="step-card-title">Update: Mutación Atómica ($set / $inc)</div>
+            <div class="step-card-title">Delete: Eliminación Segura con Filtro</div>
             <div class="step-card-action-hint">
-              Ver updateOne en Mongosh & GUI
+              Ver deleteOne() en Mongosh
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
             </div>
           </button>
 
           <button type="button" class="stepper-card-btn" onclick="abrirModalStepper(5)">
             <span class="step-pill-number">05</span>
-            <div class="step-card-title">Delete: Eliminación Segura con Filtro</div>
+            <div class="step-card-title">Exportar Colecciones a JSON</div>
             <div class="step-card-action-hint">
-              Ver deleteOne & Papelera
+              Ver mongoexport en terminal
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
             </div>
           </button>
 
           <button type="button" class="stepper-card-btn" onclick="abrirModalStepper(6)">
             <span class="step-pill-number">06</span>
-            <div class="step-card-title">Video Demostrativo EV04 (7 Minutos)</div>
+            <div class="step-card-title">Video Demostrativo EV04 (5 a 7 Minutos)</div>
             <div class="step-card-action-hint">
-              Ver Guión de Grabación OBS
+              Ver Guión de Grabación Completo
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
             </div>
           </button>
@@ -1906,19 +1825,19 @@ db.productos.deleteOne({
             <thead>
               <tr>
                 <th style="width:25%;">Operación CRUD</th>
-                <th style="width:40%;">Sintaxis MQL / Interfaz Compass</th>
+                <th style="width:40%;">Sintaxis en Mongosh</th>
                 <th style="width:35%;">Efecto en la Base de Datos</th>
               </tr>
             </thead>
             <tbody>
               <tr class="cpt-row highlight">
                 <td><strong>Create (Crear)</strong></td>
-                <td><code>db.productos.insertOne({ ... })</code> o botón <strong>ADD DATA ▾</strong></td>
+                <td><code>db.productos.insertOne({ ... })</code></td>
                 <td>Inserta nuevo documento generando un <code>_id</code> ObjectId único e inmutable.</td>
               </tr>
               <tr class="cpt-row">
                 <td><strong>Read (Leer)</strong></td>
-                <td><code>db.productos.find({ precio: { $gt: 500000 } })</code> o barra <strong>FILTER</strong></td>
+                <td><code>db.productos.find({ precio: { $gt: 500000 } })</code></td>
                 <td>Recupera un cursor con documentos coincidentes sin alterar el almacenamiento en disco.</td>
               </tr>
               <tr class="cpt-row">
@@ -1928,7 +1847,7 @@ db.productos.deleteOne({
               </tr>
               <tr class="cpt-row">
                 <td><strong>Delete (Eliminar)</strong></td>
-                <td><code>db.productos.deleteOne({ codigo: "..." })</code> o ícono papelera Compass</td>
+                <td><code>db.productos.deleteOne({ codigo: "..." })</code></td>
                 <td>Remueve físicamente el documento de la colección. Requiere filtro específico para evitar borrados masivos.</td>
               </tr>
             </tbody>
@@ -1957,7 +1876,7 @@ db.productos.deleteOne({
           <div style="font-size:13px;color:#1e3a8a;line-height:1.6;">
             <strong>Flexibilidad Temática de Entrega (Dualidad A/B):</strong> Para tu video demostrativo puedes optar por:
             <br>• <strong>Ruta A (Literal Guía SENA):</strong> Base de datos de vehículos/concesionario demostrando CRUD sobre automóviles, marcas y clientes.
-            <br>• <strong>Ruta B (Proyecto Formativo Continuado - Recomendada):</strong> Base de datos <code>techstore_db</code> trabajada en la Sesión 3 y 4, realizando el CRUD sobre las colecciones <code>productos</code>, <code>usuarios</code> u <code>ordenes</code>.
+            <br>• <strong>Ruta B (Proyecto Formativo Continuado - Recomendada):</strong> Base de datos <code>techstore_nosql</code> trabajada en la Sesión 3 y 4, realizando el CRUD sobre las colecciones <code>productos</code>, <code>usuarios</code> u <code>ordenes</code>.
             <br><em>Ambas rutas son 100% válidas y evaluadas con el máximo puntaje.</em>
           </div>
         </div>
@@ -1978,23 +1897,23 @@ db.productos.deleteOne({
             <div style="display: flex; flex-direction: column; gap: 8px; font-size: 12.5px; color: var(--texto-muted); line-height: 1.5;">
               <div style="background: #f8fafc; border: 1px solid var(--borde-light); border-radius: 6px; padding: 8px 10px;">
                 <strong style="color:var(--texto-main);">Minuto 0:00 - 1:00 · Portada & Conexión:</strong><br>
-                Presentación verbal (nombre, ficha 3389010) y conexión exitosa en MongoDB Compass a <code>mongodb://localhost:27017</code> mostrando la base de datos seleccionada.
+                Presentación verbal (nombre, ficha 3389010) y conexión exitosa abriendo la consola Mongosh desde Compass (botón <strong>'Open MongoDB shell'</strong>), mostrando la base de datos <code>techstore_nosql</code> ya seleccionada.
               </div>
               <div style="background: #f8fafc; border: 1px solid var(--borde-light); border-radius: 6px; padding: 8px 10px;">
                 <strong style="color:var(--texto-main);">Minuto 1:00 - 2:30 · Operación Create (Inserción):</strong><br>
-                Demostración de inserción individual con <code>insertOne()</code> en Mongosh o botón <em>Insert Document</em> en Compass, y posterior inserción masiva (2+ documentos).
+                Demostración de inserción individual con <code>insertOne()</code> en Mongosh, y posterior inserción masiva con <code>insertMany()</code> (2+ documentos).
               </div>
               <div style="background: #f8fafc; border: 1px solid var(--borde-light); border-radius: 6px; padding: 8px 10px;">
                 <strong style="color:var(--texto-main);">Minuto 2:30 - 4:00 · Operación Read (Consultas Filtradas):</strong><br>
-                Uso de la barra FILTER en Compass o <code>db.collection.find()</code> en Mongosh aplicando filtros lógicos (ej. <code>{ precio: { $gt: 500000 } }</code>) y proyección.
+                Uso de <code>db.collection.find()</code> aplicando filtros lógicos (ej. <code>{ precio: { $gt: 500000 } }</code>), consulta por el <code>_id</code> interno generado al insertar, y <code>findOne()</code> por identificador de negocio único.
               </div>
               <div style="background: #f8fafc; border: 1px solid var(--borde-light); border-radius: 6px; padding: 8px 10px;">
-                <strong style="color:var(--texto-main);">Minuto 4:00 - 5:30 · Operación Update (Mutación):</strong><br>
-                Actualización de precio o stock usando <code>updateOne()</code> con el operador <code>$set</code> y verificación inmediata del cambio reflejado en Compass.
+                <strong style="color:var(--texto-main);">Minuto 4:00 - 5:30 · Operación Update (ciclo buscar→actualizar→buscar):</strong><br>
+                <code>find()</code> mostrando el documento ANTES del cambio → <code>updateOne()</code> con <code>$set</code> → <code>find()</code> de nuevo confirmando el cambio ya aplicado.
               </div>
               <div style="background: #f8fafc; border: 1px solid var(--borde-light); border-radius: 6px; padding: 8px 10px;">
-                <strong style="color:var(--texto-main);">Minuto 5:30 - 7:00 · Delete & Conclusión:</strong><br>
-                Eliminación controlada con <code>deleteOne()</code> mediante filtro por código/ID, verificación de que el documento ya no existe y cierre formal del video.
+                <strong style="color:var(--texto-main);">Minuto 5:30 - 7:00 · Delete (ciclo buscar→eliminar→buscar) & Conclusión:</strong><br>
+                <code>find()</code> mostrando el documento ANTES de eliminarlo → <code>deleteOne()</code> con filtro específico → <code>find()</code> de nuevo confirmando que ya no existe, y cierre formal del video.
               </div>
             </div>
           </div>
@@ -2077,7 +1996,7 @@ db.productos.deleteOne({
               <input type="checkbox" class="check-checkbox">
               <div class="check-text">
                 <h4>2. Operación Create (Inserción) Explicada y Verificada</h4>
-                <p>En el video se aprecia con claridad la inserción de documentos nuevos mediante <code>insertOne()</code> / <code>insertMany()</code> en Mongosh o interfaz gráfica de Compass.</p>
+                <p>En el video se aprecia con claridad la inserción de documentos nuevos mediante <code>insertOne()</code> / <code>insertMany()</code> ejecutados en Mongosh.</p>
               </div>
             </label>
 
@@ -2129,18 +2048,18 @@ db.productos.deleteOne({
   </main>
 
   <!-- ==========================================================================
-       MODAL GUIADO DE STEPPER INTERACTIVO (5 PASOS EN MONGODB COMPASS)
+       MODAL GUIADO DE STEPPER INTERACTIVO (6 PASOS: 100% MONGOSH)
        ========================================================================== -->
   <div class="ddl-modal-overlay" id="stepperModal" onclick="cerrarModalStepperOnBackdrop(event)">
     <div class="ddl-modal-box">
       <div class="modal-header-nav">
         <div class="modal-nav-pills">
-          <button type="button" class="modal-pill-btn active" id="modalPill1" onclick="cambiarPasoModal(1)">Paso 1: ¿Qué es & Descarga?</button>
-          <button type="button" class="modal-pill-btn" id="modalPill2" onclick="cambiarPasoModal(2)">Paso 2: Conexión Local</button>
-          <button type="button" class="modal-pill-btn" id="modalPill3" onclick="cambiarPasoModal(3)">Paso 3: Crear Base & Colecciones</button>
-          <button type="button" class="modal-pill-btn" id="modalPill4" onclick="cambiarPasoModal(4)">Paso 4: Inserción JSON</button>
-          <button type="button" class="modal-pill-btn" id="modalPill5" onclick="cambiarPasoModal(5)">Paso 5: Filtros & Consultas</button>
-          <button type="button" class="modal-pill-btn" id="modalPill6" onclick="cambiarPasoModal(6)">Paso 6: Exportar JSON</button>
+          <button type="button" class="modal-pill-btn active" id="modalPill1" onclick="cambiarPasoModal(1)">Paso 1: Create (insertMany)</button>
+          <button type="button" class="modal-pill-btn" id="modalPill2" onclick="cambiarPasoModal(2)">Paso 2: Read (Filtros)</button>
+          <button type="button" class="modal-pill-btn" id="modalPill3" onclick="cambiarPasoModal(3)">Paso 3: Update ($set/$inc)</button>
+          <button type="button" class="modal-pill-btn" id="modalPill4" onclick="cambiarPasoModal(4)">Paso 4: Delete Seguro</button>
+          <button type="button" class="modal-pill-btn" id="modalPill5" onclick="cambiarPasoModal(5)">Paso 5: Exportar JSON</button>
+          <button type="button" class="modal-pill-btn" id="modalPill6" onclick="cambiarPasoModal(6)">Paso 6: Video EV04</button>
         </div>
         <button type="button" class="modal-close-btn" onclick="cerrarModalStepper()" title="Cerrar ventana">✕</button>
       </div>
@@ -2236,11 +2155,36 @@ db.productos.deleteOne({
       if (el) {
         const text = el.innerText;
         navigator.clipboard.writeText(text).then(() => {
-          alert('¡Esquema JSON/BSON copiado exitosamente al portapapeles!');
+          mostrarToast('¡Esquema JSON/BSON copiado exitosamente al portapapeles!');
         }).catch(err => {
           console.error('Error al copiar: ', err);
         });
       }
+    }
+
+    // 4.1. TOAST INSTITUCIONAL (REEMPLAZA alert() NATIVO DEL NAVEGADOR)
+    let toastTimeoutId = null;
+    function mostrarToast(mensaje) {
+      let toast = document.getElementById('appToast');
+      if (!toast) {
+        toast = document.createElement('div');
+        toast.id = 'appToast';
+        toast.className = 'app-toast';
+        toast.innerHTML = `
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="flex-shrink:0;"><path d="M20 6 9 17l-5-5"/></svg>
+          <span class="app-toast-text"></span>
+        `;
+        document.body.appendChild(toast);
+      }
+      toast.querySelector('.app-toast-text').textContent = mensaje;
+
+      clearTimeout(toastTimeoutId);
+      toast.classList.remove('visible');
+      void toast.offsetWidth;
+      toast.classList.add('visible');
+      toastTimeoutId = setTimeout(() => {
+        toast.classList.remove('visible');
+      }, 2800);
     }
 
     // 5. MODALES GUIADOS DEL STEPPER (5 PASOS OFICIALES EN MONGODB COMPASS)
@@ -2248,112 +2192,31 @@ db.productos.deleteOne({
 
     const pasosData = {
       1: {
-        titulo: "Paso 1: ¿Qué es MongoDB Compass? Descarga e Instalación Guiada",
-        badge: "Fundamento GUI NoSQL",
-        badgeColor: "#0284c7",
-        desc: "Para entender MongoDB Compass, piensa en la experiencia que tuviste en la Sesión 2 con la extensión de VS Code (<strong>Database Client de Cweijan</strong>). En lugar de escribir comandos ciegos por consola, tenías una interfaz visual para interactuar con tus datos. <strong>MongoDB Compass</strong> es la herramienta gráfica oficial (GUI) creada por MongoDB para que puedas ver tus colecciones, documentos JSON y realizar consultas visualmente con clics de ratón.",
-        analogia: "<strong>Analogía para ti:</strong> Así como en la Sesión 2 usaste la extensión de Cweijan en VS Code para explorar gráficamente tus tablas y filas de MySQL, en NoSQL usas MongoDB Compass para explorar tus colecciones y documentos JSON.",
-        pasos: [
-          "<strong>Descarga del Portal Oficial:</strong> Abre tu navegador e ingresa a <a href='https://www.mongodb.com/try/download/compass' target='_blank' style='color:#0284c7;font-weight:700;text-decoration:underline;'>mongodb.com/try/download/compass</a>.",
-          "<strong>Selección del Instalador para Windows:</strong> En el selector de versión elige la versión estable más reciente (ej. <em>1.44+</em>), plataforma <strong>Windows 64-bit (MSI o EXE)</strong> y pulsa el botón verde <strong>Download</strong>.",
-          "<strong>Ejecución del Asistente:</strong> Abre el archivo descargado en tu carpeta de descargas. En Windows se instalará de forma automática y creará el acceso directo en tu Escritorio y Menú Inicio.",
-          "<strong>Primer Lanzamiento:</strong> Abre MongoDB Compass. Aparecerá una pantalla de bienvenida con la barra superior de conexión <code>mongodb://localhost:27017</code> lista para usar."
-        ],
-        tablaParams: [
-          { campo: "Herramienta", valor: "MongoDB Compass (GUI Oficial)", accion: "Descargar desde el sitio oficial de MongoDB" },
-          { campo: "Tipo de Paquete", valor: "Windows 64-bit (EXE o MSI)", accion: "Ejecutar con doble clic en tu PC" },
-          { campo: "Motor de Base de Datos", valor: "MongoDB Community Server", accion: "Debe estar instalado para que Compass tenga a dónde conectarse" },
-          { campo: "Servicio de Windows", valor: "MongoDB Server (services.msc)", accion: "Verificar que su estado sea 'En ejecución' (Running)" }
-        ],
-        code: `// Si deseas comprobar por consola de PowerShell que MongoDB esté corriendo:\nGet-Service -Name MongoDB`,
-        note: "<strong>¡Clave de Oro para no frustrarse!</strong> MongoDB Compass es el CLIENTE VISUAL (la pantalla con la que interactúas). Compass no almacena datos por sí solo: se conecta al SERVIDOR LOCAL de MongoDB (puerto 27017). Si tu servicio no está iniciado, Compass mostrará un error de conexión."
-      },
-      2: {
-        titulo: "Paso 2: Conexión Local en Compass (Secuencia Visual Completa)",
-        badge: "Conexión URI",
-        badgeColor: "#16a34a",
-        desc: "Al abrir MongoDB Compass te encontrarás primero con la pantalla de bienvenida (<strong>Welcome to MongoDB Compass</strong>). Al pulsar el botón verde <strong>'+ Add new connection'</strong> se desplegará la ventana modal <strong>'New Connection'</strong> donde confirmarás la conexión al puerto local 27017.",
-        analogia: "<strong>¿Qué significa el puerto 27017?</strong> Así como en la extensión de Cweijan en VS Code configuraste el puerto 3306 para comunicarte con MySQL, en MongoDB Compass nos comunicamos con el motor a través del puerto estándar 27017.",
-        imagenes: [
-          {
-            src: "img/compass_welcome.png",
-            titulo: "1. Pantalla de Bienvenida: Clic en '+ Add new connection'",
-            pie: "Al abrir Compass te recibirá esta pantalla. Haz clic en el botón verde central '+ Add new connection' o en el ícono '+' de la sección CONNECTIONS a la izquierda."
-          },
-          {
-            src: "img/compass_modal_connection.png",
-            titulo: "2. Ventana Modal 'New Connection': Formulario de Conexión",
-            pie: "El campo URI ya viene auto-completado con mongodb://localhost:27017/. Escribe 'TechStore Local' en Name y pulsa el botón verde Save & Connect."
-          }
-        ],
-        pasos: [
-          "<strong>Identificar la Pantalla de Bienvenida (Captura 1):</strong> Al abrir Compass verás la pantalla <em>'Welcome to MongoDB Compass'</em> con la ilustración de la lupa.",
-          "<strong>Desplegar la Ventana de Conexión:</strong> Haz clic en el botón verde central <strong>'+ Add new connection'</strong> (o en el ícono con el signo más <strong>'+'</strong> situado al lado de <em>CONNECTIONS</em> en la columna lateral izquierda).",
-          "<strong>Ventana Emergente 'New Connection' (Captura 2):</strong> Se abrirá el modal para configurar los parámetros de tu servidor local.",
-          "<strong>Verificar el Campo URI (Pre-llenado):</strong> Comprueba que ya contiene automáticamente: <code>mongodb://localhost:27017/</code>. ¡No necesitas modificarlo!",
-          "<strong>Asignar un Nombre Amigable (Name):</strong> En el campo de texto <strong>'Name'</strong> escribe: <code>TechStore Local</code> para identificarla fácilmente en tu panel lateral.",
-          "<strong>Guardar y Conectar:</strong> Haz clic en el botón verde oscuro inferior derecho: <strong>'Save & Connect'</strong>. Compass guardará tu servidor en la lista y abrirá la sesión de trabajo de inmediato.",
-          "<strong>Confirmación de Éxito & ¿Bases desconocidas?:</strong> Verás un círculo verde junto al nombre de tu conexión. En el panel lateral aparecerán las bases internas del sistema (<code>admin</code>, <code>config</code>, <code>local</code>) y cualquier proyecto previo de tu PC. <em>¡Esto es completamente normal!</em> Aún no has creado la base de datos de tu tienda; ese es exactamente el siguiente paso (Paso 3)."
-        ],
-        tablaParams: [
-          { campo: "URI", valor: "mongodb://localhost:27017/", accion: "Pre-llenado automático; no requiere cambios" },
-          { campo: "Name", valor: "TechStore Local", accion: "Escribir nombre amigable para tu lista de conexiones" },
-          { campo: "Color", valor: "Verde / No Color", accion: "Opcional para identificar visualmente la pestaña" },
-          { campo: "Favorite this connection", valor: "Checkbox opcional", accion: "Márcalo si deseas anclarla siempre arriba en la lista" },
-          { campo: "Advanced Connection Options", valor: "Colapsadas", accion: "No modificar en entorno local de desarrollo" },
-          { campo: "Botón de Confirmación", valor: "Save & Connect (Verde)", accion: "Guarda la conexión en el panel lateral y se conecta al instante" }
-        ],
-        code: `// Cadena URI predeterminada que ya viene escrita en el modal:\nmongodb://localhost:27017/`,
-        note: "<strong>⚠️ ¿Ves bases de datos en la lista que no reconoces?</strong> ¡Tranquilo, es totalmente normal! Al conectarte, Compass se enlaza con todo tu motor local y lista todas las bases existentes en tu PC (incluidas las 3 del sistema: admin, config, local). En el Paso 3 crearemos tu base de datos propia <code>techstore_nosql</code>. (Si te sale 'connect ECONNREFUSED', inicia el servicio con <code>net start MongoDB</code> en CMD)."
-      },
-      3: {
-        titulo: "Paso 3: Creación de la Base de Datos con el Atajo (+) en Compass",
-        badge: "Estructura NoSQL",
-        badgeColor: "#ea580c",
-        desc: "Para crear tu base de datos no necesitas navegar por menús complejos. MongoDB Compass te ofrece un <strong>atajo contextual rápido</strong> directamente en el panel lateral izquierdo.",
-        analogia: "<strong>Equivalencia directa:</strong> Base de Datos = Catálogo general; Colección = Tabla; Documento = Fila.",
-        imagenes: [
-          {
-            src: "img/compass_create_db_sidebar.png",
-            titulo: "1. Atajo Contextual en Panel Lateral: Ícono (+) 'Create database'",
-            pie: "Pasa el cursor sobre tu conexión 'TechStore Local' en la barra lateral y haz clic en el botón circular (+) que muestra el mensaje flotante 'Create database'."
-          },
-          {
-            src: "img/compass_modal_create_db.png",
-            titulo: "2. Ventana Modal 'Create Database': Parámetros Base y Primera Colección",
-            pie: "Ingresa Database Name: techstore_nosql y Collection Name: usuarios. Luego pulsa el botón verde Create Database para crearlas de inmediato."
-          }
-        ],
-        pasos: [
-          "<strong>Ubicar el Atajo en la Barra Lateral (Captura 1):</strong> En la columna lateral izquierda de Compass, pasa el ratón por encima del nombre de tu conexión activa (<strong>TechStore Local</strong>).",
-          "<strong>Pulsar el Ícono Circular (+):</strong> Notarás que aparecen 4 herramientas contextuales; haz clic en el botón circular con el signo más <strong>(+)</strong> que muestra el mensaje emergente <strong>'Create database'</strong> (como ves en la captura 1).",
-          "<strong>Llenar el Formulario Emergente (Captura 2):</strong> En la ventana modal ingresa:<br>• <strong>Database Name:</strong> <code>techstore_nosql</code> (en minúsculas, sin espacios ni caracteres especiales).<br>• <strong>Collection Name:</strong> <code>usuarios</code> (el nombre de tu primera colección documental obligatoria).",
-          "<strong>Confirmar la Creación:</strong> Haz clic en el botón verde inferior <strong>'Create Database'</strong>. ¡Listo! Tu base de datos aparecerá inmediatamente en la lista.",
-          "<strong>Agregar las 2 Colecciones Restantes:</strong> Haz clic sobre el nombre <code>techstore_nosql</code> en la lista y pulsa el botón <strong>'Create collection'</strong> para agregar <code>productos</code>, y repite el proceso para <code>ordenes</code>."
-        ],
-        tablaParams: [
-          { campo: "Atajo en Panel Lateral", valor: "Ícono circular (+) junto a TechStore Local", accion: "Clic para abrir la ventana directa de creación" },
-          { campo: "Database Name", valor: "techstore_nosql", accion: "Contenedor principal de la tienda virtual" },
-          { campo: "Colección 1 (Inicial)", valor: "usuarios", accion: "Colección obligatoria para habilitar la creación de la base" },
-          { campo: "Colección 2", valor: "productos", accion: "Crear con el botón 'Create collection' dentro de techstore_nosql" },
-          { campo: "Colección 3", valor: "ordenes", accion: "Crear con el botón 'Create collection' dentro de techstore_nosql" }
-        ],
-        code: `// En Compass todo se hace visualmente con clics.\n// Las 3 colecciones requeridas para tu entrega son:\n- usuarios\n- productos\n- ordenes`,
-        note: "<strong>Regla de Nomenclatura Profesional:</strong> Las bases de datos y colecciones siempre deben nombrarse en minúsculas y en plural (ej: <code>usuarios</code>, no <code>Usuario</code> ni <code>TB_USUARIOS</code>), siguiendo las convenciones de la industria para APIs RESTful y microservicios."
-      },
-      4: {
-        titulo: "Paso 4: Inserción de Colecciones en Lote (JSON Completo)",
+        titulo: "Paso 1: Create — Inserción en Lote con insertMany() en Mongosh",
         badge: "Carga de Datos",
         badgeColor: "#39a900",
-        desc: "Inserta los lotes de <strong>5 documentos organizados</strong> en cada colección (<code>usuarios</code>, <code>productos</code>, <code>ordenes</code>). Con 5 documentos reales por colección cumples y superas el requisito de la Guía 6 (mínimo 5 registros) y dejas habilitadas las pruebas reales de filtrado y actualización del Paso 5.",
-        analogia: "Equivalente a ejecutar sentencias <code>INSERT INTO</code> en MySQL, pero aquí pegas arreglos de objetos JSON completos en Compass sin preocuparte por tipos fijos de columnas.",
+        desc: "Ya tienes <code>techstore_nosql</code> y sus 3 colecciones creadas desde la Sesión 3 (<code>use techstore_nosql</code> + <code>db.createCollection()</code>). Hoy el instructor abre la consola <strong>Mongosh</strong> embebida en Compass y puebla cada colección con un lote de <strong>5 documentos reales</strong>, cumpliendo el mínimo que exige la Guía 6 y dejando datos listos para filtrar, actualizar y eliminar en los siguientes pasos.",
+        analogia: "Equivalente a ejecutar sentencias <code>INSERT INTO</code> en MySQL, pero aquí pegas un arreglo JSON completo con <code>insertMany()</code> en una sola operación, sin preocuparte por columnas ni tipos fijos.",
         pasos: [
-          "<strong>Seleccionar la Colección:</strong> En la barra lateral izquierda de Compass, haz clic sobre la colección a poblar (ej: <code>usuarios</code>).",
-          "<strong>Abrir el Asistente de Inserción:</strong> Haz clic en el botón verde <strong>ADD DATA ▾</strong> y selecciona la opción <strong>'Insert document'</strong>.",
-          "<strong>Cambiar a Modo Texto/JSON:</strong> En la esquina superior derecha del cuadro emergente, haz clic en el icono de llaves <strong>{ }</strong> (Modo JSON / Raw Text).",
-          "<strong>Limpiar y Pegar el Lote de 5:</strong> Borra cualquier contenido que aparezca (incluso las llaves por defecto) y pega exactamente el arreglo JSON con los 5 documentos de la pestaña correspondiente abajo.",
-          "<strong>Confirmar Inserción:</strong> Haz clic en el botón azul <strong>'Insert'</strong>. Compass procesará los 5 documentos y mostrará el contador <em>'1-5 of 5'</em>.",
-          "<strong>Repetir para las Demás Colecciones:</strong> Repite este mismo proceso con <code>productos</code> (5 documentos) y con <code>ordenes</code> (5 documentos)."
+          "<strong>Abrir Mongosh desde Compass:</strong> Con tu conexión <strong>TechStore Local</strong> abierta, pulsa el botón <strong>'Open MongoDB shell'</strong> (esquina superior derecha). Se abre la consola ya conectada.",
+          "<strong>Confirmar la base activa:</strong> La consola ya ejecuta <code>use(\"techstore_nosql\")</code> automáticamente; el prompt queda en <code>techstore_nosql&gt;</code>.",
+          "<strong>Borrar las 3 colecciones (punto de partida limpio):</strong> Ejecuta <code>db.usuarios.deleteMany({})</code>, <code>db.productos.deleteMany({})</code> y <code>db.ordenes.deleteMany({})</code>. Verifica con <code>countDocuments()</code> que las 3 den 0.",
+          "<strong>Insertar los 5 usuarios:</strong> Abre la pestaña <em>'usuarios.json'</em> de abajo, pulsa <strong>'Copiar JSON'</strong>, escribe <code>db.usuarios.insertMany(</code> y pega el arreglo copiado justo después, cerrando con <code>);</code>.",
+          "<strong>Insertar los 5 productos:</strong> Mismo procedimiento con la pestaña <em>'productos.json'</em> y <code>db.productos.insertMany( ... );</code>.",
+          "<strong>Insertar las 5 órdenes:</strong> Mismo procedimiento con la pestaña <em>'ordenes.json'</em> y <code>db.ordenes.insertMany( ... );</code>.",
+          "<strong>Confirmación por comando:</strong> Mongosh responde con <code>{ acknowledged: true, insertedIds: {...} }</code>, listando los 5 identificadores generados en cada colección."
+        ],
+        avisos: [
+          {
+            color: "ambar",
+            titulo: "Error común 1 — corchete extra al inicio:",
+            texto: "El arreglo copiado ya trae su propio <code>[</code> inicial. No escribas tú otro <code>[</code> antes de pegar, o quedarán corchetes dobles <code>[[ ... ]]</code> y Mongosh marcará <code>SyntaxError: Unexpected token</code>."
+          },
+          {
+            color: "ambar",
+            titulo: "Error común 2 — falta cerrar al final:",
+            texto: "El arreglo pegado termina solo en <code>]</code>. Tú debes añadir a mano, justo después, el cierre <code>);</code> — el comando completo debe terminar en <code>]);</code>, nunca en <code>]</code> solo."
+          }
         ],
         coleccionesCode: {
           usuarios: {
@@ -2617,88 +2480,258 @@ db.productos.deleteOne({
 ]`
           }
         },
-        note: "<strong>¡Cumplimiento Oficial Garantizado (Guía 6):</strong> Pegar estos lotes de 5 documentos por colección en Compass te asegura cumplir con creces el requisito de la evidencia (mínimo 5 registros) y habilita la prueba real de consultas con filtros y actualización en el Paso 5."
+        note: "<strong>¡Cumplimiento Oficial Garantizado (Guía 6):</strong> Ejecutar estos 3 <code>insertMany()</code> en Mongosh te asegura cumplir con creces el requisito de la evidencia (mínimo 5 registros por colección) y habilita la prueba real de consultas, actualización y eliminación en los siguientes pasos.<br><br><strong>💡 No necesitas instalar nada aparte:</strong> el binario independiente de <code>mongosh</code> para terminal es un paquete distinto a Compass, y no viene instalado por defecto. Usa siempre el botón <strong>'Open MongoDB shell'</strong> dentro de Compass (esquina superior derecha) — abre la misma consola Mongosh, ya conectada a tu base de datos, sin pasos adicionales."
       },
-      5: {
-        titulo: "Paso 5: Consultas con Filtros y Actualización de Datos (MQL)",
-        badge: "Consultas & Actualización",
+      2: {
+        titulo: "Paso 2: Read — Consultas con Filtros MQL en Mongosh",
+        badge: "Consultas con find()",
         badgeColor: "#0284c7",
-        desc: "La barra superior <strong>'Filter'</strong> de MongoDB Compass es el equivalente visual directo a la cláusula <code>WHERE</code> de SQL. Con los 5 productos insertados en el Paso 4, ahora podrás comprobar visualmente cómo cada filtro discrimina y reduce el conjunto de resultados. Además, aprenderás a <strong>actualizar datos</strong> (<code>updateOne</code>) tal como exige la Guía 6.",
-        analogia: "En SQL: <code>SELECT * FROM productos WHERE activo = true;</code>. En Compass escribes: <code>{ activo: true }</code> y observas cómo el contador cambia de 5 a 4 documentos.",
+        desc: "El método <code>find()</code> de Mongosh es el equivalente directo a la cláusula <code>WHERE</code> de SQL. Con los 5 productos ya insertados en el Paso 1, el instructor ejecuta en vivo una batería de filtros que reducen el conjunto de resultados según distintos criterios.",
+        analogia: "En SQL: <code>SELECT * FROM productos WHERE activo = true;</code>. En Mongosh: <code>db.productos.find({ activo: true })</code> — mismo resultado, sintaxis de objeto JSON en vez de cláusula SQL.",
         pasos: [
-          "<strong>Filtro 1 - Booleano ({ activo: true }):</strong> En la barra Filter de <code>productos</code>, escribe <code>{ activo: true }</code> y pulsa <strong>Find</strong>.<br>🎯 <strong>Resultado:</strong> Muestra <strong>4 de 5 productos</strong> (el Monitor inactivo queda excluido de la vista).",
-          "<strong>Filtro 2 - Rango Superior ({ precio: { $gt: 2000000 } }):</strong> Escribe <code>{ precio: { $gt: 2000000 } }</code> y pulsa <strong>Find</strong>.<br>🎯 <strong>Resultado:</strong> Muestra <strong>1 de 5 productos</strong> (solo el Portátil supera los 2M COP; los otros 4 quedan excluidos).",
-          "<strong>Filtro 3 - Rango Intermedio ({ precio: { $gte: 300000, $lte: 1000000 } }):</strong> Escribe <code>{ precio: { $gte: 300000, $lte: 1000000 } }</code> y pulsa <strong>Find</strong>.<br>🎯 <strong>Resultado:</strong> Muestra <strong>2 de 5 productos</strong> (el Teclado de $350k y los Auriculares de $620k).",
-          "<strong>Filtro 4 - Notación de Punto ({ \"especificaciones.ram_gb\": 32 }):</strong> Escribe <code>{ \"especificaciones.ram_gb\": 32 }</code> y pulsa <strong>Find</strong>.<br>🎯 <strong>Resultado:</strong> Muestra <strong>1 producto</strong> (comprueba cómo navegas al objeto anidado sin hacer ningún JOIN).",
-          "<strong>Filtro 5 - Búsqueda en Arreglos ({ etiquetas: \"gamer\" }):</strong> Escribe <code>{ etiquetas: \"gamer\" }</code> y pulsa <strong>Find</strong>.<br>🎯 <strong>Resultado:</strong> Muestra <strong>3 de 5 productos</strong> (Portátil, Monitor y Auriculares contienen 'gamer' en su arreglo).",
-          "<strong>Operación de Actualización (updateOne / Edición en Compass):</strong><br>• <strong>Vía Visual en Compass:</strong> Pasa el cursor sobre el documento del Portátil (<code>LAP-PRO-01</code>), haz clic en el icono del lápiz <em>'Edit Document'</em>, cambia el precio a <code>4990000.00</code> y el stock a <code>12</code>, luego pulsa <strong>Update</strong>.<br>• <strong>Vía Mongosh (Consola inferior de Compass):</strong> Abre la pestaña <code>>_ MONGOSH</code> y ejecuta:<br><code>db.productos.updateOne({ sku: \"LAP-PRO-01\" }, { $set: { precio: 4990000.00, stock: 12 } })</code>."
+          "<strong>Filtro 1 — Booleano:</strong> Ejecuta <code>db.productos.find({ activo: true })</code>.",
+          "<strong>Filtro 2 — Rango Superior ($gt):</strong> Ejecuta <code>db.productos.find({ precio: { $gt: 2000000 } })</code>.",
+          "<strong>Filtro 3 — Rango Intermedio ($gte/$lte):</strong> Ejecuta <code>db.productos.find({ precio: { $gte: 300000, $lte: 1000000 } })</code>.",
+          "<strong>Filtro 4 — Notación de Punto (subdocumento embebido):</strong> Ejecuta <code>db.productos.find({ \"especificaciones.ram_gb\": 32 })</code>.",
+          "<strong>Filtro 5 — Búsqueda en Arreglos:</strong> Ejecuta <code>db.productos.find({ etiquetas: \"gamer\" })</code>.",
+          "<strong>Consultar por el _id generado al insertar:</strong> Copia un <code>ObjectId</code> real de tu propia respuesta del Paso 1 (ej. el que te devolvió <code>insertedIds</code>) y ejecuta <code>db.productos.find({ _id: ObjectId(\"<em>tu-id-copiado</em>\") })</code>.",
+          "<strong>Consultar por identificador de negocio único (findOne):</strong> Ejecuta <code>db.productos.findOne({ sku: \"TEC-MEC-02\" })</code> y verifica que retorna exactamente 1 documento completo."
         ],
         tablaParams: [
-          { campo: "{ activo: true }", valor: "Filtro Booleano (WHERE)", accion: "Resultado: 4 de 5 productos (oculta inactivos)" },
-          { campo: "{ precio: { $gt: 2000000 } }", valor: "Operador de Rango ($gt)", accion: "Resultado: 1 de 5 productos (solo Portátil > 2M COP)" },
-          { campo: "{ precio: { $gte: 300000, $lte: 1000000 } }", valor: "Rango Intermedio ($gte / $lte)", accion: "Resultado: 2 de 5 productos (Teclado y Auriculares)" },
-          { campo: "{ \"especificaciones.ram_gb\": 32 }", valor: "Notación de Punto", accion: "Resultado: 1 producto (filtra en subdocumento embebido)" },
-          { campo: "{ etiquetas: \"gamer\" }", valor: "Filtro en Arreglos", accion: "Resultado: 3 productos (coincidencia de elemento en array)" },
-          { campo: "db.productos.updateOne(...)", valor: "Actualización MQL ($set)", accion: "Actualiza precio y stock del Portátil (cumple Guía 6)" }
+          { campo: "find({ activo: true })", valor: "Filtro Booleano (WHERE)", accion: "Resultado: 4 de 5 productos (oculta inactivos)" },
+          { campo: "find({ precio: { $gt: 2000000 } })", valor: "Operador de Rango ($gt)", accion: "Resultado: 1 de 5 productos (solo Portátil > 2M COP)" },
+          { campo: "find({ precio: { $gte:..., $lte:... } })", valor: "Rango Intermedio ($gte / $lte)", accion: "Resultado: 2 de 5 productos (Teclado y Auriculares)" },
+          { campo: "find({ \"especificaciones.ram_gb\": 32 })", valor: "Notación de Punto", accion: "Resultado: 1 producto (filtra en subdocumento embebido)" },
+          { campo: "find({ etiquetas: \"gamer\" })", valor: "Filtro en Arreglos", accion: "Resultado: 3 productos (coincidencia de elemento en array)" },
+          { campo: "find({ _id: ObjectId(\"...\") })", valor: "Filtro por identificador interno", accion: "Resultado: 1 producto (el ObjectId que MongoDB generó al insertar)" },
+          { campo: "findOne({ sku: \"TEC-MEC-02\" })", valor: "Consulta por identificador de negocio", accion: "Cumple requisito de la Guía 6: obtener documento por identificador" }
         ],
         code: `// ========================================================
-// 1. CONSULTAS CON FILTROS (BARRA FILTER DE COMPASS)
+// CONSULTAS CON FILTROS (MONGOSH)
 // ========================================================
 
-// 1.1. Mostrar productos activos (Resultado: 4 de 5):
-{ activo: true }
+// 1. Mostrar productos activos (Resultado: 4 de 5):
+db.productos.find({ activo: true });
 
-// 1.2. Filtrar productos de gama alta mayores a 2 millones (Resultado: 1 de 5):
-{ precio: { $gt: 2000000 } }
+// 2. Filtrar productos de gama alta mayores a 2 millones (Resultado: 1 de 5):
+db.productos.find({ precio: { $gt: 2000000 } });
 
-// 1.3. Rango de precio intermedio entre 300k y 1M COP (Resultado: 2 de 5):
-{ precio: { $gte: 300000, $lte: 1000000 } }
+// 3. Rango de precio intermedio entre 300k y 1M COP (Resultado: 2 de 5):
+db.productos.find({ precio: { $gte: 300000, $lte: 1000000 } });
 
-// 1.4. Buscar por subdocumento técnico con notación de punto (Resultado: 1 de 5):
-{ "especificaciones.ram_gb": 32 }
+// 4. Buscar por subdocumento técnico con notación de punto (Resultado: 1 de 5):
+db.productos.find({ "especificaciones.ram_gb": 32 });
 
-// 1.5. Buscar productos con la etiqueta 'gamer' en su arreglo (Resultado: 3 de 5):
-{ etiquetas: "gamer" }
+// 5. Buscar productos con la etiqueta 'gamer' en su arreglo (Resultado: 3 de 5):
+db.productos.find({ etiquetas: "gamer" });
 
 // ========================================================
-// 2. SENTENCIA DE ACTUALIZACIÓN (REQUISITO GUÍA 6)
+// FILTRAR POR EL _id GENERADO AUTOMÁTICAMENTE AL INSERTAR
 // ========================================================
-// Ejecutar en la pestaña inferior >_ MONGOSH de Compass:
-db.productos.updateOne(
-  { sku: "LAP-PRO-01" },
-  { 
-    $set: { 
-      precio: 4990000.00,
-      stock: 12
-    } 
-  }
-);
-// Retorno esperado en consola: { acknowledged: true, modifiedCount: 1 }`,
-        note: "<strong>Requisito Oficial de la Guía 6:</strong> Toma captura de pantalla de MongoDB Compass aplicando al menos dos de las consultas con filtros (evidenciando el cambio en el contador superior) y la captura de la actualización del documento (mostrando los nuevos valores actualizados)."
+// Reemplaza el valor de ejemplo por un ObjectId real de TU propia
+// respuesta insertedIds del Paso 1:
+db.productos.find({ _id: ObjectId("6ae11b84794f53fc1b143b90") });
+
+// ========================================================
+// CONSULTAR UN DOCUMENTO POR IDENTIFICADOR DE NEGOCIO ÚNICO (REQUISITO GUÍA 6)
+// ========================================================
+db.productos.findOne({ sku: "TEC-MEC-02" });`,
+        note: "<strong>Requisito Oficial de la Guía 6:</strong> En tu video debes ejecutar al menos dos de estas consultas con filtros, la consulta por <code>_id</code> (el identificador interno que MongoDB asigna automáticamente al insertar) y la consulta por identificador de negocio (<code>findOne</code> sobre <code>TEC-MEC-02</code>), mostrando siempre el resultado impreso en la terminal.<br><br><strong>💡 Diferencia clave:</strong> el <code>_id</code> es un <code>ObjectId</code> que MongoDB genera solo y nunca se repite entre documentos; el <code>sku</code> es un identificador que tú defines en tu modelo de datos (equivalente a una clave de negocio en SQL)."
       },
-      6: {
-        titulo: "Paso 6: Exportación de Colecciones a Archivos JSON (.json)",
-        badge: "Exportación de Datos",
+      3: {
+        titulo: "Paso 3: Update — Atomicidad con $set y $inc en Mongosh",
+        badge: "Actualización Atómica",
         badgeColor: "#16a34a",
-        desc: "Para adjuntar los esquemas en la plataforma Zajuna (Evidencia AA1-EV03), debes exportar tus colecciones desde MongoDB Compass hacia archivos físicos <code>.json</code> en tu computador. Compass incluye un asistente visual nativo que extrae los datos limpios en segundos.",
-        analogia: "<strong>¿Por qué se exporta colección por colección?:</strong> En MongoDB no existe un botón para 'exportar toda la base junta en un solo archivo'. Cada colección es independiente y genera su propio archivo (<code>usuarios.json</code>, <code>productos.json</code>, <code>ordenes.json</code>) para armar la carpeta <code>esquemas_json/</code>.",
+        desc: "La rúbrica de la Guía 6 exige actualizar explícitamente el <strong>primer</strong> y el <strong>último</strong> registro insertado. El flujo correcto en Mongosh siempre son <strong>3 tiempos</strong>: buscas el documento antes del cambio, lo actualizas con <code>updateOne()</code> usando un identificador único (<code>_id</code> o <code>sku</code>, nunca un campo de texto libre como el nombre), y vuelves a buscar para confirmar el cambio en pantalla.",
+        analogia: "En SQL equivale a <code>UPDATE productos SET precio = ..., stock = ... WHERE sku = '...'</code>. <code>$set</code> reemplaza el valor de un campo; <code>$inc</code> en cambio suma al valor que ya existía.",
         pasos: [
-          "<strong>Seleccionar la Colección en el Panel Lateral:</strong> En la barra lateral izquierda de Compass, haz clic sobre la colección que vas a exportar (comienza por <code>usuarios</code>).",
-          "<strong>Clic en el Botón 'EXPORT DATA' (O Menú Superior):</strong> En la barra de herramientas, ubica el botón <strong>'EXPORT DATA ▾'</strong> (es el tercer botón, dos casillas a la derecha del botón verde <em>ADD DATA</em>). Haz clic en él y selecciona <strong>'Export the full collection'</strong>.<br><em>(Ruta alternativa igualmente válida: menú superior de la ventana: <strong>Collection</strong> → <strong>Export Collection</strong>).</em>",
-          "<strong>Confirmar Selección de Campos:</strong> En la ventana emergente que se abre, deja seleccionados todos los campos y pulsa el botón azul <strong>'Select output'</strong>.",
-          "<strong>Seleccionar Formato JSON:</strong> En el selector de tipo de archivo (<em>Select export file type</em>), asegúrate de que esté marcado <strong>JSON</strong> (¡nunca CSV, la evidencia exige formato JSON!).",
-          "<strong>Elegir Carpeta y Guardar:</strong> Haz clic en <strong>'Browse'</strong> (Examinar), navega hasta tu carpeta de proyecto (ej: <code>esquemas_json/</code>), nombra el archivo como <code>usuarios.json</code> y pulsa el botón verde <strong>'Export'</strong>.",
-          "<strong>Repetir para las 3 Colecciones:</strong> Repite este mismo procedimiento rápido seleccionando <code>productos</code> (guardando como <code>productos.json</code>) y luego <code>ordenes</code> (guardando como <code>ordenes.json</code>)."
+          "<strong>Buscar ANTES de actualizar (PRIMER registro):</strong> Ejecuta <code>db.productos.find({ sku: \"LAP-PRO-01\" })</code> y observa el precio y stock actuales.",
+          "<strong>Actualizar el PRIMER registro:</strong> Ejecuta <code>db.productos.updateOne({ sku: \"LAP-PRO-01\" }, { $set: { precio: 4990000.00, stock: 12 } })</code>.",
+          "<strong>Buscar DESPUÉS para confirmar:</strong> Repite <code>db.productos.find({ sku: \"LAP-PRO-01\" })</code> y verifica en pantalla que precio y stock ya cambiaron.",
+          "<strong>Repetir el ciclo buscar→actualizar→buscar con el ÚLTIMO registro (AUD-ANC-05):</strong> <code>find({ sku: \"AUD-ANC-05\" })</code> → <code>updateOne({ sku: \"AUD-ANC-05\" }, { $set: { precio: 599000.00, stock: 22 } })</code> → <code>find({ sku: \"AUD-ANC-05\" })</code> de nuevo. Con esto cumples el punto de la rúbrica que exige actualizar 'el primer y último registro'.",
+          "<strong>Alternativa por _id:</strong> El mismo ciclo funciona reemplazando el filtro por el identificador interno que MongoDB generó al insertar: <code>db.productos.updateOne({ _id: ObjectId(\"tu-id-copiado\") }, { $set: { ... } })</code>."
         ],
         tablaParams: [
-          { campo: "Botón en Barra de Herramientas", valor: "EXPORT DATA ▾ (junto a BULK)", accion: "Abre el menú con la opción 'Export the full collection'" },
-          { campo: "Menú Superior Alternativo", valor: "Collection -> Export Collection", accion: "Ruta equivalente desde el menú de la ventana de Compass" },
-          { campo: "Diferencia con ADD DATA", valor: "ADD DATA es solo para insertar/importar", accion: "Para exportar siempre se usa el botón EXPORT DATA" },
+          { campo: "find({ sku: \"...\" }) — ANTES", valor: "Confirma el estado inicial del documento", accion: "Ejecutar siempre antes de actualizar" },
+          { campo: "updateOne(sku: LAP-PRO-01)", valor: "Actualiza el PRIMER registro ($set)", accion: "Cumple requisito de la Guía 6: actualizar primer documento" },
+          { campo: "updateOne(sku: AUD-ANC-05)", valor: "Actualiza el ÚLTIMO registro ($set)", accion: "Cumple requisito de la Guía 6: actualizar último documento" },
+          { campo: "find({ sku: \"...\" }) — DESPUÉS", valor: "Confirma visualmente el cambio aplicado", accion: "Ejecutar siempre después de actualizar" },
+          { campo: "updateOne({ _id: ObjectId(...) })", valor: "Alternativa por identificador interno", accion: "Mismo resultado, filtrando por _id en vez de sku" }
+        ],
+        avisos: [
+          {
+            color: "ambar",
+            titulo: "¿Por qué no filtrar por nombre_completo o titulo?",
+            texto: "Un campo de texto libre (nombre, título) puede repetirse entre documentos o escribirse distinto por error de tipeo — nunca garantiza que afectes exactamente 1 documento. Usa siempre un identificador único: <code>_id</code> (el que genera MongoDB) o un campo de negocio único como <code>sku</code>."
+          },
+          {
+            color: "ambar",
+            titulo: "$set vs $inc — no son lo mismo:",
+            texto: "<code>$set</code> reemplaza el valor por uno nuevo que tú escribes. <code>$inc</code> suma al valor existente — por ejemplo <code>$inc: { veces_actualizado: 1 }</code> toma el contador actual y le suma 1 (si el campo no existe, MongoDB lo crea empezando en 1)."
+          }
+        ],
+        code: `// ========================================================
+// CICLO COMPLETO: BUSCAR → ACTUALIZAR → BUSCAR (PRIMER REGISTRO)
+// ========================================================
+
+// 1. Buscar ANTES del cambio:
+db.productos.find({ sku: "LAP-PRO-01" });
+
+// 2. Actualizar:
+db.productos.updateOne(
+  { sku: "LAP-PRO-01" },
+  {
+    $set: { precio: 4990000.00, stock: 12 },
+    $inc: { veces_actualizado: 1 }
+  }
+);
+// Retorno esperado: { acknowledged: true, modifiedCount: 1 }
+
+// 3. Buscar DESPUÉS para confirmar el cambio:
+db.productos.find({ sku: "LAP-PRO-01" });
+
+// ========================================================
+// MISMO CICLO CON EL ÚLTIMO REGISTRO (AUD-ANC-05)
+// ========================================================
+db.productos.find({ sku: "AUD-ANC-05" });
+
+db.productos.updateOne(
+  { sku: "AUD-ANC-05" },
+  { $set: { precio: 599000.00, stock: 22 } }
+);
+
+db.productos.find({ sku: "AUD-ANC-05" });
+
+// ========================================================
+// ALTERNATIVA: FILTRAR POR _id EN VEZ DE sku
+// ========================================================
+// Reemplaza por un ObjectId real de tu propia respuesta insertedIds:
+db.productos.updateOne(
+  { _id: ObjectId("6ae11b84794f53fc1b143b90") },
+  { $set: { stock: 10 } }
+);`,
+        note: "<strong>Requisito Oficial de la Guía 6:</strong> En tu video debes mostrar el ciclo completo buscar → actualizar → buscar para el PRIMER registro (<code>LAP-PRO-01</code>) y para el ÚLTIMO registro (<code>AUD-ANC-05</code>), dejando visible en pantalla el antes y el después de cada cambio."
+      },
+      4: {
+        titulo: "Paso 4: Delete — Eliminación Segura con Filtro Estricto",
+        badge: "Eliminación Controlada",
+        badgeColor: "#dc2626",
+        desc: "La operación <strong>Delete</strong> es la más delicada del ciclo CRUD porque es irreversible. Igual que en Update, el flujo correcto es de <strong>3 tiempos</strong>: buscas el documento antes de borrarlo, lo eliminas con <code>deleteOne()</code> usando un filtro específico (<code>sku</code> o <code>_id</code>, nunca vacío), y vuelves a buscar para confirmar que ya no existe.",
+        analogia: "En SQL equivale a <code>DELETE FROM productos WHERE sku = '...'</code>. Si olvidas el <code>WHERE</code> en SQL borras toda la tabla; si olvidas el filtro <code>{}</code> en MongoDB, <code>deleteMany({})</code> borra toda la colección de igual forma.",
+        pasos: [
+          "<strong>Buscar ANTES de eliminar:</strong> Ejecuta <code>db.productos.find({ sku: \"MON-GAM-03\" })</code> — la rúbrica exige borrar el TERCER documento insertado, que en tu lote es el Monitor <code>MON-GAM-03</code>. Confirma que el documento existe antes de continuar.",
+          "<strong>Eliminar con deleteOne():</strong> Ejecuta <code>db.productos.deleteOne({ sku: \"MON-GAM-03\" })</code>. Mongosh responde con <code>{ acknowledged: true, deletedCount: 1 }</code>, confirmando que se eliminó exactamente 1 documento.",
+          "<strong>Buscar DESPUÉS para confirmar:</strong> Repite <code>db.productos.find({ sku: \"MON-GAM-03\" })</code> — ahora debe devolver un resultado vacío, confirmando visualmente que el documento ya no existe.",
+          "<strong>Verificación Final con conteo:</strong> Ejecuta <code>db.productos.countDocuments()</code> y confirma que el total bajó de 5 a 4 documentos."
+        ],
+        tablaParams: [
+          { campo: "find({ sku: \"...\" }) — ANTES", valor: "Confirma que el documento existe", accion: "Ejecutar siempre antes de eliminar" },
+          { campo: "db.productos.deleteOne(filtro)", valor: "Elimina 1 documento específico", accion: "Elimina exactamente 1 documento que cumpla el filtro" },
+          { campo: "find({ sku: \"...\" }) — DESPUÉS", valor: "Debe devolver vacío", accion: "Confirma visualmente que el documento ya no existe" },
+          { campo: "db.productos.countDocuments()", valor: "Verificación posterior obligatoria", accion: "Confirma que el conteo bajó en 1 tras el borrado" }
+        ],
+        avisos: [
+          {
+            color: "rojo",
+            titulo: "Prohibido en la entrega:",
+            texto: "Nunca ejecutes <code>db.productos.deleteMany({})</code> (filtro vacío) durante tu grabación — elimina TODA la colección de forma instantánea e irreversible."
+          }
+        ],
+        code: `// ========================================================
+// CICLO COMPLETO: BUSCAR → ELIMINAR → BUSCAR (TERCER REGISTRO)
+// ========================================================
+
+// 1. Buscar ANTES de eliminar:
+db.productos.find({ sku: "MON-GAM-03" });
+
+// 2. Eliminar con filtro específico:
+db.productos.deleteOne({ sku: "MON-GAM-03" });
+// Retorno esperado: { acknowledged: true, deletedCount: 1 }
+
+// 3. Buscar DESPUÉS para confirmar (debe devolver vacío):
+db.productos.find({ sku: "MON-GAM-03" });
+
+// 4. Verificar el conteo total después del borrado:
+db.productos.countDocuments();
+// Debe mostrar 4 (si partiste de 5 documentos en el Paso 1)
+
+// ⚠️ NUNCA ejecutes esto en tu entrega (borra TODA la colección):
+// db.productos.deleteMany({});`,
+        note: "<strong>Requisito Oficial de la Guía 6:</strong> En tu video debes mostrar el ciclo completo buscar → eliminar → buscar: el documento ANTES de eliminarlo, la respuesta <code>deletedCount: 1</code> de <code>deleteOne()</code>, la búsqueda DESPUÉS confirmando que ya no existe, y el conteo final verificando que solo se eliminó 1 registro."
+      },
+      5: {
+        titulo: "Paso 5: Exportación de Colecciones a Archivos JSON (desde Compass)",
+        badge: "Exportación de Datos",
+        badgeColor: "#16a34a",
+        desc: "Para adjuntar los esquemas en la plataforma Zajuna (Evidencia AA1-EV03), exporta tus colecciones a archivos físicos <code>.json</code> usando el botón visual <strong>EXPORT DATA</strong> de MongoDB Compass. No se usa Mongosh para este paso — exportar es una operación de archivo, no una consulta de base de datos.",
+        analogia: "<strong>¿Por qué se exporta colección por colección?:</strong> En MongoDB no existe un botón para 'exportar toda la base junta en un solo archivo'. Cada colección es independiente y genera su propio archivo (<code>usuarios.json</code>, <code>productos.json</code>, <code>ordenes.json</code>) para armar la carpeta <code>esquemas_json/</code>.",
+        pasos: [
+          "<strong>Seleccionar la colección en Compass:</strong> En el panel lateral, haz clic sobre la colección a exportar (empieza por <code>usuarios</code>).",
+          "<strong>Abrir EXPORT DATA:</strong> En la barra de herramientas de la colección, haz clic en el botón <strong>'EXPORT DATA ▾'</strong> y elige <strong>'Export the full collection'</strong>.",
+          "<strong>Confirmar campos y formato JSON:</strong> Deja todos los campos seleccionados, pulsa <strong>'Select output'</strong>, y asegúrate de que el formato marcado sea <strong>JSON</strong> (nunca CSV).",
+          "<strong>Guardar el archivo:</strong> Elige la carpeta de tu proyecto (ej. <code>esquemas_json/</code>), nombra el archivo como <code>usuarios.json</code> y pulsa <strong>'Export'</strong>.",
+          "<strong>Repetir para productos y ordenes:</strong> Mismo procedimiento, guardando como <code>productos.json</code> y <code>ordenes.json</code> respectivamente."
+        ],
+        tablaParams: [
+          { campo: "Botón EXPORT DATA ▾", valor: "En la barra de herramientas de cada colección", accion: "Abre el menú con la opción 'Export the full collection'" },
           { campo: "Formato de Salida Obligatorio", valor: "JSON (No CSV)", accion: "Requisito estricto de la rúbrica GA6-220501096-AA1-EV03" },
           { campo: "Resultado Final", valor: "3 archivos .json en carpeta esquemas_json/", accion: "Se comprimen junto al PDF en el archivo ZIP final para Zajuna" }
         ],
-        code: `// Si prefieres exportar por terminal de comandos (MongoDB Database Tools):\n\n// 1. Exportar colección usuarios:\nmongoexport --db=techstore_nosql --collection=usuarios --out=usuarios.json --pretty --jsonArray\n\n// 2. Exportar colección productos:\nmongoexport --db=techstore_nosql --collection=productos --out=productos.json --pretty --jsonArray\n\n// 3. Exportar colección ordenes:\nmongoexport --db=techstore_nosql --collection=ordenes --out=ordenes.json --pretty --jsonArray`,
-        note: "<strong>⚠️ Aclaración para no confundirse:</strong> Los tres puntos <code>...</code> que aparecen junto a <em>CONNECTIONS</em> en el panel lateral son para exportar cadenas de conexión del servidor, no datos. Y el botón verde <code>ADD DATA</code> es únicamente para ingresar datos (<em>Insert document</em>). Para extraer tus datos a archivo, usa siempre el botón <strong>EXPORT DATA ▾</strong> o el menú <strong>Collection → Export Collection</strong>."
+        avisos: [
+          {
+            color: "ambar",
+            titulo: "¿Por qué no usamos mongoexport?",
+            texto: "<code>mongoexport</code> es un programa de línea de comandos aparte (MongoDB Database Tools), que no viene instalado junto con Compass — igual que el binario standalone de <code>mongosh</code>. Como no lo tienes instalado, usamos directamente el botón visual de Compass, que exporta el mismo resultado sin instalar nada extra."
+          }
+        ],
+        note: "<strong>Requisito Oficial de la Guía 6:</strong> Verifica los 3 archivos generados en tu carpeta de proyecto antes de continuar — deben contener exactamente los documentos que ves en Compass en ese momento (con tus cambios de Update y Delete ya aplicados)."
+      },
+      6: {
+        titulo: "Paso 6: Guión del Video Demostrativo AA1-EV04 (5 a 7 Minutos)",
+        badge: "Evidencia en Video",
+        badgeColor: "#39a900",
+        desc: "El video debe mostrar el ciclo CRUD completo (Create, Read, Update, Delete) sobre <code>techstore_nosql</code>, replicando exactamente el flujo de 3 tiempos (<strong>buscar → actuar → buscar</strong>) que el instructor ejecutó en vivo en los Pasos 1 a 4. Graba con <strong>OBS Studio</strong>, <strong>Loom</strong> o el grabador nativo de Windows (<code>Win + Alt + R</code>) con audio claro y resolución legible.",
+        analogia: "Piensa en el video como la 'sustentación' de todo lo que practicaste en los Pasos 1 a 5: aquí demuestras que sabes ejecutar cada operación tú mismo, no solo que la viste hacer.",
+        pasos: [
+          "<strong>Minuto 0:00 – 1:00 · Portada & Conexión:</strong> Preséntate (nombre, ficha 3389010) y muestra la conexión exitosa abriendo la consola Mongosh desde Compass (botón <strong>'Open MongoDB shell'</strong>), con <code>techstore_nosql</code> ya seleccionada.",
+          "<strong>Minuto 1:00 – 2:30 · Create:</strong> Inserta un documento nuevo con <code>insertOne()</code> y luego un lote con <code>insertMany()</code>, igual que en el Paso 1.",
+          "<strong>Minuto 2:30 – 4:00 · Read:</strong> Ejecuta <code>db.productos.find()</code> para listar la colección completa, <code>db.productos.find({ _id: ObjectId(\"...\") })</code> filtrando por el identificador interno, y <code>db.productos.findOne({ sku: \"TEC-MEC-02\" })</code> por identificador de negocio (requisito explícito de la Guía 6).",
+          "<strong>Minuto 4:00 – 5:30 · Update (ciclo buscar→actualizar→buscar):</strong> Para el PRIMER registro (<code>LAP-PRO-01</code>): <code>find()</code> antes → <code>updateOne()</code> con <code>$set</code> → <code>find()</code> después confirmando el cambio. Repite el mismo ciclo con el ÚLTIMO registro (<code>AUD-ANC-05</code>).",
+          "<strong>Minuto 5:30 – 7:00 · Delete (ciclo buscar→eliminar→buscar) & Cierre:</strong> Para el TERCER registro (<code>MON-GAM-03</code>): <code>find()</code> antes → <code>deleteOne()</code> con filtro específico (nunca <code>deleteMany({})</code>) → <code>find()</code> después confirmando que ya no existe. Verifica el conteo final con <code>countDocuments()</code> y cierra con una conclusión breve."
+        ],
+        tablaParams: [
+          { campo: "Herramienta de Grabación", valor: "OBS Studio / Loom / Win+Alt+R", accion: "Verificar audio y resolución legible antes de grabar" },
+          { campo: "Duración Total", valor: "5 a 7 minutos", accion: "Ni muy corto (falta detalle) ni muy largo (pierde foco)" },
+          { campo: "Alojamiento del Video", valor: "YouTube (No listado) o Google Drive (enlace abierto)", accion: "Probar el enlace en ventana de incógnito antes de entregar" },
+          { campo: "Documento de Entrega", valor: "PDF con portada, enlace y tabla de sentencias MQL", accion: "Adjuntar en Zajuna junto al enlace del video" }
+        ],
+        code: `// Checklist de comandos a demostrar en el video (Mongosh), sobre techstore_nosql.productos:
+
+// CREATE
+db.productos.insertOne({ ... });
+db.productos.insertMany([ { ... }, { ... } ]);
+
+// READ (listar completo + por _id + por identificador de negocio)
+db.productos.find();
+db.productos.find({ _id: ObjectId("tu-id-copiado") });
+db.productos.findOne({ sku: "TEC-MEC-02" });
+
+// UPDATE — ciclo buscar → actualizar → buscar (primer registro)
+db.productos.find({ sku: "LAP-PRO-01" });
+db.productos.updateOne({ sku: "LAP-PRO-01" }, { $set: { precio: 4990000.00, stock: 12 } });
+db.productos.find({ sku: "LAP-PRO-01" });
+
+// UPDATE — mismo ciclo (último registro)
+db.productos.find({ sku: "AUD-ANC-05" });
+db.productos.updateOne({ sku: "AUD-ANC-05" }, { $set: { precio: 599000.00, stock: 22 } });
+db.productos.find({ sku: "AUD-ANC-05" });
+
+// DELETE — ciclo buscar → eliminar → buscar (tercer registro)
+db.productos.find({ sku: "MON-GAM-03" });
+db.productos.deleteOne({ sku: "MON-GAM-03" });
+db.productos.find({ sku: "MON-GAM-03" });
+db.productos.countDocuments();`,
+        note: "<strong>Ruta de Envío en Zajuna (Corte 2 — 04/Nov/2026):</strong> Zajuna LMS → Ficha 3389010 → Contenido del Curso → Fase 3: Ejecución → Actividad de Proyecto 6 (AP6) → AA1 → Evidencia GA6-220501096-AA1-EV04 → adjuntar PDF y pulsar Enviar. Ver la guía completa de preparación en la sección 'Guía Oficial Video AA1-EV04' de esta presentación."
       }
     };
 
@@ -2710,7 +2743,7 @@ db.productos.updateOne(
 
     function cambiarPlantillaColeccion(key) {
       coleccionModalActiva = key;
-      const info = pasosData[4];
+      const info = pasosData[1];
       if (!info || !info.coleccionesCode || !info.coleccionesCode[key]) return;
       const data = info.coleccionesCode[key];
 
@@ -2730,11 +2763,11 @@ db.productos.updateOne(
     }
 
     function copiarPlantillaColeccionActiva() {
-      const info = pasosData[4];
+      const info = pasosData[1];
       if (!info || !info.coleccionesCode || !info.coleccionesCode[coleccionModalActiva]) return;
       const text = info.coleccionesCode[coleccionModalActiva].json;
       navigator.clipboard.writeText(text).then(() => {
-        alert(`¡Plantilla JSON de la colección '${coleccionModalActiva}' copiada exitosamente al portapapeles!`);
+        mostrarToast(`¡Plantilla JSON de la colección '${coleccionModalActiva}' copiada exitosamente al portapapeles!`);
       }).catch(err => {
         console.error('Error al copiar: ', err);
       });
@@ -2753,7 +2786,7 @@ db.productos.updateOne(
         if (info.tablaParams && info.tablaParams.length > 0) {
           tablaHtml = `
             <div style="margin: 16px 0;">
-              <h4 style="font-family:'Syne',sans-serif;font-size:14px;color:var(--texto-main);margin-bottom:8px;">Parámetros Clave en Pantalla (Compass):</h4>
+              <h4 style="font-family:'Syne',sans-serif;font-size:14px;color:var(--texto-main);margin-bottom:8px;">Parámetros Clave del Comando (Mongosh):</h4>
               <table class="cweijan-params-table" style="margin:0;">
                 <thead>
                   <tr>
@@ -2788,6 +2821,18 @@ db.productos.updateOne(
           `;
         }
 
+        let avisosHtml = '';
+        if (info.avisos && info.avisos.length > 0) {
+          avisosHtml = info.avisos.map(aviso => `
+            <div style="margin:12px 0;background:${aviso.color === 'rojo' ? '#fef2f2' : '#fffbeb'};border:1px solid ${aviso.color === 'rojo' ? '#fecaca' : '#fde68a'};border-radius:8px;padding:12px 14px;display:flex;gap:10px;align-items:flex-start;">
+              <span style="font-size:15px;line-height:1;flex-shrink:0;">${aviso.color === 'rojo' ? '🛑' : '⚠️'}</span>
+              <div style="font-size:12.5px;color:${aviso.color === 'rojo' ? '#991b1b' : '#92400e'};line-height:1.6;">
+                <strong>${aviso.titulo}</strong><br>${aviso.texto}
+              </div>
+            </div>
+          `).join('');
+        }
+
         let codeHtml = '';
         if (info.coleccionesCode) {
           const keys = Object.keys(info.coleccionesCode);
@@ -2815,17 +2860,17 @@ db.productos.updateOne(
               <div id="tabColDesc" style="background:#1e1e1e;border-left:1px solid #333;border-right:1px solid #333;padding:6px 14px;font-size:11.5px;color:#94a3b8;font-family:'Plus Jakarta Sans',sans-serif;">
                 💡 ${info.coleccionesCode[firstKey].desc}
               </div>
-              <div id="tabColCodeBlock" style="background:#18181b;border:1px solid #333;border-radius:0 0 8px 8px;padding:14px;font-family:'JetBrains Mono',monospace;font-size:12.5px;color:#a7f3d0;white-space:pre-wrap;overflow-x:auto;max-height:220px;">${info.coleccionesCode[firstKey].json}</div>
+              <div id="tabColCodeBlock" style="background:#18181b;border:1px solid #333;border-radius:0 0 8px 8px;padding:14px;font-family:'JetBrains Mono',monospace;font-size:12.5px;color:#a7f3d0;white-space:pre-wrap;overflow-x:auto;">${info.coleccionesCode[firstKey].json}</div>
             </div>
           `;
         } else if (info.code) {
           codeHtml = `
             <div style="margin:16px 0;">
               <div style="display:flex;align-items:center;justify-content:space-between;background:#252526;padding:6px 14px;border-radius:8px 8px 0 0;border:1px solid #333;border-bottom:none;">
-                <span style="font-size:11.5px;color:#cccccc;font-family:'Plus Jakarta Sans',sans-serif;font-weight:600;">💻 Código / Plantilla JSON de Referencia</span>
-                <span style="font-size:10px;color:#00ed64;font-weight:700;background:rgba(0,237,100,0.1);padding:2px 8px;border-radius:10px;">Listo para Compass</span>
+                <span style="font-size:11.5px;color:#cccccc;font-family:'Plus Jakarta Sans',sans-serif;font-weight:600;">💻 Comandos Mongosh</span>
+                <span style="font-size:10px;color:#00ed64;font-weight:700;background:rgba(0,237,100,0.1);padding:2px 8px;border-radius:10px;">Listo para copiar</span>
               </div>
-              <div style="background:#1e1e1e;border:1px solid #333;border-radius:0 0 8px 8px;padding:14px;font-family:'JetBrains Mono',monospace;font-size:12.5px;color:#a7f3d0;white-space:pre-wrap;overflow-x:auto;max-height:220px;">${info.code}</div>
+              <div style="background:#1e1e1e;border:1px solid #333;border-radius:0 0 8px 8px;padding:14px;font-family:'JetBrains Mono',monospace;font-size:12.5px;color:#a7f3d0;white-space:pre-wrap;overflow-x:auto;">${info.code}</div>
             </div>
           `;
         }
@@ -2870,6 +2915,7 @@ db.productos.updateOne(
           </div>
           ${imagenHtml}
           ${pasosListHtml}
+          ${avisosHtml}
           ${tablaHtml}
           ${codeHtml}
           <div style="background:#fff7ed;border-left:4px solid #ea580c;padding:12px 16px;border-radius:6px;font-size:13px;color:#9a3412;line-height:1.6;margin-top:14px;">

@@ -1,0 +1,1040 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manual Didáctico del Aprendiz — Sesión 4 (CRUD MongoDB) | SENA ADSO 3389010</title>
+
+  <!-- Tipografías Google Fonts Institucionales de Alta Gama -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@600;700;800;900&family=Syne:wght@700;800;900&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --sena-verde: #39a900;
+      --sena-verde-dark: #236b00;
+      --sena-verde-bg: #f0fdf4;
+      --sena-verde-border: #bbf7d0;
+      --sena-naranja: #ff6b00;
+      --sena-naranja-dark: #c2410c;
+      --sena-naranja-bg: #fff7ed;
+      --sena-naranja-border: #fed7aa;
+      --azul-tech: #0284c7;
+      --azul-tech-dark: #0369a1;
+      --azul-bg: #eff6ff;
+      --azul-border: #bfdbfe;
+      --rojo-dc: #dc2626;
+      --rojo-bg: #fef2f2;
+      --rojo-border: #fecaca;
+      --purpura-pro: #7c3aed;
+      --purpura-bg: #faf5ff;
+      --purpura-border: #e9d5ff;
+
+      --bg-page: #f8fafc;
+      --bg-card: #ffffff;
+      --bg-subtle: #f1f5f9;
+      --borde-light: #e2e8f0;
+      --texto-main: #0f172a;
+      --texto-muted: #334155;
+      --texto-sub: #64748b;
+      --texto-dimmer: #94a3b8;
+
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
+      --shadow-card: 0 8px 24px rgba(15,23,42,0.06);
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --radius-xl: 20px;
+    }
+
+    * { margin:0; padding:0; box-sizing:border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg-page);
+      color: var(--texto-main);
+      line-height: 1.7;
+    }
+
+    /* Topbar Fijo */
+    .doc-topbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--borde-light);
+      padding: 12px 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    .topbar-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .sena-badge {
+      background: linear-gradient(135deg, var(--sena-verde), var(--sena-verde-dark));
+      color: #fff;
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 14px;
+      padding: 5px 12px;
+      border-radius: 8px;
+      letter-spacing: 0.5px;
+    }
+    .topbar-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 14.5px;
+      font-weight: 700;
+      color: var(--texto-main);
+    }
+    .topbar-sub {
+      font-size: 11.5px;
+      color: var(--texto-sub);
+    }
+    .topbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .btn-topbar {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 7px 14px;
+      border-radius: 20px;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      cursor: pointer;
+    }
+    .btn-topbar.portal {
+      background: #f1f5f9;
+      color: var(--texto-muted);
+      border: 1px solid var(--borde-light);
+    }
+    .btn-topbar.portal:hover {
+      background: #e2e8f0;
+      color: var(--texto-main);
+    }
+    .btn-topbar.pres {
+      background: linear-gradient(135deg, var(--sena-verde), var(--sena-verde-dark));
+      color: #fff;
+      box-shadow: 0 2px 8px rgba(57,169,0,0.25);
+    }
+    .btn-topbar.pres:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 14px rgba(57,169,0,0.35);
+    }
+    .btn-topbar.print {
+      background: #ffffff;
+      color: var(--azul-tech);
+      border: 1px solid var(--azul-border);
+    }
+    .btn-topbar.print:hover {
+      background: var(--azul-bg);
+    }
+
+    /* Layout Doc: Sidebar + Contenido */
+    .doc-layout {
+      display: flex;
+      max-width: 1440px;
+      margin: 0 auto;
+      min-height: calc(100vh - 65px);
+    }
+
+    /* Sidebar Índice de Navegación */
+    .doc-sidebar {
+      width: 300px;
+      flex-shrink: 0;
+      background: #ffffff;
+      border-right: 1px solid var(--borde-light);
+      position: sticky;
+      top: 61px;
+      height: calc(100vh - 61px);
+      overflow-y: auto;
+      padding: 24px 16px;
+    }
+    .sidebar-heading {
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--texto-sub);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 12px;
+      padding-left: 8px;
+    }
+    .doc-nav-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .doc-nav-link {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--texto-muted);
+      text-decoration: none;
+      transition: all 0.2s ease;
+      line-height: 1.35;
+    }
+    .doc-nav-link:hover {
+      background: #f8fafc;
+      color: var(--sena-verde-dark);
+      padding-left: 15px;
+    }
+    .doc-nav-link.active {
+      background: var(--sena-verde-bg);
+      color: var(--sena-verde-dark);
+      border-left: 3px solid var(--sena-verde);
+      font-weight: 700;
+    }
+    .doc-nav-num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--texto-dimmer);
+      width: 18px;
+      text-align: right;
+    }
+
+    /* Contenedor del Artículo */
+    .doc-main {
+      flex: 1;
+      min-width: 0;
+      padding: 40px 48px 80px;
+      max-width: 960px;
+    }
+
+    @media (max-width: 992px) {
+      .doc-sidebar { display: none; }
+      .doc-main { padding: 24px 20px; }
+    }
+
+    /* Tipografía y Elementos del Manual */
+    .doc-header-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--sena-verde-bg);
+      border: 1px solid var(--sena-verde-border);
+      padding: 5px 14px;
+      border-radius: 30px;
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--sena-verde-dark);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 16px;
+    }
+    .doc-title {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(28px, 3.5vw, 40px);
+      font-weight: 800;
+      color: var(--texto-main);
+      line-height: 1.2;
+      margin-bottom: 12px;
+      letter-spacing: -0.5px;
+    }
+    .doc-subtitle {
+      font-size: 16px;
+      color: var(--texto-muted);
+      margin-bottom: 24px;
+      line-height: 1.6;
+    }
+
+    /* Meta Caja */
+    .meta-box-panel {
+      background: #ffffff;
+      border: 1px solid var(--borde-light);
+      border-radius: var(--radius-md);
+      padding: 16px 20px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 16px;
+      margin-bottom: 40px;
+      box-shadow: var(--shadow-sm);
+    }
+    .meta-item-label {
+      font-size: 10.5px;
+      font-weight: 700;
+      color: var(--texto-sub);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 2px;
+    }
+    .meta-item-val {
+      font-size: 13.5px;
+      font-weight: 800;
+      color: var(--texto-main);
+    }
+
+    /* Secciones de Contenido */
+    .doc-section {
+      margin-bottom: 56px;
+      scroll-margin-top: 80px;
+    }
+    .sec-h2 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--texto-main);
+      margin-bottom: 16px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #f1f5f9;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .sec-h3 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--texto-main);
+      margin: 24px 0 12px;
+    }
+    p { margin-bottom: 16px; font-size: 14.5px; color: var(--texto-muted); }
+
+    /* Callouts / Alertas Didácticas */
+    .callout {
+      border-radius: var(--radius-md);
+      padding: 18px 22px;
+      margin: 20px 0;
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+      border: 1px solid;
+    }
+    .callout-icon { flex-shrink: 0; margin-top: 2px; }
+    .callout-content { font-size: 13.5px; line-height: 1.6; }
+    .callout-content strong { color: var(--texto-main); }
+    .callout.verde {
+      background: var(--sena-verde-bg);
+      border-color: var(--sena-verde-border);
+      color: #14532d;
+    }
+    .callout.naranja {
+      background: var(--sena-naranja-bg);
+      border-color: var(--sena-naranja-border);
+      color: #7c2d12;
+    }
+    .callout.tech {
+      background: var(--azul-bg);
+      border-color: var(--azul-border);
+      color: #0c4a6e;
+    }
+    .callout.rojo {
+      background: var(--rojo-bg);
+      border-color: var(--rojo-border);
+      color: #7f1d1d;
+    }
+
+    /* Cajas de Plantillas Copiables con Botón */
+    .copy-box-container {
+      background: #ffffff;
+      border: 1.5px solid var(--borde-light);
+      border-radius: var(--radius-md);
+      margin: 20px 0;
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+    }
+    .copy-box-header {
+      background: #f8fafc;
+      border-bottom: 1px solid var(--borde-light);
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .copy-box-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--texto-main);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .btn-copy {
+      background: #ffffff;
+      border: 1px solid var(--borde-light);
+      border-radius: 6px;
+      padding: 5px 12px;
+      font-size: 11.5px;
+      font-weight: 700;
+      color: var(--sena-verde-dark);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+    }
+    .btn-copy:hover {
+      background: var(--sena-verde);
+      border-color: var(--sena-verde);
+      color: #ffffff;
+    }
+    .copy-box-body {
+      padding: 16px 18px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      color: #334155;
+      background: #ffffff;
+      white-space: pre-wrap;
+      line-height: 1.6;
+      max-height: 380px;
+      overflow-y: auto;
+    }
+
+    /* Tablas Estructuradas Responsivas */
+    .table-card {
+      background: #ffffff;
+      border: 1px solid var(--borde-light);
+      border-radius: var(--radius-md);
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      margin: 20px 0;
+      box-shadow: var(--shadow-sm);
+      width: 100%;
+    }
+    .doc-table {
+      width: 100%;
+      min-width: 620px;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 13px;
+    }
+    .doc-table th {
+      background: #f8fafc;
+      padding: 12px 16px;
+      font-weight: 700;
+      color: var(--texto-main);
+      border-bottom: 2px solid var(--borde-light);
+      text-transform: uppercase;
+      font-size: 11px;
+      letter-spacing: 0.5px;
+    }
+    .doc-table td {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--borde-light);
+      color: var(--texto-muted);
+      vertical-align: middle;
+    }
+    .doc-table tr:hover { background: #f8fafc; }
+    .badge-pk {
+      background: #fef08a;
+      color: #854d0e;
+      font-weight: 800;
+      font-size: 10.5px;
+      padding: 2px 7px;
+      border-radius: 4px;
+      border: 1px solid #fde047;
+    }
+    .badge-fk {
+      background: #e0f2fe;
+      color: #0369a1;
+      font-weight: 800;
+      font-size: 10.5px;
+      padding: 2px 7px;
+      border-radius: 4px;
+      border: 1px solid #bae6fd;
+    }
+
+    /* Lista de Chequeo Interactiva */
+    .checklist-container {
+      background: #ffffff;
+      border: 1.5px solid var(--borde-light);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      margin: 24px 0;
+      box-shadow: var(--shadow-sm);
+    }
+    .checklist-progress-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+    .checklist-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 12px;
+      border-radius: 8px;
+      transition: background 0.2s ease;
+      cursor: pointer;
+      user-select: none;
+    }
+    .checklist-item:hover { background: #f8fafc; }
+    .check-custom {
+      width: 20px;
+      height: 20px;
+      border-radius: 6px;
+      border: 2px solid #cbd5e1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 2px;
+      transition: all 0.2s ease;
+    }
+    .checklist-item.checked .check-custom {
+      background: var(--sena-verde);
+      border-color: var(--sena-verde);
+      color: #fff;
+    }
+    .checklist-item.checked .checklist-text {
+      text-decoration: line-through;
+      color: var(--texto-dimmer);
+    }
+    .checklist-text {
+      font-size: 13.5px;
+      color: var(--texto-main);
+      line-height: 1.5;
+    }
+    .checklist-tip {
+      font-size: 11px;
+      color: var(--texto-sub);
+      display: block;
+      margin-top: 2px;
+    }
+
+    /* Estilos de Impresión */
+    @media print {
+      .doc-topbar, .doc-sidebar, .btn-copy, .btn-topbar { display: none !important; }
+      .doc-main { max-width: 100% !important; padding: 0 !important; }
+      body { background: #fff !important; color: #000 !important; }
+      .copy-box-container, .table-card, .checklist-container { box-shadow: none !important; border-color: #ccc !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- TOPBAR FIJO -->
+  <header class="doc-topbar">
+    <div class="topbar-left">
+      <div class="sena-badge">SENA</div>
+      <div>
+        <div class="topbar-title">ADSO 3389010 — Guía 6 | Manual de la Sesión 4</div>
+        <div class="topbar-sub">Operaciones CRUD en MongoDB (Compass & Mongosh)</div>
+      </div>
+    </div>
+    <div class="topbar-actions">
+      <a href="../explorar.html" class="btn-topbar portal">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+        Volver al Hub
+      </a>
+      <a href="./PRESENTACION_SESION04_CRUD_MONGODB.html" target="_blank" class="btn-topbar pres">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+        Ver Presentación ↗
+      </a>
+      <button type="button" class="btn-topbar print" onclick="window.print()">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect width="12" height="8" x="6" y="14"/></svg>
+        Imprimir / Guardar PDF
+      </button>
+    </div>
+  </header>
+
+  <!-- CONTENEDOR DOCUMENTO -->
+  <div class="doc-layout">
+
+    <!-- SIDEBAR DE NAVEGACIÓN RÁPIDA -->
+    <aside class="doc-sidebar">
+      <div class="sidebar-heading">Índice del Manual</div>
+      <ul class="doc-nav-list">
+        <li><a href="#sec-1" class="doc-nav-link active"><span class="doc-nav-num">01</span> Ficha Técnica & RAPs</a></li>
+        <li><a href="#sec-2" class="doc-nav-link"><span class="doc-nav-num">02</span> Herramientas: Compass & Mongosh</a></li>
+        <li><a href="#sec-3" class="doc-nav-link"><span class="doc-nav-num">03</span> El Ciclo de 3 Tiempos</a></li>
+        <li><a href="#sec-4" class="doc-nav-link"><span class="doc-nav-num">04</span> Create — insertMany()</a></li>
+        <li><a href="#sec-5" class="doc-nav-link"><span class="doc-nav-num">05</span> Read — Filtros MQL</a></li>
+        <li><a href="#sec-6" class="doc-nav-link"><span class="doc-nav-num">06</span> Update — $set y $inc</a></li>
+        <li><a href="#sec-7" class="doc-nav-link"><span class="doc-nav-num">07</span> Delete — Eliminación Segura</a></li>
+        <li><a href="#sec-8" class="doc-nav-link"><span class="doc-nav-num">08</span> Exportar a JSON</a></li>
+        <li><a href="#sec-9" class="doc-nav-link"><span class="doc-nav-num">09</span> Guion del Video AA1-EV04</a></li>
+        <li><a href="#sec-10" class="doc-nav-link"><span class="doc-nav-num">10</span> Checklist Anti-Rechazo</a></li>
+      </ul>
+    </aside>
+
+    <!-- CUERPO PRINCIPAL DEL MANUAL -->
+    <main class="doc-main">
+
+      <!-- ENCABEZADO PRINCIPAL -->
+      <header style="margin-bottom:32px;">
+        <div class="doc-header-badge">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+          Material Didáctico del Aprendiz — Sesión 4
+        </div>
+        <h1 class="doc-title">Manual de Operaciones CRUD en MongoDB (Compass & Mongosh)</h1>
+        <p class="doc-subtitle">
+          Guía técnica paso a paso para el desarrollo y entrega de la evidencia <strong>GA6-220501096-AA1-EV04</strong> sobre el proyecto formativo <strong>TechStore Pro (NoSQL)</strong>, trabajando la base de datos <code>techstore_nosql</code> ya creada en la Sesión 3.
+        </p>
+
+        <!-- META PANEL -->
+        <div class="meta-box-panel">
+          <div>
+            <div class="meta-item-label">Programa</div>
+            <div class="meta-item-val">ADSO (Ficha 3389010)</div>
+          </div>
+          <div>
+            <div class="meta-item-label">Fase del Proyecto</div>
+            <div class="meta-item-val">Fase 3: Ejecución (AP6)</div>
+          </div>
+          <div>
+            <div class="meta-item-label">Competencia</div>
+            <div class="meta-item-val">220501096 — Software</div>
+          </div>
+          <div>
+            <div class="meta-item-label">Fecha Límite Zajuna</div>
+            <div class="meta-item-val" style="color:var(--sena-naranja-dark);">04 / Noviembre / 2026 (Corte 2)</div>
+          </div>
+        </div>
+      </header>
+
+      <!-- ========================================================
+           SECCIÓN 1: FICHA TÉCNICA Y CONTEXTO
+           ======================================================== -->
+      <section id="sec-1" class="doc-section">
+        <h2 class="sec-h2">1. Ficha Técnica y Contexto Normativo en Guía 6</h2>
+        <p>
+          Después de modelar y crear la estructura documental de <code>techstore_nosql</code> en la Sesión 3, esta sesión se enfoca en demostrar dominio real sobre el ciclo de vida completo de un documento: crearlo, consultarlo, modificarlo y eliminarlo de forma segura — el corazón de cualquier sistema que use una base de datos NoSQL en producción.
+        </p>
+        <p>
+          Abordamos la <strong>Actividad de Aprendizaje GA6-220501096-AA1</strong> (<em>Crear un modelo de base de datos, con base a los requerimientos del cliente</em>), evaluando el <strong>RAP 220501096-02</strong> (<em>Construir la base de datos para el software a partir del modelo de datos</em>), ahora en su variante documental.
+        </p>
+
+        <div class="callout verde">
+          <div class="callout-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+          <div class="callout-content">
+            <strong>La Evidencia a Desarrollar:</strong><br>
+            • <strong>AA1-EV04 (Desempeño):</strong> Video demostrativo de 5 a 7 minutos ejecutando operaciones CRUD completas (Create, Read, Update, Delete) sobre <code>techstore_nosql</code>, grabado en vivo desde Mongosh.
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================================
+           SECCIÓN 2: HERRAMIENTAS
+           ======================================================== -->
+      <section id="sec-2" class="doc-section">
+        <h2 class="sec-h2">2. Tus Herramientas: MongoDB Compass y la Consola Mongosh</h2>
+        <p>
+          <strong>MongoDB Compass</strong> es la interfaz visual (GUI) oficial de MongoDB. Dentro de ella, el botón <strong>'Open MongoDB shell'</strong> (esquina superior derecha de la ventana) abre una consola <strong>Mongosh</strong> ya conectada a tu base de datos, en una pestaña nueva — sin necesidad de instalar ningún programa aparte.
+        </p>
+
+        <div class="callout tech">
+          <div class="callout-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+          </div>
+          <div class="callout-content">
+            <strong>¿Por qué usamos solo la consola embebida de Compass?</strong><br>
+            El binario independiente de <code>mongosh</code> (para abrir en una terminal normal de PowerShell/CMD) es un paquete aparte que no viene instalado junto con Compass. Para evitar errores de <code>"mongosh no se reconoce como un comando"</code>, en esta sesión usamos exclusivamente la vía garantizada: el botón <strong>'Open MongoDB shell'</strong> dentro de Compass.
+          </div>
+        </div>
+
+        <h3 class="sec-h3">Al abrir la consola, ya estás conectado</h3>
+        <p>
+          La consola embebida ejecuta automáticamente <code>use("techstore_nosql")</code> al abrirse, y el prompt queda como <code>techstore_nosql&gt;</code>, listo para trabajar sin escribir nada más.
+        </p>
+      </section>
+
+      <!-- ========================================================
+           SECCIÓN 3: EL CICLO DE 3 TIEMPOS
+           ======================================================== -->
+      <section id="sec-3" class="doc-section">
+        <h2 class="sec-h2">3. El Ciclo de 3 Tiempos: Buscar → Actuar → Buscar</h2>
+        <p>
+          <strong>Analogía Didáctica:</strong> <em>"Antes y Después de la Foto"</em>. Nunca modifiques o elimines un documento a ciegas. El flujo profesional y el que exige tu evidencia es siempre el mismo, sin importar si es un Update o un Delete:
+        </p>
+
+        <div class="copy-box-container">
+          <div class="copy-box-header">
+            <span class="copy-box-title">🔁 El Ciclo que Repetirás en Toda la Sesión</span>
+          </div>
+          <div class="copy-box-body">1. BUSCAR (find / findOne)  →  Confirmas el estado ANTES del cambio.
+2. ACTUAR (updateOne / deleteOne)  →  Ejecutas la modificación o eliminación.
+3. BUSCAR DE NUEVO (find / findOne)  →  Confirmas el estado DESPUÉS del cambio.</div>
+          </div>
+        </div>
+
+        <div class="callout naranja">
+          <div class="callout-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg>
+          </div>
+          <div class="callout-content">
+            <strong>¿Por qué nunca filtras por nombre o texto libre?</strong><br>
+            Un campo de texto libre (nombre, título) puede repetirse entre documentos o tener un error de tipeo — nunca garantiza que afectes exactamente 1 documento. Filtra siempre por un identificador único: el <code>_id</code> que MongoDB genera automáticamente al insertar, o un campo de negocio único como <code>sku</code>.
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================================
+           SECCIÓN 4: CREATE
+           ======================================================== -->
+      <section id="sec-4" class="doc-section">
+        <h2 class="sec-h2">4. Create — Inserción en Lote con insertMany()</h2>
+        <p>
+          <code>insertMany()</code> recibe un <strong>arreglo <code>[ ]</code></strong> de varios objetos <code>{ }</code> y los inserta todos en una sola operación — a diferencia de <code>insertOne()</code>, que solo guarda un documento.
+        </p>
+
+        <div class="copy-box-container">
+          <div class="copy-box-header">
+            <span class="copy-box-title">📄 Insertar 5 usuarios reales de TechStore</span>
+            <button class="btn-copy" onclick="copiarAlPortapapeles('codeInsertUsuarios', this)">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+              Copiar Comando
+            </button>
+          </div>
+          <div class="copy-box-body" id="codeInsertUsuarios">db.usuarios.insertMany([
+  { "email": "carlos.perez@techstore.co", "nombre_completo": "Carlos Andrés Pérez Sterling", "activo": true },
+  { "email": "laura.gomez@techstore.co", "nombre_completo": "Laura Marcela Gómez Quintero", "activo": true },
+  { "email": "julian.morales@techstore.co", "nombre_completo": "Julián David Morales Rivera", "activo": false },
+  { "email": "diana.rojas@techstore.co", "nombre_completo": "Diana Carolina Rojas Peña", "activo": true },
+  { "email": "andres.cabrera@techstore.co", "nombre_completo": "Andrés Felipe Cabrera Medina", "activo": true }
+]);</div>
+        </div>
+
+        <div class="callout rojo">
+          <div class="callout-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg>
+          </div>
+          <div class="callout-content">
+            <strong>2 errores comunes que debes evitar:</strong><br>
+            • <strong>Corchete extra al inicio:</strong> el arreglo que copies ya trae su propio <code>[</code> — no escribas tú otro antes, o quedan corchetes dobles <code>[[ ... ]]</code> y Mongosh marca <code>SyntaxError</code>.<br>
+            • <strong>Falta cerrar al final:</strong> el arreglo pegado termina en <code>]</code> — tú debes añadir a mano el cierre <code>);</code> justo después. El comando completo debe terminar exactamente en <code>]);</code>.
+          </div>
+        </div>
+
+        <h3 class="sec-h3">Punto de partida limpio</h3>
+        <p>
+          Si ya tenías datos cargados desde la Sesión 3, vacía primero las 3 colecciones para evitar duplicados: <code>db.usuarios.deleteMany({})</code>, <code>db.productos.deleteMany({})</code>, <code>db.ordenes.deleteMany({})</code>.
+        </p>
+      </section>
+
+      <!-- ========================================================
+           SECCIÓN 5: READ
+           ======================================================== -->
+      <section id="sec-5" class="doc-section">
+        <h2 class="sec-h2">5. Read — Consultas con Filtros MQL</h2>
+        <p>El método <code>find()</code> es el equivalente directo a la cláusula <code>WHERE</code> de SQL.</p>
+
+        <div class="table-card">
+          <table class="doc-table">
+            <thead>
+              <tr><th>Comando</th><th>Operador</th><th>Resultado Esperado</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><code>find({ activo: true })</code></td><td>Booleano</td><td>4 de 5 productos (oculta inactivos)</td></tr>
+              <tr><td><code>find({ precio: { $gt: 2000000 } })</code></td><td>Rango superior</td><td>1 de 5 productos</td></tr>
+              <tr><td><code>find({ precio: { $gte:..., $lte:... } })</code></td><td>Rango intermedio</td><td>2 de 5 productos</td></tr>
+              <tr><td><code>find({ "especificaciones.ram_gb": 32 })</code></td><td>Notación de punto</td><td>1 producto (subdocumento embebido)</td></tr>
+              <tr><td><code>find({ etiquetas: "gamer" })</code></td><td>Filtro en arreglos</td><td>3 productos</td></tr>
+              <tr><td><code>find({ _id: ObjectId("...") })</code></td><td>Identificador interno</td><td>1 producto (el que MongoDB generó al insertar)</td></tr>
+              <tr><td><code>findOne({ sku: "TEC-MEC-02" })</code></td><td>Identificador de negocio</td><td>1 documento completo</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="callout tech">
+          <div class="callout-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+          </div>
+          <div class="callout-content">
+            <strong>_id vs sku — ¿cuál es la diferencia?</strong><br>
+            El <code>_id</code> es un <code>ObjectId</code> que MongoDB genera solo y nunca se repite entre documentos; el <code>sku</code> es un identificador que tú defines en tu modelo de datos (equivalente a una clave de negocio en SQL).
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================================
+           SECCIÓN 6: UPDATE
+           ======================================================== -->
+      <section id="sec-6" class="doc-section">
+        <h2 class="sec-h2">6. Update — Atomicidad con $set y $inc</h2>
+        <p>La rúbrica exige actualizar explícitamente el <strong>primer</strong> y el <strong>último</strong> registro insertado, siguiendo siempre el ciclo de 3 tiempos.</p>
+
+        <div class="copy-box-container">
+          <div class="copy-box-header">
+            <span class="copy-box-title">🔁 Ciclo completo: buscar → actualizar → buscar</span>
+            <button class="btn-copy" onclick="copiarAlPortapapeles('codeUpdate', this)">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+              Copiar Comando
+            </button>
+          </div>
+          <div class="copy-box-body" id="codeUpdate">// 1. Buscar ANTES:
+db.productos.find({ sku: "LAP-PRO-01" });
+
+// 2. Actualizar:
+db.productos.updateOne(
+  { sku: "LAP-PRO-01" },
+  { $set: { precio: 4990000.00, stock: 12 } }
+);
+
+// 3. Buscar DESPUÉS para confirmar:
+db.productos.find({ sku: "LAP-PRO-01" });</div>
+        </div>
+
+        <h3 class="sec-h3">$set vs $inc — no son lo mismo</h3>
+        <p>
+          <code>$set</code> reemplaza el valor por uno nuevo que tú escribes. <code>$inc</code> suma al valor existente — por ejemplo <code>$inc: { veces_actualizado: 1 }</code> toma el contador actual y le suma 1 (si el campo no existe, MongoDB lo crea empezando en 1).
+        </p>
+      </section>
+
+      <!-- ========================================================
+           SECCIÓN 7: DELETE
+           ======================================================== -->
+      <section id="sec-7" class="doc-section">
+        <h2 class="sec-h2">7. Delete — Eliminación Segura con Filtro Estricto</h2>
+        <p>La rúbrica exige explícitamente eliminar el <strong>tercer</strong> documento insertado, siguiendo el mismo ciclo de 3 tiempos.</p>
+
+        <div class="copy-box-container">
+          <div class="copy-box-header">
+            <span class="copy-box-title">🔁 Ciclo completo: buscar → eliminar → buscar</span>
+            <button class="btn-copy" onclick="copiarAlPortapapeles('codeDelete', this)">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+              Copiar Comando
+            </button>
+          </div>
+          <div class="copy-box-body" id="codeDelete">// 1. Buscar ANTES de eliminar:
+db.productos.find({ sku: "MON-GAM-03" });
+
+// 2. Eliminar con filtro específico:
+db.productos.deleteOne({ sku: "MON-GAM-03" });
+// Retorno esperado: { acknowledged: true, deletedCount: 1 }
+
+// 3. Buscar DESPUÉS (debe devolver vacío):
+db.productos.find({ sku: "MON-GAM-03" });
+
+// 4. Verificar el conteo total:
+db.productos.countDocuments();
+// Debe mostrar 4 (si partiste de 5 documentos)</div>
+        </div>
+
+        <div class="callout rojo">
+          <div class="callout-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+          </div>
+          <div class="callout-content">
+            <strong>Prohibido en la entrega:</strong> Nunca ejecutes <code>db.productos.deleteMany({})</code> (filtro vacío) durante tu grabación — elimina TODA la colección de forma instantánea e irreversible.
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================================
+           SECCIÓN 8: EXPORTAR
+           ======================================================== -->
+      <section id="sec-8" class="doc-section">
+        <h2 class="sec-h2">8. Exportación de Colecciones a Archivos JSON</h2>
+        <p>
+          Para adjuntar los esquemas en Zajuna (Evidencia AA1-EV03), exportamos tus colecciones usando el botón visual <strong>EXPORT DATA</strong> de Compass — no se usa la línea de comandos <code>mongoexport</code> porque ese binario, igual que el <code>mongosh</code> standalone, no viene instalado por defecto.
+        </p>
+
+        <div style="display:flex;flex-direction:column;gap:12px;margin:16px 0;">
+          <div style="background:#fff;border:1px solid var(--borde-light);border-left:4px solid var(--sena-verde);padding:14px;border-radius:8px;">
+            <strong>Paso 1 — Seleccionar la colección:</strong> En el panel lateral de Compass, haz clic sobre la colección a exportar (empieza por <code>usuarios</code>).
+          </div>
+          <div style="background:#fff;border:1px solid var(--borde-light);border-left:4px solid var(--azul-tech);padding:14px;border-radius:8px;">
+            <strong>Paso 2 — Abrir EXPORT DATA:</strong> En la barra de herramientas, clic en <strong>'EXPORT DATA ▾'</strong> y elige <strong>'Export the full collection'</strong>.
+          </div>
+          <div style="background:#fff;border:1px solid var(--borde-light);border-left:4px solid var(--sena-naranja);padding:14px;border-radius:8px;">
+            <strong>Paso 3 — Confirmar formato JSON:</strong> Deja todos los campos seleccionados y asegúrate de que el formato marcado sea <strong>JSON</strong>, nunca CSV.
+          </div>
+          <div style="background:#fff;border:1px solid var(--borde-light);border-left:4px solid var(--purpura-pro);padding:14px;border-radius:8px;">
+            <strong>Paso 4 — Guardar y repetir:</strong> Guarda como <code>usuarios.json</code> y repite el mismo proceso con <code>productos</code> y <code>ordenes</code>.
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================================
+           SECCIÓN 9: GUION DEL VIDEO
+           ======================================================== -->
+      <section id="sec-9" class="doc-section">
+        <h2 class="sec-h2">9. Guion Cronometrado del Video Demostrativo (5 a 7 Minutos)</h2>
+        <p>Graba tu pantalla con <strong>OBS Studio</strong>, <strong>Loom</strong> o el grabador de Windows (<code>Win + Alt + R</code>) con audio claro y resolución legible:</p>
+
+        <div class="table-card">
+          <table class="doc-table">
+            <thead>
+              <tr><th>Minuto</th><th>Operación</th><th>Qué debes mostrar</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>0:00 – 1:00</td><td>Portada & Conexión</td><td>Preséntate y abre la consola Mongosh desde Compass</td></tr>
+              <tr><td>1:00 – 2:30</td><td>Create</td><td><code>insertOne()</code> + <code>insertMany()</code></td></tr>
+              <tr><td>2:30 – 4:00</td><td>Read</td><td><code>find()</code> general, por <code>_id</code>, y <code>findOne()</code> por <code>sku</code></td></tr>
+              <tr><td>4:00 – 5:30</td><td>Update</td><td>Ciclo buscar→actualizar→buscar (primer y último registro)</td></tr>
+              <tr><td>5:30 – 7:00</td><td>Delete & Cierre</td><td>Ciclo buscar→eliminar→buscar (tercer registro) + conteo final</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="callout verde">
+          <div class="callout-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+          <div class="callout-content">
+            <strong>Ruta de Envío en Zajuna (Corte 2 — 04/Nov/2026):</strong> Zajuna LMS → Ficha 3389010 → Contenido del Curso → Fase 3: Ejecución → Actividad de Proyecto 6 (AP6) → AA1 → Evidencia GA6-220501096-AA1-EV04 → adjuntar PDF con el enlace del video y pulsar Enviar.
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================================
+           SECCIÓN 10: CHECKLIST ANTI-RECHAZO
+           ======================================================== -->
+      <section id="sec-10" class="doc-section">
+        <h2 class="sec-h2">10. Lista de Chequeo Anti-Rechazo (Auto-Auditoría del Aprendiz)</h2>
+        <p>Marca cada casilla antes de subir tu video y PDF a Zajuna para garantizar tu calificación de <strong>Aprobado (A)</strong>:</p>
+
+        <div class="checklist-container">
+          <div class="checklist-progress-row">
+            <strong style="font-size:14px;color:var(--texto-main);">Puntos de Control de Calidad:</strong>
+            <span id="checkCounter" style="font-size:12px;font-weight:800;color:var(--sena-verde-dark);background:var(--sena-verde-bg);padding:4px 10px;border-radius:20px;border:1px solid var(--sena-verde-border);">0 de 7 Verificados</span>
+          </div>
+
+          <div class="checklist-item" onclick="toggleCheck(this)">
+            <div class="check-custom">✓</div>
+            <div>
+              <div class="checklist-text">1. Conexión Mostrada desde Compass (botón Open MongoDB shell)</div>
+              <span class="checklist-tip">Se ve claramente la base <code>techstore_nosql</code> ya seleccionada.</span>
+            </div>
+          </div>
+
+          <div class="checklist-item" onclick="toggleCheck(this)">
+            <div class="check-custom">✓</div>
+            <div>
+              <div class="checklist-text">2. Create: insertOne() e insertMany() Demostrados</div>
+              <span class="checklist-tip">Inserción individual y por lote, con resultado impreso en pantalla.</span>
+            </div>
+          </div>
+
+          <div class="checklist-item" onclick="toggleCheck(this)">
+            <div class="check-custom">✓</div>
+            <div>
+              <div class="checklist-text">3. Read: find() con Filtros y findOne() por Identificador</div>
+              <span class="checklist-tip">Al menos dos filtros distintos, más la consulta por sku o _id.</span>
+            </div>
+          </div>
+
+          <div class="checklist-item" onclick="toggleCheck(this)">
+            <div class="check-custom">✓</div>
+            <div>
+              <div class="checklist-text">4. Update: Ciclo Buscar→Actualizar→Buscar (Primer y Último Registro)</div>
+              <span class="checklist-tip">Se ve el documento antes y después del updateOne() con $set.</span>
+            </div>
+          </div>
+
+          <div class="checklist-item" onclick="toggleCheck(this)">
+            <div class="check-custom">✓</div>
+            <div>
+              <div class="checklist-text">5. Delete: Ciclo Buscar→Eliminar→Buscar (Tercer Registro)</div>
+              <span class="checklist-tip">deleteOne() con filtro específico, nunca deleteMany({}), y conteo final.</span>
+            </div>
+          </div>
+
+          <div class="checklist-item" onclick="toggleCheck(this)">
+            <div class="check-custom">✓</div>
+            <div>
+              <div class="checklist-text">6. Video de 5 a 7 Minutos con Audio Claro</div>
+              <span class="checklist-tip">Subido a YouTube (No listado) o Google Drive, probado en incógnito.</span>
+            </div>
+          </div>
+
+          <div class="checklist-item" onclick="toggleCheck(this)">
+            <div class="check-custom">✓</div>
+            <div>
+              <div class="checklist-text">7. PDF de Entrega Subido en Zajuna (Corte 2)</div>
+              <span class="checklist-tip">Incluye portada, enlace del video y tabla de sentencias MQL ejecutadas.</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- PIE DEL MANUAL -->
+      <footer style="margin-top:60px;padding-top:20px;border-top:1px solid var(--borde-light);font-size:12px;color:var(--texto-sub);display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+        <div>Servicio Nacional de Aprendizaje (SENA) — Regional Huila | Centro CADPH Garzón</div>
+        <div>Instructor Líder: <strong>Julián Andrés Trujillo Morales</strong></div>
+      </footer>
+
+    </main>
+  </div>
+
+  <script>
+    // Copiar al portapapeles con feedback visual
+    function copiarAlPortapapeles(idElemento, btn) {
+      const el = document.getElementById(idElemento);
+      if (!el) return;
+      const texto = el.innerText || el.textContent;
+
+      navigator.clipboard.writeText(texto).then(() => {
+        const textoOriginal = btn.innerHTML;
+        btn.innerHTML = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> ¡Copiado con Éxito!`;
+        btn.style.background = "var(--sena-verde)";
+        btn.style.borderColor = "var(--sena-verde)";
+        btn.style.color = "#ffffff";
+        setTimeout(() => {
+          btn.innerHTML = textoOriginal;
+          btn.style.background = "";
+          btn.style.borderColor = "";
+          btn.style.color = "";
+        }, 2200);
+      }).catch(err => {
+        console.error('Error al copiar: ', err);
+      });
+    }
+
+    // Toggle Checkboxes en Checklist
+    function toggleCheck(item) {
+      item.classList.toggle('checked');
+      actualizarContadorChecklist();
+    }
+
+    function actualizarContadorChecklist() {
+      const total = document.querySelectorAll('.checklist-item').length;
+      const completados = document.querySelectorAll('.checklist-item.checked').length;
+      const counter = document.getElementById('checkCounter');
+      if (counter) {
+        counter.innerText = `${completados} de ${total} Verificados`;
+        if (completados === total) {
+          counter.style.background = "var(--sena-verde)";
+          counter.style.color = "#ffffff";
+          counter.innerText = "¡100% Listo para Subir a Zajuna!";
+        } else {
+          counter.style.background = "var(--sena-verde-bg)";
+          counter.style.color = "var(--sena-verde-dark)";
+        }
+      }
+    }
+
+    // ScrollSpy en Sidebar
+    window.addEventListener('DOMContentLoaded', () => {
+      const sections = document.querySelectorAll('section[id^="sec-"]');
+      const navLinks = document.querySelectorAll('.doc-nav-link');
+
+      window.addEventListener('scroll', () => {
+        let current = '';
+        sections.forEach(sec => {
+          const top = sec.offsetTop - 120;
+          if (window.pageYOffset >= top) {
+            current = sec.getAttribute('id');
+          }
+        });
+
+        navLinks.forEach(link => {
+          link.classList.remove('active');
+          if (link.getAttribute('href') === `#${current}`) {
+            link.classList.add('active');
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>
