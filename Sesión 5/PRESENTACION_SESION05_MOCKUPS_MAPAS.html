@@ -1,0 +1,1367 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sesión 5 — Mockups & Mapas de Navegación (Contexto) | SENA ADSO GA6</title>
+
+  <!-- Tipografías Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Syne:wght@700;800;900&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --sena-verde: #39a900;
+      --sena-verde-dark: #236b00;
+      --sena-verde-soft: #44c702;
+      --sena-verde-bg: rgba(57, 169, 0, 0.08);
+      --sena-verde-border: rgba(57, 169, 0, 0.28);
+      --sena-verde-glow: rgba(57, 169, 0, 0.15);
+
+      --sena-naranja: #ff6b00;
+      --sena-naranja-dark: #c2410c;
+      --sena-naranja-bg: rgba(255, 107, 0, 0.08);
+      --sena-naranja-border: rgba(255, 107, 0, 0.28);
+
+      --azul-tech: #0284c7;
+      --azul-tech-dark: #0369a1;
+      --azul-bg: rgba(2, 132, 199, 0.08);
+      --azul-border: rgba(2, 132, 199, 0.28);
+      --azul-glow: rgba(2, 132, 199, 0.15);
+
+      --mongo-verde: #00ed64;
+      --mongo-verde-dark: #00684a;
+      --mongo-verde-bg: rgba(0, 237, 100, 0.08);
+      --mongo-verde-border: rgba(0, 104, 74, 0.28);
+
+      --purpura: #7c3aed;
+      --purpura-bg: rgba(124, 58, 237, 0.08);
+      --purpura-border: rgba(124, 58, 237, 0.28);
+
+      --bg-main: #f8fafc;
+      --bg-card: #ffffff;
+      --borde-light: #e2e8f0;
+      --borde-focus: #cbd5e1;
+
+      --texto-main: #0f172a;
+      --texto-muted: #334155;
+      --texto-sub: #64748b;
+      --texto-dimmer: #94a3b8;
+
+      --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.04);
+      --shadow-card: 0 10px 30px rgba(15, 23, 42, 0.05), 0 1px 3px rgba(0, 0, 0, 0.03);
+      --shadow-hover: 0 20px 40px rgba(2, 132, 199, 0.12), 0 4px 12px rgba(0, 0, 0, 0.05);
+
+      --radius-xl: 20px;
+      --radius-lg: 16px;
+      --radius-md: 12px;
+      --radius-sm: 8px;
+    }
+
+    * { margin:0; padding:0; box-sizing:border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: var(--bg-main);
+      color: var(--texto-main);
+      line-height: 1.6;
+      overflow-x: hidden;
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* ==========================================================================
+       SIDEBAR INSTITUCIONAL 280PX (PATRÓN OFICIAL)
+       ========================================================================== */
+    .sidebar {
+      width: 280px;
+      background: #ffffff;
+      border-right: 1px solid var(--borde-light);
+      position: fixed;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 2px 0 16px rgba(15, 23, 42, 0.04);
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .sidebar.collapsed {
+      transform: translateX(-100%);
+    }
+
+    .sidebar-logo {
+      width: 40px;
+      height: 40px;
+      background: var(--sena-verde, #39a900);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+      flex-shrink: 0;
+      box-shadow: 0 4px 10px rgba(57, 169, 0, 0.25);
+    }
+    .sidebar-header {
+      padding: 18px 20px;
+      border-bottom: 1px solid var(--borde-light);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .brand-link {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .brand-logo-svg {
+      width: 36px;
+      height: 36px;
+      flex-shrink: 0;
+    }
+
+    .brand-info h1 {
+      font-family: 'Syne', sans-serif;
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--texto-main);
+      line-height: 1.2;
+    }
+
+    .brand-info p {
+      font-size: 11px;
+      color: var(--azul-tech);
+      font-weight: 600;
+      letter-spacing: 0.3px;
+    }
+
+    .sidebar-toggle-btn {
+      background: transparent;
+      border: 1px solid var(--borde-light);
+      border-radius: 8px;
+      padding: 6px;
+      cursor: pointer;
+      color: var(--texto-sub);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+
+    .sidebar-toggle-btn:hover {
+      background: var(--bg-main);
+      color: var(--azul-tech);
+      border-color: var(--azul-border);
+    }
+
+    .sidebar-nav {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .nav-group-title {
+      font-size: 10.5px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--texto-dimmer);
+      padding: 0 10px 6px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nav-links-list {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .nav-link {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 12px;
+      border-radius: 8px;
+      color: var(--texto-muted);
+      text-decoration: none;
+      font-size: 12.5px;
+      font-weight: 600;
+      transition: all 0.2s ease;
+      position: relative;
+    }
+
+    .nav-link:hover {
+      background: var(--azul-bg);
+      color: var(--azul-tech-dark);
+    }
+
+    .nav-link.active {
+      background: rgba(2, 132, 199, 0.1);
+      color: var(--azul-tech-dark);
+      font-weight: 700;
+    }
+
+    .nav-link.active::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 6px;
+      bottom: 6px;
+      width: 3.5px;
+      background: var(--azul-tech);
+      border-radius: 0 4px 4px 0;
+    }
+
+    .nav-link-num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--texto-dimmer);
+      min-width: 18px;
+    }
+
+    .nav-link.active .nav-link-num {
+      color: var(--azul-tech);
+      font-weight: 700;
+    }
+
+    .nav-link-title {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .sidebar-footer {
+      padding: 14px 16px;
+      border-top: 1px solid var(--borde-light);
+      background: #fafbfe;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .sidebar-footer-pill {
+      background: var(--azul-bg);
+      border: 1px solid var(--azul-border);
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 11px;
+      color: var(--azul-tech-dark);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 600;
+    }
+
+    .btn-return-hub {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 8px 12px;
+      background: #ffffff;
+      border: 1px solid var(--borde-light);
+      border-radius: 8px;
+      color: var(--texto-muted);
+      font-size: 12px;
+      font-weight: 700;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+
+    .btn-return-hub:hover {
+      background: var(--sena-verde-bg);
+      color: var(--sena-verde-dark);
+      border-color: var(--sena-verde-border);
+    }
+
+    /* BOTÓN FLOTANTE DE REAPERTURA DEL SIDEBAR */
+    .floating-sidebar-toggle {
+      position: fixed;
+      top: 18px;
+      left: 20px;
+      z-index: 999;
+      height: 38px;
+      padding: 0 14px 0 10px;
+      background: #ffffff;
+      border: 1px solid var(--borde-focus);
+      border-radius: 10px;
+      box-shadow: 0 6px 18px rgba(15, 23, 42, 0.08);
+      color: var(--texto-main);
+      font-size: 12.5px;
+      font-weight: 700;
+      display: none;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      transition: all 0.25s ease;
+    }
+
+    .floating-sidebar-toggle:hover {
+      border-color: var(--azul-tech);
+      color: var(--azul-tech);
+      box-shadow: 0 8px 24px rgba(2, 132, 199, 0.2);
+    }
+
+    .sidebar.collapsed ~ .floating-sidebar-toggle,
+    .floating-sidebar-toggle.visible {
+      display: inline-flex !important;
+      animation: fadeInToggle 0.25s ease-out forwards;
+    }
+
+    @keyframes fadeInToggle {
+      from { opacity: 0; transform: translateX(-12px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    /* ==========================================================================
+       MAIN CONTENT CONTAINER
+       ========================================================================== */
+    .main-content {
+      margin-left: 280px;
+      flex: 1;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      transition: margin-left 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .main-content.expanded {
+      margin-left: 0;
+    }
+
+    .slide-section {
+      padding: 64px 54px;
+      border-bottom: 1px solid var(--borde-light);
+      position: relative;
+      scroll-margin-top: 0px;
+    }
+
+    .slide-container {
+      max-width: 1140px;
+      margin: 0 auto;
+    }
+
+    /* HEADER DE CADA SLIDE */
+    .slide-badge-category {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 11.5px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      padding: 4px 12px;
+      border-radius: 20px;
+      margin-bottom: 12px;
+    }
+
+    .badge-blue { background: var(--azul-bg); color: var(--azul-tech-dark); border: 1px solid var(--azul-border); }
+    .badge-green { background: var(--sena-verde-bg); color: var(--sena-verde-dark); border: 1px solid var(--sena-verde-border); }
+    .badge-mongo { background: var(--mongo-verde-bg); color: var(--mongo-verde-dark); border: 1px solid var(--mongo-verde-border); }
+    .badge-orange { background: var(--sena-naranja-bg); color: var(--sena-naranja-dark); border: 1px solid var(--sena-naranja-border); }
+
+    .slide-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 32px;
+      font-weight: 800;
+      color: var(--texto-main);
+      line-height: 1.25;
+      margin-bottom: 12px;
+      letter-spacing: -0.5px;
+    }
+
+    .slide-subtitle {
+      font-size: 15.5px;
+      color: var(--texto-muted);
+      line-height: 1.6;
+      max-width: 880px;
+      margin-bottom: 28px;
+    }
+
+    /* ==========================================================================
+       TARJETAS Y GRIDS PREMIUM
+       ========================================================================== */
+    .cards-grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+
+    .cards-grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    .card-pro {
+      background: linear-gradient(175deg, #ffffff 0%, #fbfcfe 65%, #f8fafc 100%);
+      border: 1px solid var(--borde-light);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      box-shadow: var(--shadow-card);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: all 0.25s ease;
+    }
+
+    .card-pro:hover {
+      box-shadow: var(--shadow-hover);
+      transform: translateY(-2px);
+    }
+
+    .card-pro.top-azul { border-top: 4px solid var(--azul-tech); }
+    .card-pro.top-verde { border-top: 4px solid var(--sena-verde); }
+    .card-pro.top-mongo { border-top: 4px solid #13aa52; }
+    .card-pro.top-naranja { border-top: 4px solid var(--sena-naranja); }
+    .card-pro.top-purpura { border-top: 4px solid var(--purpura); }
+
+    .card-header-flex {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+
+    .card-icon-badge {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .icon-badge-blue { background: var(--azul-bg); color: var(--azul-tech); }
+    .icon-badge-green { background: var(--sena-verde-bg); color: var(--sena-verde); }
+    .icon-badge-mongo { background: rgba(19, 170, 82, 0.1); color: #13aa52; }
+    .icon-badge-orange { background: var(--sena-naranja-bg); color: var(--sena-naranja); }
+    .icon-badge-purpura { background: var(--purpura-bg); color: var(--purpura); }
+
+    .card-pill-tag {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 20px;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .card-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--texto-main);
+      margin-bottom: 8px;
+      line-height: 1.3;
+    }
+
+    .card-desc {
+      font-size: 13.5px;
+      color: var(--texto-muted);
+      line-height: 1.6;
+    }
+
+    /* ==========================================================================
+       TABLA COMPARATIVA SQL VS NOSQL MONGODB
+       ========================================================================== */
+    .table-container-card {
+      background: #ffffff;
+      border: 1px solid var(--borde-light);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: var(--shadow-card);
+      margin-top: 16px;
+    }
+
+    .table-comparativa {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      text-align: left;
+    }
+
+    .table-comparativa th {
+      background: #f1f5f9;
+      color: var(--texto-main);
+      font-weight: 800;
+      padding: 14px 18px;
+      border-bottom: 2px solid var(--borde-light);
+      font-family: 'Syne', sans-serif;
+      font-size: 13.5px;
+    }
+
+    .table-comparativa td {
+      padding: 13px 18px;
+      border-bottom: 1px solid var(--borde-light);
+      color: var(--texto-muted);
+      vertical-align: middle;
+    }
+
+    .table-comparativa tr:hover td {
+      background: #fafcfe;
+    }
+
+    .concept-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 700;
+      color: var(--texto-main);
+    }
+
+    .badge-sql {
+      background: #fef2f2;
+      color: #991b1b;
+      border: 1px solid #fecaca;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .badge-nosql {
+      background: #f0fdf4;
+      color: #166534;
+      border: 1px solid #bbf7d0;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    /* ==========================================================================
+       ESTÁNDAR DE CODEBOXES (ESTILO TERMINAL CON SEMÁFORO - PATRÓN SESIÓN 19)
+       ========================================================================== */
+    .code-editor-box {
+      background: #1a1a2e;
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 20px 50px rgba(0,0,0,.25);
+      font-family: 'JetBrains Mono', Consolas, 'Courier New', monospace;
+      margin: 14px auto;
+      max-width: 760px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .editor-header {
+      background: #12121f;
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-sizing: border-box;
+    }
+
+    .editor-dot { width: 11px; height: 11px; border-radius: 50%; }
+    .editor-dot.r { background: #ff5f57; }
+    .editor-dot.y { background: #febc2e; }
+    .editor-dot.g { background: #28c840; }
+
+    .editor-title {
+      margin-left: 8px;
+      font-family: 'JetBrains Mono', Consolas, monospace;
+      font-size: 11px;
+      color: #8892a4;
+      flex: 1;
+    }
+
+    .editor-badge {
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 3px 9px;
+      border-radius: 5px;
+      background: rgba(74,222,128,.15);
+      color: #4ade80;
+    }
+
+    .editor-body {
+      padding: 10px 0;
+      font-family: 'JetBrains Mono', Consolas, 'Courier New', monospace;
+      font-size: 12.5px;
+      line-height: 1.9;
+      flex: 1;
+      overflow-x: auto;
+      background: #1a1a2e;
+      box-sizing: border-box;
+    }
+
+    .cl {
+      display: grid;
+      grid-template-columns: 34px 1fr;
+      column-gap: 12px;
+      padding: 0 20px;
+      white-space: pre;
+    }
+
+    .cl .ln {
+      color: #4a5178;
+      user-select: none;
+      text-align: right;
+    }
+
+    .cl .code { color: #e2e8f0; }
+    .cl.indent-1 .code { padding-left: 18px; }
+    .cl.indent-2 .code { padding-left: 36px; }
+
+    /* TOKENS DE SINTAXIS JSON / BSON / MONGODB (paleta Tokyo Night, patrón Sesión 19) */
+    .tok-key, .sel, .syn-key, .syn-prop { color: #7dcfff; }
+    .tok-str, .str, .prop, .syn-str { color: #9ece6a; }
+    .tok-num, .val, .syn-num { color: #e2e8f0; }
+    .tok-bool, .syn-keyword { color: #f7768e; font-weight: 700; }
+    .tok-bson, .var, .syn-method, .syn-func { color: #e0af68; }
+    .tok-comment, .cm, .syn-comment { color: #565f89; font-style: italic; }
+    .tok-op, .punc { color: #8892a4; }
+    .tag { color: #f7768e; }
+    .attr { color: #e0af68; }
+    .tok-id-badge { background: rgba(78, 201, 176, 0.2); color: #4ec9b0; border: 1px solid rgba(78, 201, 176, 0.4); font-size: 9px; font-weight: 800; padding: 0 5px; border-radius: 3px; height: 16px; line-height: 14px; display: inline-block; vertical-align: middle; margin-left: 6px; }
+    .tok-embed-badge { background: rgba(255, 107, 0, 0.2); color: #ff9800; border: 1px solid rgba(255, 107, 0, 0.4); font-size: 9px; font-weight: 800; padding: 0 5px; border-radius: 3px; height: 16px; line-height: 14px; display: inline-block; vertical-align: middle; margin-left: 6px; }
+    .tok-ref-badge { background: rgba(59, 130, 246, 0.2); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.4); font-size: 9px; font-weight: 800; padding: 0 5px; border-radius: 3px; height: 16px; line-height: 14px; display: inline-block; vertical-align: middle; margin-left: 6px; }
+
+    /* ==========================================================================
+       STEPPER DIDÁCTICO & MODALES GUIADOS
+       ========================================================================== */
+    .stepper-steps-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 16px;
+      margin-top: 18px;
+    }
+
+    .stepper-card-btn {
+      background: #ffffff;
+      border: 1px solid var(--borde-light);
+      border-radius: var(--radius-md);
+      padding: 18px;
+      text-align: left;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      transition: all 0.2s ease;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .stepper-card-btn:hover {
+      border-color: var(--azul-tech);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-card);
+    }
+
+    .step-pill-number {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--azul-bg);
+      color: var(--azul-tech-dark);
+      font-size: 12px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .step-card-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 14.5px;
+      font-weight: 700;
+      color: var(--texto-main);
+      line-height: 1.3;
+    }
+
+    .step-card-action-hint {
+      font-size: 11.5px;
+      color: var(--azul-tech);
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      margin-top: auto;
+    }
+
+    /* TABLA ESTRUCTURADA DE PARÁMETROS (.cweijan-params-table) */
+    .cweijan-params-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      background: #ffffff;
+      border: 1px solid var(--borde-light);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      margin: 14px 0;
+    }
+
+    .cweijan-params-table th {
+      background: #f8fafc;
+      padding: 12px 16px;
+      font-weight: 800;
+      color: var(--texto-main);
+      border-bottom: 2px solid var(--borde-light);
+      font-family: 'Syne', sans-serif;
+    }
+
+    .cpt-row td {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--borde-light);
+      color: var(--texto-muted);
+    }
+
+    .cpt-row.highlight {
+      background: #fffbeb;
+    }
+
+    .cpt-row.highlight td:first-child {
+      border-left: 4px solid var(--sena-naranja);
+      font-weight: 700;
+      color: #92400e;
+    }
+
+    /* MODALES DE STEPPER */
+    .ddl-modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(15, 23, 42, 0.75);
+      backdrop-filter: blur(6px);
+      z-index: 2000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .ddl-modal-overlay.active {
+      display: flex;
+      animation: modalFadeIn 0.25s ease-out forwards;
+    }
+
+    /* TOAST INSTITUCIONAL (reemplaza alert() nativo) */
+    .app-toast {
+      position: fixed;
+      bottom: 28px;
+      left: 50%;
+      transform: translateX(-50%) translateY(16px);
+      background: #ffffff;
+      color: var(--texto-main, #1a1a2e);
+      border: 1px solid #bbf7d0;
+      border-left: 4px solid #39a900;
+      border-radius: 10px;
+      padding: 12px 18px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 13.5px;
+      font-weight: 600;
+      box-shadow: 0 12px 32px rgba(15, 23, 42, 0.18);
+      z-index: 9999;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease, transform 0.25s ease;
+      max-width: 90vw;
+    }
+
+    .app-toast svg { color: #39a900; }
+
+    .app-toast.visible {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    @keyframes modalFadeIn {
+      from { opacity: 0; transform: scale(0.96); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .ddl-modal-box {
+      background: #ffffff;
+      border-radius: var(--radius-lg);
+      width: 100%;
+      max-width: 1080px;
+      max-height: 94vh;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.25);
+      overflow: hidden;
+    }
+
+    .modal-header-nav {
+      padding: 16px 22px;
+      border-bottom: 1px solid var(--borde-light);
+      background: #f8fafc;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .modal-nav-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .modal-pill-btn {
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 11.5px;
+      font-weight: 700;
+      background: #ffffff;
+      border: 1px solid var(--borde-light);
+      color: var(--texto-sub);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .modal-pill-btn.active {
+      background: var(--azul-tech);
+      color: #ffffff;
+      border-color: var(--azul-tech);
+    }
+
+    .col-tab-pill {
+      background: #2d2d30;
+      color: #94a3b8;
+      border: 1px solid #475569;
+      border-radius: 6px;
+      padding: 5px 12px;
+      font-size: 11.5px;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .col-tab-pill:hover {
+      background: #3e3e42;
+      color: #ffffff;
+      border-color: #64748b;
+    }
+
+    .col-tab-pill.active {
+      background: rgba(0, 237, 100, 0.15);
+      color: #00ed64;
+      border-color: #00ed64;
+      box-shadow: 0 0 8px rgba(0, 237, 100, 0.2);
+    }
+
+    .modal-close-btn {
+      background: transparent;
+      border: none;
+      font-size: 20px;
+      color: var(--texto-sub);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+    }
+
+    .modal-close-btn:hover {
+      background: #fee2e2;
+      color: #ef4444;
+    }
+
+    .modal-body-scroll {
+      padding: 24px;
+      overflow-y: auto;
+      flex: 1;
+    }
+
+    /* ==========================================================================
+       CHECKLIST INTERACTIVO EV03 (CORTES & RÚBRICA)
+       ========================================================================== */
+    .checklist-card {
+      background: #ffffff;
+      border: 1px solid var(--borde-light);
+      border-radius: var(--radius-lg);
+      padding: 28px;
+      box-shadow: var(--shadow-card);
+      margin-top: 18px;
+    }
+
+    .checklist-progress-bar-wrap {
+      background: #e2e8f0;
+      border-radius: 10px;
+      height: 10px;
+      overflow: hidden;
+      margin: 14px 0 20px 0;
+    }
+
+    .checklist-progress-bar {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--azul-tech) 0%, #00ed64 100%);
+      transition: width 0.3s ease;
+    }
+
+    .checklist-items-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .check-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 12px 14px;
+      border-radius: var(--radius-md);
+      background: #f8fafc;
+      border: 1px solid var(--borde-light);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .check-item:hover {
+      background: #f1f5f9;
+    }
+
+    .check-item.completed {
+      background: #f0fdf4;
+      border-color: #bbf7d0;
+    }
+
+    .check-checkbox {
+      margin-top: 3px;
+      width: 18px;
+      height: 18px;
+      accent-color: var(--azul-tech);
+      cursor: pointer;
+    }
+
+    .check-text h4 {
+      font-size: 13.5px;
+      font-weight: 700;
+      color: var(--texto-main);
+      margin-bottom: 2px;
+    }
+
+    .check-text p {
+      font-size: 12px;
+      color: var(--texto-sub);
+      line-height: 1.5;
+    }
+
+    /* BOTONES DE ACCIÓN */
+    .btn-action-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--azul-tech);
+      color: #ffffff;
+      padding: 10px 18px;
+      border-radius: 10px;
+      font-size: 13.5px;
+      font-weight: 700;
+      text-decoration: none;
+      transition: all 0.2s;
+      box-shadow: 0 4px 12px rgba(2, 132, 199, 0.25);
+    }
+
+    .btn-action-primary:hover {
+      background: var(--azul-tech-dark);
+      transform: translateY(-1px);
+    }
+
+    .btn-copy-code {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #333333;
+      color: #ffffff;
+      border: 1px solid #444444;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 11px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-copy-code:hover {
+      background: #444444;
+      border-color: #555555;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 992px) {
+      .sidebar { transform: translateX(-100%); }
+      .main-content { margin-left: 0; }
+      .floating-sidebar-toggle { display: inline-flex !important; }
+      .cards-grid-2, .cards-grid-3, .stepper-steps-grid { grid-template-columns: 1fr; }
+      .slide-section { padding: 40px 20px; }
+      .slide-title { font-size: 26px; }
+    }
+
+    /* ===== Componentes propios de la Sesión 5 (contexto: mockups y mapas) ===== */
+    .callout { margin-top: 18px; border-radius: var(--radius-md); padding: 16px 20px; font-size: 14px; line-height: 1.65; color: var(--texto-muted); border: 1px solid; }
+    .callout-title { display: flex; align-items: center; gap: 8px; font-family: 'Syne', sans-serif; font-weight: 800; font-size: 14.5px; margin-bottom: 6px; color: var(--texto-main); }
+    .callout-blue { background: var(--azul-bg); border-color: var(--azul-border); }
+    .callout-green { background: var(--sena-verde-bg); border-color: var(--sena-verde-border); }
+    .callout-orange { background: var(--sena-naranja-bg); border-color: var(--sena-naranja-border); }
+    .fid-ladder { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; }
+    .fid-step { background: #fff; border: 1px solid var(--borde-light); border-radius: 14px; padding: 14px 12px; text-align: center; box-shadow: var(--shadow-card); position: relative; }
+    .fid-step h4 { font-family: 'Syne', sans-serif; font-size: 14.5px; margin: 8px 0 4px; color: var(--texto-main); }
+    .fid-step p { font-size: 12px; color: var(--texto-muted); line-height: 1.5; }
+    .fid-num { position: absolute; top: -10px; left: -10px; width: 26px; height: 26px; border-radius: 50%; background: var(--sena-verde); color: #fff; font-weight: 800; font-size: 13px; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 6px rgba(57,169,0,.35); }
+    .compare-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; max-width: 760px; margin: 0 auto; }
+    .compare-box { background: #fff; border: 1px solid var(--borde-light); border-radius: 16px; padding: 18px; box-shadow: var(--shadow-card); }
+    .compare-box svg { max-height: 300px; }
+    .compare-label { display: inline-block; font-size: 11.5px; font-weight: 800; letter-spacing: .5px; padding: 4px 12px; border-radius: 20px; margin-bottom: 10px; }
+    .label-gray { background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; }
+    .label-green { background: var(--sena-verde-bg); color: var(--sena-verde-dark); border: 1px solid var(--sena-verde-border); }
+    .compare-note { font-size: 12.5px; color: var(--texto-muted); line-height: 1.55; margin-top: 10px; }
+    .map-wrap { background: #fff; border: 1px solid var(--borde-light); border-radius: 16px; padding: 18px; box-shadow: var(--shadow-card); }
+    .map-legend { display: flex; flex-wrap: wrap; gap: 18px; margin-top: 10px; font-size: 12.5px; color: var(--texto-muted); }
+    .map-legend i { display: inline-block; width: 22px; height: 4px; border-radius: 2px; vertical-align: middle; margin-right: 6px; }
+    .steps-list { display: flex; flex-direction: column; gap: 12px; }
+    .step-row { display: flex; gap: 14px; align-items: flex-start; background: #fff; border: 1px solid var(--borde-light); border-radius: 14px; padding: 14px 16px; box-shadow: var(--shadow-sm); }
+    .step-n { flex-shrink: 0; width: 34px; height: 34px; border-radius: 50%; background: var(--sena-verde); color: #fff; font-weight: 800; display: flex; align-items: center; justify-content: center; font-family: 'Syne', sans-serif; }
+    .step-row h4 { font-size: 14.5px; color: var(--texto-main); margin-bottom: 3px; font-family: 'Syne', sans-serif; }
+    .step-row p { font-size: 13px; color: var(--texto-muted); line-height: 1.6; }
+    @media (max-width: 992px) { .fid-ladder { grid-template-columns: repeat(2, 1fr); } .compare-grid { grid-template-columns: 1fr; } }
+
+  </style>
+</head>
+
+<body>
+
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <a href="../explorar.html" class="brand-link" title="Ir al Portal de Materiales">
+        <div class="sidebar-logo" title="Servicio Nacional de Aprendizaje SENA">
+          <svg width="24" height="24" viewBox="0 0 64 62" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
+            <g transform="translate(-377 -19)">
+              <path d="M409.164 19C412.922 19 415.992 22.09 415.992 25.8778 415.992 29.6656 412.932 32.7556 409.164 32.7556 405.397 32.7556 402.336 29.6656 402.336 25.8778 402.336 22.09 405.407 19 409.164 19"/>
+              <path d="M384.305 41.1884 384.305 41.2183C384.285 41.3379 384.275 41.4177 384.275 41.4675 384.275 41.8264 384.474 42.0855 384.873 42.265 385.282 42.4344 385.9 42.5241 386.747 42.5241 387.395 42.5241 387.893 42.4543 388.262 42.3148 388.631 42.1752 388.81 41.9759 388.81 41.7267 388.81 41.3479 388.082 41.0489 386.647 40.8096 386.478 40.7797 386.348 40.7598 386.268 40.7498 386.179 40.7299 386.039 40.71 385.86 40.6801 383.567 40.3013 382.092 39.8926 381.434 39.454 381.115 39.2347 380.876 38.9855 380.706 38.6965 380.547 38.4074 380.467 38.0785 380.467 37.7096 380.467 36.8125 380.995 36.1248 382.052 35.6563 383.109 35.1878 384.654 34.9486 386.677 34.9486 388.7 34.9486 390.166 35.1678 391.133 35.6064 392.1 36.045 392.578 36.7228 392.578 37.6399L392.578 37.7495 388.78 37.7495 388.78 37.7096C388.78 37.3907 388.591 37.1614 388.202 36.992 387.813 36.8325 387.255 36.7428 386.508 36.7428 385.929 36.7428 385.481 36.8026 385.182 36.9122 384.863 37.0318 384.713 37.1913 384.713 37.4006 384.713 37.7794 385.541 38.1084 387.195 38.3675 387.514 38.4174 387.764 38.4572 387.943 38.4871 389.119 38.6865 389.966 38.8559 390.465 38.9955 390.963 39.135 391.392 39.3045 391.761 39.4939 392.159 39.7132 392.478 39.9923 392.698 40.3312 392.917 40.6701 393.027 41.0389 393.027 41.4476 393.027 42.3746 392.448 43.0823 391.302 43.5907 390.156 44.0891 388.501 44.3383 386.348 44.3383 384.195 44.3383 382.67 44.099 381.723 43.6206 380.766 43.1421 380.298 42.3746 380.298 41.308L380.298 41.1685 384.305 41.1685ZM394.711 44.1987 394.711 35.0881 405.546 35.0881 405.546 37.0518 398.778 37.0518 398.778 38.5071 405.028 38.5071 405.028 40.4508 398.778 40.4508 398.778 42.2151 405.795 42.2151 405.795 44.2087 394.711 44.2087ZM407.5 44.1987 407.5 35.0881 412.643 35.0881 418.155 41.2084 418.155 35.0881 422.063 35.0881 422.063 44.1987 416.72 44.1987 411.387 38.0585 411.387 44.1987 407.49 44.1987ZM432.569 40.5604 430.625 37.2511 428.572 40.5604 432.579 40.5604ZM426.369 44.1987 422.292 44.1987 428.592 35.0881 433.107 35.0881 439.118 44.1987 434.592 44.1987 433.675 42.554 427.366 42.554 426.389 44.1987Z"/>
+              <path d="M389.309 76.3351 385.67 72.9161 396.735 53.6881C397.333 52.6415 396.585 51.3257 395.379 51.3257L377.267 51.3257 377.267 46.5113 406.413 46.5113 389.309 76.3351Z"/>
+              <path d="M428.701 76.3351 432.34 72.9161 421.275 53.6881C420.677 52.6415 421.425 51.3257 422.631 51.3257L440.743 51.3257 440.743 46.5113 411.597 46.5113 428.701 76.3351Z"/>
+              <path d="M408.965 51.5949C408.965 51.5949 409.005 51.5251 409.005 51.5251L425.432 78.7174 421.066 80.99 410.48 63.2373C409.852 62.1907 408.347 62.1907 407.729 63.2373 404.2 69.1981 397.213 80.99 397.213 80.99L392.947 78.8768C392.947 78.8768 408.088 53.09 408.965 51.5949"/>
+            </g>
+          </svg>
+        </div>
+        <div class="brand-info">
+          <h1>ADSO 3389010</h1>
+          <p>Sesión 5 · Mockups & Mapas</p>
+        </div>
+      </a>
+      <button type="button" class="sidebar-toggle-btn" onclick="toggleSidebar()" title="Contraer panel lateral">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><line x1="9" x2="9" y1="3" y2="21"/><path d="m14 9-3 3 3 3"/></svg>
+      </button>
+    </div>
+    <nav class="sidebar-nav" id="sidebarNav"><div class="nav-group"><div class="nav-group-title">Bloque 1 · Contexto & Regla de Oro</div><div class="nav-links-list"><a href="#slide-01" class="nav-link active"><span class="nav-link-num">01</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><span class="nav-link-title">Portada & Metadatos</span></a><a href="#slide-02" class="nav-link"><span class="nav-link-num">02</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="19" r="3"/><path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15"/><circle cx="18" cy="5" r="3"/></svg><span class="nav-link-title">¿Dónde estamos?</span></a><a href="#slide-03" class="nav-link"><span class="nav-link-num">03</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" x2="8" y1="13" y2="13"/><line x1="16" x2="8" y1="17" y2="17"/></svg><span class="nav-link-title">Regla de Oro: un solo PDF</span></a></div></div><div class="nav-group"><div class="nav-group-title">Bloque 2 · Mockups, Paso a Paso</div><div class="nav-links-list"><a href="#slide-04" class="nav-link"><span class="nav-link-num">04</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg><span class="nav-link-title">UX vs. UI</span></a><a href="#slide-05" class="nav-link"><span class="nav-link-num">05</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg><span class="nav-link-title">Escalera de fidelidad</span></a><a href="#slide-06" class="nav-link"><span class="nav-link-num">06</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg><span class="nav-link-title">Wireframe vs. Mockup</span></a><a href="#slide-07" class="nav-link"><span class="nav-link-num">07</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="13.5" cy="6.5" r=".5"/><circle cx="17.5" cy="10.5" r=".5"/><circle cx="8.5" cy="7.5" r=".5"/><circle cx="6.5" cy="12.5" r=".5"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/></svg><span class="nav-link-title">Ingredientes del mockup</span></a><a href="#slide-08" class="nav-link"><span class="nav-link-num">08</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="16" cy="4" r="1"/><path d="m18 19 1-7-6 1"/><path d="m5 8 3-3 5.5 3-2.36 3.5"/><path d="M4.24 14.5a5 5 0 0 0 6.88 6"/><path d="M13.76 17.5a5 5 0 0 0-6.88-6"/></svg><span class="nav-link-title">Usabilidad y accesibilidad</span></a></div></div><div class="nav-group"><div class="nav-group-title">Bloque 3 · Mapas & Herramientas</div><div class="nav-links-list"><a href="#slide-09" class="nav-link"><span class="nav-link-num">09</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"/><line x1="9" x2="9" y1="3" y2="18"/><line x1="15" x2="15" y1="6" y2="21"/></svg><span class="nav-link-title">¿Qué es un mapa de navegación?</span></a><a href="#slide-10" class="nav-link"><span class="nav-link-num">10</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="19" r="3"/><path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15"/><circle cx="18" cy="5" r="3"/></svg><span class="nav-link-title">Cómo se construye</span></a><a href="#slide-11" class="nav-link"><span class="nav-link-num">11</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg><span class="nav-link-title">Herramientas de prototipado</span></a></div></div><div class="nav-group"><div class="nav-group-title">Bloque 4 · Tu Entrega (EV AA3)</div><div class="nav-links-list"><a href="#slide-12" class="nav-link"><span class="nav-link-num">12</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg><span class="nav-link-title">Qué pide cada evidencia</span></a><a href="#slide-13" class="nav-link"><span class="nav-link-num">13</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="18" r="3"/><circle cx="6" cy="6" r="3"/><path d="M6 21V9a9 9 0 0 0 9 9"/></svg><span class="nav-link-title">Reutiliza tu Guía 5</span></a><a href="#slide-14" class="nav-link"><span class="nav-link-num">14</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></svg><span class="nav-link-title">Cómo unir en un PDF</span></a><a href="#slide-15" class="nav-link"><span class="nav-link-num">15</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg><span class="nav-link-title">Checklist Anti-Error 100%</span></a></div></div></nav>
+    <div class="sidebar-footer">
+      <div class="sidebar-footer-pill"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg><span>Corte 2: Miércoles 04/Nov (11:59 PM)</span></div>
+      <a href="https://julianon2.github.io/seguimiento-adso-3389010/" target="_blank" class="btn-return-hub" style="margin-bottom:6px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg> Dashboard de Seguimiento</a>
+      <a href="../explorar.html" class="btn-return-hub"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m15 18-6-6 6-6"/></svg> Volver al Hub</a>
+    </div>
+  </aside>
+
+  <button type="button" class="floating-sidebar-toggle" id="floatingToggle" onclick="toggleSidebar()" title="Abrir Menú de Navegación">
+    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><line x1="9" x2="9" y1="3" y2="21"/><path d="m10 9 3 3-3 3"/></svg>
+    <span>Menú (15 Slides)</span>
+  </button>
+
+  <main class="main-content" id="mainContent">
+
+    <section class="slide-section" id="slide-01">
+      <div class="slide-container">
+        <span class="slide-badge-category badge-green"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Sesión Sincrónica 5 de 7 · Bloque Front-End (UI/UX)</span>
+        <h2 class="slide-title">Mockups & Mapas de Navegación: diseñar antes de programar</h2>
+        <p class="slide-subtitle">Hoy no escribes código ni abres ninguna herramienta: hoy entiendes <strong>por qué</strong> se diseña una interfaz antes de construirla, <strong>qué es</strong> un mockup, <strong>qué es</strong> un mapa de navegación y <strong>cómo</strong> se evalúan. Con ese contexto, tus evidencias de la Guía 6 se vuelven mucho más sencillas.</p>
+<div class="cards-grid-3"><div class="card-pro top-azul"><div class="card-header-flex"><div class="card-icon-badge icon-badge-blue"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg></div><span class="card-pill-tag badge-blue">Sincrónico</span></div><h3 class="card-title">Datos de la Sesión</h3><p class="card-desc"><strong>Fecha:</strong> Martes, 27 de Octubre de 2026<br><strong>Horario:</strong> 6:30 PM - 8:30 PM (Teams)<br><strong>Instructor:</strong> Julián Andrés Trujillo Morales<br><strong>Regional:</strong> Huila | CADPH Garzón</p></div><div class="card-pro top-verde"><div class="card-header-flex"><div class="card-icon-badge icon-badge-green"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div><span class="card-pill-tag badge-green">Solo contexto</span></div><h3 class="card-title">Qué vas a lograr hoy</h3><p class="card-desc">Distinguir <strong>UX, UI, wireframe, mockup, prototipo y maqueta</strong>.<br>Leer y entender un <strong>mapa de navegación</strong>.<br>Conocer los criterios con que se evalúan tus evidencias.<br>Saber cómo <strong>reutilizar tu trabajo de la Guía 5</strong>.</p></div><div class="card-pro top-naranja"><div class="card-header-flex"><div class="card-icon-badge icon-badge-orange"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" x2="4" y1="22" y2="15"/></svg></div><span class="card-pill-tag badge-orange">SLA Corte 2</span></div><h3 class="card-title">Evidencias AA3 (RAP 03)</h3><p class="card-desc"><strong>AA3-EV01:</strong> Selección de herramientas para prototipado.<br><strong>AA3-EV02:</strong> Diseño del sitio web y/o móvil.<br><strong>AA3-EV03:</strong> Interfaces gráficas del proyecto.<br><strong>Cierre:</strong> Miércoles 04/Nov (11:59 PM)</p></div></div>
+      </div>
+    </section>
+
+    <section class="slide-section" id="slide-02">
+      <div class="slide-container">
+        <span class="slide-badge-category badge-blue"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="19" r="3"/><path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15"/><circle cx="18" cy="5" r="3"/></svg> Bloque 1 · Contexto de la Guía</span>
+        <h2 class="slide-title">¿Dónde estamos y por qué diseñamos antes de programar?</h2>
+        <p class="slide-subtitle">Piensa en construir una casa: nadie empieza a poner ladrillos sin un <strong>plano</strong>. En software, el plano de la pantalla es el mockup y el plano de cómo te mueves entre pantallas es el mapa de navegación. Corregir una línea en un plano cuesta segundos; corregir una pared ya construida cuesta días.</p>
+<div class="cards-grid-3"><div class="card-pro top-verde"><div class="card-header-flex"><div class="card-icon-badge icon-badge-green"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div><span class="card-pill-tag badge-green">Ya lo hiciste</span></div><h3 class="card-title">Base de datos (Sesiones 1 a 4)</h3><p class="card-desc">Modelaste y construiste la base de datos relacional (SQL) y la de documentos (MongoDB) de <strong>TechStore Pro React</strong>. Ya sabes <em>qué datos</em> maneja el sistema.</p></div><div class="card-pro top-azul"><div class="card-header-flex"><div class="card-icon-badge icon-badge-blue"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg></div><span class="card-pill-tag badge-blue">Estás aquí</span></div><h3 class="card-title">Interfaz de usuario (Sesión 5)</h3><p class="card-desc">Ahora defines <em>cómo se verán y cómo se recorrerán</em> esos datos: pantallas, botones, formularios y el camino entre ellas. Es el <strong>plano visual</strong> del sistema.</p></div><div class="card-pro top-naranja"><div class="card-header-flex"><div class="card-icon-badge icon-badge-orange"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></div><span class="card-pill-tag badge-orange">Sigue</span></div><h3 class="card-title">Maquetación (Sesión 6)</h3><p class="card-desc">Con el plano aprobado, lo conviertes en código: HTML5 semántico, CSS3 responsivo y JavaScript. Sin plano, esa sesión se vuelve adivinar.</p></div></div><div class="callout callout-blue"><div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg> La idea clave</div><div>Diseñar primero es la forma más barata de equivocarse. Un cliente puede decir <em>«ese botón no me gusta»</em> sobre un mockup en 5 minutos; sobre una aplicación ya programada, el mismo comentario puede costar horas de trabajo.</div></div>
+      </div>
+    </section>
+
+    <section class="slide-section" id="slide-03">
+      <div class="slide-container">
+        <span class="slide-badge-category badge-orange"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" x2="8" y1="13" y2="13"/><line x1="16" x2="8" y1="17" y2="17"/></svg> Bloque 1 · Regla de Oro en PDF</span>
+        <h2 class="slide-title">Regla de Oro: una sola entrega, en PDF y sin repetir trabajo</h2>
+        <p class="slide-subtitle">En la Fase 2 (Guía 5, evidencias EV01, EV03 y EV05) ya diseñaste interfaces y un mapa de navegación en Balsamiq y Figma. Pedirte rehacerlo sería redundante. Por eso, <strong>reutilizas esas evidencias y las entregas unidas en un único archivo PDF</strong>.</p>
+<div class="cards-grid-2"><div class="card-pro top-naranja"><div class="card-header-flex"><div class="card-icon-badge icon-badge-orange"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" x2="8" y1="13" y2="13"/><line x1="16" x2="8" y1="17" y2="17"/></svg></div><span class="card-pill-tag badge-orange">Regla de Oro</span></div><h3 class="card-title">Un solo PDF</h3><p class="card-desc">Todo tu trabajo viaja en <strong>un archivo PDF</strong>: ordenado, con páginas legibles y con el enlace a tu prototipo si lo tienes en Figma. Nada de carpetas sueltas ni capturas desordenadas.</p></div><div class="card-pro top-verde"><div class="card-header-flex"><div class="card-icon-badge icon-badge-green"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="18" r="3"/><circle cx="6" cy="6" r="3"/><path d="M6 21V9a9 9 0 0 0 9 9"/></svg></div><span class="card-pill-tag badge-green">Qué cambia</span></div><h3 class="card-title">Reutilizar, no rehacer</h3><p class="card-desc">Tomas lo que ya hiciste en la Guía 5, lo completas solo si falta algo que pide el instrumento de evaluación de la Guía 6, y lo unes. Al final de esta presentación (slides 13 y 14) te muestro <strong>qué evidencias reutilizas y cómo unirlas</strong>, paso a paso.</p></div></div><div class="callout callout-orange"><div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg> Importante</div><div>Reutilizar no significa copiar sin revisar. Antes de entregar, compara tu PDF con la lista de chequeo de cada evidencia (slide 12): si algo no está, lo agregas.</div></div>
+      </div>
+    </section>
+
+    <section class="slide-section" id="slide-04">
+      <div class="slide-container">
+        <span class="slide-badge-category badge-blue"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg> Bloque 2 · Conceptos Fundamentales</span>
+        <h2 class="slide-title">UX vs. UI: la experiencia y la apariencia</h2>
+        <p class="slide-subtitle">Aunque suelen decirse juntas, son dos cosas distintas. La analogía del restaurante te ayuda a recordarlas: <strong>UX</strong> es toda la experiencia de comer (reservar, que te atiendan rápido, que la comida llegue caliente) y <strong>UI</strong> es lo que ves y tocas (la carta, los platos, la decoración).</p>
+<div class="table-container-card"><table class="table-comparativa"><thead><tr><th></th><th>UX · Experiencia de Usuario</th><th>UI · Interfaz de Usuario</th></tr></thead><tbody><tr><td><span class='concept-tag'>Pregunta que responde</span></td><td>¿Es fácil, rápido y agradable lograr lo que quiero?</td><td>¿Cómo se ve y qué elementos puedo tocar?</td></tr><tr><td><span class='concept-tag'>Se ocupa de</span></td><td>Flujos, orden de pantallas, claridad, tiempos, errores</td><td>Colores, tipografía, botones, iconos, espaciado</td></tr><tr><td><span class='concept-tag'>Ejemplo en TechStore</span></td><td>Comprar un producto en 3 pasos sin perderte</td><td>Que el botón «Agregar al carrito» sea verde, grande y legible</td></tr><tr><td><span class='concept-tag'>Herramienta típica</span></td><td>Mapa de navegación, flujos, pruebas con usuarios</td><td>Wireframes, mockups, guía de estilo</td></tr><tr><td><span class='concept-tag'>Si falla</span></td><td>El usuario se pierde y abandona la compra</td><td>El usuario desconfía o no entiende qué tocar</td></tr></tbody></table></div><div class="callout callout-green"><div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg> Para recordarlo</div><div>Una interfaz hermosa con un flujo confuso es mala UX. Un flujo perfecto con una interfaz ilegible es mala UI. Un buen sistema necesita <strong>las dos</strong>.</div></div>
+      </div>
+    </section>
+
+    <section class="slide-section" id="slide-05">
+      <div class="slide-container">
+        <span class="slide-badge-category badge-green"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg> Bloque 2 · Conceptos Fundamentales</span>
+        <h2 class="slide-title">La escalera de fidelidad: del boceto a la maqueta</h2>
+        <p class="slide-subtitle">Un diseño no nace terminado: sube peldaños. Cada peldaño añade detalle y cuesta más cambiarlo. Por eso se empieza barato (boceto) y se avanza solo cuando el peldaño anterior ya está aprobado.</p>
+<div class="fid-ladder"><div class="fid-step"><div class="fid-num">1</div><svg viewBox="0 0 120 84" width="100%" style="max-width:130px" xmlns="http://www.w3.org/2000/svg"><rect x="6" y="6" width="108" height="72" rx="4" fill="#fffbeb" stroke="#d6a84a" stroke-width="1.6" stroke-dasharray="4 3"/><path d="M16 20 Q40 14 70 20" stroke="#92702a" stroke-width="1.8" fill="none"/><path d="M16 34 L60 34 M16 44 L86 43 M16 54 L50 55" stroke="#92702a" stroke-width="1.6" fill="none"/><path d="M80 56 Q96 50 104 62" stroke="#92702a" stroke-width="1.8" fill="none"/></svg><h4>Boceto</h4><p>Dibujo rápido a mano o en papel. Sirve para <em>pensar</em>, no para mostrar.</p></div><div class="fid-step"><div class="fid-num">2</div><svg viewBox="0 0 120 84" width="100%" style="max-width:130px" xmlns="http://www.w3.org/2000/svg"><rect x="6" y="6" width="108" height="72" rx="4" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.6"/><rect x="14" y="14" width="92" height="8" fill="#cbd5e1"/><rect x="14" y="28" width="44" height="30" fill="#e2e8f0" stroke="#94a3b8"/><path d="M14 28 L58 58 M58 28 L14 58" stroke="#94a3b8"/><rect x="64" y="28" width="42" height="6" fill="#cbd5e1"/><rect x="64" y="40" width="30" height="6" fill="#cbd5e1"/><rect x="64" y="52" width="26" height="8" fill="none" stroke="#94a3b8"/><rect x="14" y="66" width="92" height="6" fill="#cbd5e1"/></svg><h4>Wireframe</h4><p>Esquema en grises: qué elementos hay y dónde. Sin color ni estilo.</p></div><div class="fid-step"><div class="fid-num">3</div><svg viewBox="0 0 120 84" width="100%" style="max-width:130px" xmlns="http://www.w3.org/2000/svg"><rect x="6" y="6" width="108" height="72" rx="6" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.6"/><rect x="14" y="14" width="92" height="8" rx="4" fill="#39a900"/><rect x="14" y="28" width="44" height="30" rx="5" fill="#0284c7"/><circle cx="36" cy="43" r="8" fill="#ffffff" opacity=".85"/><rect x="64" y="28" width="42" height="6" rx="3" fill="#0f172a"/><rect x="64" y="40" width="30" height="6" rx="3" fill="#64748b"/><rect x="64" y="52" width="30" height="9" rx="4.5" fill="#39a900"/><rect x="14" y="66" width="92" height="6" rx="3" fill="#e2e8f0"/></svg><h4>Mockup</h4><p>Diseño visual final: colores, tipografía, imágenes y textos reales.</p></div><div class="fid-step"><div class="fid-num">4</div><svg viewBox="0 0 120 84" width="100%" style="max-width:130px" xmlns="http://www.w3.org/2000/svg"><rect x="6" y="6" width="108" height="72" rx="6" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.6"/><rect x="14" y="14" width="92" height="8" rx="4" fill="#39a900"/><rect x="14" y="28" width="44" height="30" rx="5" fill="#0284c7"/><rect x="64" y="52" width="30" height="9" rx="4.5" fill="#39a900" stroke="#ff6b00" stroke-width="2"/><path d="M92 58 L92 72 L96 68 L100 76 L103 74 L99 66 L105 66 Z" fill="#0f172a"/><path d="M110 20 C118 30 118 44 110 54" stroke="#ff6b00" stroke-width="2" fill="none" stroke-dasharray="3 2"/></svg><h4>Prototipo</h4><p>Mockup con pantallas conectadas: puedes hacer clic y navegar.</p></div><div class="fid-step"><div class="fid-num">5</div><svg viewBox="0 0 120 84" width="100%" style="max-width:130px" xmlns="http://www.w3.org/2000/svg"><rect x="6" y="6" width="108" height="72" rx="6" fill="#1a1a2e"/><circle cx="16" cy="14" r="3" fill="#ff5f57"/><circle cx="26" cy="14" r="3" fill="#febc2e"/><circle cx="36" cy="14" r="3" fill="#28c840"/><text x="14" y="40" font-family="monospace" font-size="11" fill="#7dcfff">&lt;button&gt;</text><text x="22" y="54" font-family="monospace" font-size="11" fill="#9ece6a">Comprar</text><text x="14" y="68" font-family="monospace" font-size="11" fill="#7dcfff">&lt;/button&gt;</text></svg><h4>Maqueta</h4><p>El diseño llevado a código real (HTML/CSS). Sesión 6.</p></div></div><div class="callout callout-blue"><div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg> Ya lo viste en la Guía 5</div><div>Tu taller en Balsamiq fue un <strong>wireframe/prototipo de baja fidelidad</strong>; tu trabajo en Figma con colores, componentes y conexiones fue un <strong>mockup y prototipo de alta fidelidad</strong>. Esta sesión pone nombre y criterio a lo que ya hiciste.</div></div><div style="margin-top:16px;"><div class="table-container-card"><table class="table-comparativa"><thead><tr><th>Término</th><th>Definición corta</th><th>¿Se puede hacer clic?</th></tr></thead><tbody><tr><td><span class='concept-tag'>Wireframe</span></td><td>Esquema estructural de una pantalla</td><td>No (es una imagen)</td></tr><tr><td><span class='concept-tag'>Mockup</span></td><td>Pantalla con aspecto visual final</td><td>No (es una imagen)</td></tr><tr><td><span class='concept-tag'>Prototipo</span></td><td>Pantallas conectadas que simulan el uso</td><td>Sí (simulado)</td></tr><tr><td><span class='concept-tag'>Maqueta</span></td><td>Pantalla construida en código</td><td>Sí (real, aún sin lógica)</td></tr></tbody></table></div></div>
+      </div>
+    </section>
+
+    <section class="slide-section" id="slide-06">
+      <div class="slide-container">
+        <span class="slide-badge-category badge-orange"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg> Bloque 2 · Casos Reales · Antes vs. Después</span>
+        <h2 class="slide-title">Wireframe vs. Mockup: la misma tarjeta de producto</h2>
+        <p class="slide-subtitle">Mira la misma tarjeta de producto de TechStore Pro en dos peldaños de la escalera. La estructura es idéntica: lo que cambia es la <strong>información visual</strong> que se agrega. El wireframe decide el orden; el mockup decide la apariencia.</p>
+
+<div class="compare-grid">
+  <div class="compare-box">
+    <div class="compare-label label-gray">WIREFRAME · estructura</div>
+    <svg viewBox="0 0 240 300" width="100%" xmlns="http://www.w3.org/2000/svg">
+      <rect x="10" y="10" width="220" height="280" rx="6" fill="#f8fafc" stroke="#94a3b8" stroke-width="2"/>
+      <rect x="24" y="24" width="192" height="130" fill="#e2e8f0" stroke="#94a3b8"/>
+      <path d="M24 24 L216 154 M216 24 L24 154" stroke="#94a3b8"/>
+      <rect x="24" y="170" width="140" height="14" fill="#cbd5e1"/>
+      <rect x="24" y="194" width="90" height="12" fill="#cbd5e1"/>
+      <rect x="24" y="222" width="192" height="40" rx="4" fill="none" stroke="#94a3b8" stroke-width="2"/>
+      <text x="120" y="247" text-anchor="middle" font-family="Arial" font-size="13" fill="#64748b">Botón</text>
+    </svg>
+    <p class="compare-note">Cajas grises y una <strong>X</strong> donde irá la imagen. Solo responde: <em>¿qué va y dónde?</em></p>
+  </div>
+  <div class="compare-box">
+    <div class="compare-label label-green">MOCKUP · aspecto final</div>
+    <svg viewBox="0 0 240 300" width="100%" xmlns="http://www.w3.org/2000/svg">
+      <defs><linearGradient id="gimg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0284c7"/><stop offset="1" stop-color="#39a900"/></linearGradient></defs>
+      <rect x="10" y="10" width="220" height="280" rx="14" fill="#ffffff" stroke="#e2e8f0" stroke-width="2"/>
+      <rect x="24" y="24" width="192" height="130" rx="10" fill="url(#gimg)"/>
+      <rect x="86" y="62" width="68" height="44" rx="4" fill="#ffffff" opacity=".9"/><rect x="72" y="108" width="96" height="6" rx="3" fill="#ffffff" opacity=".9"/>
+      <rect x="160" y="32" width="48" height="20" rx="10" fill="#ff6b00"/><text x="184" y="46" text-anchor="middle" font-family="Arial" font-size="11" font-weight="700" fill="#fff">-15%</text>
+      <text x="24" y="182" font-family="Arial" font-size="15" font-weight="700" fill="#0f172a">Laptop Pro 14</text>
+      <text x="24" y="206" font-family="Arial" font-size="14" font-weight="700" fill="#39a900">$ 3.299.000</text>
+      <rect x="24" y="222" width="192" height="40" rx="20" fill="#39a900"/>
+      <text x="120" y="247" text-anchor="middle" font-family="Arial" font-size="13" font-weight="700" fill="#fff">Agregar al carrito</text>
+    </svg>
+    <p class="compare-note">Colores, tipografía, imagen y textos reales. Responde: <em>¿cómo se ve exactamente?</em></p>
+  </div>
+</div><div class="cards-grid-3" style="margin-top:18px;"><div class="card-pro top-azul"><div class="card-header-flex"><div class="card-icon-badge icon-badge-blue"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg></div><span class="card-pill-tag badge-blue">Qué se decide aquí</span></div><h3 class="card-title">En el wireframe</h3><p class="card-desc">Qué elementos existen (imagen, nombre, precio, botón), su <strong>orden</strong> y su <strong>tamaño relativo</strong>. Se discute con el cliente sin distraerse con colores.</p></div><div class="card-pro top-verde"><div class="card-header-flex"><div class="card-icon-badge icon-badge-green"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="13.5" cy="6.5" r=".5"/><circle cx="17.5" cy="10.5" r=".5"/><circle cx="8.5" cy="7.5" r=".5"/><circle cx="6.5" cy="12.5" r=".5"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/></svg></div><span class="card-pill-tag badge-green">Qué se decide aquí</span></div><h3 class="card-title">En el mockup</h3><p class="card-desc">Paleta, tipografía, forma de los botones, imágenes y textos reales. Aquí se valora si el diseño se ve <strong>profesional y coherente</strong> con la marca.</p></div><div class="card-pro top-naranja"><div class="card-header-flex"><div class="card-icon-badge icon-badge-orange"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg></div><span class="card-pill-tag badge-orange">Error común</span></div><h3 class="card-title">Saltarse el wireframe</h3><p class="card-desc">Si te lanzas directo al mockup, gastas tiempo ajustando colores en una estructura que quizá estaba mal. Estructura primero, estética después.</p></div></div>
+      </div>
+    </section>
+
+    <section class="slide-section" id="slide-07">
+      <div class="slide-container">
+        <span class="slide-badge-category badge-green"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="13.5" cy="6.5" r=".5"/><circle cx="17.5" cy="10.5" r=".5"/><circle cx="8.5" cy="7.5" r=".5"/><circle cx="6.5" cy="12.5" r=".5"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/></svg> Bloque 2 · Ingredientes de un Buen Mockup</span>
+        <h2 class="slide-title">¿Qué hace que un mockup se vea bien y se entienda?</h2>
+        <p class="slide-subtitle">No es «gusto»: hay principios que cualquier diseñador aplica. Si los respetas, tu mockup se ve ordenado y profesional aunque no seas artista.</p>
+<div class="cards-grid-3"><div class="card-pro top-azul"><div class="card-header-flex"><div class="card-icon-badge icon-badge-blue"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg></div><span class="card-pill-tag badge-blue">Principio 1</span></div><h3 class="card-title">Jerarquía visual</h3><p class="card-desc">Lo más importante se ve primero: es más grande, más oscuro o de color más fuerte. En una tarjeta de producto, el <strong>precio y el botón de compra</strong> deben destacar sobre el texto secundario.</p></div><div class="card-pro top-verde"><div class="card-header-flex"><div class="card-icon-badge icon-badge-green"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="13.5" cy="6.5" r=".5"/><circle cx="17.5" cy="10.5" r=".5"/><circle cx="8.5" cy="7.5" r=".5"/><circle cx="6.5" cy="12.5" r=".5"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/></svg></div><span class="card-pill-tag badge-green">Principio 2</span></div><h3 class="card-title">Color 60-30-10</h3><p class="card-desc"><strong>60%</strong> color neutro (fondos), <strong>30%</strong> color de apoyo (tarjetas, textos) y <strong>10%</strong> color de acento (botones y llamadas a la acción). Usar demasiados colores cansa y confunde.</p></div><div class="card-pro top-naranja"><div class="card-header-flex"><div class="card-icon-badge icon-badge-orange"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></div><span class="card-pill-tag badge-orange">Principio 3</span></div><h3 class="card-title">Tipografía legible</h3><p class="card-desc">Máximo 2 familias de letra. Tamaños que distingan título, subtítulo y cuerpo. El texto del cuerpo, idealmente no menor a 16 px en pantalla.</p></div><div class="card-pro top-purpura"><div class="card-header-flex"><div class="card-icon-badge icon-badge-purpura"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg></div><span class="card-pill-tag badge-blue">Principio 4</span></div><h3 class="card-title">Espaciado y cuadrícula</h3><p class="card-desc">Márgenes y separaciones constantes (por ejemplo múltiplos de 8 px) y una cuadrícula (grid) para alinear. El aire entre elementos también comunica orden.</p></div><div class="card-pro top-azul"><div class="card-header-flex"><div class="card-icon-badge icon-badge-blue"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div><span class="card-pill-tag badge-blue">Principio 5</span></div><h3 class="card-title">Componentes reutilizables</h3><p class="card-desc">Un botón, una tarjeta o un campo de formulario se diseña <strong>una sola vez</strong> como componente y se reutiliza. Así toda la aplicación se ve coherente y cambiarlo después es fácil.</p></div><div class="card-pro top-verde"><div class="card-header-flex"><div class="card-icon-badge icon-badge-green"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="20" x="5" y="2" rx="2" ry="2"/><path d="M12 18h.01"/></svg></div><span class="card-pill-tag badge-green">Principio 6</span></div><h3 class="card-title">Diseño responsivo</h3><p class="card-desc">El mismo diseño debe funcionar en <strong>escritorio, tableta y móvil</strong>. Por eso se diseñan versiones para varios anchos de pantalla (por ejemplo, ~1280 px, ~768 px y ~375 px).</p></div></div>
+      </div>
+    </section>
+
+    <section class="slide-section" id="slide-08">
+      <div class="slide-container">
+        <span class="slide-badge-category badge-blue"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="16" cy="4" r="1"/><path d="m18 19 1-7-6 1"/><path d="m5 8 3-3 5.5 3-2.36 3.5"/><path d="M4.24 14.5a5 5 0 0 0 6.88 6"/><path d="M13.76 17.5a5 5 0 0 0-6.88-6"/></svg> Bloque 2 · Usabilidad y Accesibilidad</span>
+        <h2 class="slide-title">Usabilidad y accesibilidad: el criterio con que se evalúa tu diseño</h2>
+        <p class="slide-subtitle">El criterio de evaluación de las tres evidencias AA3 dice textualmente: <em>«Crea interfaces de usuario aplicando buenas prácticas de usabilidad y accesibilidad»</em>. Por eso conviene conocer las reglas más importantes.</p>
+<div class="cards-grid-2"><div class="card-pro top-azul"><div class="card-header-flex"><div class="card-icon-badge icon-badge-blue"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div><span class="card-pill-tag badge-blue">Usabilidad</span></div><h3 class="card-title">Las 10 heurísticas de Nielsen</h3><p class="card-desc" style="line-height:1.75;">1. Visibilidad del estado del sistema<br>2. Coincidir con el mundo real<br>3. Control y libertad del usuario<br>4. Consistencia y estándares<br>5. Prevención de errores<br>6. Reconocer antes que recordar<br>7. Flexibilidad y eficiencia de uso<br>8. Diseño estético y minimalista<br>9. Ayudar a reconocer y corregir errores<br>10. Ayuda y documentación</p></div><div class="card-pro top-verde"><div class="card-header-flex"><div class="card-icon-badge icon-badge-green"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="16" cy="4" r="1"/><path d="m18 19 1-7-6 1"/><path d="m5 8 3-3 5.5 3-2.36 3.5"/><path d="M4.24 14.5a5 5 0 0 0 6.88 6"/><path d="M13.76 17.5a5 5 0 0 0-6.88-6"/></svg></div><span class="card-pill-tag badge-green">Accesibilidad</span></div><h3 class="card-title">Los 4 principios de WCAG (POUR)</h3><p class="card-desc" style="line-height:1.75;"><strong>Perceptible:</strong> todo se puede ver u oír (contraste suficiente, texto alternativo en imágenes).<br><strong>Operable:</strong> se maneja con mouse, teclado o toque (botones de buen tamaño, ~44 px).<br><strong>Comprensible:</strong> lenguaje claro y comportamiento predecible.<br><strong>Robusto:</strong> funciona en distintos dispositivos y lectores de pantalla.<br><br><strong>Regla práctica de contraste:</strong> texto normal con una relación mínima de <strong>4,5 : 1</strong> frente al fondo.</p></div></div><div class="callout callout-green"><div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg> Un ejemplo para entenderlo</div><div>Un botón gris claro con texto blanco puede verse «elegante», pero casi nadie lo lee bajo el sol del celular. Eso es un problema de <strong>accesibilidad</strong> (contraste) y de <strong>usabilidad</strong> (el usuario no sabe qué tocar).</div></div>
+      </div>
+    </section>
+
+    <section class="slide-section" id="slide-09">
+      <div class="slide-container">
+        <span class="slide-badge-category badge-green"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"/><line x1="9" x2="9" y1="3" y2="18"/><line x1="15" x2="15" y1="6" y2="21"/></svg> Bloque 3 · Mapas de Navegación</span>
+        <h2 class="slide-title">¿Qué es un mapa de navegación?</h2>
+        <p class="slide-subtitle">Es el <strong>diagrama que muestra todas las pantallas del sistema y cómo se llega de una a otra</strong>. Funciona como el plano del metro: no muestra cómo luce cada estación, sino por dónde puedes ir. Así se detecta a tiempo si falta una pantalla, si hay una que nadie puede alcanzar o si el usuario puede quedarse atrapado.</p>
+
+<div class="map-wrap">
+<svg viewBox="0 0 900 340" width="100%" xmlns="http://www.w3.org/2000/svg" font-family="Plus Jakarta Sans, Arial, sans-serif">
+  <defs>
+    <marker id="arrG" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#39a900"/></marker>
+    <marker id="arrB" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#0284c7"/></marker>
+    <marker id="arrR" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#dc2626"/></marker>
+  </defs>
+  <!-- Pantallas fila 1 -->
+  <rect x="20" y="30" width="160" height="54" rx="10" fill="#f0fdf4" stroke="#39a900" stroke-width="2"/><text x="100" y="62" text-anchor="middle" font-size="14" font-weight="700" fill="#236b00">Inicio (Home)</text>
+  <rect x="250" y="30" width="160" height="54" rx="10" fill="#f0fdf4" stroke="#39a900" stroke-width="2"/><text x="330" y="62" text-anchor="middle" font-size="14" font-weight="700" fill="#236b00">Catálogo</text>
+  <rect x="480" y="30" width="160" height="54" rx="10" fill="#f0fdf4" stroke="#39a900" stroke-width="2"/><text x="560" y="62" text-anchor="middle" font-size="14" font-weight="700" fill="#236b00">Detalle de producto</text>
+  <rect x="710" y="30" width="160" height="54" rx="10" fill="#f0fdf4" stroke="#39a900" stroke-width="2"/><text x="790" y="62" text-anchor="middle" font-size="14" font-weight="700" fill="#236b00">Carrito</text>
+  <!-- Fila 2 -->
+  <rect x="20" y="150" width="160" height="54" rx="10" fill="#eff6ff" stroke="#0284c7" stroke-width="2"/><text x="100" y="182" text-anchor="middle" font-size="14" font-weight="700" fill="#0369a1">Iniciar sesión</text>
+  <rect x="250" y="150" width="160" height="54" rx="10" fill="#eff6ff" stroke="#0284c7" stroke-width="2"/><text x="330" y="182" text-anchor="middle" font-size="14" font-weight="700" fill="#0369a1">Registro</text>
+  <rect x="480" y="150" width="160" height="54" rx="10" fill="#fef2f2" stroke="#dc2626" stroke-width="2" stroke-dasharray="6 4"/><text x="560" y="182" text-anchor="middle" font-size="14" font-weight="700" fill="#991b1b">Error de pago</text>
+  <rect x="710" y="150" width="160" height="54" rx="10" fill="#f0fdf4" stroke="#39a900" stroke-width="2"/><text x="790" y="182" text-anchor="middle" font-size="14" font-weight="700" fill="#236b00">Checkout</text>
+  <!-- Fila 3 -->
+  <rect x="20" y="270" width="160" height="54" rx="10" fill="#eff6ff" stroke="#0284c7" stroke-width="2"/><text x="100" y="302" text-anchor="middle" font-size="14" font-weight="700" fill="#0369a1">Mi perfil</text>
+  <rect x="710" y="270" width="160" height="54" rx="10" fill="#f0fdf4" stroke="#39a900" stroke-width="2"/><text x="790" y="302" text-anchor="middle" font-size="14" font-weight="700" fill="#236b00">Confirmación</text>
+  <!-- Flechas flujo de compra -->
+  <line x1="180" y1="57" x2="248" y2="57" stroke="#39a900" stroke-width="2.4" marker-end="url(#arrG)"/>
+  <line x1="410" y1="57" x2="478" y2="57" stroke="#39a900" stroke-width="2.4" marker-end="url(#arrG)"/>
+  <line x1="640" y1="57" x2="708" y2="57" stroke="#39a900" stroke-width="2.4" marker-end="url(#arrG)"/>
+  <line x1="790" y1="84" x2="790" y2="148" stroke="#39a900" stroke-width="2.4" marker-end="url(#arrG)"/>
+  <line x1="790" y1="204" x2="790" y2="268" stroke="#39a900" stroke-width="2.4" marker-end="url(#arrG)"/>
+  <!-- Flechas de autenticación -->
+  <line x1="100" y1="84" x2="100" y2="148" stroke="#0284c7" stroke-width="2.4" marker-end="url(#arrB)"/>
+  <line x1="180" y1="177" x2="248" y2="177" stroke="#0284c7" stroke-width="2.4" stroke-dasharray="6 4" marker-end="url(#arrB)"/>
+  <line x1="100" y1="204" x2="100" y2="268" stroke="#0284c7" stroke-width="2.4" marker-end="url(#arrB)"/>
+  <!-- Camino de error -->
+  <line x1="708" y1="177" x2="642" y2="177" stroke="#dc2626" stroke-width="2.4" stroke-dasharray="6 4" marker-end="url(#arrR)"/>
+  <!-- Etiquetas de acciones -->
+  <text x="214" y="48" text-anchor="middle" font-size="11" fill="#475569">clic en "Ver"</text>
+  <text x="444" y="48" text-anchor="middle" font-size="11" fill="#475569">elige</text>
+  <text x="674" y="48" text-anchor="middle" font-size="11" fill="#475569">agrega</text>
+  <text x="802" y="120" font-size="11" fill="#475569">"Pagar"</text>
+  <text x="802" y="240" font-size="11" fill="#475569">pago OK</text>
+  <text x="108" y="122" font-size="11" fill="#475569">"Entrar"</text>
+  <text x="214" y="168" text-anchor="middle" font-size="11" fill="#475569">¿sin cuenta?</text>
+  <text x="108" y="242" font-size="11" fill="#475569">acceso OK</text>
+  <text x="675" y="168" text-anchor="middle" font-size="11" fill="#991b1b">pago falla</text>
+</svg>
+<div class="map-legend">
+  <span><i style="background:#39a900"></i> Flujo de compra</span>
+  <span><i style="background:#0284c7"></i> Autenticación</span>
+  <span><i style="background:#dc2626"></i> Camino de error (línea punteada)</span>
+</div>
+</div><div class="cards-grid-3" style="margin-top:18px;"><div class="card-pro top-verde"><div class="card-header-flex"><div class="card-icon-badge icon-badge-green"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="19" r="3"/><path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15"/><circle cx="18" cy="5" r="3"/></svg></div><span class="card-pill-tag badge-green">Cómo leerlo</span></div><h3 class="card-title">Cajas y flechas</h3><p class="card-desc">Cada <strong>caja</strong> es una pantalla. Cada <strong>flecha</strong> es una acción del usuario (clic en un botón o enlace) que lo lleva a otra pantalla. El texto sobre la flecha dice qué acción es.</p></div><div class="card-pro top-azul"><div class="card-header-flex"><div class="card-icon-badge icon-badge-blue"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div><span class="card-pill-tag badge-blue">Por qué sirve</span></div><h3 class="card-title">Detecta huecos</h3><p class="card-desc">Si una pantalla no tiene flechas que lleguen a ella, está «huérfana». Si no tiene salida, el usuario queda atrapado. El mapa permite verlo antes de programar.</p></div><div class="card-pro top-naranja"><div class="card-header-flex"><div class="card-icon-badge icon-badge-orange"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg></div><span class="card-pill-tag badge-orange">No olvides</span></div><h3 class="card-title">El camino de error</h3><p class="card-desc">Un buen mapa incluye lo que pasa cuando algo falla (pago rechazado, sesión vencida, página no encontrada). Es parte de la UX, no un detalle.</p></div></div>
+      </div>
+    </section>
+
+    <section class="slide-section" id="slide-10">
+      <div class="slide-container">
+        <span class="slide-badge-category badge-blue"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="19" r="3"/><path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15"/><circle cx="18" cy="5" r="3"/></svg> Bloque 3 · Construcción del Mapa</span>
+        <h2 class="slide-title">¿Cómo se construye un mapa de navegación?</h2>
+        <p class="slide-subtitle">No se dibuja de memoria: se <strong>deduce de los requisitos</strong> del sistema. Cada requisito funcional (por ejemplo «el usuario puede comprar») implica una o varias pantallas y un camino entre ellas.</p>
+<div class="steps-list"><div class="step-row"><div class="step-n">1</div><div><h4>Lista las pantallas</h4><p>Revisa los requisitos funcionales y escribe cada pantalla necesaria: Home, Catálogo, Detalle, Carrito, Login, Registro, Checkout, Error...</p></div></div><div class="step-row"><div class="step-n">2</div><div><h4>Define el punto de entrada</h4><p>¿Por dónde llega el usuario primero? Normalmente es el Home o el Login. De ahí parte el mapa.</p></div></div><div class="step-row"><div class="step-n">3</div><div><h4>Conecta con acciones reales</h4><p>Dibuja una flecha por cada botón o enlace, etiquetada con la acción («Pagar», «Entrar»). Si no existe un botón que provoque el salto, no hay flecha.</p></div></div><div class="step-row"><div class="step-n">4</div><div><h4>Agrega los caminos de error</h4><p>Para cada acción que puede fallar, dibuja la pantalla de error y cómo se regresa o se reintenta (línea punteada).</p></div></div><div class="step-row"><div class="step-n">5</div><div><h4>Revisa con estas preguntas</h4><p>¿Alguna pantalla sin entrada? ¿Alguna sin salida? ¿Se llega a lo importante en pocos clics (idealmente 3 o menos)? ¿Se puede volver atrás?</p></div></div></div><div style="margin-top:18px;"><div class="table-container-card"><table class="table-comparativa"><thead><tr><th>Símbolo</th><th>Qué representa</th><th>Ejemplo en TechStore</th></tr></thead><tbody><tr><td><span class='concept-tag'>Rectángulo</span></td><td>Una pantalla o vista</td><td>Catálogo, Carrito, Checkout</td></tr><tr><td><span class='concept-tag'>Flecha</span></td><td>Acción del usuario que cambia de pantalla</td><td>Clic en «Agregar al carrito»</td></tr><tr><td><span class='concept-tag'>Línea punteada</span></td><td>Camino alternativo o de error</td><td>Pago rechazado → Error de pago</td></tr><tr><td><span class='concept-tag'>Color</span></td><td>Agrupa por tipo de flujo</td><td>Verde: compra · Azul: cuenta</td></tr></tbody></table></div></div>
+      </div>
+    </section>
+
+    <section class="slide-section" id="slide-11">
+      <div class="slide-container">
+        <span class="slide-badge-category badge-orange"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg> Bloque 3 · Herramientas de Prototipado (AA3-EV01)</span>
+        <h2 class="slide-title">Elegir la herramienta de prototipado: criterios, no modas</h2>
+        <p class="slide-subtitle">La evidencia AA3-EV01 te pide <strong>seleccionar y configurar una herramienta</strong> para crear prototipos, hacer ejemplos con ella y manejar sus elementos. No existe «la mejor»: se elige según lo que necesitas hacer, y tú ya usaste dos en la Guía 5.</p>
+<div class="table-container-card"><table class="table-comparativa"><thead><tr><th>Herramienta</th><th>Qué es</th><th>Cuándo conviene</th><th>Costo (referencia)</th></tr></thead><tbody><tr><td><span class='concept-tag'>Balsamiq</span></td><td>Wireframes de baja fidelidad con aspecto de boceto</td><td>Ideas rápidas y discusión de estructura (tu EV01 de la Guía 5)</td><td>De pago, con prueba</td></tr><tr><td><span class='concept-tag'>Figma</span></td><td>Diseño de interfaz de alta fidelidad, en el navegador, con prototipado y colaboración</td><td>Mockups, componentes, Auto Layout y prototipos conectados (tu EV03 de la Guía 5)</td><td>Plan gratuito disponible</td></tr><tr><td><span class='concept-tag'>Penpot</span></td><td>Alternativa de código abierto a Figma</td><td>Si prefieres software libre y trabajo en equipo</td><td>Gratuito</td></tr><tr><td><span class='concept-tag'>Sketch</span></td><td>Diseño de interfaces, solo para macOS</td><td>Equipos que trabajan en ecosistema Apple</td><td>De pago</td></tr></tbody></table></div><div class="callout callout-blue"><div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg> Cómo justificar tu elección</div><div>Para la evidencia no basta con decir «usé Figma». Explica <strong>por qué</strong> la elegiste: permite componentes reutilizables, conecta pantallas para simular navegación, se usa desde el navegador sin instalar nada y exporta las especificaciones que luego usarás para maquetar.</div></div><div class="cards-grid-3" style="margin-top:16px;"><div class="card-pro top-verde"><div class="card-header-flex"><div class="card-icon-badge icon-badge-green"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div><span class="card-pill-tag badge-green">Lo que pide el instrumento</span></div><h3 class="card-title">Selecciona y configura</h3><p class="card-desc">Muestra que creaste tu cuenta/proyecto y dejaste lista la herramienta para el proyecto TechStore Pro.</p></div><div class="card-pro top-azul"><div class="card-header-flex"><div class="card-icon-badge icon-badge-blue"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg></div><span class="card-pill-tag badge-blue">Lo que pide el instrumento</span></div><h3 class="card-title">Hace ejemplos</h3><p class="card-desc">Incluye ejemplos concretos de lo que hiciste con la herramienta (pantallas, componentes, conexiones).</p></div><div class="card-pro top-naranja"><div class="card-header-flex"><div class="card-icon-badge icon-badge-orange"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" x2="8" y1="13" y2="13"/><line x1="16" x2="8" y1="17" y2="17"/></svg></div><span class="card-pill-tag badge-orange">Lo que pide el instrumento</span></div><h3 class="card-title">Documento claro</h3><p class="card-desc">El documento cumple los requisitos básicos de presentación: ordenado, legible y completo.</p></div></div>
+      </div>
+    </section>
+
+    <section class="slide-section" id="slide-12">
+      <div class="slide-container">
+        <span class="slide-badge-category badge-green"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg> Bloque 4 · Tus Evidencias AA3</span>
+        <h2 class="slide-title">Qué te pide cada evidencia AA3 (según el instrumento oficial)</h2>
+        <p class="slide-subtitle">Estos son los indicadores de logro que el instructor revisa en la lista de chequeo oficial. Úsalos como guía para comprobar tu PDF antes de entregarlo. Las tres evidencias pertenecen al <strong>RAP 220501096-03: Crear componentes front-end del software de acuerdo con el diseño</strong>.</p>
+<div class="cards-grid-3"><div class="card-pro top-azul"><div class="card-header-flex"><div class="card-icon-badge icon-badge-blue"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg></div><span class="card-pill-tag badge-blue">Evidencia de conocimiento</span></div><h3 class="card-title">AA3-EV01 · Selección de herramientas</h3><p class="card-desc">• Selecciona y configura una herramienta para crear prototipos.<br>• Realiza ejemplos con la herramienta.<br>• Maneja los elementos de la herramienta.<br>• Cumple los requisitos básicos de presentación del documento.</p></div><div class="card-pro top-verde"><div class="card-header-flex"><div class="card-icon-badge icon-badge-green"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg></div><span class="card-pill-tag badge-green">Evidencia de desempeño</span></div><h3 class="card-title">AA3-EV02 · Diseño del sitio web/móvil</h3><p class="card-desc">• Realiza los mockups según los requerimientos del software.<br>• Los mockups tienen <strong>navegación entre interfaces</strong>.<br>• Las interfaces responden a los requerimientos.<br>• Los mockups están hechos en una herramienta vista en el curso.</p></div><div class="card-pro top-naranja"><div class="card-header-flex"><div class="card-icon-badge icon-badge-orange"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="13.5" cy="6.5" r=".5"/><circle cx="17.5" cy="10.5" r=".5"/><circle cx="8.5" cy="7.5" r=".5"/><circle cx="6.5" cy="12.5" r=".5"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/></svg></div><span class="card-pill-tag badge-orange">Evidencia de producto</span></div><h3 class="card-title">AA3-EV03 · Interfaces gráficas</h3><p class="card-desc">• Las interfaces presentadas muestran un <strong>diseño usable</strong>.<br>• Manejan buena <strong>composición de color</strong>.<br>• Están relacionadas con los mockups presentados antes.<br>• Cumplen los requerimientos del software.</p></div></div><div class="callout callout-orange"><div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" x2="4" y1="22" y2="15"/></svg> Fecha límite</div><div>Las tres evidencias del Corte 2 se entregan a más tardar el <strong>miércoles 04 de noviembre de 2026, 11:59 PM</strong> en Zajuna.</div></div>
+      </div>
+    </section>
+
+    <section class="slide-section" id="slide-13">
+      <div class="slide-container">
+        <span class="slide-badge-category badge-orange"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="18" r="3"/><circle cx="6" cy="6" r="3"/><path d="M6 21V9a9 9 0 0 0 9 9"/></svg> Bloque 4 · Reutiliza tu Guía 5</span>
+        <h2 class="slide-title">Qué evidencias de la Guía 5 puedes reutilizar</h2>
+        <p class="slide-subtitle">Como el diseño en Balsamiq y Figma ya lo realizaste en la Fase 2, no lo repites: <strong>reutilizas lo que ya entregaste</strong>. Esta tabla te dice qué trabajo de la Guía 5 respalda cada evidencia de la Guía 6.</p>
+<div class="table-container-card"><table class="table-comparativa"><thead><tr><th>Evidencia Guía 6 (AA3)</th><th>Qué reutilizas de la Guía 5</th><th>Revisa que incluya</th></tr></thead><tbody><tr><td><span class='concept-tag'>AA3-EV01</span><br>Selección de herramientas</td><td><strong>GA5-…-AA1-EV01</strong> (taller de prototipo en Balsamiq) y la parte de configuración de <strong>Figma</strong> del trabajo de EV03</td><td>Qué herramientas usaste, por qué las elegiste y ejemplos de uso</td></tr><tr><td><span class='concept-tag'>AA3-EV02</span><br>Diseño del sitio web/móvil</td><td><strong>GA5-…-AA1-EV03</strong> (interfaz gráfica y mapa de navegación en Figma) y <strong>GA5-…-AA1-EV05</strong> (mapa de navegación documentado)</td><td>Mockups de las pantallas del sistema y la <strong>navegación entre ellas</strong></td></tr><tr><td><span class='concept-tag'>AA3-EV03</span><br>Interfaces gráficas</td><td><strong>GA5-…-AA1-EV03</strong> (pantallas finales en Figma)</td><td>Diseño usable, buena composición de color y relación con los mockups</td></tr><tr><td><span class='concept-tag'>Apoyo</span><br>Criterio de usabilidad</td><td><strong>GA5-…-AA1-EV02</strong> (reglas de usabilidad y accesibilidad)</td><td>Opcional: refuerza el criterio «buenas prácticas de usabilidad y accesibilidad»</td></tr></tbody></table></div><div class="callout callout-blue"><div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg> Antes de unir</div><div>Verifica con la lista de chequeo del slide anterior que tu material cubre cada indicador. Si falta algo (por ejemplo, la <em>justificación de la herramienta</em> o la <em>navegación entre interfaces</em>), agrégalo en una página nueva dentro del mismo PDF.</div></div>
+      </div>
+    </section>
+
+    <section class="slide-section" id="slide-14">
+      <div class="slide-container">
+        <span class="slide-badge-category badge-green"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></svg> Bloque 4 · Entrega en un Solo PDF</span>
+        <h2 class="slide-title">Cómo unir tus evidencias en un único PDF y subirlo</h2>
+        <p class="slide-subtitle">Tienes tus evidencias de la Guía 5 en archivos separados (PDF, Word, capturas). Sigue estos pasos para dejarlas en <strong>un solo documento PDF</strong> ordenado.</p>
+<div class="steps-list"><div class="step-row"><div class="step-n">1</div><div><h4>Reúne tus archivos</h4><p>Ubica en tu computador las evidencias de la Guía 5 que vas a reutilizar (EV01, EV03, EV05 y, si quieres, EV02). Si alguna está en Word o son imágenes, conviértela primero a PDF.</p></div></div><div class="step-row"><div class="step-n">2</div><div><h4>Convierte a PDF lo que no lo sea</h4><p>En <strong>Word</strong>: Archivo → Guardar como → PDF. En <strong>Google Docs</strong>: Archivo → Descargar → Documento PDF. Para imágenes: abre la imagen e imprímela con «Microsoft Print to PDF» (Windows) o «Guardar como PDF» (Mac).</p></div></div><div class="step-row"><div class="step-n">3</div><div><h4>Une los PDF en el orden correcto</h4><p>Usa una herramienta de unión: <strong>PDF24 Creator</strong> (gratis, sin conexión) o un servicio en línea como <strong>iLovePDF</strong> («Unir PDF») o <strong>Smallpdf</strong>. Arrastra los archivos, ordénalos y descarga el resultado. En Mac también puedes hacerlo con la app <strong>Vista Previa</strong>.</p></div></div><div class="step-row"><div class="step-n">4</div><div><h4>Orden sugerido dentro del PDF</h4><p>Portada con tu nombre y la ficha → herramienta elegida y justificación (EV01) → mockups y pantallas (EV02 y EV03) → mapa de navegación (EV05) → enlace a tu prototipo en Figma, con permiso de «ver» para cualquiera que tenga el enlace.</p></div></div><div class="step-row"><div class="step-n">5</div><div><h4>Revisa antes de subir</h4><p>Ábrelo completo: ¿se leen todas las páginas? ¿Las imágenes se ven nítidas? ¿El enlace de Figma abre sin pedir inicio de sesión? Nómbralo así: <strong>GA6-220501096-AA3_Nombre_Apellido.pdf</strong>.</p></div></div><div class="step-row"><div class="step-n">6</div><div><h4>Súbelo a Zajuna</h4><p>Entra a cada una de las tres evidencias <strong>AA3-EV01, AA3-EV02 y AA3-EV03</strong> y adjunta ese mismo PDF en cada una. Fecha límite: <strong>miércoles 04/Nov/2026, 11:59 PM</strong>.</p></div></div></div><div class="callout callout-orange"><div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg> Cuidado con los servicios en línea</div><div>Si usas una página web para unir PDF, evita subir documentos con datos personales sensibles. Si prefieres no subir nada a internet, usa <strong>PDF24 Creator</strong> o Vista Previa, que trabajan en tu propio equipo.</div></div>
+      </div>
+    </section>
+
+    <section class="slide-section" id="slide-15">
+      <div class="slide-container">
+        <span class="slide-badge-category badge-green"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg> Bloque 4 · Aseguramiento de Calidad</span>
+        <h2 class="slide-title">Lista de Cotejo Anti-Error (Checklist 100%)</h2>
+        <p class="slide-subtitle">Marca cada casilla antes de subir tu PDF a Zajuna. Este checklist autoevalúa en tiempo real si tu entrega cumple los criterios del instrumento de las evidencias <strong>GA6-220501096-AA3-EV01, EV02 y EV03</strong>.</p>
+<div class="checklist-card"><div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;"><div style="font-family:'Syne',sans-serif;font-size:16px;font-weight:800;color:var(--texto-main);">Progreso de verificación de tu entrega AA3:</div><div id="checklistScoreText" style="font-family:'JetBrains Mono',monospace;font-size:15px;font-weight:800;color:var(--azul-tech);">0% (0 de 7 ítems)</div></div><div class="checklist-progress-bar-wrap"><div class="checklist-progress-bar" id="checklistBar"></div></div><div class="checklist-items-list"><label class="check-item" onclick="toggleCheckItem(this)"><input type="checkbox" class="check-checkbox"><div class="check-text"><h4>1. Mi PDF es uno solo y se abre completo</h4><p>Abre sin errores, no tiene páginas en blanco y el peso es razonable para subirlo a Zajuna.</p></div></label><label class="check-item" onclick="toggleCheckItem(this)"><input type="checkbox" class="check-checkbox"><div class="check-text"><h4>2. Incluye la herramienta elegida y por qué la elegí (EV01)</h4><p>Explico qué herramienta usé, cómo la configuré y muestro ejemplos de uso.</p></div></label><label class="check-item" onclick="toggleCheckItem(this)"><input type="checkbox" class="check-checkbox"><div class="check-text"><h4>3. Muestra los mockups de las pantallas del sistema (EV02)</h4><p>Se ven las interfaces de TechStore Pro (por ejemplo Home, Login, Catálogo) hechas en una herramienta vista en el curso.</p></div></label><label class="check-item" onclick="toggleCheckItem(this)"><input type="checkbox" class="check-checkbox"><div class="check-text"><h4>4. Se aprecia la navegación entre interfaces (EV02)</h4><p>Incluye mi mapa de navegación o el prototipo conectado, con acciones y camino de error.</p></div></label><label class="check-item" onclick="toggleCheckItem(this)"><input type="checkbox" class="check-checkbox"><div class="check-text"><h4>5. Las interfaces son usables y con buena composición de color (EV03)</h4><p>Hay jerarquía clara, contraste legible y una paleta coherente (60-30-10).</p></div></label><label class="check-item" onclick="toggleCheckItem(this)"><input type="checkbox" class="check-checkbox"><div class="check-text"><h4>6. El enlace de Figma abre sin pedir inicio de sesión</h4><p>Probé el enlace en una ventana de incógnito. Si no tengo prototipo en línea, lo indico y uso capturas.</p></div></label><label class="check-item" onclick="toggleCheckItem(this)"><input type="checkbox" class="check-checkbox"><div class="check-text"><h4>7. Subí el mismo PDF a EV01, EV02 y EV03 antes del 04/Nov 11:59 PM</h4><p>Verifiqué en Zajuna que las tres entregas muestran el archivo adjunto.</p></div></label></div><div style="margin-top:24px;padding-top:20px;border-top:1px solid var(--borde-light);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;"><div style="font-size:12.5px;color:var(--texto-sub);">Fecha límite en Zajuna: <strong>Miércoles, 04 de Noviembre de 2026 (11:59 PM) - Corte 2</strong></div><div style="display:flex;gap:10px;flex-wrap:wrap;"><a href="https://julianon2.github.io/seguimiento-adso-3389010/" target="_blank" class="btn-action-primary"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg> Dashboard de Calificaciones ↗</a><a href="../explorar.html" class="btn-return-hub"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg> Volver al Hub</a></div></div></div>
+      </div>
+    </section>
+
+  </main>
+
+  <script>
+    // 1. SIDEBAR (colapso y reapertura)
+    function toggleSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      const mainContent = document.getElementById('mainContent');
+      const floatingToggle = document.getElementById('floatingToggle');
+      if (sidebar && mainContent) {
+        sidebar.classList.toggle('collapsed');
+        mainContent.classList.toggle('expanded');
+        if (floatingToggle) floatingToggle.classList.toggle('visible', sidebar.classList.contains('collapsed'));
+      }
+    }
+
+    // 2. SCROLLSPY con IntersectionObserver
+    const sections = document.querySelectorAll('.slide-section');
+    const navLinks = document.querySelectorAll('.nav-link');
+    const spyObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const currentId = entry.target.getAttribute('id');
+          navLinks.forEach(link => {
+            const href = link.getAttribute('href').substring(1);
+            if (href === currentId) {
+              link.classList.add('active');
+              link.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+            } else {
+              link.classList.remove('active');
+            }
+          });
+        }
+      });
+    }, { root: null, rootMargin: '-20% 0px -70% 0px', threshold: 0 });
+    sections.forEach(sec => spyObserver.observe(sec));
+
+    // 3. CHECKLIST con barra de progreso
+    function toggleCheckItem(labelEl) {
+      const checkbox = labelEl.querySelector('.check-checkbox');
+      setTimeout(() => {
+        labelEl.classList.toggle('completed', checkbox.checked);
+        actualizarProgresoChecklist();
+      }, 10);
+    }
+
+    function actualizarProgresoChecklist() {
+      const checkboxes = document.querySelectorAll('.check-checkbox');
+      const total = checkboxes.length;
+      let checkedCount = 0;
+      checkboxes.forEach(cb => { if (cb.checked) checkedCount++; });
+      const percentage = Math.round((checkedCount / total) * 100);
+      const bar = document.getElementById('checklistBar');
+      const text = document.getElementById('checklistScoreText');
+      if (bar) bar.style.width = percentage + '%';
+      if (text) text.innerText = percentage + '% (' + checkedCount + ' de ' + total + ' ítems)';
+    }
+  </script>
+</body>
+</html>
