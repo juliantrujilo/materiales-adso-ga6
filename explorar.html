@@ -1489,10 +1489,9 @@
                       <svg class="sidebar-nav-icon theme-verde" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m12 19 7-7 3 3-7 7-3-3z"/><path d="m18 13-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><path d="m2 2 7.586 7.586"/><circle cx="11" cy="11" r="2"/></svg>
                       <span>Sesión 5 · Figma UX/UI</span>
                     </button>
-                    <button type="button" class="sidebar-nav-item sub locked" onclick="irASeccion('card-sesion-6', this)" title="Disponible el 02 de Noviembre">
+                    <button type="button" class="sidebar-nav-item sub" onclick="irASeccion('card-sesion-6', this)">
                       <svg class="sidebar-nav-icon theme-verde" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m18 16 4-4-4-4"/><path d="m6 8-4 4 4 4"/><path d="m14.5 4-5 16"/></svg>
-                      <span>Sesión 6 · Front-End & Cierre</span>
-                      <svg class="sidebar-nav-lock" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                      <span>Sesión 6 · Front-End HTML/CSS/JS</span>
                     </button>
                     <button type="button" class="sidebar-nav-item sub" id="nav-pdf" onclick="switchView('view-pdf', this)">
                       <svg class="sidebar-nav-icon theme-naranja" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/></svg>
@@ -1959,27 +1958,43 @@
               Programada
             </span>
           </div>
-          <h3 class="card-pro-title">Maquetación Front-End Web & Cierre de Guía</h3>
+          <h3 class="card-pro-title">Front-End: HTML, CSS y JavaScript (Cierre de Guía)</h3>
           <div class="card-pro-date">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>
-            Lunes, 02 de Noviembre de 2026 (6:30 PM)
+            Sábado, 07 de Noviembre de 2026
           </div>
           <p class="card-pro-desc">
-            Traducción de mockups a código HTML5 semántico, CSS3 responsivo (Flexbox/Grid), dinamismo e interactividad con JavaScript y cierre formal de la Guía 6.
+            Sesión en dos momentos: primero construimos en vivo el index y la página de productos; luego sigues el tutorial para crear login, contacto, las conexiones entre páginas, el diseño adaptable y el JavaScript de tu sitio (EV03). Incluye punto de control con ZIP, plantilla del documento (EV02) y checklist. Las guías de EV01 y EV02 están en la Guía de Estudio.
           </p>
           <div class="card-pro-chips">
             <span class="tech-chip">AA4-EV01..03</span>
             <span class="tech-chip">HTML5 / CSS3 / JS</span>
-            <span class="tech-chip">Cierre Técnico</span>
-            <span class="deadline-chip corte2">Corte 2 — 11/Nov</span>
+            <span class="tech-chip">Entrega en 3 ZIP</span>
+            <span class="deadline-chip corte2">Cierre AA4 — 10/Nov</span>
           </div>
         </div>
 
         <div class="card-pro-actions">
-          <button class="btn-card-action disabled-locked" title="El material se activará en la fecha programada">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-            Disponible el 02 de Noviembre
-          </button>
+          <div style="display:grid;grid-template-columns:1fr auto;gap:6px;">
+            <a href="./Sesión 6/TUTORIAL_EV03_SESION06.html" target="_blank" class="btn-card-action primary-green" style="font-size:12.5px;padding:9px 12px;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+              Abrir Tutorial EV03 ↗
+            </a>
+            <button type="button" class="btn-card-action preview-btn" style="padding:9px 14px;font-size:12px;gap:5px;" onclick="abrirVisorCinema('./Sesión 6/TUTORIAL_EV03_SESION06.html', 'Sesión 6 — Tutorial EV03: construye tu sitio TechStore Pro')" title="Previsualizar el tutorial en pantalla">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+              <span>Ver</span>
+            </button>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:6px;">
+            <a href="./Sesión 6/PRESENTACION_SESION06_FRONTEND_AA4.html" target="_blank" class="btn-card-action secondary-neutral" style="font-size:11.5px;padding:7px 10px;justify-content:center;">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+              Contexto ↗
+            </a>
+            <a href="./Sesión 6/MANUAL_SESION06.html" target="_blank" class="btn-card-action secondary-neutral" style="font-size:11.5px;padding:7px 10px;justify-content:center;">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"/><path d="M6 6h10"/><path d="M6 10h10"/></svg>
+              Guía de Estudio ↗
+            </a>
+          </div>
         </div>
       </article>
 

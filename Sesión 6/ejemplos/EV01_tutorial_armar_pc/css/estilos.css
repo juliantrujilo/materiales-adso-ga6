@@ -1,0 +1,122 @@
+/* ============================================================
+   Tutorial: Cómo armar tu primera PC  ·  EV01 (ejemplo de referencia)
+   ============================================================ */
+
+/* Variables reutilizables */
+:root {
+  --azul: #2563eb;
+  --azul-oscuro: #1d4ed8;
+  --oscuro: #1e293b;
+  --fondo: #f8fafc;
+  --texto: #334155;
+  --borde: #e2e8f0;
+}
+
+/* Reinicio básico: quita márgenes y hace que el ancho incluya el padding */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Inter', Arial, sans-serif;
+  background: var(--fondo);
+  color: var(--texto);
+  line-height: 1.7;
+}
+
+/* Encabezado común a todas las páginas */
+header {
+  background: var(--oscuro);
+  color: #fff;
+  padding: 16px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+header a { color: #fff; text-decoration: none; font-weight: 600; }
+header a:hover { text-decoration: underline; }
+
+/* Contenido principal centrado */
+main { max-width: 820px; margin: 0 auto; padding: 32px 20px 48px; }
+
+h1 { color: var(--oscuro); line-height: 1.25; margin-bottom: 12px; }
+h2 { color: var(--azul); margin: 28px 0 10px; }
+p { margin-bottom: 14px; }
+
+/* Imagen de cada tema: ocupa el ancho disponible sin deformarse */
+.imagen-tema {
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+  border: 1px solid var(--borde);
+  margin: 12px 0 20px;
+}
+
+/* Lista ordenada del índice: cada tema enlazado */
+.indice { counter-reset: tema; list-style: none; margin-top: 20px; }
+.indice li {
+  counter-increment: tema;
+  background: #fff;
+  border: 1px solid var(--borde);
+  border-radius: 10px;
+  padding: 14px 16px 14px 56px;
+  margin-bottom: 12px;
+  position: relative;
+}
+.indice li::before {
+  content: counter(tema);
+  position: absolute;
+  left: 14px;
+  top: 14px;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--azul);
+  color: #fff;
+  font-weight: 700;
+  text-align: center;
+  line-height: 30px;
+}
+.indice a { color: var(--azul); font-weight: 700; text-decoration: none; font-size: 1.05rem; }
+.indice a:hover { color: var(--azul-oscuro); text-decoration: underline; }
+.indice span { display: block; font-size: .92rem; }
+
+/* Cuadro de datos clave */
+.datos {
+  background: #eff6ff;
+  border-left: 4px solid var(--azul);
+  border-radius: 6px;
+  padding: 14px 18px 14px 36px;
+  margin-bottom: 8px;
+}
+
+/* Pasos de instalación: lista ordenada con texto normal */
+.pasos { padding-left: 22px; margin-bottom: 14px; }
+.pasos li { margin-bottom: 6px; }
+
+/* Navegación anterior / siguiente */
+.navegacion {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 32px;
+  padding-top: 20px;
+  border-top: 1px solid var(--borde);
+}
+.navegacion a {
+  background: var(--azul);
+  color: #fff;
+  padding: 10px 18px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+}
+.navegacion a:hover { background: var(--azul-oscuro); }
+
+footer { text-align: center; padding: 24px; font-size: .9rem; color: #64748b; }
+
+/* Móvil: la navegación se apila */
+@media (max-width: 600px) {
+  .navegacion { flex-direction: column; }
+  .navegacion a { text-align: center; }
+}

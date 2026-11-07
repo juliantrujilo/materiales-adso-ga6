@@ -1,0 +1,1456 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sesión 6 — Front-End: HTML, CSS y JavaScript (AA4) | SENA ADSO GA6</title>
+
+  <!-- Tipografías Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Syne:wght@700;800;900&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --sena-verde: #39a900;
+      --sena-verde-dark: #236b00;
+      --sena-verde-soft: #44c702;
+      --sena-verde-bg: rgba(57, 169, 0, 0.08);
+      --sena-verde-border: rgba(57, 169, 0, 0.28);
+      --sena-verde-glow: rgba(57, 169, 0, 0.15);
+
+      --sena-naranja: #ff6b00;
+      --sena-naranja-dark: #c2410c;
+      --sena-naranja-bg: rgba(255, 107, 0, 0.08);
+      --sena-naranja-border: rgba(255, 107, 0, 0.28);
+
+      --azul-tech: #0284c7;
+      --azul-tech-dark: #0369a1;
+      --azul-bg: rgba(2, 132, 199, 0.08);
+      --azul-border: rgba(2, 132, 199, 0.28);
+      --azul-glow: rgba(2, 132, 199, 0.15);
+
+      --mongo-verde: #00ed64;
+      --mongo-verde-dark: #00684a;
+      --mongo-verde-bg: rgba(0, 237, 100, 0.08);
+      --mongo-verde-border: rgba(0, 104, 74, 0.28);
+
+      --purpura: #7c3aed;
+      --purpura-bg: rgba(124, 58, 237, 0.08);
+      --purpura-border: rgba(124, 58, 237, 0.28);
+
+      --bg-main: #f8fafc;
+      --bg-card: #ffffff;
+      --borde-light: #e2e8f0;
+      --borde-focus: #cbd5e1;
+
+      --texto-main: #0f172a;
+      --texto-muted: #334155;
+      --texto-sub: #64748b;
+      --texto-dimmer: #94a3b8;
+
+      --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.04);
+      --shadow-card: 0 10px 30px rgba(15, 23, 42, 0.05), 0 1px 3px rgba(0, 0, 0, 0.03);
+      --shadow-hover: 0 20px 40px rgba(2, 132, 199, 0.12), 0 4px 12px rgba(0, 0, 0, 0.05);
+
+      --radius-xl: 20px;
+      --radius-lg: 16px;
+      --radius-md: 12px;
+      --radius-sm: 8px;
+    }
+
+    * { margin:0; padding:0; box-sizing:border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: var(--bg-main);
+      color: var(--texto-main);
+      line-height: 1.6;
+      overflow-x: hidden;
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* ==========================================================================
+       SIDEBAR INSTITUCIONAL 280PX (PATRÓN OFICIAL)
+       ========================================================================== */
+    .sidebar {
+      width: 280px;
+      background: #ffffff;
+      border-right: 1px solid var(--borde-light);
+      position: fixed;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 2px 0 16px rgba(15, 23, 42, 0.04);
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .sidebar.collapsed {
+      transform: translateX(-100%);
+    }
+
+    .sidebar-logo {
+      width: 40px;
+      height: 40px;
+      background: var(--sena-verde, #39a900);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+      flex-shrink: 0;
+      box-shadow: 0 4px 10px rgba(57, 169, 0, 0.25);
+    }
+    .sidebar-header {
+      padding: 18px 20px;
+      border-bottom: 1px solid var(--borde-light);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .brand-link {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .brand-logo-svg {
+      width: 36px;
+      height: 36px;
+      flex-shrink: 0;
+    }
+
+    .brand-info h1 {
+      font-family: 'Syne', sans-serif;
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--texto-main);
+      line-height: 1.2;
+    }
+
+    .brand-info p {
+      font-size: 11px;
+      color: var(--azul-tech);
+      font-weight: 600;
+      letter-spacing: 0.3px;
+    }
+
+    .sidebar-toggle-btn {
+      background: transparent;
+      border: 1px solid var(--borde-light);
+      border-radius: 8px;
+      padding: 6px;
+      cursor: pointer;
+      color: var(--texto-sub);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+
+    .sidebar-toggle-btn:hover {
+      background: var(--bg-main);
+      color: var(--azul-tech);
+      border-color: var(--azul-border);
+    }
+
+    .sidebar-nav {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .nav-group-title {
+      font-size: 10.5px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--texto-dimmer);
+      padding: 0 10px 6px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nav-links-list {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .nav-link {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 12px;
+      border-radius: 8px;
+      color: var(--texto-muted);
+      text-decoration: none;
+      font-size: 12.5px;
+      font-weight: 600;
+      transition: all 0.2s ease;
+      position: relative;
+    }
+
+    .nav-link:hover {
+      background: var(--azul-bg);
+      color: var(--azul-tech-dark);
+    }
+
+    .nav-link.active {
+      background: rgba(2, 132, 199, 0.1);
+      color: var(--azul-tech-dark);
+      font-weight: 700;
+    }
+
+    .nav-link.active::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 6px;
+      bottom: 6px;
+      width: 3.5px;
+      background: var(--azul-tech);
+      border-radius: 0 4px 4px 0;
+    }
+
+    .nav-link-num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--texto-dimmer);
+      min-width: 18px;
+    }
+
+    .nav-link.active .nav-link-num {
+      color: var(--azul-tech);
+      font-weight: 700;
+    }
+
+    .nav-link-title {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .sidebar-footer {
+      padding: 14px 16px;
+      border-top: 1px solid var(--borde-light);
+      background: #fafbfe;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .sidebar-footer-pill {
+      background: var(--azul-bg);
+      border: 1px solid var(--azul-border);
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 11px;
+      color: var(--azul-tech-dark);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 600;
+    }
+
+    .btn-return-hub {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 8px 12px;
+      background: #ffffff;
+      border: 1px solid var(--borde-light);
+      border-radius: 8px;
+      color: var(--texto-muted);
+      font-size: 12px;
+      font-weight: 700;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+
+    .btn-return-hub:hover {
+      background: var(--sena-verde-bg);
+      color: var(--sena-verde-dark);
+      border-color: var(--sena-verde-border);
+    }
+
+    /* BOTÓN FLOTANTE DE REAPERTURA DEL SIDEBAR */
+    .floating-sidebar-toggle {
+      position: fixed;
+      top: 18px;
+      left: 20px;
+      z-index: 999;
+      height: 38px;
+      padding: 0 14px 0 10px;
+      background: #ffffff;
+      border: 1px solid var(--borde-focus);
+      border-radius: 10px;
+      box-shadow: 0 6px 18px rgba(15, 23, 42, 0.08);
+      color: var(--texto-main);
+      font-size: 12.5px;
+      font-weight: 700;
+      display: none;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      transition: all 0.25s ease;
+    }
+
+    .floating-sidebar-toggle:hover {
+      border-color: var(--azul-tech);
+      color: var(--azul-tech);
+      box-shadow: 0 8px 24px rgba(2, 132, 199, 0.2);
+    }
+
+    .sidebar.collapsed ~ .floating-sidebar-toggle,
+    .floating-sidebar-toggle.visible {
+      display: inline-flex !important;
+      animation: fadeInToggle 0.25s ease-out forwards;
+    }
+
+    @keyframes fadeInToggle {
+      from { opacity: 0; transform: translateX(-12px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    /* ==========================================================================
+       MAIN CONTENT CONTAINER
+       ========================================================================== */
+    .main-content {
+      margin-left: 280px;
+      flex: 1;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      transition: margin-left 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .main-content.expanded {
+      margin-left: 0;
+    }
+
+    .slide-section {
+      padding: 64px 54px;
+      border-bottom: 1px solid var(--borde-light);
+      position: relative;
+      scroll-margin-top: 0px;
+    }
+
+    .slide-container {
+      max-width: 1140px;
+      margin: 0 auto;
+    }
+
+    /* HEADER DE CADA SLIDE */
+    .slide-badge-category {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 11.5px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      padding: 4px 12px;
+      border-radius: 20px;
+      margin-bottom: 12px;
+    }
+
+    .badge-blue { background: var(--azul-bg); color: var(--azul-tech-dark); border: 1px solid var(--azul-border); }
+    .badge-green { background: var(--sena-verde-bg); color: var(--sena-verde-dark); border: 1px solid var(--sena-verde-border); }
+    .badge-mongo { background: var(--mongo-verde-bg); color: var(--mongo-verde-dark); border: 1px solid var(--mongo-verde-border); }
+    .badge-orange { background: var(--sena-naranja-bg); color: var(--sena-naranja-dark); border: 1px solid var(--sena-naranja-border); }
+
+    .slide-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 32px;
+      font-weight: 800;
+      color: var(--texto-main);
+      line-height: 1.25;
+      margin-bottom: 12px;
+      letter-spacing: -0.5px;
+    }
+
+    .slide-subtitle {
+      font-size: 15.5px;
+      color: var(--texto-muted);
+      line-height: 1.6;
+      max-width: 880px;
+      margin-bottom: 28px;
+    }
+
+    /* ==========================================================================
+       TARJETAS Y GRIDS PREMIUM
+       ========================================================================== */
+    .cards-grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+
+    .cards-grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    .card-pro {
+      background: linear-gradient(175deg, #ffffff 0%, #fbfcfe 65%, #f8fafc 100%);
+      border: 1px solid var(--borde-light);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      box-shadow: var(--shadow-card);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: all 0.25s ease;
+    }
+
+    .card-pro:hover {
+      box-shadow: var(--shadow-hover);
+      transform: translateY(-2px);
+    }
+
+    .card-pro.top-azul { border-top: 4px solid var(--azul-tech); }
+    .card-pro.top-verde { border-top: 4px solid var(--sena-verde); }
+    .card-pro.top-mongo { border-top: 4px solid #13aa52; }
+    .card-pro.top-naranja { border-top: 4px solid var(--sena-naranja); }
+    .card-pro.top-purpura { border-top: 4px solid var(--purpura); }
+
+    .card-header-flex {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+
+    .card-icon-badge {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .icon-badge-blue { background: var(--azul-bg); color: var(--azul-tech); }
+    .icon-badge-green { background: var(--sena-verde-bg); color: var(--sena-verde); }
+    .icon-badge-mongo { background: rgba(19, 170, 82, 0.1); color: #13aa52; }
+    .icon-badge-orange { background: var(--sena-naranja-bg); color: var(--sena-naranja); }
+    .icon-badge-purpura { background: var(--purpura-bg); color: var(--purpura); }
+
+    .card-pill-tag {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 20px;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .card-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--texto-main);
+      margin-bottom: 8px;
+      line-height: 1.3;
+    }
+
+    .card-desc {
+      font-size: 13.5px;
+      color: var(--texto-muted);
+      line-height: 1.6;
+    }
+
+    /* ==========================================================================
+       TABLA COMPARATIVA SQL VS NOSQL MONGODB
+       ========================================================================== */
+    .table-container-card {
+      background: #ffffff;
+      border: 1px solid var(--borde-light);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: var(--shadow-card);
+      margin-top: 16px;
+    }
+
+    .table-comparativa {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      text-align: left;
+    }
+
+    .table-comparativa th {
+      background: #f1f5f9;
+      color: var(--texto-main);
+      font-weight: 800;
+      padding: 14px 18px;
+      border-bottom: 2px solid var(--borde-light);
+      font-family: 'Syne', sans-serif;
+      font-size: 13.5px;
+    }
+
+    .table-comparativa td {
+      padding: 13px 18px;
+      border-bottom: 1px solid var(--borde-light);
+      color: var(--texto-muted);
+      vertical-align: middle;
+    }
+
+    .table-comparativa tr:hover td {
+      background: #fafcfe;
+    }
+
+    .concept-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 700;
+      color: var(--texto-main);
+    }
+
+    .badge-sql {
+      background: #fef2f2;
+      color: #991b1b;
+      border: 1px solid #fecaca;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .badge-nosql {
+      background: #f0fdf4;
+      color: #166534;
+      border: 1px solid #bbf7d0;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    /* ==========================================================================
+       ESTÁNDAR DE CODEBOXES (ESTILO TERMINAL CON SEMÁFORO - PATRÓN SESIÓN 19)
+       ========================================================================== */
+    .code-editor-box {
+      background: #1a1a2e;
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 20px 50px rgba(0,0,0,.25);
+      font-family: 'JetBrains Mono', Consolas, 'Courier New', monospace;
+      margin: 14px auto;
+      max-width: 760px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .editor-header {
+      background: #12121f;
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-sizing: border-box;
+    }
+
+    .editor-dot { width: 11px; height: 11px; border-radius: 50%; }
+    .editor-dot.r { background: #ff5f57; }
+    .editor-dot.y { background: #febc2e; }
+    .editor-dot.g { background: #28c840; }
+
+    .editor-title {
+      margin-left: 8px;
+      font-family: 'JetBrains Mono', Consolas, monospace;
+      font-size: 11px;
+      color: #8892a4;
+      flex: 1;
+    }
+
+    .editor-badge {
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 3px 9px;
+      border-radius: 5px;
+      background: rgba(74,222,128,.15);
+      color: #4ade80;
+    }
+
+    .editor-body {
+      padding: 10px 0;
+      font-family: 'JetBrains Mono', Consolas, 'Courier New', monospace;
+      font-size: 12.5px;
+      line-height: 1.9;
+      flex: 1;
+      overflow-x: auto;
+      background: #1a1a2e;
+      box-sizing: border-box;
+    }
+
+    .cl {
+      display: grid;
+      grid-template-columns: 34px 1fr;
+      column-gap: 12px;
+      padding: 0 20px;
+      white-space: pre;
+    }
+
+    .cl .ln {
+      color: #4a5178;
+      user-select: none;
+      text-align: right;
+    }
+
+    .cl .code { color: #e2e8f0; }
+    .cl.indent-1 .code { padding-left: 18px; }
+    .cl.indent-2 .code { padding-left: 36px; }
+
+    /* TOKENS DE SINTAXIS JSON / BSON / MONGODB (paleta Tokyo Night, patrón Sesión 19) */
+    .tok-key, .sel, .syn-key, .syn-prop { color: #7dcfff; }
+    .tok-str, .str, .prop, .syn-str { color: #9ece6a; }
+    .tok-num, .val, .syn-num { color: #e2e8f0; }
+    .tok-bool, .syn-keyword { color: #f7768e; font-weight: 700; }
+    .tok-bson, .var, .syn-method, .syn-func { color: #e0af68; }
+    .tok-comment, .cm, .syn-comment { color: #565f89; font-style: italic; }
+    .tok-op, .punc { color: #8892a4; }
+    .tag { color: #f7768e; }
+    .attr { color: #e0af68; }
+    .tok-id-badge { background: rgba(78, 201, 176, 0.2); color: #4ec9b0; border: 1px solid rgba(78, 201, 176, 0.4); font-size: 9px; font-weight: 800; padding: 0 5px; border-radius: 3px; height: 16px; line-height: 14px; display: inline-block; vertical-align: middle; margin-left: 6px; }
+    .tok-embed-badge { background: rgba(255, 107, 0, 0.2); color: #ff9800; border: 1px solid rgba(255, 107, 0, 0.4); font-size: 9px; font-weight: 800; padding: 0 5px; border-radius: 3px; height: 16px; line-height: 14px; display: inline-block; vertical-align: middle; margin-left: 6px; }
+    .tok-ref-badge { background: rgba(59, 130, 246, 0.2); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.4); font-size: 9px; font-weight: 800; padding: 0 5px; border-radius: 3px; height: 16px; line-height: 14px; display: inline-block; vertical-align: middle; margin-left: 6px; }
+
+    /* ==========================================================================
+       STEPPER DIDÁCTICO & MODALES GUIADOS
+       ========================================================================== */
+    .stepper-steps-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 16px;
+      margin-top: 18px;
+    }
+
+    .stepper-card-btn {
+      background: #ffffff;
+      border: 1px solid var(--borde-light);
+      border-radius: var(--radius-md);
+      padding: 18px;
+      text-align: left;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      transition: all 0.2s ease;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .stepper-card-btn:hover {
+      border-color: var(--azul-tech);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-card);
+    }
+
+    .step-pill-number {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--azul-bg);
+      color: var(--azul-tech-dark);
+      font-size: 12px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .step-card-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 14.5px;
+      font-weight: 700;
+      color: var(--texto-main);
+      line-height: 1.3;
+    }
+
+    .step-card-action-hint {
+      font-size: 11.5px;
+      color: var(--azul-tech);
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      margin-top: auto;
+    }
+
+    /* TABLA ESTRUCTURADA DE PARÁMETROS (.cweijan-params-table) */
+    .cweijan-params-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      background: #ffffff;
+      border: 1px solid var(--borde-light);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      margin: 14px 0;
+    }
+
+    .cweijan-params-table th {
+      background: #f8fafc;
+      padding: 12px 16px;
+      font-weight: 800;
+      color: var(--texto-main);
+      border-bottom: 2px solid var(--borde-light);
+      font-family: 'Syne', sans-serif;
+    }
+
+    .cpt-row td {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--borde-light);
+      color: var(--texto-muted);
+    }
+
+    .cpt-row.highlight {
+      background: #fffbeb;
+    }
+
+    .cpt-row.highlight td:first-child {
+      border-left: 4px solid var(--sena-naranja);
+      font-weight: 700;
+      color: #92400e;
+    }
+
+    /* MODALES DE STEPPER */
+    .ddl-modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(15, 23, 42, 0.75);
+      backdrop-filter: blur(6px);
+      z-index: 2000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .ddl-modal-overlay.active {
+      display: flex;
+      animation: modalFadeIn 0.25s ease-out forwards;
+    }
+
+    /* TOAST INSTITUCIONAL (reemplaza alert() nativo) */
+    .app-toast {
+      position: fixed;
+      bottom: 28px;
+      left: 50%;
+      transform: translateX(-50%) translateY(16px);
+      background: #ffffff;
+      color: var(--texto-main, #1a1a2e);
+      border: 1px solid #bbf7d0;
+      border-left: 4px solid #39a900;
+      border-radius: 10px;
+      padding: 12px 18px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 13.5px;
+      font-weight: 600;
+      box-shadow: 0 12px 32px rgba(15, 23, 42, 0.18);
+      z-index: 9999;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease, transform 0.25s ease;
+      max-width: 90vw;
+    }
+
+    .app-toast svg { color: #39a900; }
+
+    .app-toast.visible {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    @keyframes modalFadeIn {
+      from { opacity: 0; transform: scale(0.96); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .ddl-modal-box {
+      background: #ffffff;
+      border-radius: var(--radius-lg);
+      width: 100%;
+      max-width: 1080px;
+      max-height: 94vh;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.25);
+      overflow: hidden;
+    }
+
+    .modal-header-nav {
+      padding: 16px 22px;
+      border-bottom: 1px solid var(--borde-light);
+      background: #f8fafc;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .modal-nav-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .modal-pill-btn {
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 11.5px;
+      font-weight: 700;
+      background: #ffffff;
+      border: 1px solid var(--borde-light);
+      color: var(--texto-sub);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .modal-pill-btn.active {
+      background: var(--azul-tech);
+      color: #ffffff;
+      border-color: var(--azul-tech);
+    }
+
+    .col-tab-pill {
+      background: #2d2d30;
+      color: #94a3b8;
+      border: 1px solid #475569;
+      border-radius: 6px;
+      padding: 5px 12px;
+      font-size: 11.5px;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .col-tab-pill:hover {
+      background: #3e3e42;
+      color: #ffffff;
+      border-color: #64748b;
+    }
+
+    .col-tab-pill.active {
+      background: rgba(0, 237, 100, 0.15);
+      color: #00ed64;
+      border-color: #00ed64;
+      box-shadow: 0 0 8px rgba(0, 237, 100, 0.2);
+    }
+
+    .modal-close-btn {
+      background: transparent;
+      border: none;
+      font-size: 20px;
+      color: var(--texto-sub);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+    }
+
+    .modal-close-btn:hover {
+      background: #fee2e2;
+      color: #ef4444;
+    }
+
+    .modal-body-scroll {
+      padding: 24px;
+      overflow-y: auto;
+      flex: 1;
+    }
+
+    /* ==========================================================================
+       CHECKLIST INTERACTIVO EV03 (CORTES & RÚBRICA)
+       ========================================================================== */
+    .checklist-card {
+      background: #ffffff;
+      border: 1px solid var(--borde-light);
+      border-radius: var(--radius-lg);
+      padding: 28px;
+      box-shadow: var(--shadow-card);
+      margin-top: 18px;
+    }
+
+    .checklist-progress-bar-wrap {
+      background: #e2e8f0;
+      border-radius: 10px;
+      height: 10px;
+      overflow: hidden;
+      margin: 14px 0 20px 0;
+    }
+
+    .checklist-progress-bar {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--azul-tech) 0%, #00ed64 100%);
+      transition: width 0.3s ease;
+    }
+
+    .checklist-items-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .check-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 12px 14px;
+      border-radius: var(--radius-md);
+      background: #f8fafc;
+      border: 1px solid var(--borde-light);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .check-item:hover {
+      background: #f1f5f9;
+    }
+
+    .check-item.completed {
+      background: #f0fdf4;
+      border-color: #bbf7d0;
+    }
+
+    .check-checkbox {
+      margin-top: 3px;
+      width: 18px;
+      height: 18px;
+      accent-color: var(--azul-tech);
+      cursor: pointer;
+    }
+
+    .check-text h4 {
+      font-size: 13.5px;
+      font-weight: 700;
+      color: var(--texto-main);
+      margin-bottom: 2px;
+    }
+
+    .check-text p {
+      font-size: 12px;
+      color: var(--texto-sub);
+      line-height: 1.5;
+    }
+
+    /* BOTONES DE ACCIÓN */
+    .btn-action-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--azul-tech);
+      color: #ffffff;
+      padding: 10px 18px;
+      border-radius: 10px;
+      font-size: 13.5px;
+      font-weight: 700;
+      text-decoration: none;
+      transition: all 0.2s;
+      box-shadow: 0 4px 12px rgba(2, 132, 199, 0.25);
+    }
+
+    .btn-action-primary:hover {
+      background: var(--azul-tech-dark);
+      transform: translateY(-1px);
+    }
+
+    .btn-copy-code {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #333333;
+      color: #ffffff;
+      border: 1px solid #444444;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 11px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-copy-code:hover {
+      background: #444444;
+      border-color: #555555;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 992px) {
+      .sidebar { transform: translateX(-100%); }
+      .main-content { margin-left: 0; }
+      .floating-sidebar-toggle { display: inline-flex !important; }
+      .cards-grid-2, .cards-grid-3, .stepper-steps-grid { grid-template-columns: 1fr; }
+      .slide-section { padding: 40px 20px; }
+      .slide-title { font-size: 26px; }
+    }
+
+    /* ===== Componentes propios de la Sesión 5 (contexto: mockups y mapas) ===== */
+    .callout { margin-top: 18px; border-radius: var(--radius-md); padding: 16px 20px; font-size: 14px; line-height: 1.65; color: var(--texto-muted); border: 1px solid; }
+    .callout-title { display: flex; align-items: center; gap: 8px; font-family: 'Syne', sans-serif; font-weight: 800; font-size: 14.5px; margin-bottom: 6px; color: var(--texto-main); }
+    .callout-blue { background: var(--azul-bg); border-color: var(--azul-border); }
+    .callout-green { background: var(--sena-verde-bg); border-color: var(--sena-verde-border); }
+    .callout-orange { background: var(--sena-naranja-bg); border-color: var(--sena-naranja-border); }
+    .fid-ladder { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; }
+    .fid-step { background: #fff; border: 1px solid var(--borde-light); border-radius: 14px; padding: 14px 12px; text-align: center; box-shadow: var(--shadow-card); position: relative; }
+    .fid-step h4 { font-family: 'Syne', sans-serif; font-size: 14.5px; margin: 8px 0 4px; color: var(--texto-main); }
+    .fid-step p { font-size: 12px; color: var(--texto-muted); line-height: 1.5; }
+    .fid-num { position: absolute; top: -10px; left: -10px; width: 26px; height: 26px; border-radius: 50%; background: var(--sena-verde); color: #fff; font-weight: 800; font-size: 13px; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 6px rgba(57,169,0,.35); }
+    .compare-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; max-width: 760px; margin: 0 auto; }
+    .compare-box { background: #fff; border: 1px solid var(--borde-light); border-radius: 16px; padding: 18px; box-shadow: var(--shadow-card); }
+    .compare-box svg { max-height: 300px; }
+    .compare-label { display: inline-block; font-size: 11.5px; font-weight: 800; letter-spacing: .5px; padding: 4px 12px; border-radius: 20px; margin-bottom: 10px; }
+    .label-gray { background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; }
+    .label-green { background: var(--sena-verde-bg); color: var(--sena-verde-dark); border: 1px solid var(--sena-verde-border); }
+    .compare-note { font-size: 12.5px; color: var(--texto-muted); line-height: 1.55; margin-top: 10px; }
+    .map-wrap { background: #fff; border: 1px solid var(--borde-light); border-radius: 16px; padding: 18px; box-shadow: var(--shadow-card); }
+    .map-legend { display: flex; flex-wrap: wrap; gap: 18px; margin-top: 10px; font-size: 12.5px; color: var(--texto-muted); }
+    .map-legend i { display: inline-block; width: 22px; height: 4px; border-radius: 2px; vertical-align: middle; margin-right: 6px; }
+    .steps-list { display: flex; flex-direction: column; gap: 12px; }
+    .step-row { display: flex; gap: 14px; align-items: flex-start; background: #fff; border: 1px solid var(--borde-light); border-radius: 14px; padding: 14px 16px; box-shadow: var(--shadow-sm); }
+    .step-n { flex-shrink: 0; width: 34px; height: 34px; border-radius: 50%; background: var(--sena-verde); color: #fff; font-weight: 800; display: flex; align-items: center; justify-content: center; font-family: 'Syne', sans-serif; }
+    .step-row h4 { font-size: 14.5px; color: var(--texto-main); margin-bottom: 3px; font-family: 'Syne', sans-serif; }
+    .step-row p { font-size: 13px; color: var(--texto-muted); line-height: 1.6; }
+    @media (max-width: 992px) { .fid-ladder { grid-template-columns: repeat(2, 1fr); } .compare-grid { grid-template-columns: 1fr; } }
+
+
+    /* ===== Componentes propios de la Sesión 6 ===== */
+    .fig-box { background: #fff; border: 1px solid var(--borde-light); border-radius: 16px; padding: 16px; box-shadow: var(--shadow-card); max-width: 720px; margin: 8px auto 4px; }
+    .notes { max-width: 760px; margin: 12px auto 4px; background: #fff; border: 1px solid var(--borde-light); border-radius: 14px; padding: 16px 18px; box-shadow: var(--shadow-sm); }
+    .notes-title { display: flex; align-items: center; gap: 8px; font-family: 'Syne', sans-serif; font-weight: 800; font-size: 14.5px; color: var(--texto-main); margin-bottom: 10px; }
+    .note { display: flex; gap: 12px; align-items: flex-start; padding: 7px 0; border-top: 1px dashed var(--borde-light); }
+    .note:first-of-type { border-top: none; }
+    .note-ln { flex-shrink: 0; min-width: 62px; text-align: center; font-family: 'JetBrains Mono', monospace; font-size: 11.5px; font-weight: 700; color: var(--azul-tech-dark); background: var(--azul-bg); border: 1px solid var(--azul-border); border-radius: 6px; padding: 2px 6px; }
+    .note p { font-size: 13px; color: var(--texto-muted); line-height: 1.6; margin: 0; }
+    .demo-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .demo-panel { background: #fff; border: 1px solid var(--borde-light); border-radius: 14px; padding: 14px; box-shadow: var(--shadow-card); }
+    .demo-label { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 13px; color: var(--sena-verde-dark); margin-bottom: 8px; }
+    .demo-stage { background: #f8fafc; border: 1px dashed #cbd5e1; border-radius: 10px; padding: 14px; min-height: 150px; }
+    .demo-raw h4, .demo-raw p, .demo-raw button { all: revert; }
+    .demo-card { background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; text-align: center; }
+    .demo-card h4 { font-size: 15px; color: #1e293b; margin-bottom: 4px; }
+    .demo-precio { font-weight: 800; color: #2563eb; margin-bottom: 8px; font-size: 15px; }
+    .demo-btn { background: #2563eb; color: #fff; border: none; padding: 8px 16px; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 13px; }
+    .demo-btn:hover { background: #1d4ed8; }
+    .demo-contador { margin-top: 8px; font-size: 13px; }
+    .demo-note { font-size: 12px; color: var(--texto-muted); margin-top: 8px; line-height: 1.5; }
+    .big-list { max-width: 760px; margin: 10px auto 0; }
+    @media (max-width: 992px) { .demo-3 { grid-template-columns: 1fr; } }
+
+  </style>
+</head>
+
+<body>
+
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <a href="../explorar.html" class="brand-link" title="Ir al Portal de Materiales">
+        <div class="sidebar-logo" title="Servicio Nacional de Aprendizaje SENA">
+          <svg width="24" height="24" viewBox="0 0 64 62" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
+            <g transform="translate(-377 -19)">
+              <path d="M409.164 19C412.922 19 415.992 22.09 415.992 25.8778 415.992 29.6656 412.932 32.7556 409.164 32.7556 405.397 32.7556 402.336 29.6656 402.336 25.8778 402.336 22.09 405.407 19 409.164 19"/>
+              <path d="M384.305 41.1884 384.305 41.2183C384.285 41.3379 384.275 41.4177 384.275 41.4675 384.275 41.8264 384.474 42.0855 384.873 42.265 385.282 42.4344 385.9 42.5241 386.747 42.5241 387.395 42.5241 387.893 42.4543 388.262 42.3148 388.631 42.1752 388.81 41.9759 388.81 41.7267 388.81 41.3479 388.082 41.0489 386.647 40.8096 386.478 40.7797 386.348 40.7598 386.268 40.7498 386.179 40.7299 386.039 40.71 385.86 40.6801 383.567 40.3013 382.092 39.8926 381.434 39.454 381.115 39.2347 380.876 38.9855 380.706 38.6965 380.547 38.4074 380.467 38.0785 380.467 37.7096 380.467 36.8125 380.995 36.1248 382.052 35.6563 383.109 35.1878 384.654 34.9486 386.677 34.9486 388.7 34.9486 390.166 35.1678 391.133 35.6064 392.1 36.045 392.578 36.7228 392.578 37.6399L392.578 37.7495 388.78 37.7495 388.78 37.7096C388.78 37.3907 388.591 37.1614 388.202 36.992 387.813 36.8325 387.255 36.7428 386.508 36.7428 385.929 36.7428 385.481 36.8026 385.182 36.9122 384.863 37.0318 384.713 37.1913 384.713 37.4006 384.713 37.7794 385.541 38.1084 387.195 38.3675 387.514 38.4174 387.764 38.4572 387.943 38.4871 389.119 38.6865 389.966 38.8559 390.465 38.9955 390.963 39.135 391.392 39.3045 391.761 39.4939 392.159 39.7132 392.478 39.9923 392.698 40.3312 392.917 40.6701 393.027 41.0389 393.027 41.4476 393.027 42.3746 392.448 43.0823 391.302 43.5907 390.156 44.0891 388.501 44.3383 386.348 44.3383 384.195 44.3383 382.67 44.099 381.723 43.6206 380.766 43.1421 380.298 42.3746 380.298 41.308L380.298 41.1685 384.305 41.1685ZM394.711 44.1987 394.711 35.0881 405.546 35.0881 405.546 37.0518 398.778 37.0518 398.778 38.5071 405.028 38.5071 405.028 40.4508 398.778 40.4508 398.778 42.2151 405.795 42.2151 405.795 44.2087 394.711 44.2087ZM407.5 44.1987 407.5 35.0881 412.643 35.0881 418.155 41.2084 418.155 35.0881 422.063 35.0881 422.063 44.1987 416.72 44.1987 411.387 38.0585 411.387 44.1987 407.49 44.1987ZM432.569 40.5604 430.625 37.2511 428.572 40.5604 432.579 40.5604ZM426.369 44.1987 422.292 44.1987 428.592 35.0881 433.107 35.0881 439.118 44.1987 434.592 44.1987 433.675 42.554 427.366 42.554 426.389 44.1987Z"/>
+              <path d="M389.309 76.3351 385.67 72.9161 396.735 53.6881C397.333 52.6415 396.585 51.3257 395.379 51.3257L377.267 51.3257 377.267 46.5113 406.413 46.5113 389.309 76.3351Z"/>
+              <path d="M428.701 76.3351 432.34 72.9161 421.275 53.6881C420.677 52.6415 421.425 51.3257 422.631 51.3257L440.743 51.3257 440.743 46.5113 411.597 46.5113 428.701 76.3351Z"/>
+              <path d="M408.965 51.5949C408.965 51.5949 409.005 51.5251 409.005 51.5251L425.432 78.7174 421.066 80.99 410.48 63.2373C409.852 62.1907 408.347 62.1907 407.729 63.2373 404.2 69.1981 397.213 80.99 397.213 80.99L392.947 78.8768C392.947 78.8768 408.088 53.09 408.965 51.5949"/>
+            </g>
+          </svg>
+        </div>
+        <div class="brand-info">
+          <h1>ADSO 3389010</h1>
+          <p>Sesión 6 · Front-End AA4</p>
+        </div>
+      </a>
+      <button type="button" class="sidebar-toggle-btn" onclick="toggleSidebar()" title="Contraer panel lateral">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><line x1="9" x2="9" y1="3" y2="21"/><path d="m14 9-3 3 3 3"/></svg>
+      </button>
+    </div>
+    <nav class="sidebar-nav" id="sidebarNav"><div class="nav-group"><div class="nav-group-title">Bloque 1 · Contexto</div><div class="nav-links-list"><a href="#slide-01" class="nav-link active"><span class="nav-link-num">01</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><span class="nav-link-title">Portada & Metadatos</span></a><a href="#slide-02" class="nav-link"><span class="nav-link-num">02</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg><span class="nav-link-title">Las 3 evidencias AA4</span></a><a href="#slide-03" class="nav-link"><span class="nav-link-num">03</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg><span class="nav-link-title">HTML + CSS + JS: 3 capas</span></a><a href="#slide-04" class="nav-link"><span class="nav-link-num">04</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg><span class="nav-link-title">Anatomía de una página</span></a><a href="#slide-05" class="nav-link"><span class="nav-link-num">05</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg><span class="nav-link-title">El esqueleto HTML</span></a><a href="#slide-06" class="nav-link"><span class="nav-link-num">06</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/></svg><span class="nav-link-title">Archivos y carpetas</span></a><a href="#slide-07" class="nav-link"><span class="nav-link-num">07</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="19" r="3"/><path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15"/><circle cx="18" cy="5" r="3"/></svg><span class="nav-link-title">Tu plan de hoy</span></a></div></div><div class="nav-group"><div class="nav-group-title">Bloque 2 · EV01 Tutorial</div><div class="nav-links-list"><a href="#slide-08" class="nav-link"><span class="nav-link-num">08</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" x2="21" y1="6" y2="6"/><line x1="8" x2="21" y1="12" y2="12"/><line x1="8" x2="21" y1="18" y2="18"/><line x1="3" x2="3.01" y1="6" y2="6"/><line x1="3" x2="3.01" y1="12" y2="12"/><line x1="3" x2="3.01" y1="18" y2="18"/></svg><span class="nav-link-title">Planea tu tutorial</span></a><a href="#slide-09" class="nav-link"><span class="nav-link-num">09</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/></svg><span class="nav-link-title">Paso 1: carpetas</span></a><a href="#slide-10" class="nav-link"><span class="nav-link-num">10</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg><span class="nav-link-title">Paso 2: índice con ol</span></a><a href="#slide-11" class="nav-link"><span class="nav-link-num">11</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg><span class="nav-link-title">Paso 3: páginas de temas</span></a><a href="#slide-12" class="nav-link"><span class="nav-link-num">12</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="13.5" cy="6.5" r=".5"/><circle cx="17.5" cy="10.5" r=".5"/><circle cx="8.5" cy="7.5" r=".5"/><circle cx="6.5" cy="12.5" r=".5"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/></svg><span class="nav-link-title">Paso 4: CSS</span></a><a href="#slide-13" class="nav-link"><span class="nav-link-num">13</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg><span class="nav-link-title">Paso 5: prueba y errores</span></a></div></div><div class="nav-group"><div class="nav-group-title">Bloque 3 · EV02 Documento</div><div class="nav-links-list"><a href="#slide-14" class="nav-link"><span class="nav-link-num">14</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg><span class="nav-link-title">Qué es un componente</span></a><a href="#slide-15" class="nav-link"><span class="nav-link-num">15</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" x2="8" y1="13" y2="13"/><line x1="16" x2="8" y1="17" y2="17"/></svg><span class="nav-link-title">Cómo redactar</span></a><a href="#slide-16" class="nav-link"><span class="nav-link-num">16</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" x2="21" y1="6" y2="6"/><line x1="8" x2="21" y1="12" y2="12"/><line x1="8" x2="21" y1="18" y2="18"/><line x1="3" x2="3.01" y1="6" y2="6"/><line x1="3" x2="3.01" y1="12" y2="12"/><line x1="3" x2="3.01" y1="18" y2="18"/></svg><span class="nav-link-title">Tabla de componentes</span></a><a href="#slide-17" class="nav-link"><span class="nav-link-num">17</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg><span class="nav-link-title">Elementos HTML</span></a></div></div><div class="nav-group"><div class="nav-group-title">Bloque 4 · EV03 y Entrega</div><div class="nav-links-list"><a href="#slide-18" class="nav-link"><span class="nav-link-num">18</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="19" r="3"/><path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15"/><circle cx="18" cy="5" r="3"/></svg><span class="nav-link-title">Punto de partida</span></a><a href="#slide-19" class="nav-link"><span class="nav-link-num">19</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="13.5" cy="6.5" r=".5"/><circle cx="17.5" cy="10.5" r=".5"/><circle cx="8.5" cy="7.5" r=".5"/><circle cx="6.5" cy="12.5" r=".5"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/></svg><span class="nav-link-title">De Figma al código</span></a><a href="#slide-20" class="nav-link"><span class="nav-link-num">20</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/></svg><span class="nav-link-title">Paso A: carpetas y head</span></a><a href="#slide-21" class="nav-link"><span class="nav-link-num">21</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg><span class="nav-link-title">Paso B: header y menú</span></a><a href="#slide-22" class="nav-link"><span class="nav-link-num">22</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg><span class="nav-link-title">Paso C: tarjetas y ol</span></a><a href="#slide-23" class="nav-link"><span class="nav-link-num">23</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg><span class="nav-link-title">Paso D: login</span></a><a href="#slide-24" class="nav-link"><span class="nav-link-num">24</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="20" x="5" y="2" rx="2" ry="2"/><path d="M12 18h.01"/></svg><span class="nav-link-title">Paso E: responsive</span></a><a href="#slide-25" class="nav-link"><span class="nav-link-num">25</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg><span class="nav-link-title">Paso F: JavaScript</span></a><a href="#slide-26" class="nav-link"><span class="nav-link-num">26</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></svg><span class="nav-link-title">Prueba, ZIP y entrega</span></a><a href="#slide-27" class="nav-link"><span class="nav-link-num">27</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg><span class="nav-link-title">Checklist Anti-Error</span></a></div></div></nav>
+    <div class="sidebar-footer">
+      <div class="sidebar-footer-pill"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg><span>AA4 cierra: Martes 10/Nov (11:59 PM)</span></div>
+      <a href="https://julianon2.github.io/seguimiento-adso-3389010/" target="_blank" class="btn-return-hub" style="margin-bottom:6px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg> Dashboard de Seguimiento</a>
+      <a href="../explorar.html" class="btn-return-hub"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m15 18-6-6 6-6"/></svg> Volver al Hub</a>
+    </div>
+  </aside>
+
+  <button type="button" class="floating-sidebar-toggle" id="floatingToggle" onclick="toggleSidebar()" title="Abrir Menú de Navegación">
+    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><line x1="9" x2="9" y1="3" y2="21"/><path d="m10 9 3 3-3 3"/></svg>
+    <span>Menú (27 Slides)</span>
+  </button>
+
+  <main class="main-content" id="mainContent">
+
+    <section class="slide-section" id="slide-01">
+      <div class="slide-container">
+        <span class="slide-badge-category badge-green"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Sesión Sincrónica 6 de 7 · Bloque Front-End</span>
+        <h2 class="slide-title">Front-End con HTML, CSS y JavaScript: tus 3 últimas evidencias</h2>
+        <p class="slide-subtitle">Hoy cierras la Guía 6. Esta presentación te lleva <strong>paso a paso</strong>: primero entiendes cómo funciona una página web, y luego construyes cada una de las tres evidencias de <strong>AA4 — Generar plantillas y estilos, de acuerdo con el diseño</strong>. No necesitas saber programar de antemano: cada código viene explicado línea por línea.</p>
+<div class="cards-grid-3"><div class="card-pro top-azul"><div class="card-header-flex"><div class="card-icon-badge icon-badge-blue"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg></div><span class="card-pill-tag badge-blue">Sincrónico</span></div><h3 class="card-title">Datos de la Sesión</h3><p class="card-desc"><strong>Fecha:</strong> Sábado, 07 de Noviembre de 2026<br><strong>Instructor:</strong> Julián Andrés Trujillo Morales<br><strong>Regional:</strong> Huila | CADPH Garzón<br><strong>Modalidad:</strong> Sesión de trabajo guiada</p></div><div class="card-pro top-verde"><div class="card-header-flex"><div class="card-icon-badge icon-badge-green"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div><span class="card-pill-tag badge-green">Lo que haces hoy</span></div><h3 class="card-title">3 entregas, 3 archivos ZIP</h3><p class="card-desc"><strong>EV01:</strong> un mini tutorial en HTML y CSS.<br><strong>EV02:</strong> un documento de componentes.<br><strong>EV03:</strong> tu sitio front-end con HTML, CSS y JS.</p></div><div class="card-pro top-naranja"><div class="card-header-flex"><div class="card-icon-badge icon-badge-orange"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" x2="4" y1="22" y2="15"/></svg></div><span class="card-pill-tag badge-orange">SLA Zajuna</span></div><h3 class="card-title">Cierre de AA4</h3><p class="card-desc"><strong>Fecha límite:</strong> Martes, 10 de Noviembre de 2026<br><strong>Hora:</strong> 11:59 PM<br><strong>Dónde:</strong> las 3 áreas de entrega de AA4 en Zajuna</p></div></div><div class="callout callout-green"><div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg> Dos materiales, dos funciones</div><div><strong>Esta presentación</strong> te da el contexto y explica los conceptos. El <strong>tutorial paso a paso</strong> (Guía de Estudio) te lleva de la mano a construir las tres evidencias, con el código listo para copiar y una verificación en cada paso. <a href="MANUAL_SESION06.html" target="_blank" class="btn-action-primary"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"/><path d="M6 6h10"/><path d="M6 10h10"/></svg> Abrir el tutorial paso a paso ↗</a></div></div>
+      </div>
+    </section>
+
+    <section class="slide-section" id="slide-02">
+      <div class="slide-container">
+        <span class="slide-badge-category badge-blue"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg> Bloque 1 · Qué te piden exactamente</span>
+        <h2 class="slide-title">Las 3 evidencias de AA4 de un vistazo</h2>
+        <p class="slide-subtitle">Esto es lo que dice la guía oficial y lo que el instructor revisa en la lista de chequeo. Los tres productos se entregan en formato <strong>ZIP</strong> (una carpeta comprimida).</p>
+<div class="table-container-card"><table class="table-comparativa"><thead><tr><th>Evidencia</th><th>Qué construyes</th><th>Qué se revisa (lista de chequeo)</th></tr></thead><tbody><tr><td><span class='concept-tag'>AA4-EV01</span><br>Conocimiento</td><td>Una <strong>página-tutorial</strong> sobre un tema de tu gusto: un título, una <strong>lista ordenada</strong> con enlaces a cada tema, y cada tema con título, imagen y descripción.</td><td>Resuelve el problema con componentes front-end · el contenido enlaza a su página con imagen, título y descripción · aplica CSS · emplea listas ordenadas.</td></tr><tr><td><span class='concept-tag'>AA4-EV02</span><br>Desempeño</td><td>Un <strong>documento de componentes</strong>: portada, introducción, objetivo y definición de los elementos HTML que usarás en tu proyecto.</td><td>Establece los componentes del proyecto · incluye componentes principales de HTML y CSS · los describe con claridad · cumple las normas básicas de presentación.</td></tr><tr><td><span class='concept-tag'>AA4-EV03</span><br>Producto</td><td>El <strong>diseño front-end</strong> de tu proyecto aplicando HTML, CSS y JS, y el diseño que hiciste antes (AA3).</td><td>Crea el front-end según los requerimientos · aplica los componentes de AA3-EV02 · es usable · aplica el diseño de interfaz anterior.</td></tr></tbody></table></div><div class="callout callout-blue"><div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg> Qué es un «componente front-end»</div><div>Es cada pieza reconocible de una página: el encabezado con el menú, una tarjeta de producto, un formulario, el pie de página. Más adelante aprenderás a identificarlos en tu propio proyecto.</div></div>
+      </div>
+    </section>
+
+    <section class="slide-section" id="slide-03">
+      <div class="slide-container">
+        <span class="slide-badge-category badge-green"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg> Bloque 1 · Contexto · Las 3 capas de una página web</span>
+        <h2 class="slide-title">¿Cómo funciona una página web? Tres capas que trabajan juntas</h2>
+        <p class="slide-subtitle">Toda página web se construye con tres lenguajes, y cada uno tiene un trabajo distinto. Piensa en una casa: <strong>HTML</strong> son las paredes y puertas (la estructura), <strong>CSS</strong> es la pintura y los muebles (la apariencia) y <strong>JavaScript</strong> es la instalación eléctrica que hace que el timbre suene cuando lo presionas (el comportamiento).</p>
+
+<div class="demo-3">
+  <div class="demo-panel">
+    <div class="demo-label">1 · Solo HTML</div>
+    <div class="demo-stage demo-raw">
+      <h4>Laptop Gamer RTX 4070</h4>
+      <p>$4.999.000</p>
+      <button type="button">Agregar al carrito</button>
+    </div>
+    <p class="demo-note">Está la información, pero sin diseño. Es el esqueleto.</p>
+  </div>
+  <div class="demo-panel">
+    <div class="demo-label">2 · HTML + CSS</div>
+    <div class="demo-stage demo-card">
+      <h4>Laptop Gamer RTX 4070</h4>
+      <p class="demo-precio">$4.999.000</p>
+      <button type="button" class="demo-btn">Agregar al carrito</button>
+    </div>
+    <p class="demo-note">Los mismos elementos, ahora con colores, bordes y espacio.</p>
+  </div>
+  <div class="demo-panel">
+    <div class="demo-label">3 · HTML + CSS + JS</div>
+    <div class="demo-stage demo-card">
+      <h4>Laptop Gamer RTX 4070</h4>
+      <p class="demo-precio">$4.999.000</p>
+      <button type="button" class="demo-btn" id="demoCarrito">Agregar al carrito</button>
+      <p class="demo-contador">Carrito: <strong id="demoContador">0</strong></p>
+    </div>
+    <p class="demo-note"><strong>Pruébalo:</strong> haz clic en el botón. JavaScript reacciona.</p>
+  </div>
+</div><div class="cards-grid-3" style="margin-top:18px;"><div class="card-pro top-azul"><div class="card-header-flex"><div class="card-icon-badge icon-badge-blue"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></div><span class="card-pill-tag badge-blue">Estructura</span></div><h3 class="card-title">HTML</h3><p class="card-desc">Es un lenguaje de <strong>marcado</strong>: encierras el contenido entre <strong>etiquetas</strong> que dicen qué es cada cosa (un título, un párrafo, una imagen, un enlace). No programa nada: solo describe.</p></div><div class="card-pro top-verde"><div class="card-header-flex"><div class="card-icon-badge icon-badge-green"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="13.5" cy="6.5" r=".5"/><circle cx="17.5" cy="10.5" r=".5"/><circle cx="8.5" cy="7.5" r=".5"/><circle cx="6.5" cy="12.5" r=".5"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/></svg></div><span class="card-pill-tag badge-green">Apariencia</span></div><h3 class="card-title">CSS</h3><p class="card-desc">Son <strong>reglas de estilo</strong>: dices a qué elementos aplican (selector) y cómo se ven (propiedad: valor). Por ejemplo, «todos los botones, fondo azul». Controla colores, tamaños, espacios y la disposición.</p></div><div class="card-pro top-naranja"><div class="card-header-flex"><div class="card-icon-badge icon-badge-orange"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div><span class="card-pill-tag badge-orange">Comportamiento</span></div><h3 class="card-title">JavaScript</h3><p class="card-desc">Es un lenguaje de <strong>programación</strong>: la página <strong>reacciona</strong> a lo que haces (un clic, enviar un formulario) y cambia sin recargarse. Valida datos, abre menús, muestra mensajes.</p></div></div><div class="callout callout-green"><div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg> Cómo se reparte en tus evidencias</div><div><strong>EV01</strong> usa HTML + CSS. <strong>EV02</strong> describe los componentes HTML y CSS de tu proyecto. <strong>EV03</strong> usa las tres capas.</div></div>
+      </div>
+    </section>
+
+    <section class="slide-section" id="slide-04">
+      <div class="slide-container">
+        <span class="slide-badge-category badge-blue"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg> Bloque 1 · Contexto · Anatomía de una página HTML</span>
+        <h2 class="slide-title">Anatomía de una página: cada zona tiene su etiqueta</h2>
+        <p class="slide-subtitle">Una página no es un bloque único: se divide en zonas con un significado. HTML tiene una etiqueta para cada zona (a esto se le llama HTML <strong>semántico</strong>). Usar la etiqueta correcta ayuda a los buscadores, a los lectores de pantalla y a ti mismo cuando vuelves a leer tu código.</p>
+<div class="fig-box"><svg viewBox="0 0 620 350" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Zonas de una página web y su etiqueta HTML"><rect x="6" y="6" width="608" height="338" rx="14" fill="#fff" stroke="#cbd5e1" stroke-width="2"/><rect x="20" y="18" width="580" height="50" rx="8" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/><text x="34" y="40" font-family="JetBrains Mono, Consolas, monospace" font-size="14" font-weight="700" fill="#1d4ed8" text-anchor="start">&lt;header&gt;</text><rect x="330" y="28" width="256" height="30" rx="6" fill="#bfdbfe" stroke="#2563eb"/><text x="342" y="48" font-family="JetBrains Mono, Consolas, monospace" font-size="11" font-weight="600" fill="#1d4ed8" text-anchor="start">&lt;nav&gt;  Inicio · Productos · Contacto</text><rect x="20" y="78" width="580" height="196" rx="8" fill="#f8fafc" stroke="#64748b" stroke-width="2" stroke-dasharray="7 5"/><text x="34" y="98" font-family="JetBrains Mono, Consolas, monospace" font-size="13" font-weight="700" fill="#334155" text-anchor="start">&lt;main&gt;  contenido principal (uno por página)</text><rect x="34" y="108" width="552" height="44" rx="6" fill="#dcfce7" stroke="#16a34a" stroke-width="2"/><text x="46" y="135" font-family="JetBrains Mono, Consolas, monospace" font-size="13" font-weight="700" fill="#166534" text-anchor="start">&lt;section&gt;  Bienvenida (hero)</text><rect x="34" y="162" width="172" height="100" rx="6" fill="#ffedd5" stroke="#ea580c" stroke-width="2"/><text x="46" y="184" font-family="JetBrains Mono, Consolas, monospace" font-size="13" font-weight="700" fill="#c2410c" text-anchor="start">&lt;article&gt;</text><text x="46" y="204" font-family="JetBrains Mono, Consolas, monospace" font-size="11" font-weight="500" fill="#9a3412" text-anchor="start">tarjeta 1</text><rect x="224" y="162" width="172" height="100" rx="6" fill="#ffedd5" stroke="#ea580c" stroke-width="2"/><text x="236" y="184" font-family="JetBrains Mono, Consolas, monospace" font-size="13" font-weight="700" fill="#c2410c" text-anchor="start">&lt;article&gt;</text><text x="236" y="204" font-family="JetBrains Mono, Consolas, monospace" font-size="11" font-weight="500" fill="#9a3412" text-anchor="start">tarjeta 2</text><rect x="414" y="162" width="172" height="100" rx="6" fill="#ffedd5" stroke="#ea580c" stroke-width="2"/><text x="426" y="184" font-family="JetBrains Mono, Consolas, monospace" font-size="13" font-weight="700" fill="#c2410c" text-anchor="start">&lt;article&gt;</text><text x="426" y="204" font-family="JetBrains Mono, Consolas, monospace" font-size="11" font-weight="500" fill="#9a3412" text-anchor="start">tarjeta 3</text><rect x="20" y="284" width="580" height="48" rx="8" fill="#e2e8f0" stroke="#475569" stroke-width="2"/><text x="34" y="313" font-family="JetBrains Mono, Consolas, monospace" font-size="14" font-weight="700" fill="#334155" text-anchor="start">&lt;footer&gt;  pie de página</text></svg></div><div style="margin-top:16px;"><div class="table-container-card"><table class="table-comparativa"><thead><tr><th>Etiqueta</th><th>Significa</th><th>Úsala para...</th></tr></thead><tbody><tr><td><span class='concept-tag'>&lt;header&gt;</span></td><td>Encabezado</td><td>El logo o título del sitio y, normalmente, el menú</td></tr><tr><td><span class='concept-tag'>&lt;nav&gt;</span></td><td>Navegación</td><td>Un grupo de enlaces para moverse por el sitio</td></tr><tr><td><span class='concept-tag'>&lt;main&gt;</span></td><td>Contenido principal</td><td>Lo más importante de la página. Solo hay uno por página</td></tr><tr><td><span class='concept-tag'>&lt;section&gt;</span></td><td>Sección</td><td>Un tema con su propio título (bienvenida, catálogo, «quiénes somos»)</td></tr><tr><td><span class='concept-tag'>&lt;article&gt;</span></td><td>Artículo</td><td>Una pieza independiente que podrías mover a otro lugar: una tarjeta de producto, un tema del tutorial</td></tr><tr><td><span class='concept-tag'>&lt;footer&gt;</span></td><td>Pie de página</td><td>Contacto, derechos y enlaces finales</td></tr></tbody></table></div></div>
+      </div>
+    </section>
+
+    <section class="slide-section" id="slide-05">
+      <div class="slide-container">
+        <span class="slide-badge-category badge-orange"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg> Bloque 1 · Contexto · El esqueleto de todo archivo HTML</span>
+        <h2 class="slide-title">El esqueleto: lo que lleva TODA página HTML</h2>
+        <p class="slide-subtitle">Todas las páginas empiezan igual. Hay una parte que <strong>no se ve</strong> (el <code>&lt;head&gt;</code>: configuración) y una que <strong>sí se ve</strong> (el <code>&lt;body&gt;</code>: tu contenido). Memoriza esta estructura: es la plantilla de cada archivo <code>.html</code> que crearás hoy.</p>
+<div class="code-editor-box"><div class="editor-header"><span class="editor-dot r"></span><span class="editor-dot y"></span><span class="editor-dot g"></span><span class="editor-title">esqueleto.html</span><span class="editor-badge">HTML</span></div><div class="editor-body"><div class="cl"><span class="ln">1</span><span class="code">&lt;!DOCTYPE html<span class="tag">&gt;</span></span></div><div class="cl"><span class="ln">2</span><span class="code"><span class="tag">&lt;html</span> <span class="attr">lang</span>=<span class="str">"es"</span><span class="tag">&gt;</span></span></div><div class="cl"><span class="ln">3</span><span class="code"><span class="tag">&lt;head</span><span class="tag">&gt;</span></span></div><div class="cl"><span class="ln">4</span><span class="code">  <span class="tag">&lt;meta</span> <span class="attr">charset</span>=<span class="str">"UTF-8"</span><span class="tag">&gt;</span></span></div><div class="cl"><span class="ln">5</span><span class="code">  <span class="tag">&lt;meta</span> <span class="attr">name</span>=<span class="str">"viewport"</span> <span class="attr">content</span>=<span class="str">"width=device-width, initial-scale=1.0"</span><span class="tag">&gt;</span></span></div><div class="cl"><span class="ln">6</span><span class="code">  <span class="tag">&lt;title</span><span class="tag">&gt;</span>Título que aparece en la pestaña<span class="tag">&lt;/title</span><span class="tag">&gt;</span></span></div><div class="cl"><span class="ln">7</span><span class="code">  <span class="tag">&lt;link</span> <span class="attr">rel</span>=<span class="str">"stylesheet"</span> <span class="attr">href</span>=<span class="str">"css/estilos.css"</span><span class="tag">&gt;</span></span></div><div class="cl"><span class="ln">8</span><span class="code"><span class="tag">&lt;/head</span><span class="tag">&gt;</span></span></div><div class="cl"><span class="ln">9</span><span class="code"><span class="tag">&lt;body</span><span class="tag">&gt;</span></span></div><div class="cl"><span class="ln">10</span><span class="code">  <span class="tag">&lt;header</span><span class="tag">&gt;</span>...<span class="tag">&lt;/header</span><span class="tag">&gt;</span></span></div><div class="cl"><span class="ln">11</span><span class="code">  <span class="tag">&lt;main</span><span class="tag">&gt;</span>...<span class="tag">&lt;/main</span><span class="tag">&gt;</span></span></div><div class="cl"><span class="ln">12</span><span class="code">  <span class="tag">&lt;footer</span><span class="tag">&gt;</span>...<span class="tag">&lt;/footer</span><span class="tag">&gt;</span></span></div><div class="cl"><span class="ln">13</span><span class="code">  <span class="tag">&lt;script</span> <span class="attr">src</span>=<span class="str">"js/main.js"</span><span class="tag">&gt;</span><span class="tag">&lt;/script</span><span class="tag">&gt;</span></span></div><div class="cl"><span class="ln">14</span><span class="code"><span class="tag">&lt;/body</span><span class="tag">&gt;</span></span></div><div class="cl"><span class="ln">15</span><span class="code"><span class="tag">&lt;/html</span><span class="tag">&gt;</span></span></div></div></div><div class="notes"><div class="notes-title"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"/><path d="M6 6h10"/><path d="M6 10h10"/></svg> Qué hace cada parte, línea por línea</div><div class="note"><span class="note-ln">Línea 1</span><p>Le dice al navegador que este archivo es HTML5. Va siempre en la primera línea.</p></div><div class="note"><span class="note-ln">Línea 2</span><p>Declara que la página está en español. Ayuda a los lectores de pantalla a pronunciar bien.</p></div><div class="note"><span class="note-ln">Línea 3</span><p>Zona <strong>invisible</strong>: configuración de la página. Nada de lo que pongas aquí se dibuja en pantalla.</p></div><div class="note"><span class="note-ln">Línea 4</span><p>Codificación UTF-8: permite escribir tildes y la ñ sin que salgan caracteres raros.</p></div><div class="note"><span class="note-ln">Línea 5</span><p>Hace que la página se ajuste al ancho del celular. Sin esta línea, el diseño móvil no funciona.</p></div><div class="note"><span class="note-ln">Línea 6</span><p>El texto de la pestaña del navegador.</p></div><div class="note"><span class="note-ln">Línea 7</span><p>Conecta tu archivo de estilos CSS. La ruta es <strong>relativa</strong> a este archivo.</p></div><div class="note"><span class="note-ln">Línea 9</span><p>Zona <strong>visible</strong>: aquí va todo lo que el usuario ve.</p></div><div class="note"><span class="note-ln">Línea 13</span><p>Conecta el JavaScript. Va <strong>al final</strong> del body para que el HTML ya exista cuando el código lo busque.</p></div></div>
+      </div>
+    </section>
+
+    <section class="slide-section" id="slide-06">
+      <div class="slide-container">
+        <span class="slide-badge-category badge-green"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/></svg> Bloque 1 · Contexto · Archivos y carpetas conectados</span>
+        <h2 class="slide-title">Cómo se conectan los archivos entre sí</h2>
+        <p class="slide-subtitle">Un sitio web es un conjunto de archivos que se <strong>enlazan</strong> unos a otros. Cada conexión usa una etiqueta distinta y una <strong>ruta relativa</strong>: la dirección del archivo contada <em>desde el archivo donde estás escribiendo</em>, no desde tu disco duro. Por eso tu proyecto funciona igual en cualquier computador.</p>
+<div class="cards-grid-2"><div class="card-pro top-azul"><div class="card-header-flex"><div class="card-icon-badge icon-badge-blue"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/></svg></div><span class="card-pill-tag badge-blue">Ejemplo</span></div><h3 class="card-title">Carpeta de tu proyecto</h3><p class="card-desc"><code>techstore-html/</code><br>&nbsp;&nbsp;<code>index.html</code> ← página principal<br>&nbsp;&nbsp;<code>login.html</code><br>&nbsp;&nbsp;<code>css/</code><br>&nbsp;&nbsp;&nbsp;&nbsp;<code>estilos.css</code><br>&nbsp;&nbsp;<code>js/</code><br>&nbsp;&nbsp;&nbsp;&nbsp;<code>main.js</code><br>&nbsp;&nbsp;<code>img/</code><br>&nbsp;&nbsp;&nbsp;&nbsp;<code>laptop.svg</code></p></div><div class="card-pro top-verde"><div class="card-header-flex"><div class="card-icon-badge icon-badge-green"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div><span class="card-pill-tag badge-green">Reglas de oro</span></div><h3 class="card-title">Nombres de archivos</h3><p class="card-desc">• Todo en <strong>minúsculas</strong>.<br>• <strong>Sin espacios ni tildes</strong>: <code>tema1.html</code>, no <code>Tema 1.html</code>.<br>• La extensión importa: <code>.html</code>, <code>.css</code>, <code>.js</code>.<br>• Una carpeta por tipo de archivo: <code>css/</code>, <code>js/</code>, <code>img/</code>.</p></div></div><div style="margin-top:16px;"><div class="table-container-card"><table class="table-comparativa"><thead><tr><th>Para conectar...</th><th>Etiqueta</th><th>Ejemplo</th><th>Dónde va</th></tr></thead><tbody><tr><td><span class='concept-tag'>Hoja de estilos</span></td><td><code>&lt;link&gt;</code></td><td><code>href="css/estilos.css"</code></td><td>Dentro del <code>&lt;head&gt;</code></td></tr><tr><td><span class='concept-tag'>JavaScript</span></td><td><code>&lt;script&gt;</code></td><td><code>src="js/main.js"</code></td><td>Al final del <code>&lt;body&gt;</code></td></tr><tr><td><span class='concept-tag'>Otra página</span></td><td><code>&lt;a&gt;</code></td><td><code>href="login.html"</code></td><td>Donde quieras el enlace</td></tr><tr><td><span class='concept-tag'>Una imagen</span></td><td><code>&lt;img&gt;</code></td><td><code>src="img/laptop.svg"</code></td><td>Donde quieras la imagen</td></tr></tbody></table></div></div><div class="callout callout-orange"><div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg> El error número 1 de principiantes</div><div>Una imagen o un estilo que «no carga» casi siempre es una <strong>ruta mal escrita</strong>: una mayúscula de más, una tilde, una carpeta que falta o una extensión equivocada (<code>.jpg</code> vs <code>.jpeg</code>). Revisa la ruta letra por letra.</div></div>
+      </div>
+    </section>
+
+    <section class="slide-section" id="slide-07">
+      <div class="slide-container">
+        <span class="slide-badge-category badge-orange"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="19" r="3"/><path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15"/><circle cx="18" cy="5" r="3"/></svg> Bloque 1 · Tu plan de trabajo de hoy</span>
+        <h2 class="slide-title">Tu plan de hoy: herramientas y orden recomendado</h2>
+        <p class="slide-subtitle">Necesitas solo dos herramientas: un <strong>editor de código</strong> (Visual Studio Code) y un <strong>navegador</strong> (Chrome, Edge o Firefox). Escribes en el editor, guardas, y recargas el navegador para ver el resultado.</p>
+<div class="steps-list"><div class="step-row"><div class="step-n">1</div><div><h4>Prepara tu espacio (5 min)</h4><p>Abre Visual Studio Code → <strong>File → Open Folder</strong> y elige (o crea) una carpeta para cada evidencia. Para crear un archivo: clic derecho en el panel izquierdo → <strong>New File</strong> → escribe el nombre con su extensión (<code>index.html</code>). Guarda siempre con <strong>Ctrl + S</strong>.</p></div></div><div class="step-row"><div class="step-n">2</div><div><h4>EV01: el tutorial (≈ 35 min)</h4><p>Es la más corta y sirve de calentamiento: practicas listas, enlaces, imágenes y CSS básico.</p></div></div><div class="step-row"><div class="step-n">3</div><div><h4>EV03: tu sitio TechStore (≈ 60 min)</h4><p>Partes de tu <code>techstore-html</code> de la Guía 5: lo ordenas, agregas páginas, lo haces adaptable y le pones JavaScript.</p></div></div><div class="step-row"><div class="step-n">4</div><div><h4>EV02: el documento (≈ 30 min)</h4><p>Lo haces al final a propósito: <strong>describes lo que ya construiste</strong>, así sabes exactamente qué componentes usaste.</p></div></div><div class="step-row"><div class="step-n">5</div><div><h4>Prueba, comprime y entrega (≈ 15 min)</h4><p>Pruebas cada entrega, la comprimes en ZIP y la subes a Zajuna.</p></div></div></div><div class="callout callout-blue"><div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg> Cómo ver tu página mientras trabajas</div><div>Haz doble clic en el archivo <code>index.html</code> para abrirlo en el navegador. Después de cada cambio, guarda en el editor y presiona <strong>F5</strong> en el navegador. Si tienes la extensión <em>Live Server</em> en VS Code, se recarga sola.</div></div><div class="callout callout-green"><div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"/><path d="M6 6h10"/><path d="M6 10h10"/></svg> Empieza el tutorial</div><div>Con este contexto ya puedes construir. Abre el tutorial paso a paso y sigue las partes A (EV01), B (EV03), C (EV02) y D (entrega). <a href="MANUAL_SESION06.html" target="_blank" class="btn-action-primary"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"/><path d="M6 6h10"/><path d="M6 10h10"/></svg> Abrir el tutorial paso a paso ↗</a></div></div>
+      </div>
+    </section>
+
+    <section class="slide-section" id="slide-08">
+      <div class="slide-container">
+        <span class="slide-badge-category badge-green"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="8" x2="21" y1="6" y2="6"/><line x1="8" x2="21" y1="12" y2="12"/><line x1="8" x2="21" y1="18" y2="18"/><line x1="3" x2="3.01" y1="6" y2="6"/><line x1="3" x2="3.01" y1="12" y2="12"/><line x1="3" x2="3.01" y1="18" y2="18"/></svg> Bloque 2 · EV01 · Planea antes de escribir</span>
+        <h2 class="slide-title">EV01: primero decide tu tema y planea tus páginas</h2>
+        <p class="slide-subtitle">La guía te pide un <strong>mini tutorial</strong> sobre un tema que te guste. Antes de escribir una sola línea de código, haz una lista: tu tutorial tendrá <strong>una página de inicio</strong> con un índice, y <strong>una página por cada concepto</strong>. Con 3 a 5 conceptos es suficiente.</p>
+<div class="cards-grid-2"><div class="card-pro top-verde"><div class="card-header-flex"><div class="card-icon-badge icon-badge-green"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg></div><span class="card-pill-tag badge-green">Ideas de tema</span></div><h3 class="card-title">Elige algo que domines</h3><p class="card-desc">• Cómo armar tu primera PC<br>• Cómo preparar un plato típico<br>• Reglas básicas del fútbol o del ajedrez<br>• Cómo cuidar una planta<br>• Primeros pasos en un videojuego<br>• Cómo crear tu primera página web</p></div><div class="card-pro top-azul"><div class="card-header-flex"><div class="card-icon-badge icon-badge-blue"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" x2="21" y1="6" y2="6"/><line x1="8" x2="21" y1="12" y2="12"/><line x1="8" x2="21" y1="18" y2="18"/><line x1="3" x2="3.01" y1="6" y2="6"/><line x1="3" x2="3.01" y1="12" y2="12"/><line x1="3" x2="3.01" y1="18" y2="18"/></svg></div><span class="card-pill-tag badge-blue">Cómo planear</span></div><h3 class="card-title">Una tabla por concepto</h3><p class="card-desc">Para cada concepto define: <strong>1)</strong> el nombre del archivo, <strong>2)</strong> el título, <strong>3)</strong> la imagen que usarás y <strong>4)</strong> 2 o 3 frases de descripción. Con esa tabla, escribir el código es solo copiar y llenar.</p></div></div><div style="margin-top:16px;"><div class="table-container-card"><table class="table-comparativa"><thead><tr><th>Concepto</th><th>Archivo</th><th>Título de la página</th><th>Imagen</th><th>Descripción (idea)</th></tr></thead><tbody><tr><td>1</td><td><code>tema1.html</code></td><td>El procesador (CPU)</td><td><code>img/cpu.svg</code></td><td>Es el cerebro: ejecuta las instrucciones</td></tr><tr><td>2</td><td><code>tema2.html</code></td><td>La memoria RAM</td><td><code>img/ram.svg</code></td><td>Guarda temporalmente lo que usas</td></tr><tr><td>3</td><td><code>tema3.html</code></td><td><em>(tu concepto)</em></td><td><em>(tu imagen)</em></td><td><em>(tus ideas)</em></td></tr></tbody></table></div></div><div class="callout callout-green"><div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg> Mira un ejemplo funcionando</div><div>El instructor preparó un tutorial de referencia: <strong>«Cómo armar tu primera PC»</strong> (5 temas). Úsalo para entender la estructura, pero elige <strong>tu propio tema</strong> y escribe tus propias palabras. <a href="ejemplos/EV01_tutorial_armar_pc/index.html" target="_blank" class="btn-action-primary"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg> Abrir tutorial de ejemplo ↗</a></div></div>
+      </div>
+    </section>
+
+    <section class="slide-section" id="slide-09">
+      <div class="slide-container">
+        <span class="slide-badge-category badge-blue"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/></svg> Bloque 2 · EV01 · Paso 1</span>
+        <h2 class="slide-title">Paso 1: crea la carpeta y los archivos de tu tutorial</h2>
+        <p class="slide-subtitle">Con tu tabla lista, crea la estructura. Tendrás un <code>index.html</code> (el índice), un archivo por tema, una carpeta <code>css/</code> con la hoja de estilos y una carpeta <code>img/</code> con tus imágenes.</p>
+<div class="cards-grid-2"><div class="card-pro top-azul"><div class="card-header-flex"><div class="card-icon-badge icon-badge-blue"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/></svg></div><span class="card-pill-tag badge-blue">Estructura</span></div><h3 class="card-title">tutorial/</h3><p class="card-desc"><code>tutorial/</code><br>&nbsp;&nbsp;<code>index.html</code> ← título + lista ordenada<br>&nbsp;&nbsp;<code>tema1.html</code><br>&nbsp;&nbsp;<code>tema2.html</code><br>&nbsp;&nbsp;<code>tema3.html</code><br>&nbsp;&nbsp;<code>css/estilos.css</code><br>&nbsp;&nbsp;<code>img/</code> ← una imagen por tema</p></div><div class="card-pro top-verde"><div class="card-header-flex"><div class="card-icon-badge icon-badge-green"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div><span class="card-pill-tag badge-green">En orden</span></div><h3 class="card-title">Qué hacer en VS Code</h3><p class="card-desc">1. Crea la carpeta <code>tutorial</code> y ábrela con <strong>Open Folder</strong>.<br>2. Crea <code>index.html</code> y <code>tema1.html</code>…<br>3. Crea la carpeta <code>css</code> y dentro <code>estilos.css</code>.<br>4. Crea la carpeta <code>img</code> y copia tus imágenes.</p></div></div><div class="callout callout-blue"><div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg> ¿De dónde saco las imágenes?</div><div>Usa fotos propias o imágenes libres de derechos (por ejemplo de Pexels o Unsplash). Guárdalas dentro de <code>img/</code> con nombre en minúsculas y sin espacios (<code>cpu.jpg</code>). Y <strong>toda imagen lleva el atributo <code>alt</code></strong>: un texto que la describe para quien no la puede ver.</div></div>
+      </div>
+    </section>
+
+    <section class="slide-section" id="slide-10">
+      <div class="slide-container">
+        <span class="slide-badge-category badge-orange"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg> Bloque 2 · EV01 · Paso 2</span>
+        <h2 class="slide-title">Paso 2: el índice (index.html) con la lista ordenada</h2>
+        <p class="slide-subtitle">Esta es la página de inicio. Su pieza clave es la <strong>lista ordenada</strong> <code>&lt;ol&gt;</code>: numera automáticamente tus temas (1, 2, 3...). Cada elemento <code>&lt;li&gt;</code> contiene un <strong>enlace</strong> <code>&lt;a&gt;</code> hacia la página de ese tema. Copia el código, cambia los textos por los de <strong>tu</strong> tutorial y repite el bloque <code>&lt;li&gt;</code> por cada concepto.</p>
+<div class="code-editor-box"><div class="editor-header"><span class="editor-dot r"></span><span class="editor-dot y"></span><span class="editor-dot g"></span><span class="editor-title">tutorial/index.html</span><span class="editor-badge">HTML</span></div><div class="editor-body"><div class="cl"><span class="ln">1</span><span class="code">&lt;!DOCTYPE html<span class="tag">&gt;</span></span></div><div class="cl"><span class="ln">2</span><span class="code"><span class="tag">&lt;html</span> <span class="attr">lang</span>=<span class="str">"es"</span><span class="tag">&gt;</span></span></div><div class="cl"><span class="ln">3</span><span class="code"><span class="tag">&lt;head</span><span class="tag">&gt;</span></span></div><div class="cl"><span class="ln">4</span><span class="code">  <span class="tag">&lt;meta</span> <span class="attr">charset</span>=<span class="str">"UTF-8"</span><span class="tag">&gt;</span></span></div><div class="cl"><span class="ln">5</span><span class="code">  <span class="tag">&lt;meta</span> <span class="attr">name</span>=<span class="str">"viewport"</span> <span class="attr">content</span>=<span class="str">"width=device-width, initial-scale=1.0"</span><span class="tag">&gt;</span></span></div><div class="cl"><span class="ln">6</span><span class="code">  <span class="tag">&lt;title</span><span class="tag">&gt;</span>Tutorial: Cómo armar tu primera PC<span class="tag">&lt;/title</span><span class="tag">&gt;</span></span></div><div class="cl"><span class="ln">7</span><span class="code">  <span class="tag">&lt;link</span> <span class="attr">rel</span>=<span class="str">"stylesheet"</span> <span class="attr">href</span>=<span class="str">"css/estilos.css"</span><span class="tag">&gt;</span></span></div><div class="cl"><span class="ln">8</span><span class="code"><span class="tag">&lt;/head</span><span class="tag">&gt;</span></span></div><div class="cl"><span class="ln">9</span><span class="code"><span class="tag">&lt;body</span><span class="tag">&gt;</span></span></div><div class="cl"><span class="ln">10</span><span class="code">  <span class="tag">&lt;header</span><span class="tag">&gt;</span></span></div><div class="cl"><span class="ln">11</span><span class="code">    <span class="tag">&lt;strong</span><span class="tag">&gt;</span>Mi tutorial<span class="tag">&lt;/strong</span><span class="tag">&gt;</span></span></div><div class="cl"><span class="ln">12</span><span class="code">  <span class="tag">&lt;/header</span><span class="tag">&gt;</span></span></div><div class="cl"><span class="ln">13</span><span class="code"></span></div><div class="cl"><span class="ln">14</span><span class="code">  <span class="tag">&lt;main</span><span class="tag">&gt;</span></span></div><div class="cl"><span class="ln">15</span><span class="code">    <span class="tag">&lt;h1</span><span class="tag">&gt;</span>Cómo armar tu primera PC<span class="tag">&lt;/h1</span><span class="tag">&gt;</span></span></div><div class="cl"><span class="ln">16</span><span class="code">    <span class="tag">&lt;p</span><span class="tag">&gt;</span>Introducción breve: de qué trata el tutorial.<span class="tag">&lt;/p</span><span class="tag">&gt;</span></span></div><div class="cl"><span class="ln">17</span><span class="code"></span></div><div class="cl"><span class="ln">18</span><span class="code">    <span class="tag">&lt;h2</span><span class="tag">&gt;</span>Conceptos del tutorial<span class="tag">&lt;/h2</span><span class="tag">&gt;</span></span></div><div class="cl"><span class="ln">19</span><span class="code">    <span class="tag">&lt;ol</span> <span class="attr">class</span>=<span class="str">"indice"</span><span class="tag">&gt;</span></span></div><div class="cl"><span class="ln">20</span><span class="code">      <span class="tag">&lt;li</span><span class="tag">&gt;</span></span></div><div class="cl"><span class="ln">21</span><span class="code">        <span class="tag">&lt;a</span> <span class="attr">href</span>=<span class="str">"tema1.html"</span><span class="tag">&gt;</span>El procesador (CPU)<span class="tag">&lt;/a</span><span class="tag">&gt;</span></span></div><div class="cl"><span class="ln">22</span><span class="code">        <span class="tag">&lt;span</span><span class="tag">&gt;</span>Ejecuta las instrucciones de los programas.<span class="tag">&lt;/span</span><span class="tag">&gt;</span></span></div><div class="cl"><span class="ln">23</span><span class="code">      <span class="tag">&lt;/li</span><span class="tag">&gt;</span></span></div><div class="cl"><span class="ln">24</span><span class="code">      <span class="tag">&lt;li</span><span class="tag">&gt;</span></span></div><div class="cl"><span class="ln">25</span><span class="code">        <span class="tag">&lt;a</span> <span class="attr">href</span>=<span class="str">"tema2.html"</span><span class="tag">&gt;</span>La memoria RAM<span class="tag">&lt;/a</span><span class="tag">&gt;</span></span></div><div class="cl"><span class="ln">26</span><span class="code">        <span class="tag">&lt;span</span><span class="tag">&gt;</span>Guarda temporalmente lo que estás usando.<span class="tag">&lt;/span</span><span class="tag">&gt;</span></span></div><div class="cl"><span class="ln">27</span><span class="code">      <span class="tag">&lt;/li</span><span class="tag">&gt;</span></span></div><div class="cl"><span class="ln">28</span><span class="code">      <span class="cm">&lt;!-- Un &lt;li&gt; por cada tema de tu tutorial --&gt;</span></span></div><div class="cl"><span class="ln">29</span><span class="code">    <span class="tag">&lt;/ol</span><span class="tag">&gt;</span></span></div><div class="cl"><span class="ln">30</span><span class="code">  <span class="tag">&lt;/main</span><span class="tag">&gt;</span></span></div><div class="cl"><span class="ln">31</span><span class="code"><span class="tag">&lt;/body</span><span class="tag">&gt;</span></span></div><div class="cl"><span class="ln">32</span><span class="code"><span class="tag">&lt;/html</span><span class="tag">&gt;</span></span></div></div></div><div class="notes"><div class="notes-title"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"/><path d="M6 6h10"/><path d="M6 10h10"/></svg> Qué hace cada parte, línea por línea</div><div class="note"><span class="note-ln">Línea 6</span><p>Cambia el título por el de tu tutorial.</p></div><div class="note"><span class="note-ln">Línea 7</span><p>Conecta <code>css/estilos.css</code>, el archivo que crearás en el paso 4.</p></div><div class="note"><span class="note-ln">Línea 15</span><p>El <strong>título del tutorial</strong>: solo debe haber un <code>&lt;h1&gt;</code> por página.</p></div><div class="note"><span class="note-ln">Línea 19</span><p><strong>Lista ordenada</strong>. Este es el requisito principal de EV01. Si usas <code>&lt;ul&gt;</code> serán viñetas y no cumple.</p></div><div class="note"><span class="note-ln">Línea 21</span><p>El <strong>enlace</strong> al tema 1. El valor de <code>href</code> debe ser <strong>exactamente</strong> el nombre del archivo.</p></div><div class="note"><span class="note-ln">Línea 22</span><p>Una breve descripción del concepto, debajo del enlace.</p></div><div class="note"><span class="note-ln">Línea 28</span><p>Un comentario HTML: el navegador no lo muestra. Duplica el bloque <code>&lt;li&gt;</code> para cada tema nuevo.</p></div></div><div class="callout callout-orange"><div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg> Error frecuente</div><div>Escribir <code>href="Tema1.html"</code> cuando el archivo se llama <code>tema1.html</code>. En muchos servidores, mayúsculas y minúsculas <strong>no son lo mismo</strong>.</div></div>
+      </div>
+    </section>
+
+    <section class="slide-section" id="slide-11">
+      <div class="slide-container">
+        <span class="slide-badge-category badge-green"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg> Bloque 2 · EV01 · Paso 3</span>
+        <h2 class="slide-title">Paso 3: la página de cada tema (título, imagen y descripción)</h2>
+        <p class="slide-subtitle">Cada tema repite la misma receta: un <code>&lt;h1&gt;</code> con el título, una <code>&lt;img&gt;</code> con su <code>alt</code> y la descripción en párrafos. Escribe <code>tema1.html</code> completo una vez; para los demás, <strong>duplica el archivo</strong> y cambia solo el título, la imagen y el texto. No olvides el enlace de regreso al índice.</p>
+<div class="code-editor-box"><div class="editor-header"><span class="editor-dot r"></span><span class="editor-dot y"></span><span class="editor-dot g"></span><span class="editor-title">tutorial/tema1.html  (el esqueleto va igual que antes)</span><span class="editor-badge">HTML</span></div><div class="editor-body"><div class="cl"><span class="ln">1</span><span class="code"><span class="tag">&lt;main</span><span class="tag">&gt;</span></span></div><div class="cl"><span class="ln">2</span><span class="code">  <span class="tag">&lt;article</span><span class="tag">&gt;</span></span></div><div class="cl"><span class="ln">3</span><span class="code">    <span class="tag">&lt;h1</span><span class="tag">&gt;</span>El procesador (CPU): el cerebro de tu PC<span class="tag">&lt;/h1</span><span class="tag">&gt;</span></span></div><div class="cl"><span class="ln">4</span><span class="code"></span></div><div class="cl"><span class="ln">5</span><span class="code">    <span class="tag">&lt;img</span> <span class="attr">class</span>=<span class="str">"imagen-tema"</span> <span class="attr">src</span>=<span class="str">"img/cpu.svg"</span></span></div><div class="cl"><span class="ln">6</span><span class="code">         <span class="attr">alt</span>=<span class="str">"Procesador visto desde arriba"</span><span class="tag">&gt;</span></span></div><div class="cl"><span class="ln">7</span><span class="code"></span></div><div class="cl"><span class="ln">8</span><span class="code">    <span class="tag">&lt;h2</span><span class="tag">&gt;</span>Descripción<span class="tag">&lt;/h2</span><span class="tag">&gt;</span></span></div><div class="cl"><span class="ln">9</span><span class="code">    <span class="tag">&lt;p</span><span class="tag">&gt;</span>El procesador ejecuta las instrucciones de todos los</span></div><div class="cl"><span class="ln">10</span><span class="code">       programas: abrir un navegador, compilar código o correr</span></div><div class="cl"><span class="ln">11</span><span class="code">       un juego.<span class="tag">&lt;/p</span><span class="tag">&gt;</span></span></div><div class="cl"><span class="ln">12</span><span class="code">    <span class="tag">&lt;p</span><span class="tag">&gt;</span>Al elegirlo, revisa que su socket sea compatible con la</span></div><div class="cl"><span class="ln">13</span><span class="code">       placa madre.<span class="tag">&lt;/p</span><span class="tag">&gt;</span></span></div><div class="cl"><span class="ln">14</span><span class="code">  <span class="tag">&lt;/article</span><span class="tag">&gt;</span></span></div><div class="cl"><span class="ln">15</span><span class="code"></span></div><div class="cl"><span class="ln">16</span><span class="code">  <span class="tag">&lt;a</span> <span class="attr">href</span>=<span class="str">"index.html"</span><span class="tag">&gt;</span>Volver al índice<span class="tag">&lt;/a</span><span class="tag">&gt;</span></span></div><div class="cl"><span class="ln">17</span><span class="code"><span class="tag">&lt;/main</span><span class="tag">&gt;</span></span></div></div></div><div class="notes"><div class="notes-title"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"/><path d="M6 6h10"/><path d="M6 10h10"/></svg> Qué hace cada parte, línea por línea</div><div class="note"><span class="note-ln">Línea 2</span><p>Cada tema es una pieza independiente, por eso va dentro de un <code>&lt;article&gt;</code>.</p></div><div class="note"><span class="note-ln">Línea 3</span><p>El <strong>título</strong> del tema (requisito de EV01).</p></div><div class="note"><span class="note-ln">Línea 5</span><p>La <strong>imagen</strong> del tema (requisito de EV01). <code>src</code> es la ruta del archivo.</p></div><div class="note"><span class="note-ln">Línea 6</span><p>Texto alternativo: describe la imagen. Si la ruta falla, es lo que se muestra; también lo leen los lectores de pantalla.</p></div><div class="note"><span class="note-ln">Línea 8</span><p>Un subtítulo de segundo nivel para organizar el contenido.</p></div><div class="note"><span class="note-ln">Línea 9</span><p>La <strong>descripción</strong> del tema (requisito de EV01). Usa 2 o 3 párrafos con tus propias palabras.</p></div><div class="note"><span class="note-ln">Línea 16</span><p>Enlace de regreso al índice, para que el usuario no quede atrapado en la página.</p></div></div>
+      </div>
+    </section>
+
+    <section class="slide-section" id="slide-12">
+      <div class="slide-container">
+        <span class="slide-badge-category badge-blue"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="13.5" cy="6.5" r=".5"/><circle cx="17.5" cy="10.5" r=".5"/><circle cx="8.5" cy="7.5" r=".5"/><circle cx="6.5" cy="12.5" r=".5"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/></svg> Bloque 2 · EV01 · Paso 4</span>
+        <h2 class="slide-title">Paso 4: dale estilo con CSS (css/estilos.css)</h2>
+        <p class="slide-subtitle">Hasta ahora tu tutorial se ve como un documento en blanco y negro. CSS son <strong>reglas</strong> con esta forma: <code>selector { propiedad: valor; }</code>. El <em>selector</em> dice a qué elementos aplica (<code>h1</code> son todos los títulos, <code>.indice</code> es todo lo que tenga <code>class="indice"</code>) y cada <em>propiedad</em> cambia un aspecto.</p>
+<div class="code-editor-box"><div class="editor-header"><span class="editor-dot r"></span><span class="editor-dot y"></span><span class="editor-dot g"></span><span class="editor-title">tutorial/css/estilos.css</span><span class="editor-badge">CSS</span></div><div class="editor-body"><div class="cl"><span class="ln">1</span><span class="code"><span class="cm">/* Variables: los colores en un solo lugar */</span></span></div><div class="cl"><span class="ln">2</span><span class="code"><span class="sel">:root</span> { <span class="prop">--azul</span>: <span class="val">#2563eb</span><span class="punc">;</span> <span class="prop">--texto</span>: <span class="val">#334155</span><span class="punc">;</span> }</span></div><div class="cl"><span class="ln">3</span><span class="code"></span></div><div class="cl"><span class="ln">4</span><span class="code"><span class="sel">*</span> { <span class="prop">margin</span>: <span class="val">0</span><span class="punc">;</span> <span class="prop">padding</span>: <span class="val">0</span><span class="punc">;</span> <span class="prop">box-sizing</span>: <span class="val">border-box</span><span class="punc">;</span> }</span></div><div class="cl"><span class="ln">5</span><span class="code"></span></div><div class="cl"><span class="ln">6</span><span class="code"><span class="sel">body</span> {</span></div><div class="cl"><span class="ln">7</span><span class="code">  <span class="prop">font-family</span>: <span class="val">Arial, sans-serif</span>;</span></div><div class="cl"><span class="ln">8</span><span class="code">  <span class="prop">color</span>: <span class="val">var(--texto)</span>;</span></div><div class="cl"><span class="ln">9</span><span class="code">  <span class="prop">line-height</span>: <span class="val">1.7</span>;</span></div><div class="cl"><span class="ln">10</span><span class="code">}</span></div><div class="cl"><span class="ln">11</span><span class="code"></span></div><div class="cl"><span class="ln">12</span><span class="code"><span class="sel">main</span> { <span class="prop">max-width</span>: <span class="val">820px</span><span class="punc">;</span> <span class="prop">margin</span>: <span class="val">0 auto</span><span class="punc">;</span> <span class="prop">padding</span>: <span class="val">32px 20px</span><span class="punc">;</span> }</span></div><div class="cl"><span class="ln">13</span><span class="code"></span></div><div class="cl"><span class="ln">14</span><span class="code"><span class="sel">h1</span> { <span class="prop">color</span>: <span class="val">#1e293b</span><span class="punc">;</span> <span class="prop">margin-bottom</span>: <span class="val">12px</span><span class="punc">;</span> }</span></div><div class="cl"><span class="ln">15</span><span class="code"></span></div><div class="cl"><span class="ln">16</span><span class="code"><span class="sel">.imagen-tema</span> { <span class="prop">width</span>: <span class="val">100%</span><span class="punc">;</span> <span class="prop">height</span>: <span class="val">auto</span><span class="punc">;</span> <span class="prop">border-radius</span>: <span class="val">12px</span><span class="punc">;</span> }</span></div><div class="cl"><span class="ln">17</span><span class="code"></span></div><div class="cl"><span class="ln">18</span><span class="code"><span class="sel">.indice li</span> { <span class="prop">margin</span>: <span class="val">0 0 12px 22px</span><span class="punc">;</span> }</span></div><div class="cl"><span class="ln">19</span><span class="code"><span class="sel">.indice a</span> { <span class="prop">color</span>: <span class="val">var(--azul)</span><span class="punc">;</span> <span class="prop">font-weight</span>: <span class="val">700</span><span class="punc">;</span> }</span></div></div></div><div class="notes"><div class="notes-title"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"/><path d="M6 6h10"/><path d="M6 10h10"/></svg> Qué hace cada parte, línea por línea</div><div class="note"><span class="note-ln">Línea 2</span><p><strong>Variables CSS</strong>: guardas un color una vez (<code>--azul</code>) y lo reutilizas con <code>var(--azul)</code>. Si luego quieres otro azul, lo cambias en un solo lugar.</p></div><div class="note"><span class="note-ln">Línea 4</span><p>El asterisco aplica a <strong>todos</strong> los elementos. Quita los márgenes por defecto del navegador y hace que el ancho incluya el relleno (<code>box-sizing</code>), lo que evita desbordes.</p></div><div class="note"><span class="note-ln">Línea 6</span><p>Estilo base de toda la página: tipo de letra, color del texto y separación entre líneas (<code>line-height</code>) para leer cómodo.</p></div><div class="note"><span class="note-ln">Línea 12</span><p><code>max-width</code> limita el ancho del contenido; <code>margin: 0 auto</code> lo <strong>centra</strong>; <code>padding</code> deja aire en los bordes.</p></div><div class="note"><span class="note-ln">Línea 14</span><p>Todos los títulos principales quedan en azul oscuro y con espacio debajo.</p></div><div class="note"><span class="note-ln">Línea 16</span><p>Un <strong>selector de clase</strong> (empieza con punto): afecta a lo que tenga <code>class="imagen-tema"</code>. La imagen ocupa todo el ancho sin deformarse.</p></div><div class="note"><span class="note-ln">Línea 18</span><p>Separa cada elemento de la lista ordenada. Un selector con espacio significa «los <code>li</code> que están dentro de <code>.indice</code>».</p></div></div><div class="callout callout-green"><div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg> Así debería verse</div><div>Un contenido centrado y cómodo de leer, títulos oscuros, enlaces azules en negrita, la lista numerada con espacio entre elementos y la imagen del tema ocupando todo el ancho. Si no ves ningún cambio, revisa la línea <code>&lt;link rel="stylesheet"&gt;</code> de tus páginas.</div></div>
+      </div>
+    </section>
+
+    <section class="slide-section" id="slide-13">
+      <div class="slide-container">
+        <span class="slide-badge-category badge-orange"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg> Bloque 2 · EV01 · Paso 5</span>
+        <h2 class="slide-title">Paso 5: prueba tu tutorial y corrige los errores típicos</h2>
+        <p class="slide-subtitle">Abre <code>index.html</code> en el navegador y recorre todo: haz clic en cada tema, en «Volver al índice» y verifica que cada página tiene título, imagen y descripción. Si algo falla, esta tabla te dice dónde buscar.</p>
+<div class="table-container-card"><table class="table-comparativa"><thead><tr><th>Si ves esto...</th><th>Casi siempre es porque...</th><th>Cómo se arregla</th></tr></thead><tbody><tr><td>La imagen no aparece (ícono roto)</td><td>La ruta o el nombre del archivo no coinciden</td><td>Revisa <code>src="img/cpu.svg"</code> letra por letra y que la imagen esté en la carpeta <code>img/</code></td></tr><tr><td>La página se ve sin estilo</td><td>El <code>&lt;link&gt;</code> a la hoja de estilos está mal</td><td>Comprueba <code>href="css/estilos.css"</code> y que el archivo exista en <code>css/</code></td></tr><tr><td>El enlace da «archivo no encontrado»</td><td>El <code>href</code> no es igual al nombre del archivo</td><td>Compara mayúsculas, tildes y extensión (<code>tema1.html</code>)</td></tr><tr><td>La lista no tiene números</td><td>Usaste <code>&lt;ul&gt;</code> o quitaste la numeración con CSS</td><td>Usa <code>&lt;ol&gt;</code> y no pongas <code>list-style: none</code></td></tr><tr><td>Cambié el CSS y no se nota</td><td>No guardaste o el navegador guardó la versión anterior</td><td>Guarda con <strong>Ctrl + S</strong> y recarga con <strong>Ctrl + F5</strong></td></tr></tbody></table></div><div class="callout callout-orange"><div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/></svg> Entrega de EV01</div><div>Cuando todo funcione: comprime la <strong>carpeta completa</strong> <code>tutorial/</code> en un ZIP llamado <strong>GA6-220501096-AA4-EV01_Nombre_Apellido.zip</strong>. Cómo comprimir y subir lo verás al final de la sesión.</div></div>
+      </div>
+    </section>
+
+    <section class="slide-section" id="slide-14">
+      <div class="slide-container">
+        <span class="slide-badge-category badge-blue"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg> Bloque 3 · EV02 · Qué es un componente</span>
+        <h2 class="slide-title">EV02: qué es un componente y cómo encontrarlos en tu proyecto</h2>
+        <p class="slide-subtitle">Un <strong>componente</strong> es una pieza de la interfaz con una función clara y que suele <strong>repetirse</strong>: el encabezado se repite en todas las páginas, la tarjeta de producto se repite una vez por cada producto. Tu documento EV02 explica <strong>cuáles son los componentes de tu proyecto</strong> y con qué etiquetas HTML se construyen. Observa tu página de inicio de TechStore Pro: cada número es un componente.</p>
+<div class="fig-box"><svg viewBox="0 0 620 360" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Página de inicio de TechStore Pro con sus componentes numerados"><rect x="6" y="6" width="608" height="348" rx="14" fill="#f8fafc" stroke="#cbd5e1" stroke-width="2"/><rect x="6" y="6" width="608" height="48" rx="14" fill="#fff" stroke="#cbd5e1" stroke-width="2"/><text x="26" y="36" font-family="JetBrains Mono, Consolas, monospace" font-size="15" font-weight="700" fill="#1e293b" text-anchor="start">TechStore Pro</text><text x="260" y="36" font-family="JetBrains Mono, Consolas, monospace" font-size="11" font-weight="500" fill="#475569" text-anchor="start">Inicio   Productos   Nosotros   Contacto</text><rect x="30" y="72" width="560" height="68" rx="10" fill="#dbeafe"/><text x="310" y="100" font-family="JetBrains Mono, Consolas, monospace" font-size="15" font-weight="700" fill="#1e3a8a" text-anchor="middle">Bienvenido a TechStore Pro</text><rect x="250" y="112" width="52" height="18" rx="9" fill="#2563eb"/><rect x="316" y="112" width="52" height="18" rx="9" fill="#2563eb"/><rect x="30" y="156" width="170" height="124" rx="10" fill="#fff" stroke="#cbd5e1" stroke-width="2"/><rect x="40" y="166" width="150" height="50" rx="6" fill="#bfdbfe"/><rect x="40" y="226" width="110" height="9" rx="4" fill="#94a3b8"/><rect x="40" y="244" width="70" height="9" rx="4" fill="#cbd5e1"/><rect x="40" y="260" width="62" height="14" rx="7" fill="#2563eb"/><rect x="225" y="156" width="170" height="124" rx="10" fill="#fff" stroke="#cbd5e1" stroke-width="2"/><rect x="235" y="166" width="150" height="50" rx="6" fill="#bfdbfe"/><rect x="235" y="226" width="110" height="9" rx="4" fill="#94a3b8"/><rect x="235" y="244" width="70" height="9" rx="4" fill="#cbd5e1"/><rect x="235" y="260" width="62" height="14" rx="7" fill="#2563eb"/><rect x="420" y="156" width="170" height="124" rx="10" fill="#fff" stroke="#cbd5e1" stroke-width="2"/><rect x="430" y="166" width="150" height="50" rx="6" fill="#bfdbfe"/><rect x="430" y="226" width="110" height="9" rx="4" fill="#94a3b8"/><rect x="430" y="244" width="70" height="9" rx="4" fill="#cbd5e1"/><rect x="430" y="260" width="62" height="14" rx="7" fill="#2563eb"/><rect x="30" y="290" width="560" height="26" rx="6" fill="#fff" stroke="#cbd5e1"/><text x="310" y="308" font-family="JetBrains Mono, Consolas, monospace" font-size="10" font-weight="500" fill="#475569" text-anchor="middle">¿Quiénes somos?  Somos una tienda especializada en tecnología</text><rect x="6" y="322" width="608" height="32" rx="14" fill="#1e293b"/><text x="310" y="343" font-family="JetBrains Mono, Consolas, monospace" font-size="11" font-weight="500" fill="#cbd5e1" text-anchor="middle">Pie de página · contacto · derechos</text><circle cx="24" cy="30" r="13" fill="#ff6b00"/><text x="24" y="35" font-family="JetBrains Mono, Consolas, monospace" font-size="14" font-weight="800" fill="#fff" text-anchor="middle">1</text><circle cx="584" cy="76" r="13" fill="#ff6b00"/><text x="584" y="81" font-family="JetBrains Mono, Consolas, monospace" font-size="14" font-weight="800" fill="#fff" text-anchor="middle">2</text><circle cx="46" cy="160" r="13" fill="#ff6b00"/><text x="46" y="165" font-family="JetBrains Mono, Consolas, monospace" font-size="14" font-weight="800" fill="#fff" text-anchor="middle">3</text><circle cx="241" cy="160" r="13" fill="#ff6b00"/><text x="241" y="165" font-family="JetBrains Mono, Consolas, monospace" font-size="14" font-weight="800" fill="#fff" text-anchor="middle">3</text><circle cx="436" cy="160" r="13" fill="#ff6b00"/><text x="436" y="165" font-family="JetBrains Mono, Consolas, monospace" font-size="14" font-weight="800" fill="#fff" text-anchor="middle">3</text><circle cx="584" cy="296" r="13" fill="#ff6b00"/><text x="584" y="301" font-family="JetBrains Mono, Consolas, monospace" font-size="14" font-weight="800" fill="#fff" text-anchor="middle">4</text><circle cx="588" cy="338" r="13" fill="#ff6b00"/><text x="588" y="343" font-family="JetBrains Mono, Consolas, monospace" font-size="14" font-weight="800" fill="#fff" text-anchor="middle">5</text></svg></div><div style="margin-top:14px;"><div class="table-container-card"><table class="table-comparativa"><thead><tr><th>N.°</th><th>Componente</th><th>Se construye con...</th></tr></thead><tbody><tr><td>1</td><td><span class='concept-tag'>Encabezado y menú</span></td><td><code>header, h1, nav, ul, li, a</code></td></tr><tr><td>2</td><td><span class='concept-tag'>Bienvenida (hero)</span></td><td><code>section, h2, p, a</code></td></tr><tr><td>3</td><td><span class='concept-tag'>Tarjeta de producto (se repite)</span></td><td><code>article, img, h3, p, strong, button</code></td></tr><tr><td>4</td><td><span class='concept-tag'>Sección «¿Quiénes somos?»</span></td><td><code>section, h2, p</code></td></tr><tr><td>5</td><td><span class='concept-tag'>Pie de página</span></td><td><code>footer, nav, address, time, p</code></td></tr></tbody></table></div></div>
+      </div>
+    </section>
+
+    <section class="slide-section" id="slide-15">
+      <div class="slide-container">
+        <span class="slide-badge-category badge-green"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" x2="8" y1="13" y2="13"/><line x1="16" x2="8" y1="17" y2="17"/></svg> Bloque 3 · EV02 · Cómo redactar cada sección</span>
+        <h2 class="slide-title">Cómo escribir cada parte de tu documento (con frases modelo)</h2>
+        <p class="slide-subtitle">La guía exige como mínimo: <strong>portada, introducción, objetivo y definición de los elementos HTML</strong>. Aquí tienes qué debe responder cada sección y cómo empezar a redactarla. Descarga la plantilla y reemplaza los textos entre corchetes con los de tu proyecto.</p>
+<div class="table-container-card"><table class="table-comparativa"><thead><tr><th>Sección</th><th>Qué debe responder</th><th>Frase para empezar</th></tr></thead><tbody><tr><td><span class='concept-tag'>Portada</span></td><td>¿Quién entrega, qué, a quién y cuándo?</td><td>SENA · programa ADSO · ficha 3389010 · «Documento de componentes front-end» · evidencia GA6-220501096-AA4-EV02 · tu nombre · instructor · fecha</td></tr><tr><td><span class='concept-tag'>Introducción</span></td><td>¿Qué es tu proyecto y de qué trata el documento? (2 párrafos)</td><td>«<em>TechStore Pro es una tienda en línea de tecnología que...</em> Este documento especifica los componentes front-end que...»</td></tr><tr><td><span class='concept-tag'>Objetivo general</span></td><td>¿Qué lograrás con este documento? (1 oración con verbo en infinitivo)</td><td>«<em>Establecer la estructura de componentes front-end de [tu proyecto] definiendo los elementos HTML...</em>»</td></tr><tr><td><span class='concept-tag'>Objetivos específicos</span></td><td>Los pasos para lograrlo (3 viñetas)</td><td>«<em>Identificar los componentes de la interfaz.</em>» · «<em>Definir los elementos HTML de cada componente.</em>»</td></tr><tr><td><span class='concept-tag'>Componentes y elementos HTML</span></td><td>¿Qué piezas hay y con qué etiquetas se construyen?</td><td>Una tabla: componente → elementos HTML → estilos CSS (te muestro cómo en el siguiente slide)</td></tr><tr><td><span class='concept-tag'>Conclusión y referencias</span></td><td>¿Qué aprendiste? ¿Qué fuentes usaste?</td><td>«<em>Definir los componentes antes de programar permite...</em>» · MDN Web Docs</td></tr></tbody></table></div><div class="cards-grid-2" style="margin-top:16px;"><div class="card-pro top-naranja"><div class="card-header-flex"><div class="card-icon-badge icon-badge-orange"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg></div><span class="card-pill-tag badge-orange">Plantilla lista</span></div><h3 class="card-title">Plantilla Word con todas las secciones</h3><p class="card-desc">Trae la portada armada y un texto guía en cada sección. <a href="recursos/PLANTILLA_EV02_documento_componentes.docx" target="_blank" class="btn-action-primary"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg> Descargar plantilla (.docx)</a></p></div><div class="card-pro top-azul"><div class="card-header-flex"><div class="card-icon-badge icon-badge-blue"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg></div><span class="card-pill-tag badge-blue">Para guiarte</span></div><h3 class="card-title">Documento de ejemplo completo</h3><p class="card-desc">Mira el nivel de detalle esperado en un documento terminado. <a href="ejemplos/EV02_documento_componentes_EJEMPLO.docx" target="_blank" class="btn-action-primary"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg> Descargar ejemplo (.docx)</a></p></div></div>
+      </div>
+    </section>
+
+    <section class="slide-section" id="slide-16">
+      <div class="slide-container">
+        <span class="slide-badge-category badge-orange"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="8" x2="21" y1="6" y2="6"/><line x1="8" x2="21" y1="12" y2="12"/><line x1="8" x2="21" y1="18" y2="18"/><line x1="3" x2="3.01" y1="6" y2="6"/><line x1="3" x2="3.01" y1="12" y2="12"/><line x1="3" x2="3.01" y1="18" y2="18"/></svg> Bloque 3 · EV02 · Llenar la tabla de componentes</span>
+        <h2 class="slide-title">Ejercicio guiado: arma la tabla de componentes de TU proyecto</h2>
+        <p class="slide-subtitle">Esta es la parte central del documento y la puedes completar en 20 minutos si sigues el método. No estás inventando: estás <strong>leyendo tu propio código</strong> y anotando lo que encuentras.</p>
+<div class="steps-list"><div class="step-row"><div class="step-n">1</div><div><h4>Abre tu index.html y ubica los bloques</h4><p>Busca cada <code>&lt;header&gt;</code>, <code>&lt;section&gt;</code>, <code>&lt;article&gt;</code> y <code>&lt;footer&gt;</code>. Cada uno es un componente. Ponle un nombre: «Encabezado y menú», «Tarjeta de producto», «Pie de página»...</p></div></div><div class="step-row"><div class="step-n">2</div><div><h4>Anota las etiquetas que hay dentro de cada bloque</h4><p>Lee el código del bloque y apunta las etiquetas distintas que ves. En el encabezado, por ejemplo: <code>header, h1, nav, ul, li, a</code>.</p></div></div><div class="step-row"><div class="step-n">3</div><div><h4>Busca sus reglas en tu CSS</h4><p>Abre tu hoja de estilos y encuentra el selector de ese componente (<code>header</code>, <code>article</code>, <code>footer</code>). Anota 1 o 2 reglas importantes: <code>display: flex</code>, <code>display: grid</code>, <code>border-radius</code>...</p></div></div><div class="step-row"><div class="step-n">4</div><div><h4>Redacta la descripción en una frase</h4><p>Escribe qué hace cada componente: «Muestra el logo y el menú de navegación; usa Flexbox para alinearlos en una fila.»</p></div></div></div><div style="margin-top:16px;"><div class="table-container-card"><table class="table-comparativa"><thead><tr><th>Componente</th><th>Elementos HTML</th><th>Estilos CSS principales</th></tr></thead><tbody><tr><td>Encabezado y menú</td><td><code>header, h1, nav, ul, li, a</code></td><td><code>display: flex</code> para alinear logo y menú; <code>gap</code> para separar enlaces</td></tr><tr><td>Tarjeta de producto</td><td><code>article, img, h3, p, strong, button</code></td><td>Borde y esquinas redondeadas; <code>object-fit: cover</code> en la imagen</td></tr><tr><td><em>(tu componente)</em></td><td><em>(tus etiquetas)</em></td><td><em>(tus reglas)</em></td></tr></tbody></table></div></div>
+      </div>
+    </section>
+
+    <section class="slide-section" id="slide-17">
+      <div class="slide-container">
+        <span class="slide-badge-category badge-green"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg> Bloque 3 · EV02 · Definición de los elementos HTML</span>
+        <h2 class="slide-title">Define cada elemento HTML que usas: «etiqueta — función — dónde»</h2>
+        <p class="slide-subtitle">La guía pide explícitamente la <strong>definición de los elementos HTML a utilizar</strong>. La forma más clara es otra tabla con tres columnas: la etiqueta, <strong>qué hace</strong> y <strong>dónde la usas en tu proyecto</strong>. Incluye mínimo 12 elementos; estos te sirven de modelo.</p>
+<div class="table-container-card"><table class="table-comparativa"><thead><tr><th>Elemento</th><th>Función</th><th>Dónde se usa en el proyecto</th></tr></thead><tbody><tr><td><code>&lt;header&gt;</code></td><td>Agrupa el encabezado de la página: marca y menú.</td><td>Parte superior de cada página.</td></tr><tr><td><code>&lt;nav&gt;</code></td><td>Define un bloque de enlaces de navegación.</td><td>Menú principal y enlaces del pie.</td></tr><tr><td><code>&lt;article&gt;</code></td><td>Contenido independiente y reutilizable.</td><td>Cada tarjeta de producto.</td></tr><tr><td><code>&lt;img alt=""&gt;</code></td><td>Inserta una imagen; el texto alternativo la describe.</td><td>Tarjetas del catálogo.</td></tr><tr><td><code>&lt;ul&gt; / &lt;ol&gt; / &lt;li&gt;</code></td><td>Listas no ordenadas y ordenadas.</td><td>Menú (ul) y pasos de compra (ol).</td></tr><tr><td><code>&lt;form&gt;, &lt;label&gt;, &lt;input&gt;</code></td><td>Formulario y sus campos; <code>label</code> se asocia al campo con <code>for</code> e <code>id</code>.</td><td>Inicio de sesión y contacto.</td></tr><tr><td><code>&lt;button&gt;</code></td><td>Botón que dispara una acción.</td><td>Agregar al carrito, menú móvil.</td></tr></tbody></table></div><div class="callout callout-blue"><div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg> Qué más incluir en la lista</div><div><code>&lt;!DOCTYPE&gt;</code>, <code>&lt;html&gt;</code>, <code>&lt;head&gt;</code>, <code>&lt;meta&gt;</code>, <code>&lt;title&gt;</code>, <code>&lt;body&gt;</code>, <code>&lt;main&gt;</code>, <code>&lt;section&gt;</code>, <code>&lt;footer&gt;</code>, <code>&lt;h1&gt;–&lt;h3&gt;</code>, <code>&lt;p&gt;</code>, <code>&lt;a&gt;</code>, <code>&lt;script&gt;</code>. El documento de ejemplo ya los define con redacción completa.</div></div><div class="callout callout-orange"><div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/></svg> Entrega de EV02</div><div>Guarda tu documento en Word <strong>y expórtalo a PDF</strong> (Archivo → Guardar como → PDF). Mete ambos en una carpeta y comprímela en <strong>GA6-220501096-AA4-EV02_Nombre_Apellido.zip</strong>. Si el documento está en Google Docs: Archivo → Descargar → Microsoft Word / PDF.</div></div>
+      </div>
+    </section>
+
+    <section class="slide-section" id="slide-18">
+      <div class="slide-container">
+        <span class="slide-badge-category badge-orange"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="19" r="3"/><path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15"/><circle cx="18" cy="5" r="3"/></svg> Bloque 4 · EV03 · Punto de partida</span>
+        <h2 class="slide-title">EV03: tu techstore-html ya está a la mitad del camino</h2>
+        <p class="slide-subtitle">En la Guía 5 construiste la página de inicio de TechStore Pro con HTML y CSS. Eso ya cumple una parte de EV03. Lo que falta es completar el sitio con más páginas, hacerlo adaptable a móviles y agregarle comportamiento con JavaScript.</p>
+<div class="table-container-card"><table class="table-comparativa"><thead><tr><th>Ya lo tienes (Guía 5)</th><th>Lo que falta para EV03</th></tr></thead><tbody><tr><td>Página <code>index.html</code> con header, hero, tarjetas, «¿Quiénes somos?» y footer</td><td>Al menos <strong>2 páginas más enlazadas</strong>: por ejemplo <code>login.html</code> y <code>productos.html</code> (o <code>contacto.html</code>)</td></tr><tr><td>Hoja <code>estilos.css</code> con variables, Flexbox y Grid</td><td>Carpetas ordenadas (<code>css/</code>, <code>js/</code>, <code>img/</code>) y <strong>una sola</strong> hoja de estilos enlazada</td></tr><tr><td>Un punto de corte para móvil (600 px)</td><td>Diseño <strong>adaptable</strong>: tableta (900 px) y móvil (600 px) con menú plegable</td></tr><tr><td>Tarjetas sin enlace y sin lista ordenada</td><td>Tarjetas que <strong>enlazan al detalle</strong> y una lista <code>&lt;ol&gt;</code> («Cómo comprar»)</td></tr><tr><td>Nada de JavaScript</td><td><strong>JS básico</strong>: menú móvil y validación de un formulario</td></tr></tbody></table></div><div class="callout callout-blue"><div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg> Trabaja sobre una copia</div><div>Antes de empezar, <strong>copia tu carpeta techstore-html</strong> y trabaja sobre la copia. Así conservas intacta la entrega de la Guía 5 por si algo sale mal.</div></div>
+      </div>
+    </section>
+
+    <section class="slide-section" id="slide-19">
+      <div class="slide-container">
+        <span class="slide-badge-category badge-blue"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="13.5" cy="6.5" r=".5"/><circle cx="17.5" cy="10.5" r=".5"/><circle cx="8.5" cy="7.5" r=".5"/><circle cx="6.5" cy="12.5" r=".5"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/></svg> Bloque 4 · EV03 · De tu diseño al código</span>
+        <h2 class="slide-title">Cómo convertir tu diseño de Figma (AA3) en HTML y CSS</h2>
+        <p class="slide-subtitle">La evidencia EV03 exige <strong>aplicar el diseño de interfaz que hiciste antes</strong> (los mockups de AA3). Cada decisión de tu diseño tiene un equivalente directo en código. Esta tabla es tu traductor: ábrela mientras construyes.</p>
+<div class="table-container-card"><table class="table-comparativa"><thead><tr><th>En tu diseño (Figma)</th><th>En tu código</th><th>Ejemplo</th></tr></thead><tbody><tr><td>Un frame = una pantalla</td><td>Un archivo <code>.html</code></td><td>Frame «Login» → <code>login.html</code></td></tr><tr><td>Barra superior con logo y menú</td><td><code>&lt;header&gt;</code> + <code>&lt;nav&gt;</code> + <code>&lt;ul&gt;</code></td><td>El mismo header en todas las páginas</td></tr><tr><td>Auto Layout (horizontal o vertical)</td><td>Flexbox</td><td><code>display: flex; gap: 24px;</code></td></tr><tr><td>Cuadrícula de tarjetas</td><td>CSS Grid</td><td><code>grid-template-columns: repeat(3, 1fr)</code></td></tr><tr><td>Paleta de colores y estilos de texto</td><td>Variables CSS en <code>:root</code></td><td><code>--color-primario: #2563eb;</code></td></tr><tr><td>Componente reutilizable (tarjeta, botón)</td><td>Una clase o elemento con estilos compartidos</td><td><code>.boton-secundario</code></td></tr><tr><td>Flecha de conexión del prototipo</td><td>Un enlace <code>&lt;a href&gt;</code></td><td>«Iniciar sesión» → <code>login.html</code></td></tr><tr><td>Versiones tableta y móvil</td><td>Media queries</td><td><code>@media (max-width: 600px)</code></td></tr><tr><td>Pantalla de error</td><td>Mensaje con JavaScript</td><td>Texto en rojo bajo el campo inválido</td></tr></tbody></table></div>
+      </div>
+    </section>
+
+    <section class="slide-section" id="slide-20">
+      <div class="slide-container">
+        <span class="slide-badge-category badge-green"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/></svg> Bloque 4 · EV03 · Paso A</span>
+        <h2 class="slide-title">Paso A: ordena las carpetas y corrige el &lt;head&gt;</h2>
+        <p class="slide-subtitle">Un proyecto ordenado es más fácil de corregir y de entregar. Crea tres carpetas, mueve cada archivo a la suya y deja <strong>una sola</strong> hoja de estilos enlazada. Un error común en el <code>index.html</code> de la Guía 5 es enlazar dos hojas (<code>estilos.css</code> y <code>styles.css</code>) cuando una de ellas no existe.</p>
+<div class="cards-grid-2" style="margin-bottom:6px;"><div class="card-pro top-azul"><div class="card-header-flex"><div class="card-icon-badge icon-badge-blue"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/></svg></div><span class="card-pill-tag badge-blue">Estructura final</span></div><h3 class="card-title">techstore-html/</h3><p class="card-desc"><code>index.html</code> · <code>productos.html</code><br><code>login.html</code> · <code>contacto.html</code><br><code>css/estilos.css</code><br><code>js/main.js</code><br><code>img/</code> (imágenes de los productos)</p></div><div class="card-pro top-verde"><div class="card-header-flex"><div class="card-icon-badge icon-badge-green"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg></div><span class="card-pill-tag badge-green">Recurso</span></div><h3 class="card-title">Kit de imágenes</h3><p class="card-desc">Seis imágenes de productos listas para usar (laptop, celular, tarjeta de video, monitor, teclado y audífonos). Descomprímelas dentro de tu carpeta <code>img/</code>.<br><br><a href="recursos/kit_imagenes_techstore.zip" target="_blank" class="btn-action-primary"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg> Descargar kit (.zip)</a></p></div></div><div class="code-editor-box"><div class="editor-header"><span class="editor-dot r"></span><span class="editor-dot y"></span><span class="editor-dot g"></span><span class="editor-title">index.html  (solo el head)</span><span class="editor-badge">HTML</span></div><div class="editor-body"><div class="cl"><span class="ln">1</span><span class="code"><span class="tag">&lt;head</span><span class="tag">&gt;</span></span></div><div class="cl"><span class="ln">2</span><span class="code">  <span class="tag">&lt;meta</span> <span class="attr">charset</span>=<span class="str">"UTF-8"</span> <span class="tag">/&gt;</span></span></div><div class="cl"><span class="ln">3</span><span class="code">  <span class="tag">&lt;meta</span> <span class="attr">name</span>=<span class="str">"viewport"</span> <span class="attr">content</span>=<span class="str">"width=device-width, initial-scale=1.0"</span> <span class="tag">/&gt;</span></span></div><div class="cl"><span class="ln">4</span><span class="code">  <span class="tag">&lt;title</span><span class="tag">&gt;</span>TechStore Pro | Inicio<span class="tag">&lt;/title</span><span class="tag">&gt;</span></span></div><div class="cl"><span class="ln">5</span><span class="code">  <span class="tag">&lt;link</span> <span class="attr">rel</span>=<span class="str">"stylesheet"</span> <span class="attr">href</span>=<span class="str">"css/estilos.css"</span> <span class="tag">/&gt;</span></span></div><div class="cl"><span class="ln">6</span><span class="code"><span class="tag">&lt;/head</span><span class="tag">&gt;</span></span></div></div></div><div class="notes"><div class="notes-title"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"/><path d="M6 6h10"/><path d="M6 10h10"/></svg> Qué revisar en el head</div><div class="note"><span class="note-ln">Línea 1</span><p>Esta es la configuración de tu página. Revisa que no haya dos líneas <code>&lt;link&gt;</code> apuntando a archivos distintos.</p></div><div class="note"><span class="note-ln">Línea 3</span><p>Imprescindible para que el diseño se adapte a celulares.</p></div><div class="note"><span class="note-ln">Línea 4</span><p>Cada página debe tener su propio título (por ejemplo «TechStore Pro | Login»).</p></div><div class="note"><span class="note-ln">Línea 5</span><p>Mueve tu <code>estilos.css</code> a la carpeta <code>css/</code> y actualiza esta ruta. Repite la misma línea en <strong>todas</strong> las páginas.</p></div></div>
+      </div>
+    </section>
+
+    <section class="slide-section" id="slide-21">
+      <div class="slide-container">
+        <span class="slide-badge-category badge-blue"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg> Bloque 4 · EV03 · Paso B</span>
+        <h2 class="slide-title">Paso B: el header común y el botón de menú</h2>
+        <p class="slide-subtitle">El encabezado es el mismo en todas las páginas, así que <strong>cópialo y pégalo</strong> en cada archivo. Ahora le agregas dos cosas: un botón «Menú» (que solo se verá en celular) y un <code>id</code> en el <code>&lt;nav&gt;</code>. Esos <code>id</code> son los <em>nombres</em> con los que JavaScript encontrará los elementos más adelante.</p>
+<div class="code-editor-box"><div class="editor-header"><span class="editor-dot r"></span><span class="editor-dot y"></span><span class="editor-dot g"></span><span class="editor-title">index.html  (y en todas las páginas)</span><span class="editor-badge">HTML</span></div><div class="editor-body"><div class="cl"><span class="ln">1</span><span class="code"><span class="tag">&lt;header</span><span class="tag">&gt;</span></span></div><div class="cl"><span class="ln">2</span><span class="code">  <span class="tag">&lt;h1</span><span class="tag">&gt;</span><span class="tag">&lt;a</span> <span class="attr">href</span>=<span class="str">"index.html"</span><span class="tag">&gt;</span>TechStore Pro<span class="tag">&lt;/a</span><span class="tag">&gt;</span><span class="tag">&lt;/h1</span><span class="tag">&gt;</span></span></div><div class="cl"><span class="ln">3</span><span class="code"></span></div><div class="cl"><span class="ln">4</span><span class="code">  <span class="tag">&lt;button</span> <span class="attr">class</span>=<span class="str">"menu-toggle"</span> <span class="attr">id</span>=<span class="str">"menuToggle"</span> <span class="attr">type</span>=<span class="str">"button"</span><span class="tag">&gt;</span>Menú<span class="tag">&lt;/button</span><span class="tag">&gt;</span></span></div><div class="cl"><span class="ln">5</span><span class="code"></span></div><div class="cl"><span class="ln">6</span><span class="code">  <span class="tag">&lt;nav</span> <span class="attr">id</span>=<span class="str">"menuPrincipal"</span><span class="tag">&gt;</span></span></div><div class="cl"><span class="ln">7</span><span class="code">    <span class="tag">&lt;ul</span><span class="tag">&gt;</span></span></div><div class="cl"><span class="ln">8</span><span class="code">      <span class="tag">&lt;li</span><span class="tag">&gt;</span><span class="tag">&lt;a</span> <span class="attr">href</span>=<span class="str">"index.html"</span><span class="tag">&gt;</span>Inicio<span class="tag">&lt;/a</span><span class="tag">&gt;</span><span class="tag">&lt;/li</span><span class="tag">&gt;</span></span></div><div class="cl"><span class="ln">9</span><span class="code">      <span class="tag">&lt;li</span><span class="tag">&gt;</span><span class="tag">&lt;a</span> <span class="attr">href</span>=<span class="str">"productos.html"</span><span class="tag">&gt;</span>Productos<span class="tag">&lt;/a</span><span class="tag">&gt;</span><span class="tag">&lt;/li</span><span class="tag">&gt;</span></span></div><div class="cl"><span class="ln">10</span><span class="code">      <span class="tag">&lt;li</span><span class="tag">&gt;</span><span class="tag">&lt;a</span> <span class="attr">href</span>=<span class="str">"contacto.html"</span><span class="tag">&gt;</span>Contacto<span class="tag">&lt;/a</span><span class="tag">&gt;</span><span class="tag">&lt;/li</span><span class="tag">&gt;</span></span></div><div class="cl"><span class="ln">11</span><span class="code">      <span class="tag">&lt;li</span><span class="tag">&gt;</span><span class="tag">&lt;a</span> <span class="attr">href</span>=<span class="str">"login.html"</span><span class="tag">&gt;</span>Iniciar sesión<span class="tag">&lt;/a</span><span class="tag">&gt;</span><span class="tag">&lt;/li</span><span class="tag">&gt;</span></span></div><div class="cl"><span class="ln">12</span><span class="code">    <span class="tag">&lt;/ul</span><span class="tag">&gt;</span></span></div><div class="cl"><span class="ln">13</span><span class="code">  <span class="tag">&lt;/nav</span><span class="tag">&gt;</span></span></div><div class="cl"><span class="ln">14</span><span class="code"><span class="tag">&lt;/header</span><span class="tag">&gt;</span></span></div></div></div><div class="notes"><div class="notes-title"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"/><path d="M6 6h10"/><path d="M6 10h10"/></svg> Qué hace cada parte, línea por línea</div><div class="note"><span class="note-ln">Línea 2</span><p>El nombre del sitio es un enlace al inicio. Así el logo siempre te devuelve a <code>index.html</code>.</p></div><div class="note"><span class="note-ln">Línea 4</span><p>El botón «Menú». Con CSS lo ocultarás en pantallas grandes y con JavaScript abrirás y cerrarás el menú.</p></div><div class="note"><span class="note-ln">Línea 4</span><p>Un <code>id</code> es un <strong>nombre único</strong> dentro de la página. JavaScript lo usará para encontrar este botón.</p></div><div class="note"><span class="note-ln">Línea 6</span><p>El <code>id</code> del menú que se mostrará u ocultará.</p></div><div class="note"><span class="note-ln">Línea 7</span><p>El menú es una lista de enlaces: cada <code>&lt;li&gt;</code> lleva un <code>&lt;a href&gt;</code> a otra página de tu sitio.</p></div><div class="note"><span class="note-ln">Línea 11</span><p>Cada enlace debe apuntar a un archivo que <strong>exista</strong>. Crea esas páginas aunque sean sencillas.</p></div></div><div class="callout callout-orange"><div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg> Regla de consistencia</div><div>Si un enlace dice «Contacto», debe existir <code>contacto.html</code>. Un enlace que lleva a una página inexistente es el fallo más fácil de evitar y el primero que ve quien revisa tu sitio.</div></div>
+      </div>
+    </section>
+
+    <section class="slide-section" id="slide-22">
+      <div class="slide-container">
+        <span class="slide-badge-category badge-orange"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg> Bloque 4 · EV03 · Paso C</span>
+        <h2 class="slide-title">Paso C: tarjetas que enlazan al detalle y la lista ordenada</h2>
+        <p class="slide-subtitle">Cada tarjeta de producto ahora lleva un enlace «Ver detalle». Copia el bloque <code>&lt;article&gt;</code> una vez por producto (cambiando nombre, descripción, precio e imagen) para armar tu <code>productos.html</code> con al menos 6 tarjetas. Y en el inicio agrega la sección «Cómo comprar» con una lista ordenada.</p>
+<div class="code-editor-box"><div class="editor-header"><span class="editor-dot r"></span><span class="editor-dot y"></span><span class="editor-dot g"></span><span class="editor-title">productos.html  (una tarjeta) + index.html  (cómo comprar)</span><span class="editor-badge">HTML</span></div><div class="editor-body"><div class="cl"><span class="ln">1</span><span class="code"><span class="tag">&lt;article</span><span class="tag">&gt;</span></span></div><div class="cl"><span class="ln">2</span><span class="code">  <span class="tag">&lt;img</span> <span class="attr">src</span>=<span class="str">"img/laptop.svg"</span> <span class="attr">alt</span>=<span class="str">"Laptop Gamer RTX 4070"</span> <span class="tag">/&gt;</span></span></div><div class="cl"><span class="ln">3</span><span class="code">  <span class="tag">&lt;h3</span><span class="tag">&gt;</span>Laptop Gamer RTX 4070<span class="tag">&lt;/h3</span><span class="tag">&gt;</span></span></div><div class="cl"><span class="ln">4</span><span class="code">  <span class="tag">&lt;p</span><span class="tag">&gt;</span>16GB RAM, 512GB SSD<span class="tag">&lt;/p</span><span class="tag">&gt;</span></span></div><div class="cl"><span class="ln">5</span><span class="code">  <span class="tag">&lt;p</span><span class="tag">&gt;</span><span class="tag">&lt;strong</span><span class="tag">&gt;</span>$4.999.000<span class="tag">&lt;/strong</span><span class="tag">&gt;</span><span class="tag">&lt;/p</span><span class="tag">&gt;</span></span></div><div class="cl"><span class="ln">6</span><span class="code">  <span class="tag">&lt;a</span> <span class="attr">class</span>=<span class="str">"boton-secundario"</span> <span class="attr">href</span>=<span class="str">"productos.html"</span><span class="tag">&gt;</span>Ver detalle<span class="tag">&lt;/a</span><span class="tag">&gt;</span></span></div><div class="cl"><span class="ln">7</span><span class="code">  <span class="tag">&lt;button</span> <span class="attr">type</span>=<span class="str">"button"</span><span class="tag">&gt;</span>Agregar al carrito<span class="tag">&lt;/button</span><span class="tag">&gt;</span></span></div><div class="cl"><span class="ln">8</span><span class="code"><span class="tag">&lt;/article</span><span class="tag">&gt;</span></span></div><div class="cl"><span class="ln">9</span><span class="code"></span></div><div class="cl"><span class="ln">10</span><span class="code"><span class="tag">&lt;section</span> <span class="attr">id</span>=<span class="str">"como-comprar"</span><span class="tag">&gt;</span></span></div><div class="cl"><span class="ln">11</span><span class="code">  <span class="tag">&lt;h2</span><span class="tag">&gt;</span>¿Cómo comprar?<span class="tag">&lt;/h2</span><span class="tag">&gt;</span></span></div><div class="cl"><span class="ln">12</span><span class="code">  <span class="tag">&lt;ol</span> <span class="attr">class</span>=<span class="str">"pasos-compra"</span><span class="tag">&gt;</span></span></div><div class="cl"><span class="ln">13</span><span class="code">    <span class="tag">&lt;li</span><span class="tag">&gt;</span>Explora el catálogo de productos.<span class="tag">&lt;/li</span><span class="tag">&gt;</span></span></div><div class="cl"><span class="ln">14</span><span class="code">    <span class="tag">&lt;li</span><span class="tag">&gt;</span>Abre el detalle del que te interesa.<span class="tag">&lt;/li</span><span class="tag">&gt;</span></span></div><div class="cl"><span class="ln">15</span><span class="code">    <span class="tag">&lt;li</span><span class="tag">&gt;</span>Presiona «Agregar al carrito».<span class="tag">&lt;/li</span><span class="tag">&gt;</span></span></div><div class="cl"><span class="ln">16</span><span class="code">  <span class="tag">&lt;/ol</span><span class="tag">&gt;</span></span></div><div class="cl"><span class="ln">17</span><span class="code"><span class="tag">&lt;/section</span><span class="tag">&gt;</span></span></div></div></div><div class="notes"><div class="notes-title"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"/><path d="M6 6h10"/><path d="M6 10h10"/></svg> Qué hace cada parte, línea por línea</div><div class="note"><span class="note-ln">Línea 1</span><p>La tarjeta es una pieza reutilizable. Para el catálogo la <strong>duplicas</strong>, una vez por producto.</p></div><div class="note"><span class="note-ln">Línea 2</span><p>La imagen viene de tu carpeta <code>img/</code> y lleva su <code>alt</code>.</p></div><div class="note"><span class="note-ln">Línea 5</span><p>El precio en negrita con <code>&lt;strong&gt;</code> para que destaque.</p></div><div class="note"><span class="note-ln">Línea 6</span><p>Un enlace con aspecto de botón (le darás el estilo con una <em>clase</em> CSS). Lleva al detalle del producto.</p></div><div class="note"><span class="note-ln">Línea 7</span><p>El botón de compra. En el paso F lo conectarás con JavaScript si quieres.</p></div><div class="note"><span class="note-ln">Línea 12</span><p>La <strong>lista ordenada</strong> numera los pasos automáticamente. Se usa <code>&lt;ol&gt;</code> porque el orden importa.</p></div></div>
+      </div>
+    </section>
+
+    <section class="slide-section" id="slide-23">
+      <div class="slide-container">
+        <span class="slide-badge-category badge-green"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg> Bloque 4 · EV03 · Paso D</span>
+        <h2 class="slide-title">Paso D: la página de login (un formulario usable)</h2>
+        <p class="slide-subtitle">Un formulario es usable cuando cada campo tiene su <strong>etiqueta</strong> y el usuario sabe qué escribir. La clave es el par <code>&lt;label for="correo"&gt;</code> + <code>&lt;input id="correo"&gt;</code>: el <code>for</code> de la etiqueta debe ser igual al <code>id</code> del campo; así, al hacer clic en el texto, el cursor entra al campo. Debajo de cada campo dejas un párrafo vacío donde JavaScript escribirá el mensaje de error: es tu <em>pantalla de error</em> del diseño.</p>
+<div class="code-editor-box"><div class="editor-header"><span class="editor-dot r"></span><span class="editor-dot y"></span><span class="editor-dot g"></span><span class="editor-title">login.html  (dentro del main)</span><span class="editor-badge">HTML</span></div><div class="editor-body"><div class="cl"><span class="ln">1</span><span class="code"><span class="tag">&lt;section</span> <span class="attr">class</span>=<span class="str">"caja-formulario"</span><span class="tag">&gt;</span></span></div><div class="cl"><span class="ln">2</span><span class="code">  <span class="tag">&lt;h2</span><span class="tag">&gt;</span>Iniciar sesión<span class="tag">&lt;/h2</span><span class="tag">&gt;</span></span></div><div class="cl"><span class="ln">3</span><span class="code"></span></div><div class="cl"><span class="ln">4</span><span class="code">  <span class="tag">&lt;form</span> <span class="attr">id</span>=<span class="str">"formLogin"</span> novalidate<span class="tag">&gt;</span></span></div><div class="cl"><span class="ln">5</span><span class="code">    <span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="str">"campo"</span><span class="tag">&gt;</span></span></div><div class="cl"><span class="ln">6</span><span class="code">      <span class="tag">&lt;label</span> <span class="attr">for</span>=<span class="str">"correo"</span><span class="tag">&gt;</span>Correo electrónico<span class="tag">&lt;/label</span><span class="tag">&gt;</span></span></div><div class="cl"><span class="ln">7</span><span class="code">      <span class="tag">&lt;input</span> <span class="attr">type</span>=<span class="str">"email"</span> <span class="attr">id</span>=<span class="str">"correo"</span> <span class="attr">name</span>=<span class="str">"correo"</span> required <span class="tag">/&gt;</span></span></div><div class="cl"><span class="ln">8</span><span class="code">      <span class="tag">&lt;p</span> <span class="attr">class</span>=<span class="str">"error-campo"</span> <span class="attr">id</span>=<span class="str">"errorCorreo"</span><span class="tag">&gt;</span><span class="tag">&lt;/p</span><span class="tag">&gt;</span></span></div><div class="cl"><span class="ln">9</span><span class="code">    <span class="tag">&lt;/div</span><span class="tag">&gt;</span></span></div><div class="cl"><span class="ln">10</span><span class="code"></span></div><div class="cl"><span class="ln">11</span><span class="code">    <span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="str">"campo"</span><span class="tag">&gt;</span></span></div><div class="cl"><span class="ln">12</span><span class="code">      <span class="tag">&lt;label</span> <span class="attr">for</span>=<span class="str">"clave"</span><span class="tag">&gt;</span>Contraseña<span class="tag">&lt;/label</span><span class="tag">&gt;</span></span></div><div class="cl"><span class="ln">13</span><span class="code">      <span class="tag">&lt;input</span> <span class="attr">type</span>=<span class="str">"password"</span> <span class="attr">id</span>=<span class="str">"clave"</span> <span class="attr">name</span>=<span class="str">"clave"</span> required <span class="tag">/&gt;</span></span></div><div class="cl"><span class="ln">14</span><span class="code">      <span class="tag">&lt;p</span> <span class="attr">class</span>=<span class="str">"error-campo"</span> <span class="attr">id</span>=<span class="str">"errorClave"</span><span class="tag">&gt;</span><span class="tag">&lt;/p</span><span class="tag">&gt;</span></span></div><div class="cl"><span class="ln">15</span><span class="code">    <span class="tag">&lt;/div</span><span class="tag">&gt;</span></span></div><div class="cl"><span class="ln">16</span><span class="code"></span></div><div class="cl"><span class="ln">17</span><span class="code">    <span class="tag">&lt;button</span> <span class="attr">type</span>=<span class="str">"submit"</span><span class="tag">&gt;</span>Entrar<span class="tag">&lt;/button</span><span class="tag">&gt;</span></span></div><div class="cl"><span class="ln">18</span><span class="code">  <span class="tag">&lt;/form</span><span class="tag">&gt;</span></span></div><div class="cl"><span class="ln">19</span><span class="code"><span class="tag">&lt;/section</span><span class="tag">&gt;</span></span></div></div></div><div class="notes"><div class="notes-title"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"/><path d="M6 6h10"/><path d="M6 10h10"/></svg> Qué hace cada parte, línea por línea</div><div class="note"><span class="note-ln">Línea 4</span><p>El <code>id</code> del formulario: JavaScript lo usará para detectar cuándo el usuario presiona «Entrar».</p></div><div class="note"><span class="note-ln">Línea 4</span><p>Desactiva los mensajes automáticos del navegador para que <strong>tú</strong> controles los mensajes con JavaScript.</p></div><div class="note"><span class="note-ln">Línea 6</span><p>La etiqueta visible del campo. Su <code>for</code> apunta al <code>id="correo"</code> de abajo.</p></div><div class="note"><span class="note-ln">Línea 7</span><p>El tipo de campo: <code>email</code> avisa al celular que muestre el teclado con la arroba; <code>password</code> oculta lo que se escribe.</p></div><div class="note"><span class="note-ln">Línea 8</span><p>Un párrafo <strong>vacío</strong> reservado para el mensaje de error de ese campo.</p></div><div class="note"><span class="note-ln">Línea 17</span><p>Un botón de tipo <code>submit</code> envía el formulario; ese envío es el evento que JavaScript escuchará.</p></div></div>
+      </div>
+    </section>
+
+    <section class="slide-section" id="slide-24">
+      <div class="slide-container">
+        <span class="slide-badge-category badge-blue"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="20" x="5" y="2" rx="2" ry="2"/><path d="M12 18h.01"/></svg> Bloque 4 · EV03 · Paso E</span>
+        <h2 class="slide-title">Paso E: diseño adaptable (responsive) con media queries</h2>
+        <p class="slide-subtitle">Tu página se verá en pantallas muy distintas: monitores, tabletas y celulares. Un diseño <strong>adaptable</strong> reorganiza el contenido según el ancho disponible. Se logra con <strong>media queries</strong>: reglas CSS que solo se aplican cuando la pantalla mide <em>tanto o menos</em>. Este es el mismo catálogo en tres anchos:</p>
+<div class="fig-box"><svg viewBox="0 0 640 250" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="El mismo catálogo en escritorio, tableta y móvil"><rect x="10" y="20" width="300" height="190" rx="10" fill="#fff" stroke="#475569" stroke-width="3"/><rect x="24" y="44" width="82" height="70" rx="6" fill="#bfdbfe"/><rect x="24" y="124" width="82" height="70" rx="6" fill="#bfdbfe"/><rect x="118" y="44" width="82" height="70" rx="6" fill="#bfdbfe"/><rect x="118" y="124" width="82" height="70" rx="6" fill="#bfdbfe"/><rect x="212" y="44" width="82" height="70" rx="6" fill="#bfdbfe"/><rect x="212" y="124" width="82" height="70" rx="6" fill="#bfdbfe"/><text x="160" y="232" font-family="JetBrains Mono, Consolas, monospace" font-size="12" font-weight="700" fill="#334155" text-anchor="middle">Escritorio · 3 columnas</text><rect x="334" y="20" width="170" height="190" rx="10" fill="#fff" stroke="#475569" stroke-width="3"/><rect x="346" y="36" width="66" height="52" rx="6" fill="#bbf7d0"/><rect x="346" y="96" width="66" height="52" rx="6" fill="#bbf7d0"/><rect x="346" y="156" width="66" height="52" rx="6" fill="#bbf7d0"/><rect x="424" y="36" width="66" height="52" rx="6" fill="#bbf7d0"/><rect x="424" y="96" width="66" height="52" rx="6" fill="#bbf7d0"/><rect x="424" y="156" width="66" height="52" rx="6" fill="#bbf7d0"/><text x="419" y="232" font-family="JetBrains Mono, Consolas, monospace" font-size="12" font-weight="700" fill="#334155" text-anchor="middle">Tableta · 2 columnas</text><rect x="528" y="20" width="100" height="190" rx="12" fill="#fff" stroke="#475569" stroke-width="3"/><rect x="540" y="30" width="76" height="14" rx="4" fill="#fed7aa"/><rect x="540" y="52" width="76" height="42" rx="6" fill="#fed7aa"/><rect x="540" y="100" width="76" height="42" rx="6" fill="#fed7aa"/><rect x="540" y="148" width="76" height="42" rx="6" fill="#fed7aa"/><text x="578" y="232" font-family="JetBrains Mono, Consolas, monospace" font-size="12" font-weight="700" fill="#334155" text-anchor="middle">Móvil · 1 columna</text></svg></div><div class="code-editor-box"><div class="editor-header"><span class="editor-dot r"></span><span class="editor-dot y"></span><span class="editor-dot g"></span><span class="editor-title">css/estilos.css  (al final del archivo)</span><span class="editor-badge">CSS</span></div><div class="editor-body"><div class="cl"><span class="ln">1</span><span class="code"><span class="cm">/* TABLETA: 900px o menos, el catálogo pasa a 2 columnas */</span></span></div><div class="cl"><span class="ln">2</span><span class="code"><span class="syn-keyword">@media (max-width: 900px) {</span></span></div><div class="cl"><span class="ln">3</span><span class="code">  <span class="sel">.grid-productos</span> { <span class="prop">grid-template-columns</span>: <span class="val">repeat(2, 1fr)</span><span class="punc">;</span> }</span></div><div class="cl"><span class="ln">4</span><span class="code">}</span></div><div class="cl"><span class="ln">5</span><span class="code"></span></div><div class="cl"><span class="ln">6</span><span class="code"><span class="cm">/* MÓVIL: 600px o menos */</span></span></div><div class="cl"><span class="ln">7</span><span class="code"><span class="syn-keyword">@media (max-width: 600px) {</span></span></div><div class="cl"><span class="ln">8</span><span class="code">  <span class="sel">.grid-productos</span> { <span class="prop">grid-template-columns</span>: <span class="val">1fr</span><span class="punc">;</span> }</span></div><div class="cl"><span class="ln">9</span><span class="code"></span></div><div class="cl"><span class="ln">10</span><span class="code">  <span class="sel">.menu-toggle</span> { <span class="prop">display</span>: <span class="val">inline-block</span><span class="punc">;</span> }    <span class="cm">/* aparece el botón Menú */</span></span></div><div class="cl"><span class="ln">11</span><span class="code">  <span class="sel">header nav</span> { <span class="prop">display</span>: <span class="val">none</span><span class="punc">;</span> }              <span class="cm">/* el menú se oculta */</span></span></div><div class="cl"><span class="ln">12</span><span class="code">  <span class="sel">header nav.abierto</span> { <span class="prop">display</span>: <span class="val">flex</span><span class="punc">;</span> }      <span class="cm">/* y JS lo muestra */</span></span></div><div class="cl"><span class="ln">13</span><span class="code">}</span></div></div></div><div class="notes"><div class="notes-title"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"/><path d="M6 6h10"/><path d="M6 10h10"/></svg> Qué hace cada parte, línea por línea</div><div class="note"><span class="note-ln">Línea 2</span><p>«Si la pantalla mide 900 px o menos, aplica lo que está entre llaves.» Es el punto de corte de la tableta.</p></div><div class="note"><span class="note-ln">Línea 3</span><p>El catálogo pasa de <strong>3 columnas a 2</strong>: <code>repeat(2, 1fr)</code> crea dos columnas de igual ancho.</p></div><div class="note"><span class="note-ln">Línea 7</span><p>Punto de corte del celular.</p></div><div class="note"><span class="note-ln">Línea 8</span><p>Una sola columna: las tarjetas se apilan, una debajo de otra.</p></div><div class="note"><span class="note-ln">Línea 10</span><p>El botón «Menú» estaba oculto en escritorio (<code>display: none</code> en tu CSS base); en móvil se vuelve visible.</p></div><div class="note"><span class="note-ln">Línea 11</span><p>El menú se esconde para ahorrar espacio...</p></div><div class="note"><span class="note-ln">Línea 12</span><p>...y se muestra cuando JavaScript le agrega la clase <code>abierto</code>. Esa es la conexión entre CSS y JS.</p></div></div><div class="callout callout-orange"><div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg> No olvides</div><div>En tu CSS base el botón del menú debe empezar oculto: <code>.menu-toggle { display: none; }</code>. Si no, se verá también en el computador.</div></div>
+      </div>
+    </section>
+
+    <section class="slide-section" id="slide-25">
+      <div class="slide-container">
+        <span class="slide-badge-category badge-orange"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> Bloque 4 · EV03 · Paso F</span>
+        <h2 class="slide-title">Paso F: JavaScript — la página que reacciona</h2>
+        <p class="slide-subtitle">En JavaScript casi todo sigue la misma idea: <strong>1)</strong> buscas un elemento de la página, <strong>2)</strong> le dices «cuando ocurra tal evento (clic, envío), ejecuta esta función» y <strong>3)</strong> dentro de la función cambias algo. Enlaza el archivo con <code>&lt;script src="js/main.js"&gt;&lt;/script&gt;</code> al final del <code>&lt;body&gt;</code> de <strong>todas</strong> las páginas.</p>
+<div class="code-editor-box"><div class="editor-header"><span class="editor-dot r"></span><span class="editor-dot y"></span><span class="editor-dot g"></span><span class="editor-title">js/main.js</span><span class="editor-badge">JS</span></div><div class="editor-body"><div class="cl"><span class="ln">1</span><span class="code"><span class="cm">// Espera a que la página termine de cargar</span></span></div><div class="cl"><span class="ln">2</span><span class="code">document.<span class="var">addEventListener</span>(<span class="str">'DOMContentLoaded'</span>, <span class="syn-keyword">function</span> () {</span></div><div class="cl"><span class="ln">3</span><span class="code"></span></div><div class="cl"><span class="ln">4</span><span class="code">  /* ---------- 1. Menú hamburguesa ---------- */</span></div><div class="cl"><span class="ln">5</span><span class="code">  <span class="syn-keyword">const</span> boton = document.<span class="var">getElementById</span>(<span class="str">'menuToggle'</span>);</span></div><div class="cl"><span class="ln">6</span><span class="code">  <span class="syn-keyword">const</span> menu = document.<span class="var">getElementById</span>(<span class="str">'menuPrincipal'</span>);</span></div><div class="cl"><span class="ln">7</span><span class="code"></span></div><div class="cl"><span class="ln">8</span><span class="code">  <span class="syn-keyword">if</span> (boton &amp;&amp; menu) {</span></div><div class="cl"><span class="ln">9</span><span class="code">    boton.<span class="var">addEventListener</span>(<span class="str">'click'</span>, <span class="syn-keyword">function</span> () {</span></div><div class="cl"><span class="ln">10</span><span class="code">      menu.classList.<span class="var">toggle</span>(<span class="str">'abierto'</span>);   <span class="cm">// agrega o quita la clase</span></span></div><div class="cl"><span class="ln">11</span><span class="code">    });</span></div><div class="cl"><span class="ln">12</span><span class="code">  }</span></div><div class="cl"><span class="ln">13</span><span class="code"></span></div><div class="cl"><span class="ln">14</span><span class="code">  /* ---------- 2. Validación del login ---------- */</span></div><div class="cl"><span class="ln">15</span><span class="code">  <span class="syn-keyword">const</span> formulario = document.<span class="var">getElementById</span>(<span class="str">'formLogin'</span>);</span></div><div class="cl"><span class="ln">16</span><span class="code"></span></div><div class="cl"><span class="ln">17</span><span class="code">  <span class="syn-keyword">if</span> (formulario) {</span></div><div class="cl"><span class="ln">18</span><span class="code">    formulario.<span class="var">addEventListener</span>(<span class="str">'submit'</span>, <span class="syn-keyword">function</span> (evento) {</span></div><div class="cl"><span class="ln">19</span><span class="code">      evento.<span class="var">preventDefault</span>();            <span class="cm">// evita que la página se recargue</span></span></div><div class="cl"><span class="ln">20</span><span class="code"></span></div><div class="cl"><span class="ln">21</span><span class="code">      <span class="syn-keyword">const</span> correo = formulario.correo.value.<span class="var">trim</span>();</span></div><div class="cl"><span class="ln">22</span><span class="code">      <span class="syn-keyword">const</span> clave = formulario.clave.value;</span></div><div class="cl"><span class="ln">23</span><span class="code">      <span class="syn-keyword">const</span> patron = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;</span></div><div class="cl"><span class="ln">24</span><span class="code"></span></div><div class="cl"><span class="ln">25</span><span class="code">      document.<span class="var">getElementById</span>(<span class="str">'errorCorreo'</span>).textContent =</span></div><div class="cl"><span class="ln">26</span><span class="code">        patron.<span class="var">test</span>(correo) ? <span class="str">''</span> : <span class="str">'Escribe un correo válido.'</span>;</span></div><div class="cl"><span class="ln">27</span><span class="code"></span></div><div class="cl"><span class="ln">28</span><span class="code">      document.<span class="var">getElementById</span>(<span class="str">'errorClave'</span>).textContent =</span></div><div class="cl"><span class="ln">29</span><span class="code">        clave.length &gt;= 6 ? <span class="str">''</span> : <span class="str">'Mínimo 6 caracteres.'</span>;</span></div><div class="cl"><span class="ln">30</span><span class="code">    });</span></div><div class="cl"><span class="ln">31</span><span class="code">  }</span></div><div class="cl"><span class="ln">32</span><span class="code">});</span></div></div></div><div class="notes"><div class="notes-title"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"/><path d="M6 6h10"/><path d="M6 10h10"/></svg> Qué hace cada parte, línea por línea</div><div class="note"><span class="note-ln">Línea 2</span><p>Le dice al navegador: «ejecuta esto <strong>cuando el HTML ya esté cargado</strong>». Así los elementos ya existen cuando los busques.</p></div><div class="note"><span class="note-ln">Línea 5</span><p><strong>Paso 1: buscar.</strong> Guarda en <code>boton</code> el elemento que tiene <code>id="menuToggle"</code>.</p></div><div class="note"><span class="note-ln">Línea 8</span><p>Pregunta primero si existen. El mismo <code>main.js</code> se carga en todas las páginas y no todas tienen ese botón; sin esto, el código fallaría.</p></div><div class="note"><span class="note-ln">Línea 9</span><p><strong>Paso 2: escuchar un evento.</strong> «Cuando alguien haga <em>clic</em> en el botón, ejecuta esta función.»</p></div><div class="note"><span class="note-ln">Línea 10</span><p><strong>Paso 3: cambiar algo.</strong> Agrega la clase <code>abierto</code> si no la tiene, o la quita si ya la tiene. El CSS hace el resto.</p></div><div class="note"><span class="note-ln">Línea 18</span><p>El evento <code>submit</code> ocurre cuando el usuario envía el formulario (presiona «Entrar»).</p></div><div class="note"><span class="note-ln">Línea 19</span><p>Evita el comportamiento normal (recargar la página) para que tú puedas validar primero.</p></div><div class="note"><span class="note-ln">Línea 23</span><p>Una <strong>expresión regular</strong>: describe la forma de un correo (algo @ algo . algo). No hace falta que la memorices; cópiala.</p></div><div class="note"><span class="note-ln">Línea 25</span><p>Escribe un mensaje dentro del párrafo de error. Si el dato es válido se escribe una cadena vacía y el mensaje desaparece.</p></div></div><div class="callout callout-green"><div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg> Sitio de referencia y tutorial completo</div><div>El <strong>tutorial paso a paso</strong> construye este sitio completo, con el código listo para copiar. Es una referencia: <strong>no lo entregues tal cual</strong>, hazlo tuyo con tu diseño. <a href="MANUAL_SESION06.html" target="_blank" class="btn-action-primary"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"/><path d="M6 6h10"/><path d="M6 10h10"/></svg> Abrir el tutorial ↗</a> <a href="ejemplos/EV03_techstore_front_end/index.html" target="_blank" class="btn-action-primary"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg> Ver sitio resultante ↗</a></div></div>
+      </div>
+    </section>
+
+    <section class="slide-section" id="slide-26">
+      <div class="slide-container">
+        <span class="slide-badge-category badge-green"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></svg> Bloque 4 · Prueba, comprime y entrega</span>
+        <h2 class="slide-title">Antes de subir: prueba, comprime y entrega en Zajuna</h2>
+        <p class="slide-subtitle">Sigue estos pasos con cada una de las tres evidencias. Los cinco minutos que inviertes en probar evitan perder la entrega por un archivo dañado.</p>
+<div class="steps-list"><div class="step-row"><div class="step-n">1</div><div><h4>Prueba tu sitio en el navegador</h4><p>Abre <code>index.html</code> y recorre todos los enlaces. Presiona <strong>F12</strong> y luego <strong>Ctrl + Shift + M</strong> para ver cómo se ve en tableta (768 px) y móvil (375 px). Si algo se desborda, revisa tus media queries.</p></div></div><div class="step-row"><div class="step-n">2</div><div><h4>Verifica rutas e imágenes</h4><p>Todas las imágenes se ven y no hay íconos de «imagen rota». Los enlaces a CSS, JS e imágenes son relativos (<code>css/estilos.css</code>, <code>img/laptop.svg</code>).</p></div></div><div class="step-row"><div class="step-n">3</div><div><h4>Comprime la carpeta en ZIP</h4><p>Haz clic derecho sobre la <strong>carpeta</strong> de tu proyecto y elige <strong>«Comprimir en archivo ZIP»</strong> (Windows 11) o <strong>«Enviar a → Carpeta comprimida»</strong> (Windows 10). Renómbralo como <strong>GA6-220501096-AA4-EV03_Nombre_Apellido.zip</strong> (y EV01, EV02 para las otras).</p></div></div><div class="step-row"><div class="step-n">4</div><div><h4>Comprueba el ZIP</h4><p>Descomprímelo en el Escritorio y abre <code>index.html</code> desde ahí. Si funciona igual, está listo. Para EV02, el ZIP lleva tu documento (Word y PDF).</p></div></div><div class="step-row"><div class="step-n">5</div><div><h4>Sube cada ZIP a su área</h4><p>En Zajuna entra a la actividad AA4 y adjunta <strong>cada ZIP en su espacio</strong>: EV01, EV02 y EV03. Fecha límite: <strong>martes 10 de noviembre de 2026, 11:59 PM</strong>.</p></div></div></div>
+      </div>
+    </section>
+
+    <section class="slide-section" id="slide-27">
+      <div class="slide-container">
+        <span class="slide-badge-category badge-green"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg> Bloque 4 · Aseguramiento de Calidad</span>
+        <h2 class="slide-title">Lista de Cotejo Anti-Error (Checklist 100%)</h2>
+        <p class="slide-subtitle">Marca cada casilla antes de subir. Este checklist autoevalúa si tus tres entregas cumplen los criterios del instrumento de evaluación de <strong>GA6-220501096-AA4-EV01, EV02 y EV03</strong>.</p>
+<div class="checklist-card"><div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;"><div style="font-family:'Syne',sans-serif;font-size:16px;font-weight:800;color:var(--texto-main);">Progreso de verificación de tus 3 entregas AA4:</div><div id="checklistScoreText" style="font-family:'JetBrains Mono',monospace;font-size:15px;font-weight:800;color:var(--azul-tech);">0% (0 de 10 ítems)</div></div><div class="checklist-progress-bar-wrap"><div class="checklist-progress-bar" id="checklistBar"></div></div><div class="checklist-items-list"><label class="check-item" onclick="toggleCheckItem(this)"><input type="checkbox" class="check-checkbox"><div class="check-text"><h4>EV01 · La página de inicio tiene un título y una lista ordenada (&lt;ol&gt;) con enlaces a cada tema</h4><p>Usé &lt;ol&gt;, no &lt;ul&gt;, y cada &lt;li&gt; lleva un &lt;a href&gt; que abre su página.</p></div></label><label class="check-item" onclick="toggleCheckItem(this)"><input type="checkbox" class="check-checkbox"><div class="check-text"><h4>EV01 · Cada tema tiene título, imagen y descripción, con estilos CSS</h4><p>Las imágenes se ven, tienen texto alternativo y el CSS está en una hoja externa.</p></div></label><label class="check-item" onclick="toggleCheckItem(this)"><input type="checkbox" class="check-checkbox"><div class="check-text"><h4>EV02 · Mi documento tiene portada, introducción, objetivo y definición de elementos HTML</h4><p>Sustituí todos los textos guía entre corchetes por contenido de mi proyecto.</p></div></label><label class="check-item" onclick="toggleCheckItem(this)"><input type="checkbox" class="check-checkbox"><div class="check-text"><h4>EV02 · Describí mis componentes con sus elementos HTML y estilos CSS</h4><p>Tengo la tabla de componentes y la definición de cada elemento HTML que uso.</p></div></label><label class="check-item" onclick="toggleCheckItem(this)"><input type="checkbox" class="check-checkbox"><div class="check-text"><h4>EV03 · Mi sitio tiene mínimo 3 páginas enlazadas entre sí, con el mismo header y footer</h4><p>Probé todos los enlaces desde el navegador.</p></div></label><label class="check-item" onclick="toggleCheckItem(this)"><input type="checkbox" class="check-checkbox"><div class="check-text"><h4>EV03 · Se adapta a tableta y móvil con media queries</h4><p>Lo probé con F12 en 768 px y 375 px y el menú se pliega en móvil.</p></div></label><label class="check-item" onclick="toggleCheckItem(this)"><input type="checkbox" class="check-checkbox"><div class="check-text"><h4>EV03 · Tiene JavaScript funcionando (menú móvil y validación de formulario)</h4><p>El formulario muestra errores cuando los datos no son válidos.</p></div></label><label class="check-item" onclick="toggleCheckItem(this)"><input type="checkbox" class="check-checkbox"><div class="check-text"><h4>EV03 · Aplica el diseño de mi Figma y es usable</h4><p>Uso los colores y la estructura de mis mockups; los campos tienen label y las imágenes tienen alt.</p></div></label><label class="check-item" onclick="toggleCheckItem(this)"><input type="checkbox" class="check-checkbox"><div class="check-text"><h4>Entrega · Mis 3 ZIP abren y funcionan fuera de mi carpeta de trabajo</h4><p>Los descomprimí en el Escritorio y los probé.</p></div></label><label class="check-item" onclick="toggleCheckItem(this)"><input type="checkbox" class="check-checkbox"><div class="check-text"><h4>Entrega · Subí cada ZIP a su espacio en Zajuna antes del martes 10/Nov a las 11:59 PM</h4><p>Verifiqué que EV01, EV02 y EV03 muestran el archivo adjunto.</p></div></label></div><div style="margin-top:24px;padding-top:20px;border-top:1px solid var(--borde-light);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;"><div style="font-size:12.5px;color:var(--texto-sub);">Fecha límite en Zajuna (AA4): <strong>Martes, 10 de Noviembre de 2026 (11:59 PM)</strong></div><div style="display:flex;gap:10px;flex-wrap:wrap;"><a href="https://julianon2.github.io/seguimiento-adso-3389010/" target="_blank" class="btn-action-primary"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg> Dashboard de Calificaciones ↗</a><a href="../explorar.html" class="btn-return-hub"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg> Volver al Hub</a></div></div></div>
+      </div>
+    </section>
+
+  </main>
+
+  <script>
+    // 1. SIDEBAR (colapso y reapertura)
+    function toggleSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      const mainContent = document.getElementById('mainContent');
+      const floatingToggle = document.getElementById('floatingToggle');
+      if (sidebar && mainContent) {
+        sidebar.classList.toggle('collapsed');
+        mainContent.classList.toggle('expanded');
+        if (floatingToggle) floatingToggle.classList.toggle('visible', sidebar.classList.contains('collapsed'));
+      }
+    }
+
+    // 2. SCROLLSPY con IntersectionObserver
+    const sections = document.querySelectorAll('.slide-section');
+    const navLinks = document.querySelectorAll('.nav-link');
+    const spyObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const currentId = entry.target.getAttribute('id');
+          navLinks.forEach(link => {
+            const href = link.getAttribute('href').substring(1);
+            if (href === currentId) {
+              link.classList.add('active');
+              link.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+            } else {
+              link.classList.remove('active');
+            }
+          });
+        }
+      });
+    }, { root: null, rootMargin: '-20% 0px -70% 0px', threshold: 0 });
+    sections.forEach(sec => spyObserver.observe(sec));
+
+    // 3. CHECKLIST con barra de progreso
+    function toggleCheckItem(labelEl) {
+      const checkbox = labelEl.querySelector('.check-checkbox');
+      setTimeout(() => {
+        labelEl.classList.toggle('completed', checkbox.checked);
+        actualizarProgresoChecklist();
+      }, 10);
+    }
+
+    function actualizarProgresoChecklist() {
+      const checkboxes = document.querySelectorAll('.check-checkbox');
+      const total = checkboxes.length;
+      let checkedCount = 0;
+      checkboxes.forEach(cb => { if (cb.checked) checkedCount++; });
+      const percentage = Math.round((checkedCount / total) * 100);
+      const bar = document.getElementById('checklistBar');
+      const text = document.getElementById('checklistScoreText');
+      if (bar) bar.style.width = percentage + '%';
+      if (text) text.innerText = percentage + '% (' + checkedCount + ' de ' + total + ' ítems)';
+    }
+
+    // Demo interactiva del slide 3 (HTML + CSS + JS)
+    (function () {
+      var b = document.getElementById('demoCarrito'), c = document.getElementById('demoContador'), n = 0;
+      if (b && c) { b.addEventListener('click', function () { n++; c.textContent = n; }); }
+    })();
+  </script>
+</body>
+</html>

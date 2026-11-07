@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Iniciar sesión | TechStore Pro</title>
+    <link rel="stylesheet" href="css/estilos.css" />
+  </head>
+  <body>
+    <header>
+      <h1><a href="index.html">TechStore Pro</a></h1>
+
+      <button class="menu-toggle" id="menuToggle" type="button">Menú</button>
+
+      <nav id="menuPrincipal">
+        <ul>
+          <li><a href="index.html">Inicio</a></li>
+          <li><a href="productos.html">Productos</a></li>
+          <li><a href="contacto.html">Contacto</a></li>
+          <li><a href="login.html">Iniciar sesión</a></li>
+        </ul>
+      </nav>
+
+      <a class="carrito" href="productos.html">Carrito <span id="contadorCarrito">0</span></a>
+    </header>
+
+    <main>
+      <section class="caja-formulario">
+        <h2>Iniciar sesión</h2>
+        <p class="ayuda">Ingresa con tu correo y tu contraseña.</p>
+
+        <form id="formLogin" novalidate>
+          <div class="campo">
+            <label for="correo">Correo electrónico</label>
+            <input type="email" id="correo" name="correo" placeholder="nombre@correo.com" required />
+            <p class="error-campo" id="errorCorreo"></p>
+          </div>
+
+          <div class="campo">
+            <label for="clave">Contraseña</label>
+            <input type="password" id="clave" name="clave" placeholder="Mínimo 6 caracteres" required />
+            <p class="error-campo" id="errorClave"></p>
+          </div>
+
+          <button type="submit">Entrar</button>
+          <p class="mensaje-formulario" id="mensajeFormulario"></p>
+        </form>
+      </section>
+    </main>
+
+    <footer>
+      <p>TechStore Pro — Tu tienda de tecnología de confianza.</p>
+
+      <nav>
+        <a href="index.html">Inicio</a>
+        <a href="productos.html">Productos</a>
+        <a href="contacto.html">Contacto</a>
+      </nav>
+
+      <address>
+        <a href="mailto:info@techstorepro.co">info@techstorepro.co</a>
+      </address>
+
+      <p>&copy; <time datetime="2026">2026</time> TechStore Pro</p>
+    </footer>
+
+    <script src="js/main.js"></script>
+  </body>
+</html>

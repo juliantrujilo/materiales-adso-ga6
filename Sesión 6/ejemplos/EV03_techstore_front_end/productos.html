@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Catálogo | TechStore Pro</title>
+    <link rel="stylesheet" href="css/estilos.css" />
+  </head>
+  <body>
+    <header>
+      <h1><a href="index.html">TechStore Pro</a></h1>
+
+      <button class="menu-toggle" id="menuToggle" type="button">Menú</button>
+
+      <nav id="menuPrincipal">
+        <ul>
+          <li><a href="index.html">Inicio</a></li>
+          <li><a href="productos.html">Productos</a></li>
+          <li><a href="contacto.html">Contacto</a></li>
+          <li><a href="login.html">Iniciar sesión</a></li>
+        </ul>
+      </nav>
+
+      <a class="carrito" href="productos.html">Carrito <span id="contadorCarrito">0</span></a>
+    </header>
+
+    <main>
+      <section id="catalogo">
+        <h2>Catálogo de productos</h2>
+        <p>Laptops, celulares, componentes y periféricos al mejor precio.</p>
+
+        <div class="grid-productos">
+          <article>
+            <img src="img/laptop.svg" alt="Laptop Gamer RTX 4070" />
+            <h3>Laptop Gamer RTX 4070</h3>
+            <p>16GB RAM, 512GB SSD</p>
+            <p><strong>$4.999.000</strong></p>
+            <a class="boton-secundario" href="productos.html">Ver detalle</a>
+            <button type="button" data-agregar>Agregar al carrito</button>
+          </article>
+
+          <article>
+            <img src="img/celular.svg" alt="Celular Galaxy S24 Ultra" />
+            <h3>Celular Galaxy S24 Ultra</h3>
+            <p>256GB, cámara 200MP</p>
+            <p><strong>$3.299.000</strong></p>
+            <a class="boton-secundario" href="productos.html">Ver detalle</a>
+            <button type="button" data-agregar>Agregar al carrito</button>
+          </article>
+
+          <article>
+            <img src="img/gpu.svg" alt="Tarjeta de Video RTX 4070" />
+            <h3>Tarjeta de Video RTX 4070</h3>
+            <p>12GB GDDR6X, ray tracing</p>
+            <p><strong>$2.150.000</strong></p>
+            <a class="boton-secundario" href="productos.html">Ver detalle</a>
+            <button type="button" data-agregar>Agregar al carrito</button>
+          </article>
+
+          <article>
+            <img src="img/monitor.svg" alt="Monitor Gamer 27&quot; 144Hz" />
+            <h3>Monitor Gamer 27&quot; 144Hz</h3>
+            <p>QHD, panel IPS, 1 ms</p>
+            <p><strong>$1.299.000</strong></p>
+            <a class="boton-secundario" href="productos.html">Ver detalle</a>
+            <button type="button" data-agregar>Agregar al carrito</button>
+          </article>
+
+          <article>
+            <img src="img/teclado.svg" alt="Teclado Mecánico RGB" />
+            <h3>Teclado Mecánico RGB</h3>
+            <p>Switches rojos, retroiluminado</p>
+            <p><strong>$329.000</strong></p>
+            <a class="boton-secundario" href="productos.html">Ver detalle</a>
+            <button type="button" data-agregar>Agregar al carrito</button>
+          </article>
+
+          <article>
+            <img src="img/audifonos.svg" alt="Audífonos Inalámbricos" />
+            <h3>Audífonos Inalámbricos</h3>
+            <p>Bluetooth 5.3, 30 h de batería</p>
+            <p><strong>$459.000</strong></p>
+            <a class="boton-secundario" href="productos.html">Ver detalle</a>
+            <button type="button" data-agregar>Agregar al carrito</button>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <p>TechStore Pro — Tu tienda de tecnología de confianza.</p>
+
+      <nav>
+        <a href="index.html">Inicio</a>
+        <a href="productos.html">Productos</a>
+        <a href="contacto.html">Contacto</a>
+      </nav>
+
+      <address>
+        <a href="mailto:info@techstorepro.co">info@techstorepro.co</a>
+      </address>
+
+      <p>&copy; <time datetime="2026">2026</time> TechStore Pro</p>
+    </footer>
+
+    <script src="js/main.js"></script>
+  </body>
+</html>

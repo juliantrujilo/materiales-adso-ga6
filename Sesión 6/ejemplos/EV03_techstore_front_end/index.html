@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TechStore Pro | Inicio</title>
+    <link rel="stylesheet" href="css/estilos.css" />
+  </head>
+  <body>
+    <header>
+      <h1><a href="index.html">TechStore Pro</a></h1>
+
+      <button class="menu-toggle" id="menuToggle" type="button">Menú</button>
+
+      <nav id="menuPrincipal">
+        <ul>
+          <li><a href="index.html">Inicio</a></li>
+          <li><a href="productos.html">Productos</a></li>
+          <li><a href="contacto.html">Contacto</a></li>
+          <li><a href="login.html">Iniciar sesión</a></li>
+        </ul>
+      </nav>
+
+      <a class="carrito" href="productos.html">Carrito <span id="contadorCarrito">0</span></a>
+    </header>
+
+    <main>
+      <section id="hero">
+        <h2>Bienvenido a TechStore Pro</h2>
+        <p>
+          Laptops, celulares y componentes PC al mejor precio, con envío a todo
+          el país.
+        </p>
+        <a href="productos.html">Ver productos</a>
+        <a href="#about">Conócenos</a>
+      </section>
+
+      <section id="destacados">
+        <h2>Nuestros Productos</h2>
+        <div class="grid-productos">
+          <article>
+            <img src="img/laptop.svg" alt="Laptop Gamer RTX 4070" />
+            <h3>Laptop Gamer RTX 4070</h3>
+            <p>16GB RAM, 512GB SSD</p>
+            <p><strong>$4.999.000</strong></p>
+            <a class="boton-secundario" href="productos.html">Ver detalle</a>
+            <button type="button" data-agregar>Agregar al carrito</button>
+          </article>
+
+          <article>
+            <img src="img/celular.svg" alt="Celular Galaxy S24 Ultra" />
+            <h3>Celular Galaxy S24 Ultra</h3>
+            <p>256GB, cámara 200MP</p>
+            <p><strong>$3.299.000</strong></p>
+            <a class="boton-secundario" href="productos.html">Ver detalle</a>
+            <button type="button" data-agregar>Agregar al carrito</button>
+          </article>
+
+          <article>
+            <img src="img/gpu.svg" alt="Tarjeta de Video RTX 4070" />
+            <h3>Tarjeta de Video RTX 4070</h3>
+            <p>12GB GDDR6X, ray tracing</p>
+            <p><strong>$2.150.000</strong></p>
+            <a class="boton-secundario" href="productos.html">Ver detalle</a>
+            <button type="button" data-agregar>Agregar al carrito</button>
+          </article>
+        </div>
+      </section>
+
+      <section id="como-comprar">
+        <h2>¿Cómo comprar?</h2>
+        <ol class="pasos-compra">
+          <li>Explora el <a href="productos.html">catálogo</a> de productos.</li>
+          <li>Abre el detalle del que te interesa.</li>
+          <li>Presiona «Agregar al carrito» y revisa el contador del menú.</li>
+          <li>Escríbenos desde <a href="contacto.html">Contacto</a> si tienes dudas.</li>
+        </ol>
+      </section>
+
+      <section id="about">
+        <h2>¿Quiénes somos?</h2>
+        <p>
+          Somos una tienda especializada en tecnología, con más de 5 años
+          ayudando a nuestros clientes a encontrar el equipo ideal.
+        </p>
+        <a href="contacto.html">Conoce más</a>
+      </section>
+    </main>
+
+    <footer>
+      <p>TechStore Pro — Tu tienda de tecnología de confianza.</p>
+
+      <nav>
+        <a href="index.html">Inicio</a>
+        <a href="productos.html">Productos</a>
+        <a href="contacto.html">Contacto</a>
+      </nav>
+
+      <address>
+        <a href="mailto:info@techstorepro.co">info@techstorepro.co</a>
+      </address>
+
+      <p>&copy; <time datetime="2026">2026</time> TechStore Pro</p>
+    </footer>
+
+    <script src="js/main.js"></script>
+  </body>
+</html>
