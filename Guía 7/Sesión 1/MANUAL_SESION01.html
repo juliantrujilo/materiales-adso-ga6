@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Guía de Estudio — Sesión 1 (Versionamiento AA1) | SENA ADSO 3389010</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@600;700;800;900&family=Syne:wght@700;800;900&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --sena-verde: #39a900;
+      --sena-verde-dark: #236b00;
+      --sena-verde-bg: #f0fdf4;
+      --sena-verde-border: #bbf7d0;
+      --sena-naranja: #ff6b00;
+      --sena-naranja-dark: #c2410c;
+      --sena-naranja-bg: #fff7ed;
+      --sena-naranja-border: #fed7aa;
+      --azul-tech: #0284c7;
+      --azul-tech-dark: #0369a1;
+      --azul-bg: #eff6ff;
+      --azul-border: #bfdbfe;
+      --rojo-dc: #dc2626;
+      --rojo-bg: #fef2f2;
+      --rojo-border: #fecaca;
+      --purpura-pro: #7c3aed;
+      --purpura-bg: #faf5ff;
+      --purpura-border: #e9d5ff;
+
+      --bg-page: #f8fafc;
+      --bg-card: #ffffff;
+      --bg-subtle: #f1f5f9;
+      --borde-light: #e2e8f0;
+      --texto-main: #0f172a;
+      --texto-muted: #334155;
+      --texto-sub: #64748b;
+      --texto-dimmer: #94a3b8;
+
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
+      --shadow-card: 0 8px 24px rgba(15,23,42,0.06);
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --radius-xl: 20px;
+    }
+
+    * { margin:0; padding:0; box-sizing:border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg-page);
+      color: var(--texto-main);
+      line-height: 1.7;
+    }
+
+    /* Topbar Fijo */
+    .doc-topbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--borde-light);
+      padding: 12px 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    .topbar-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .sena-badge {
+      background: linear-gradient(135deg, var(--sena-verde), var(--sena-verde-dark));
+      color: #fff;
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 14px;
+      padding: 5px 12px;
+      border-radius: 8px;
+      letter-spacing: 0.5px;
+    }
+    .topbar-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 14.5px;
+      font-weight: 700;
+      color: var(--texto-main);
+    }
+    .topbar-sub {
+      font-size: 11.5px;
+      color: var(--texto-sub);
+    }
+    .topbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .btn-topbar {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 7px 14px;
+      border-radius: 20px;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      cursor: pointer;
+    }
+    .btn-topbar.portal {
+      background: #f1f5f9;
+      color: var(--texto-muted);
+      border: 1px solid var(--borde-light);
+    }
+    .btn-topbar.portal:hover {
+      background: #e2e8f0;
+      color: var(--texto-main);
+    }
+    .btn-topbar.pres {
+      background: linear-gradient(135deg, var(--sena-verde), var(--sena-verde-dark));
+      color: #fff;
+      box-shadow: 0 2px 8px rgba(57,169,0,0.25);
+    }
+    .btn-topbar.pres:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 14px rgba(57,169,0,0.35);
+    }
+    .btn-topbar.print {
+      background: #ffffff;
+      color: var(--azul-tech);
+      border: 1px solid var(--azul-border);
+    }
+    .btn-topbar.print:hover {
+      background: var(--azul-bg);
+    }
+
+    /* Layout Doc: Sidebar + Contenido */
+    .doc-layout {
+      display: flex;
+      max-width: 1440px;
+      margin: 0 auto;
+      min-height: calc(100vh - 65px);
+    }
+
+    /* Sidebar Índice de Navegación */
+    .doc-sidebar {
+      width: 300px;
+      flex-shrink: 0;
+      background: #ffffff;
+      border-right: 1px solid var(--borde-light);
+      position: sticky;
+      top: 61px;
+      height: calc(100vh - 61px);
+      overflow-y: auto;
+      padding: 24px 16px;
+    }
+    .sidebar-heading {
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--texto-sub);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 12px;
+      padding-left: 8px;
+    }
+    .doc-nav-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .doc-nav-link {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--texto-muted);
+      text-decoration: none;
+      transition: all 0.2s ease;
+      line-height: 1.35;
+    }
+    .doc-nav-link:hover {
+      background: #f8fafc;
+      color: var(--sena-verde-dark);
+      padding-left: 15px;
+    }
+    .doc-nav-link.active {
+      background: var(--sena-verde-bg);
+      color: var(--sena-verde-dark);
+      border-left: 3px solid var(--sena-verde);
+      font-weight: 700;
+    }
+    .doc-nav-num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--texto-dimmer);
+      width: 18px;
+      text-align: right;
+    }
+
+    /* Contenedor del Artículo */
+    .doc-main {
+      flex: 1;
+      min-width: 0;
+      padding: 40px 48px 80px;
+      max-width: 960px;
+    }
+
+    @media (max-width: 992px) {
+      .doc-sidebar { display: none; }
+      .doc-main { padding: 24px 20px; }
+    }
+
+    /* Tipografía y Elementos del Manual */
+    .doc-header-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--sena-verde-bg);
+      border: 1px solid var(--sena-verde-border);
+      padding: 5px 14px;
+      border-radius: 30px;
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--sena-verde-dark);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 16px;
+    }
+    .doc-title {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(28px, 3.5vw, 40px);
+      font-weight: 800;
+      color: var(--texto-main);
+      line-height: 1.2;
+      margin-bottom: 12px;
+      letter-spacing: -0.5px;
+    }
+    .doc-subtitle {
+      font-size: 16px;
+      color: var(--texto-muted);
+      margin-bottom: 24px;
+      line-height: 1.6;
+    }
+
+    /* Meta Caja */
+    .meta-box-panel {
+      background: #ffffff;
+      border: 1px solid var(--borde-light);
+      border-radius: var(--radius-md);
+      padding: 16px 20px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 16px;
+      margin-bottom: 40px;
+      box-shadow: var(--shadow-sm);
+    }
+    .meta-item-label {
+      font-size: 10.5px;
+      font-weight: 700;
+      color: var(--texto-sub);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 2px;
+    }
+    .meta-item-val {
+      font-size: 13.5px;
+      font-weight: 800;
+      color: var(--texto-main);
+    }
+
+    /* Secciones de Contenido */
+    .doc-section {
+      margin-bottom: 56px;
+      scroll-margin-top: 80px;
+    }
+    .sec-h2 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--texto-main);
+      margin-bottom: 16px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #f1f5f9;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .sec-h3 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--texto-main);
+      margin: 24px 0 12px;
+    }
+    p { margin-bottom: 16px; font-size: 14.5px; color: var(--texto-muted); }
+
+    /* Callouts / Alertas Didácticas */
+    .callout {
+      border-radius: var(--radius-md);
+      padding: 18px 22px;
+      margin: 20px 0;
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+      border: 1px solid;
+    }
+    .callout-icon { flex-shrink: 0; margin-top: 2px; }
+    .callout-content { font-size: 13.5px; line-height: 1.6; }
+    .callout-content strong { color: var(--texto-main); }
+    .callout.verde {
+      background: var(--sena-verde-bg);
+      border-color: var(--sena-verde-border);
+      color: #14532d;
+    }
+    .callout.naranja {
+      background: var(--sena-naranja-bg);
+      border-color: var(--sena-naranja-border);
+      color: #7c2d12;
+    }
+    .callout.tech {
+      background: var(--azul-bg);
+      border-color: var(--azul-border);
+      color: #0c4a6e;
+    }
+    .callout.rojo {
+      background: var(--rojo-bg);
+      border-color: var(--rojo-border);
+      color: #7f1d1d;
+    }
+
+    /* Cajas de Plantillas Copiables con Botón */
+    .copy-box-container {
+      background: #ffffff;
+      border: 1.5px solid var(--borde-light);
+      border-radius: var(--radius-md);
+      margin: 20px 0;
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+    }
+    .copy-box-header {
+      background: #f8fafc;
+      border-bottom: 1px solid var(--borde-light);
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .copy-box-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--texto-main);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .btn-copy {
+      background: #ffffff;
+      border: 1px solid var(--borde-light);
+      border-radius: 6px;
+      padding: 5px 12px;
+      font-size: 11.5px;
+      font-weight: 700;
+      color: var(--sena-verde-dark);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+    }
+    .btn-copy:hover {
+      background: var(--sena-verde);
+      border-color: var(--sena-verde);
+      color: #ffffff;
+    }
+    .copy-box-body {
+      padding: 16px 18px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      color: #334155;
+      background: #ffffff;
+      white-space: pre-wrap;
+      line-height: 1.6;
+      max-height: 380px;
+      overflow-y: auto;
+    }
+
+    /* Tablas Estructuradas Responsivas */
+    .table-card {
+      background: #ffffff;
+      border: 1px solid var(--borde-light);
+      border-radius: var(--radius-md);
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      margin: 20px 0;
+      box-shadow: var(--shadow-sm);
+      width: 100%;
+    }
+    .doc-table {
+      width: 100%;
+      min-width: 620px;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 13px;
+    }
+    .doc-table th {
+      background: #f8fafc;
+      padding: 12px 16px;
+      font-weight: 700;
+      color: var(--texto-main);
+      border-bottom: 2px solid var(--borde-light);
+      text-transform: uppercase;
+      font-size: 11px;
+      letter-spacing: 0.5px;
+    }
+    .doc-table td {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--borde-light);
+      color: var(--texto-muted);
+      vertical-align: middle;
+    }
+    .doc-table tr:hover { background: #f8fafc; }
+    .badge-pk {
+      background: #fef08a;
+      color: #854d0e;
+      font-weight: 800;
+      font-size: 10.5px;
+      padding: 2px 7px;
+      border-radius: 4px;
+      border: 1px solid #fde047;
+    }
+    .badge-fk {
+      background: #e0f2fe;
+      color: #0369a1;
+      font-weight: 800;
+      font-size: 10.5px;
+      padding: 2px 7px;
+      border-radius: 4px;
+      border: 1px solid #bae6fd;
+    }
+
+    /* Lista de Chequeo Interactiva */
+    .checklist-container {
+      background: #ffffff;
+      border: 1.5px solid var(--borde-light);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      margin: 24px 0;
+      box-shadow: var(--shadow-sm);
+    }
+    .checklist-progress-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+    .checklist-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 12px;
+      border-radius: 8px;
+      transition: background 0.2s ease;
+      cursor: pointer;
+      user-select: none;
+    }
+    .checklist-item:hover { background: #f8fafc; }
+    .check-custom {
+      width: 20px;
+      height: 20px;
+      border-radius: 6px;
+      border: 2px solid #cbd5e1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 2px;
+      transition: all 0.2s ease;
+    }
+    .checklist-item.checked .check-custom {
+      background: var(--sena-verde);
+      border-color: var(--sena-verde);
+      color: #fff;
+    }
+    .checklist-item.checked .checklist-text {
+      text-decoration: line-through;
+      color: var(--texto-dimmer);
+    }
+    .checklist-text {
+      font-size: 13.5px;
+      color: var(--texto-main);
+      line-height: 1.5;
+    }
+    .checklist-tip {
+      font-size: 11px;
+      color: var(--texto-sub);
+      display: block;
+      margin-top: 2px;
+    }
+
+    /* Estilos de Impresión */
+    @media print {
+      .doc-topbar, .doc-sidebar, .btn-copy, .btn-topbar { display: none !important; }
+      .doc-main { max-width: 100% !important; padding: 0 !important; }
+      body { background: #fff !important; color: #000 !important; }
+      .copy-box-container, .table-card, .checklist-container { box-shadow: none !important; border-color: #ccc !important; }
+    }
+  
+    /* ===== Guía de Estudio Sesión 6: layout sin topbar (estándar del Hub) y pasos ===== */
+    .doc-layout { max-width: none; min-height: 100vh; }
+    .doc-sidebar { top: 0; height: 100vh; width: 310px; padding: 0; display: flex; flex-direction: column; box-shadow: 2px 0 20px rgba(15,23,42,0.04); z-index: 300; }
+    .side-brand { display: flex; align-items: center; gap: 11px; padding: 16px 18px; border-bottom: 1px solid var(--borde-light); }
+    .side-logo { width: 40px; height: 40px; border-radius: 10px; background: var(--sena-verde); color: #fff; display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 2px 8px -2px rgba(57,169,0,.4); }
+    .side-brand h1 { font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 800; line-height: 1.25; }
+    .side-brand p { font-size: 10.5px; color: var(--texto-sub); font-weight: 600; }
+    .side-progress { padding: 12px 18px; border-bottom: 1px solid var(--borde-light); background: #f8fafc; }
+    .side-progress-top { display: flex; justify-content: space-between; font-size: 11px; font-weight: 800; color: var(--texto-muted); margin-bottom: 6px; }
+    .side-bar { height: 8px; background: #e2e8f0; border-radius: 8px; overflow: hidden; }
+    .side-bar > div { height: 100%; width: 0%; background: linear-gradient(90deg, var(--azul-tech), var(--sena-verde)); transition: width .3s ease; }
+    .side-scroll { flex: 1; overflow-y: auto; padding: 12px; }
+    .nav-part { font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: .8px; color: var(--texto-dimmer); padding: 14px 8px 6px; list-style: none; }
+    .nav-part:first-child { padding-top: 4px; }
+    .doc-nav-num { width: 26px; font-weight: 700; }
+    .nav-done { margin-left: auto; color: var(--sena-verde); display: none; }
+    .doc-nav-link.done .nav-done { display: inline-flex; }
+    .doc-nav-link.done { color: var(--texto-sub); }
+    .side-footer { padding: 12px 14px; border-top: 1px solid var(--borde-light); background: #f8fafc; display: flex; flex-direction: column; gap: 6px; }
+    .side-pill { display: flex; align-items: center; gap: 6px; background: rgba(255,107,0,.08); border: 1px solid rgba(255,107,0,.22); border-radius: 6px; padding: 5px 8px; font-size: 10.5px; font-weight: 700; color: #c2410c; }
+    .side-link { display: flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 700; color: var(--texto-muted); text-decoration: none; padding: 5px 6px; border-radius: 6px; }
+    .side-link:hover { background: #e2e8f0; color: var(--texto-main); }
+    .doc-main { max-width: 980px; margin: 0 auto; }
+    .floating-toggle { display: none; position: fixed; top: 14px; left: 14px; z-index: 310; height: 38px; padding: 0 14px 0 10px; align-items: center; gap: 8px; background: #fff; border: 1px solid #cbd5e1; border-radius: 10px; box-shadow: 0 6px 18px rgba(15,23,42,.1); font-family: 'Syne', sans-serif; font-size: 12px; font-weight: 700; cursor: pointer; }
+    @media (max-width: 992px) {
+      .doc-sidebar { display: flex; position: fixed; left: 0; transform: translateX(-100%); transition: transform .3s ease; }
+      .doc-sidebar.open { transform: none; }
+      .floating-toggle { display: inline-flex; }
+      .doc-main { padding-top: 64px; }
+    }
+    .part-banner { display: flex; align-items: center; gap: 16px; margin: 56px 0 26px; padding: 18px 22px; border-radius: 16px; border: 1px solid; }
+    .part-banner.verde { background: var(--sena-verde-bg); border-color: var(--sena-verde-border); }
+    .part-banner.azul { background: var(--azul-bg); border-color: var(--azul-border); }
+    .part-banner.naranja { background: var(--sena-naranja-bg); border-color: var(--sena-naranja-border); }
+    .part-letter { width: 48px; height: 48px; border-radius: 14px; background: var(--texto-main); color: #fff; display: flex; align-items: center; justify-content: center; font-family: 'Syne', sans-serif; font-weight: 800; font-size: 22px; flex-shrink: 0; }
+    .part-title { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 19px; }
+    .part-sub { font-size: 13px; color: var(--texto-muted); }
+    .step-banner { display: flex; align-items: center; gap: 14px; margin-bottom: 14px; }
+    .step-num { min-width: 46px; height: 46px; padding: 0 8px; border-radius: 12px; background: var(--sena-verde); color: #fff; display: flex; align-items: center; justify-content: center; font-family: 'Syne', sans-serif; font-weight: 800; font-size: 17px; flex-shrink: 0; box-shadow: 0 4px 12px rgba(57,169,0,.3); }
+    .step-meta { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--texto-sub); margin-top: 2px; }
+    .hazlo { margin: 14px 0 6px 0; padding-left: 0; list-style: none; counter-reset: h; }
+    .hazlo li { counter-increment: h; position: relative; padding: 9px 12px 9px 46px; margin-bottom: 6px; background: #fff; border: 1px solid var(--borde-light); border-radius: 10px; font-size: 14px; line-height: 1.6; }
+    .hazlo li::before { content: counter(h); position: absolute; left: 12px; top: 9px; width: 24px; height: 24px; border-radius: 50%; background: var(--azul-bg); color: var(--azul-tech-dark); border: 1px solid var(--azul-border); font-weight: 800; font-size: 12px; text-align: center; line-height: 22px; }
+    .verify-box { margin: 22px 0 6px; padding: 16px 18px; background: var(--sena-verde-bg); border: 1.5px solid var(--sena-verde-border); border-radius: 14px; }
+    .verify-title { display: flex; align-items: center; gap: 8px; font-family: 'Syne', sans-serif; font-weight: 800; font-size: 14.5px; color: var(--sena-verde-dark); margin-bottom: 8px; }
+    .verify-box ul { margin: 0 0 12px 22px; font-size: 13.5px; line-height: 1.7; color: var(--texto-muted); }
+    .btn-done { display: inline-flex; align-items: center; gap: 8px; background: #fff; border: 1.5px solid var(--sena-verde); color: var(--sena-verde-dark); font-weight: 800; font-size: 12.5px; padding: 8px 16px; border-radius: 10px; cursor: pointer; }
+    .btn-done:hover { background: var(--sena-verde); color: #fff; }
+    .doc-section.done .btn-done { background: var(--sena-verde); color: #fff; }
+    .doc-section.done .step-num { background: var(--texto-main); }
+    .tree { background: #1a1a2e; color: #e2e8f0; font-family: 'JetBrains Mono', monospace; font-size: 12.5px; line-height: 1.8; padding: 16px 20px; border-radius: 12px; white-space: pre; overflow-x: auto; margin: 14px 0; }
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 12px 0; }
+    .mini-card { background: #fff; border: 1px solid var(--borde-light); border-radius: 12px; padding: 14px 16px; font-size: 13.5px; line-height: 1.65; box-shadow: var(--shadow-sm); }
+    @media (max-width: 760px) { .two-col { grid-template-columns: 1fr; } }
+    .btn-row { display: flex; flex-wrap: wrap; gap: 10px; margin: 14px 0; }
+    .btn-link { display: inline-flex; align-items: center; gap: 8px; padding: 9px 16px; border-radius: 10px; font-size: 13px; font-weight: 700; text-decoration: none; }
+    .btn-link.primary { background: var(--azul-tech); color: #fff; box-shadow: 0 4px 12px rgba(2,132,199,.25); }
+    .btn-link.primary:hover { background: var(--azul-tech-dark); }
+    .btn-link.ghost { background: #fff; color: var(--azul-tech-dark); border: 1.5px solid var(--azul-border); }
+    .btn-link.ghost:hover { background: var(--azul-bg); }
+    .check-counter { font-size: 12px; font-weight: 800; color: var(--sena-verde-dark); background: var(--sena-verde-bg); padding: 4px 10px; border-radius: 20px; border: 1px solid var(--sena-verde-border); }
+    .copy-box-body { max-height: 440px; }
+    .doc-section code { background: #f1f5f9; padding: 1px 6px; border-radius: 5px; font-size: 0.92em; }
+    .copy-box-body code, .tree code { background: none; padding: 0; }
+    /* Codebox con el diseño de la presentación (estándar: terminal con semáforo) */
+    .code-editor-box {
+      background: #1a1a2e;
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 20px 50px rgba(0,0,0,.25);
+      font-family: 'JetBrains Mono', Consolas, 'Courier New', monospace;
+      margin: 14px auto;
+      max-width: 760px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .editor-header {
+      background: #12121f;
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-sizing: border-box;
+    }
+
+    .editor-dot { width: 11px; height: 11px; border-radius: 50%; }
+    .editor-dot.r { background: #ff5f57; }
+    .editor-dot.y { background: #febc2e; }
+    .editor-dot.g { background: #28c840; }
+
+    .editor-title {
+      margin-left: 8px;
+      font-family: 'JetBrains Mono', Consolas, monospace;
+      font-size: 11px;
+      color: #8892a4;
+      flex: 1;
+    }
+
+    .editor-badge {
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 3px 9px;
+      border-radius: 5px;
+      background: rgba(74,222,128,.15);
+      color: #4ade80;
+    }
+
+    .editor-body {
+      padding: 10px 0;
+      font-family: 'JetBrains Mono', Consolas, 'Courier New', monospace;
+      font-size: 12.5px;
+      line-height: 1.9;
+      flex: 1;
+      overflow-x: auto;
+      background: #1a1a2e;
+      box-sizing: border-box;
+    }
+
+    .cl {
+      display: grid;
+      grid-template-columns: 34px 1fr;
+      column-gap: 12px;
+      padding: 0 20px;
+      white-space: pre;
+    }
+
+    .cl .ln {
+      color: #4a5178;
+      user-select: none;
+      text-align: right;
+    }
+
+    .cl .code { color: #e2e8f0; }
+    .cl.indent-1 .code { padding-left: 18px; }
+    .cl.indent-2 .code { padding-left: 36px; }
+
+    /* TOKENS DE SINTAXIS JSON / BSON / MONGODB (paleta Tokyo Night, patrón Sesión 19) */
+    .tok-key, .sel, .syn-key, .syn-prop { color: #7dcfff; }
+    .tok-str, .str, .prop, .syn-str { color: #9ece6a; }
+    .tok-num, .val, .syn-num { color: #e2e8f0; }
+    .tok-bool, .syn-keyword { color: #f7768e; font-weight: 700; }
+    .tok-bson, .var, .syn-method, .syn-func { color: #e0af68; }
+    .tok-comment, .cm, .syn-comment { color: #565f89; font-style: italic; }
+    .tok-op, .punc { color: #8892a4; }
+    .tag { color: #f7768e; }
+    .attr { color: #e0af68; }
+    .tok-id-badge { background: rgba(78, 201, 176, 0.2); color: #4ec9b0; border: 1px solid rgba(78, 201, 176, 0.4); font-size: 9px; font-weight: 800; padding: 0 5px; border-radius: 3px; height: 16px; line-height: 14px; display: inline-block; vertical-align: middle; margin-left: 6px; }
+    .tok-embed-badge { background: rgba(255, 107, 0, 0.2); color: #ff9800; border: 1px solid rgba(255, 107, 0, 0.4); font-size: 9px; font-weight: 800; padding: 0 5px; border-radius: 3px; height: 16px; line-height: 14px; display: inline-block; vertical-align: middle; margin-left: 6px; }
+    .tok-ref-badge { background: rgba(59, 130, 246, 0.2); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.4); font-size: 9px; font-weight: 800; padding: 0 5px; border-radius: 3px; height: 16px; line-height: 14px; display: inline-block; vertical-align: middle; margin-left: 6px; }
+
+    
+    .editor-body { max-height: 460px; overflow-y: auto; }
+    .btn-copy-code { display: inline-flex; align-items: center; gap: 6px; margin-left: 10px; background: #2a2a45; color: #e2e8f0; border: 1px solid #3a3a5c; padding: 3px 10px; border-radius: 6px; font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 700; cursor: pointer; transition: all .2s ease; }
+    .btn-copy-code:hover { background: var(--sena-verde); border-color: var(--sena-verde); color: #fff; }
+    @media print { .btn-copy-code { display: none !important; } .editor-body { max-height: none; } }
+    @media print { .doc-sidebar, .floating-toggle, .btn-done, .btn-row { display: none !important; } .verify-box { break-inside: avoid; } }
+  
+    /* Extras Guia 7 */
+    .paper { background:#fff; border:1px solid var(--borde-light); border-radius:14px; padding:34px 40px; margin:18px 0; box-shadow:var(--shadow-card); position:relative; }
+    .paper h3 { font-family:'Outfit',sans-serif; font-size:17px; margin:22px 0 8px; color:var(--texto-main); }
+    .paper h4 { font-size:14px; margin:14px 0 6px; color:var(--texto-main); }
+    .paper p { font-size:13.5px; text-align:justify; }
+    .paper .cover { text-align:center; padding:30px 10px 34px; border-bottom:2px dashed var(--borde-light); margin-bottom:10px; }
+    .paper .cover .c-title { font-family:'Syne',sans-serif; font-weight:800; font-size:20px; line-height:1.3; margin:26px 0 8px; }
+    .paper .cover .c-sub { font-size:15px; color:var(--texto-muted); margin-bottom:26px; }
+    .paper .cover p { text-align:center; margin-bottom:4px; font-size:13.5px; }
+    .paper-tag { position:absolute; top:-12px; right:18px; background:var(--sena-naranja); color:#fff; font-size:10.5px; font-weight:800; letter-spacing:.6px; text-transform:uppercase; padding:4px 12px; border-radius:20px; }
+    .paper .doc-table { min-width:520px; font-size:12.5px; }
+    .paper ul, .paper ol { margin:0 0 14px 22px; font-size:13.5px; color:var(--texto-muted); line-height:1.7; }
+    @media (max-width: 760px) { .paper { padding:22px 18px; } }
+    @media print { .paper { box-shadow:none; } }
+</style>
+</head>
+<body>
+  <button type="button" class="floating-toggle" onclick="toggleSidebar()"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg><span>Índice</span></button>
+  <div class="doc-layout">
+    <aside class="doc-sidebar" id="docSidebar"><div class="side-brand"><div class="side-logo"><svg width="24" height="24" viewBox="0 0 64 62" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
+            <g transform="translate(-377 -19)">
+              <path d="M409.164 19C412.922 19 415.992 22.09 415.992 25.8778 415.992 29.6656 412.932 32.7556 409.164 32.7556 405.397 32.7556 402.336 29.6656 402.336 25.8778 402.336 22.09 405.407 19 409.164 19"/>
+              <path d="M384.305 41.1884 384.305 41.2183C384.285 41.3379 384.275 41.4177 384.275 41.4675 384.275 41.8264 384.474 42.0855 384.873 42.265 385.282 42.4344 385.9 42.5241 386.747 42.5241 387.395 42.5241 387.893 42.4543 388.262 42.3148 388.631 42.1752 388.81 41.9759 388.81 41.7267 388.81 41.3479 388.082 41.0489 386.647 40.8096 386.478 40.7797 386.348 40.7598 386.268 40.7498 386.179 40.7299 386.039 40.71 385.86 40.6801 383.567 40.3013 382.092 39.8926 381.434 39.454 381.115 39.2347 380.876 38.9855 380.706 38.6965 380.547 38.4074 380.467 38.0785 380.467 37.7096 380.467 36.8125 380.995 36.1248 382.052 35.6563 383.109 35.1878 384.654 34.9486 386.677 34.9486 388.7 34.9486 390.166 35.1678 391.133 35.6064 392.1 36.045 392.578 36.7228 392.578 37.6399L392.578 37.7495 388.78 37.7495 388.78 37.7096C388.78 37.3907 388.591 37.1614 388.202 36.992 387.813 36.8325 387.255 36.7428 386.508 36.7428 385.929 36.7428 385.481 36.8026 385.182 36.9122 384.863 37.0318 384.713 37.1913 384.713 37.4006 384.713 37.7794 385.541 38.1084 387.195 38.3675 387.514 38.4174 387.764 38.4572 387.943 38.4871 389.119 38.6865 389.966 38.8559 390.465 38.9955 390.963 39.135 391.392 39.3045 391.761 39.4939 392.159 39.7132 392.478 39.9923 392.698 40.3312 392.917 40.6701 393.027 41.0389 393.027 41.4476 393.027 42.3746 392.448 43.0823 391.302 43.5907 390.156 44.0891 388.501 44.3383 386.348 44.3383 384.195 44.3383 382.67 44.099 381.723 43.6206 380.766 43.1421 380.298 42.3746 380.298 41.308L380.298 41.1685 384.305 41.1685ZM394.711 44.1987 394.711 35.0881 405.546 35.0881 405.546 37.0518 398.778 37.0518 398.778 38.5071 405.028 38.5071 405.028 40.4508 398.778 40.4508 398.778 42.2151 405.795 42.2151 405.795 44.2087 394.711 44.2087ZM407.5 44.1987 407.5 35.0881 412.643 35.0881 418.155 41.2084 418.155 35.0881 422.063 35.0881 422.063 44.1987 416.72 44.1987 411.387 38.0585 411.387 44.1987 407.49 44.1987ZM432.569 40.5604 430.625 37.2511 428.572 40.5604 432.579 40.5604ZM426.369 44.1987 422.292 44.1987 428.592 35.0881 433.107 35.0881 439.118 44.1987 434.592 44.1987 433.675 42.554 427.366 42.554 426.389 44.1987Z"/>
+              <path d="M389.309 76.3351 385.67 72.9161 396.735 53.6881C397.333 52.6415 396.585 51.3257 395.379 51.3257L377.267 51.3257 377.267 46.5113 406.413 46.5113 389.309 76.3351Z"/>
+              <path d="M428.701 76.3351 432.34 72.9161 421.275 53.6881C420.677 52.6415 421.425 51.3257 422.631 51.3257L440.743 51.3257 440.743 46.5113 411.597 46.5113 428.701 76.3351Z"/>
+              <path d="M408.965 51.5949C408.965 51.5949 409.005 51.5251 409.005 51.5251L425.432 78.7174 421.066 80.99 410.48 63.2373C409.852 62.1907 408.347 62.1907 407.729 63.2373 404.2 69.1981 397.213 80.99 397.213 80.99L392.947 78.8768C392.947 78.8768 408.088 53.09 408.965 51.5949"/>
+            </g>
+          </svg></div><div><h1>ADSO 3389010</h1><p>Sesión 1 · Guía de Estudio</p></div></div><div class="side-progress"><div class="side-progress-top"><span>Tu avance</span><span id="progTexto">0 de 11 pasos</span></div><div class="side-bar"><div id="progBarra"></div></div></div><div class="side-scroll"><ul class="doc-nav-list"><li class="nav-part">Antes de empezar</li><li><a href="#sec-0" class="doc-nav-link active"><span class="doc-nav-num">0</span> Qué construyes y cómo usar la guía</a></li><li class="nav-part">Parte A · Prepara</li><li><a href="#sec-1" class="doc-nav-link" data-step="sec-1"><span class="doc-nav-num">1</span> Entiende qué pide EV01<span class="nav-done"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span></a></li><li><a href="#sec-2" class="doc-nav-link" data-step="sec-2"><span class="doc-nav-num">2</span> Elige y describe tu proyecto<span class="nav-done"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span></a></li><li><a href="#sec-3" class="doc-nav-link" data-step="sec-3"><span class="doc-nav-num">3</span> Compara las herramientas<span class="nav-done"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span></a></li><li class="nav-part">Parte B · Redacta</li><li><a href="#sec-4" class="doc-nav-link" data-step="sec-4"><span class="doc-nav-num">4</span> Elige y justifica (matriz)<span class="nav-done"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span></a></li><li><a href="#sec-5" class="doc-nav-link" data-step="sec-5"><span class="doc-nav-num">5</span> Portada, introducción y objetivo<span class="nav-done"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span></a></li><li><a href="#sec-13" class="doc-nav-link" data-step="sec-13"><span class="doc-nav-num">6</span> Herramientas de desarrollo<span class="nav-done"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span></a></li><li><a href="#sec-14" class="doc-nav-link" data-step="sec-14"><span class="doc-nav-num">7</span> Versionamiento local y remoto<span class="nav-done"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span></a></li><li><a href="#sec-6" class="doc-nav-link" data-step="sec-6"><span class="doc-nav-num">8</span> Selección de herramientas<span class="nav-done"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span></a></li><li><a href="#sec-7" class="doc-nav-link" data-step="sec-7"><span class="doc-nav-num">9</span> Conclusión y referencias<span class="nav-done"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span></a></li><li class="nav-part">Parte C · Entrega</li><li><a href="#sec-8" class="doc-nav-link" data-step="sec-8"><span class="doc-nav-num">10</span> Exporta a PDF y nombra<span class="nav-done"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span></a></li><li><a href="#sec-9" class="doc-nav-link" data-step="sec-9"><span class="doc-nav-num">11</span> Sube a Zajuna<span class="nav-done"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span></a></li><li class="nav-part">Cierre</li><li><a href="#sec-10" class="doc-nav-link"><span class="doc-nav-num">E</span> Ejemplo completo de informe</a></li><li><a href="#sec-11" class="doc-nav-link"><span class="doc-nav-num">S2</span> Antes de la Sesión 2</a></li><li><a href="#sec-12" class="doc-nav-link"><span class="doc-nav-num">OK</span> Lista de chequeo final</a></li></ul></div><div class="side-footer"><div class="side-pill"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg><span>Entrega AA1: por confirmar en Zajuna</span></div><a class="side-link" href="./PRESENTACION_SESION01_VERSIONAMIENTO.html" target="_blank"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg> Presentación</a><a class="side-link" href="../../explorar.html"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg> Volver al Hub</a></div></aside>
+    <main class="doc-main">
+      <header style="margin-bottom:28px;">
+        <div class="doc-header-badge"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Guía de Estudio — Sesión 1</div>
+        <h1 class="doc-title">Construye tu evidencia AA1-EV01: informe técnico de herramientas de versionamiento</h1>
+        <p class="doc-subtitle">Sigue esta guía en orden y tendrás listo tu informe en PDF: elegirás un proyecto, compararás Git, Subversion y Mercurial (y GitHub, GitLab y Bitbucket), justificarás tu decisión y subirás la evidencia a Zajuna.</p>
+        <div class="meta-box-panel">
+          <div><div class="meta-item-label">Programa</div><div class="meta-item-val">ADSO (Ficha 3389010)</div></div>
+          <div><div class="meta-item-label">Guía</div><div class="meta-item-val">GA7-220501096 · AA1</div></div>
+          <div><div class="meta-item-label">Evidencia</div><div class="meta-item-val">EV01 · Informe técnico (PDF)</div></div>
+          <div><div class="meta-item-label">Fecha Límite Zajuna</div><div class="meta-item-val" style="color:var(--sena-naranja-dark);">Por confirmar en Zajuna</div></div>
+        </div>
+      </header>
+      <section id="sec-0" class="doc-section"><h2 class="sec-h2">Antes de empezar: qué vas a construir y cómo usar esta guía</h2><p>Esta <strong>Guía de Estudio</strong> es un paso a paso para que construyas tu evidencia <strong>GA7-220501096-AA1-EV01</strong>. No necesitas saber Git todavía: en este informe vas a <strong>pensar y argumentar</strong>, no a instalar. Cada paso te dice qué hacer, te da textos modelo que adaptas con tus palabras y te indica cómo comprobar que quedó bien.</p><div class="table-card"><table class="doc-table"><thead><tr><th>Parte</th><th>Qué haces</th><th>Tiempo</th></tr></thead><tbody><tr><td><strong>A · Prepara</strong></td><td>Entiendes la evidencia, eliges tu proyecto y comparas herramientas</td><td>≈ 50 min</td></tr><tr><td><strong>B · Redacta</strong></td><td>Decides con una matriz y escribes portada, introducción, objetivo, herramientas de desarrollo, versionamiento local y remoto, selección, conclusión y referencias</td><td>≈ 125 min</td></tr><tr><td><strong>C · Entrega</strong></td><td>Exportas a PDF, nombras y subes a Zajuna</td><td>≈ 15 min</td></tr></tbody></table></div><div class="btn-row"><a class="btn-link primary" href="./PRESENTACION_SESION01_VERSIONAMIENTO.html" target="_blank"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg> Presentación</a><a class="btn-link ghost" href="#sec-10"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg> Ir al ejemplo completo</a><a class="btn-link ghost" href="../../explorar.html"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg> Volver al Hub</a></div><h3 class="sec-h3">Cómo trabajar con esta guía (siempre igual)</h3><ol class="hazlo"><li><strong>Lee</strong> la explicación corta del paso.</li><li>Abre tu documento en <strong>Word o Google Docs</strong>.</li><li>Presiona <strong>«Copiar texto»</strong> en el modelo, pégalo (Ctrl + V) y <strong>reescríbelo</strong> con tus datos.</li><li>Revisa la caja verde <strong>«Verifica que funciona»</strong> y marca el paso como hecho. Tu avance queda guardado en este navegador.</li></ol><div class="callout naranja"><div class="callout-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg></div><div class="callout-content"><strong>Tres reglas para que tu informe sea bien calificado:</strong><br>• Escribe sobre <strong>un proyecto concreto</strong>, no en general.<br>• Toda elección debe llevar su <strong>porqué</strong>.<br>• El informe debe ser <strong>tuyo</strong>: los modelos son punto de partida, no para copiar y pegar.</div></div></section>
+      <div class="part-banner verde"><div class="part-letter">A</div><div><div class="part-title">Parte A · Prepara</div><div class="part-sub">Entiende la evidencia, elige tu proyecto y compara las opciones</div></div></div>
+      <section id="sec-1" class="doc-section" data-step="sec-1"><div class="step-banner"><div class="step-num">1</div><div><h2 class="sec-h2" style="margin:0;padding:0;border:none;">Entiende qué pide EV01 y qué revisa el instructor</h2><div class="step-meta"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Tiempo estimado: 8 min</div></div></div><p>Antes de escribir una sola línea, tienes que saber <strong>exactamente</strong> qué se te pide. La evidencia <strong>GA7-220501096-AA1-EV01</strong> se llama «Informe técnico de plan de trabajo para construcción de software». En palabras simples: un documento corto donde explicas <strong>qué herramienta usarás para controlar las versiones del código de un proyecto y por qué la elegiste</strong>.</p><div class="table-card"><table class="doc-table"><thead><tr><th>Parte del informe</th><th>Qué debes poner</th><th>Extensión orientativa</th></tr></thead><tbody><tr><td><strong>Portada</strong></td><td>Título, tu nombre, programa, ficha, instructor y fecha</td><td>1 página</td></tr><tr><td><strong>Introducción</strong></td><td>De qué trata el informe y por qué importa el versionamiento</td><td>1 a 2 párrafos</td></tr><tr><td><strong>Objetivo</strong></td><td>Qué logras con el informe (general y específicos)</td><td>4 a 6 líneas</td></tr><tr><td><strong>Selección de herramientas de versionamiento</strong></td><td>Describes el proyecto, comparas opciones y eliges una con argumentos</td><td>2 a 4 páginas</td></tr><tr><td><strong>Herramientas de desarrollo para la codificación</strong></td><td>Editor o IDE, lenguaje, entorno de ejecución, gestor de paquetes, base de datos y depuración, cada una descrita y justificada</td><td>1 a 2 páginas</td></tr><tr><td><strong>Versionamiento local y remoto</strong></td><td>Qué es cada uno, tabla comparativa y flujo clone, add, commit, push, pull</td><td>1 a 2 páginas</td></tr><tr><td><em>Conclusión y referencias</em></td><td>No son obligatorias, pero suben la calidad del informe</td><td>1 página</td></tr></tbody></table></div><h3 class="sec-h3">Los 4 indicadores oficiales del instructor</h3><p>Con esta lista de chequeo del instrumento de evaluación se califica tu evidencia. Cada indicador se cumple en una parte concreta de tu informe:</p><div class="table-card"><table class="doc-table"><thead><tr><th>N.º</th><th>Indicador oficial del instructor (literal)</th><th>Dónde se cumple en tu informe</th><th>Paso de esta guía</th></tr></thead><tbody><tr><td>1</td><td>Diferencia con claridad versionamientos locales y remotos.</td><td>Sección 5: Versionamiento local y remoto (tabla comparativa y flujo)</td><td>Paso 7</td></tr><tr><td>2</td><td>Selecciona y describe herramientas de desarrollo a utilizar, para la codificación del software.</td><td>Sección 4: Herramientas de desarrollo para la codificación</td><td>Paso 6</td></tr><tr><td>3</td><td>Selecciona y describe herramientas de versionamiento.</td><td>Sección 3: Selección de herramientas de versionamiento</td><td>Pasos 2, 3, 4 y 8</td></tr><tr><td>4</td><td>Presenta el informe cumpliendo con las normas básicas de presentación de documentos.</td><td>Portada, formato, tablas tituladas y referencias en APA (todo el documento)</td><td>Pasos 5, 9 y 10</td></tr></tbody></table></div><p>Las cuatro partes mínimas (portada, introducción, objetivo y selección de herramientas) son lo que pide la guía; las secciones 4 y 5 cubren los indicadores 2 y 1, y por eso esta guía las incluye como pasos propios.</p><p>El entregable es un archivo <strong>PDF</strong> (la extensión del documento es libre: no hay un número fijo de páginas). Esta es la estructura base que vas a llenar a lo largo de la guía; cópiala a tu documento como esqueleto:</p><div class="code-editor-box"><div class="editor-header"><span class="editor-dot r"></span><span class="editor-dot y"></span><span class="editor-dot g"></span><span class="editor-title">informe_EV01_esqueleto.txt</span><span class="editor-badge">ESTRUCTURA</span><button type="button" class="btn-copy-code" onclick="copiarAlPortapapeles('cb1', this)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg> Copiar código</button></div><div class="editor-body" id="cb1"><div class="cl"><span class="ln">1</span><span class="code"><span class="syn-func">PORTADA</span></span></div><div class="cl"><span class="ln">2</span><span class="code"><span class="syn-func">1. INTRODUCCIÓN</span></span></div><div class="cl"><span class="ln">3</span><span class="code"><span class="syn-func">2. OBJETIVO</span></span></div><div class="cl"><span class="ln">4</span><span class="code">   <span class="tok-num">2.1 Objetivo general</span></span></div><div class="cl"><span class="ln">5</span><span class="code">   <span class="tok-num">2.2 Objetivos específicos</span></span></div><div class="cl"><span class="ln">6</span><span class="code"><span class="syn-func">3. SELECCIÓN DE HERRAMIENTAS DE VERSIONAMIENTO</span></span></div><div class="cl"><span class="ln">7</span><span class="code">   <span class="tok-num">3.1 Descripción del proyecto</span></span></div><div class="cl"><span class="ln">8</span><span class="code">   <span class="tok-num">3.2 Comparación de sistemas de control de versiones</span></span></div><div class="cl"><span class="ln">9</span><span class="code">   <span class="tok-num">3.3 Comparación de plataformas de alojamiento</span></span></div><div class="cl"><span class="ln">10</span><span class="code">   <span class="tok-num">3.4 Herramienta seleccionada y justificación</span></span></div><div class="cl"><span class="ln">11</span><span class="code">   <span class="tok-num">3.5 Flujo de trabajo previsto</span></span></div><div class="cl"><span class="ln">12</span><span class="code"><span class="syn-func">4. HERRAMIENTAS DE DESARROLLO PARA LA CODIFICACIÓN</span></span></div><div class="cl"><span class="ln">13</span><span class="code">   <span class="tok-num">4.1 Editor o IDE y lenguaje de programación</span></span></div><div class="cl"><span class="ln">14</span><span class="code">   <span class="tok-num">4.2 Entorno de ejecución y gestor de paquetes</span></span></div><div class="cl"><span class="ln">15</span><span class="code">   <span class="tok-num">4.3 Base de datos y herramientas de depuración</span></span></div><div class="cl"><span class="ln">16</span><span class="code"><span class="syn-func">5. VERSIONAMIENTO LOCAL Y REMOTO</span></span></div><div class="cl"><span class="ln">17</span><span class="code">   <span class="tok-num">5.1 Qué es cada uno</span></span></div><div class="cl"><span class="ln">18</span><span class="code">   <span class="tok-num">5.2 Tabla comparativa</span></span></div><div class="cl"><span class="ln">19</span><span class="code">   <span class="tok-num">5.3 Flujo de trabajo (clone, add, commit, push, pull)</span></span></div><div class="cl"><span class="ln">20</span><span class="code"><span class="syn-func">6. CONCLUSIÓN</span></span></div><div class="cl"><span class="ln">21</span><span class="code"><span class="syn-func">7. REFERENCIAS</span></span></div></div></div><div class="callout tech"><div class="callout-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></div><div class="callout-content"><strong>Qué revisa el instructor al calificar:</strong><br>• Que estén las cuatro partes mínimas: portada, introducción, objetivo y selección de herramientas.<br>• Que la elección esté <strong>justificada</strong> (no basta con decir «uso Git porque es el mejor»).<br>• Que el informe hable de <strong>un proyecto concreto</strong>, no de versionamiento en general.<br>• Que describas las herramientas de desarrollo y expliques la diferencia entre versionamiento local y remoto (indicadores 2 y 1).<br>• Que el archivo sea un PDF y se pueda abrir, y que el trabajo sea tuyo, con tus palabras.</div></div><div class="callout naranja"><div class="callout-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg></div><div class="callout-content"><strong>Fecha límite de entrega en Zajuna:</strong> por confirmar en Zajuna. Revisa el espacio de la evidencia y no esperes al último día.</div></div><div class="verify-box"><div class="verify-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Verifica que funciona antes de seguir</div><ul><li>Sé explicar con mis palabras qué es el informe EV01 y cuáles son sus 4 partes mínimas.</li><li>Tengo el esqueleto del informe copiado en un documento nuevo (Word o Google Docs).</li><li>Sé señalar en qué sección de mi informe se cumple cada uno de los 4 indicadores del instructor.</li></ul><button type="button" class="btn-done" onclick="marcarPaso('sec-1', this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Marcar este paso como hecho</button></div></section><section id="sec-2" class="doc-section" data-step="sec-2"><div class="step-banner"><div class="step-num">2</div><div><h2 class="sec-h2" style="margin:0;padding:0;border:none;">Elige el proyecto a versionar y descríbelo</h2><div class="step-meta"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Tiempo estimado: 15 min</div></div></div><p>El informe no puede ser genérico: necesita un <strong>proyecto de software concreto</strong>. Elige uno real que tengas o vayas a construir: el sitio <strong>TechStore Pro</strong> de la Guía 6, un proyecto de tu ficha, o una idea propia. Lo que importa es que puedas contestar qué hace, quién lo construye y cómo trabaja el equipo, porque <strong>esas respuestas determinan qué herramienta te conviene</strong>.</p><p>Completa esta ficha en una hoja o en tu documento. Con ella, redactar la descripción del proyecto será solo ordenar tus respuestas:</p><div class="table-card"><table class="doc-table"><thead><tr><th>Pregunta</th><th>Por qué importa para el versionamiento</th><th>Tu respuesta</th></tr></thead><tbody><tr><td>¿Qué hace el software? ¿Qué tecnologías usa?</td><td>Define qué tipo de archivos se versionan (texto, imágenes, binarios)</td><td><em>(tu respuesta)</em></td></tr><tr><td>¿Cuántas personas trabajan en él?</td><td>Con más personas, el trabajo en ramas y la revisión de código pesan más</td><td><em>(tu respuesta)</em></td></tr><tr><td>¿Cómo trabajan (metodología, ciclos de entrega)?</td><td>Una metodología ágil pide integrar cambios con frecuencia</td><td><em>(tu respuesta)</em></td></tr><tr><td>¿Trabajan siempre con internet?</td><td>Decide si necesitas un sistema que funcione sin conexión</td><td><em>(tu respuesta)</em></td></tr><tr><td>¿Qué quieres poder hacer con el historial?</td><td>Volver a versiones estables, ver quién cambió qué, revisar código</td><td><em>(tu respuesta)</em></td></tr></tbody></table></div><p>Cuando tengas la ficha, usa estos textos como modelo para redactar tu subsección <strong>3.1 Descripción del proyecto</strong>. Cámbialos por los datos de tu proyecto:</p><div class="copy-box-container"><div class="copy-box-header"><span class="copy-box-title"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg> Descripción del proyecto (modelo, adáptalo)</span><button class="btn-copy" onclick="copiarAlPortapapeles('cb2', this)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg> Copiar texto</button></div><div class="copy-box-body" id="cb2">3.1 Descripción del proyecto
+TechStore Pro es una tienda en línea que vende laptops, celulares y periféricos. El sitio tiene un catálogo de productos, un carrito de compras, inicio de sesión de clientes y un formulario de contacto. Se construye con HTML, CSS y JavaScript (React) en el front-end, y con Node.js, Express y una base de datos MongoDB en el back-end (stack MERN).</div></div><div class="copy-box-container"><div class="copy-box-header"><span class="copy-box-title"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg> Características que influyen en el versionamiento (modelo)</span><button class="btn-copy" onclick="copiarAlPortapapeles('cb3', this)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg> Copiar texto</button></div><div class="copy-box-body" id="cb3">Características que influyen en el versionamiento:
+- Tamaño: proyecto pequeño a mediano, con cientos de archivos de texto (código) y algunas imágenes de producto.
+- Equipo: 3 aprendices que trabajan al mismo tiempo, cada uno en módulos distintos (catálogo, carrito y autenticación).
+- Metodología: desarrollo ágil con entregas cortas; cada funcionalidad nueva se desarrolla de forma aislada y se integra al final de cada ciclo.
+- Necesidades: conservar el historial completo, trabajar en ramas paralelas, revisar el código del compañero antes de unirlo y poder volver a una versión estable si algo falla.
+- Entorno: los integrantes trabajan desde casa, a veces sin buena conexión a internet.</div></div><div class="callout rojo"><div class="callout-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg></div><div class="callout-content"><strong>Error frecuente:</strong> describir el proyecto en una sola línea («es una página web»). Sin detalles de equipo, metodología y entorno, después no podrás justificar tu elección.</div></div><div class="verify-box"><div class="verify-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Verifica que funciona antes de seguir</div><ul><li>Elegí un proyecto concreto y completé la ficha de 5 preguntas.</li><li>Escribí un párrafo de descripción y una lista de características con mis propias palabras.</li></ul><button type="button" class="btn-done" onclick="marcarPaso('sec-2', this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Marcar este paso como hecho</button></div></section><section id="sec-3" class="doc-section" data-step="sec-3"><div class="step-banner"><div class="step-num">3</div><div><h2 class="sec-h2" style="margin:0;padding:0;border:none;">Compara las herramientas de versionamiento</h2><div class="step-meta"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Tiempo estimado: 25 min</div></div></div><p>Aquí está el corazón del informe. Debes comparar <strong>dos niveles</strong> que mucha gente confunde:</p><div class="two-col"><div class="mini-card"><strong>Sistema de control de versiones (SCV)</strong>: el programa que registra los cambios. Ejemplos: <strong>Git, Subversion (SVN), Mercurial</strong>. Se instala en tu computador.</div><div class="mini-card"><strong>Plataforma de alojamiento remoto</strong>: el sitio web donde guardas una copia en la nube y colaboras. Ejemplos: <strong>GitHub, GitLab, Bitbucket</strong>. Git es el programa; GitHub es el servicio.</div></div><h3 class="sec-h3">Tabla 1. Sistemas de control de versiones</h3><div class="table-card"><table class="doc-table"><thead><tr><th>Criterio</th><th>Git</th><th>Subversion (SVN)</th><th>Mercurial</th></tr></thead><tbody><tr><td>Modelo</td><td>Distribuido: cada persona tiene una copia completa del historial</td><td>Centralizado: el historial vive en un servidor</td><td>Distribuido, igual que Git</td></tr><tr><td>Trabajo sin conexión</td><td>Sí: puedes confirmar cambios, ver el historial y crear ramas sin internet</td><td>Limitado: para confirmar cambios necesitas llegar al servidor</td><td>Sí</td></tr><tr><td>Ramas y fusiones</td><td>Ramas muy ligeras y rápidas; son la base del flujo de trabajo</td><td>Las ramas son copias de carpetas; son más pesadas de manejar</td><td>Buen soporte de ramas</td></tr><tr><td>Curva de aprendizaje</td><td>Media: muchos comandos al inicio</td><td>Baja: pocos conceptos</td><td>Baja a media: comandos más uniformes</td></tr><tr><td>Comunidad y ecosistema</td><td>La más grande; es el estándar de la industria</td><td>Amplia en proyectos antiguos y empresariales</td><td>Más pequeña; Bitbucket dejó de alojar repositorios Mercurial en 2020</td></tr><tr><td>Licencia y costo</td><td>Software libre y gratuito (GPL v2)</td><td>Software libre (Apache License 2.0)</td><td>Software libre (GPL v2 o superior)</td></tr></tbody></table></div><h3 class="sec-h3">Tabla 2. Plataformas de alojamiento remoto</h3><div class="table-card"><table class="doc-table"><thead><tr><th>Criterio</th><th>GitHub</th><th>GitLab</th><th>Bitbucket</th></tr></thead><tbody><tr><td>Sistema de control que usa</td><td>Git</td><td>Git</td><td>Git</td></tr><tr><td>Repositorios gratuitos</td><td>Públicos y privados (el plan gratuito limita algunas funciones)</td><td>Públicos y privados (el plan gratuito limita usuarios en grupos privados; verifica el límite vigente)</td><td>Públicos y privados (el plan gratuito está pensado para equipos pequeños, hasta 5 usuarios; verifica el límite vigente)</td></tr><tr><td>Revisión de código</td><td>Pull requests</td><td>Merge requests</td><td>Pull requests</td></tr><tr><td>Integración continua (CI/CD)</td><td>GitHub Actions</td><td>GitLab CI/CD integrado</td><td>Bitbucket Pipelines</td></tr><tr><td>Gestión de tareas</td><td>Issues y Projects</td><td>Issues y tableros</td><td>Integración nativa con Jira</td></tr><tr><td>Fortaleza principal</td><td>Mayor comunidad y portafolio público; GitHub Pages</td><td>Ciclo DevOps completo en una sola herramienta; se puede instalar en servidor propio</td><td>Ecosistema Atlassian (Jira, Confluence)</td></tr></tbody></table></div><div class="callout naranja"><div class="callout-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg></div><div class="callout-content"><strong>Verifica antes de citar:</strong> las licencias, los planes gratuitos, los límites y las funciones de las plataformas cambian con frecuencia. Entra a la página oficial de cada una (github.com, gitlab.com, bitbucket.org) y confirma los datos que pongas en tu tabla el día que redactes. Es parte de un informe técnico serio.</div></div><p>Para que tu comparación sea tuya, haz esto:</p><ol class="hazlo"><li>Copia las dos tablas a tu documento (Insertar → Tabla) y reescribe cada celda con tus palabras.</li><li>Agrega <strong>un criterio propio</strong> que importe para tu proyecto (por ejemplo: soporte de archivos grandes, facilidad para principiantes, integración con tu editor).</li><li>Revisa al menos <strong>una fuente oficial</strong> por herramienta y anota la dirección web: la usarás en las referencias.</li></ol><div class="verify-box"><div class="verify-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Verifica que funciona antes de seguir</div><ul><li>Mis dos tablas comparan 3 sistemas y 3 plataformas con al menos 5 criterios.</li><li>Agregué un criterio propio y anoté las fuentes que consulté.</li></ul><button type="button" class="btn-done" onclick="marcarPaso('sec-3', this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Marcar este paso como hecho</button></div></section><div class="part-banner azul"><div class="part-letter">B</div><div><div class="part-title">Parte B · Redacta el informe</div><div class="part-sub">Decide con argumentos y escribe cada sección con tus palabras</div></div></div><section id="sec-4" class="doc-section" data-step="sec-4"><div class="step-banner"><div class="step-num">4</div><div><h2 class="sec-h2" style="margin:0;padding:0;border:none;">Elige la herramienta y justifícala con una matriz de decisión</h2><div class="step-meta"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Tiempo estimado: 20 min</div></div></div><p>Elegir «por gusto» no es justificar. Una forma sencilla y profesional de argumentar es la <strong>matriz de decisión</strong>: calificas cada herramienta del 1 (muy mal) al 5 (excelente) en cada criterio, multiplicas por el peso del criterio (qué tan importante es para tu proyecto) y sumas.</p><div class="table-card"><table class="doc-table"><thead><tr><th>Criterio</th><th>Peso (1 a 3)</th><th>Git</th><th>Subversion</th><th>Mercurial</th></tr></thead><tbody><tr><td>Trabajo sin conexión</td><td>3</td><td>5</td><td>1</td><td>5</td></tr><tr><td>Ramas y fusiones</td><td>3</td><td>5</td><td>3</td><td>4</td></tr><tr><td>Comunidad y documentación</td><td>2</td><td>5</td><td>3</td><td>2</td></tr><tr><td>Integración con CI/CD</td><td>2</td><td>5</td><td>3</td><td>2</td></tr><tr><td>Costo</td><td>2</td><td>5</td><td>5</td><td>5</td></tr><tr><td>Lo exige la guía (EV04 y EV05 usan Git)</td><td>3</td><td>5</td><td>1</td><td>1</td></tr><tr><td><strong>Total (peso x puntaje)</strong></td><td></td><td><strong>75</strong></td><td><strong>37</strong></td><td><strong>48</strong></td></tr></tbody></table></div><div class="callout tech"><div class="callout-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></div><div class="callout-content"><strong>Es un ejemplo para TechStore Pro.</strong> Tus pesos y puntajes deben salir de la ficha del paso 2. Si tu proyecto es distinto (por ejemplo, un equipo sin internet o con archivos enormes), el resultado puede cambiar y está bien, siempre que lo expliques.</div></div><ol class="hazlo"><li>Elige <strong>de 5 a 6 criterios</strong> que importen a tu proyecto y ponles un peso del 1 al 3.</li><li>Califica cada herramienta del 1 al 5 y calcula el total.</li><li>Escribe en una frase por qué diste los puntajes más altos y más bajos: esas frases son tu justificación.</li><li>Elige también la plataforma remota (GitHub, GitLab o Bitbucket) y da <strong>al menos 3 razones</strong>.</li></ol><p>Opcional: puedes comprobar en tu terminal si Git ya está instalado en tu equipo. No es obligatorio para EV01 (la instalación es la evidencia EV04), pero te da un dato real para tu informe:</p><div class="code-editor-box"><div class="editor-header"><span class="editor-dot r"></span><span class="editor-dot y"></span><span class="editor-dot g"></span><span class="editor-title">terminal</span><span class="editor-badge">BASH</span><button type="button" class="btn-copy-code" onclick="copiarAlPortapapeles('cb4', this)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg> Copiar código</button></div><div class="editor-body" id="cb4"><div class="cl"><span class="ln">1</span><span class="code"><span class="cm"># Comprueba si Git está instalado</span></span></div><div class="cl"><span class="ln">2</span><span class="code"><span class="syn-func">git</span> <span class="str">--version</span></span></div><div class="cl"><span class="ln">3</span><span class="code"><span class="cm"># Salida esperada: git version 2.x.x (el número cambia según tu equipo)</span></span></div><div class="cl"><span class="ln">4</span><span class="code"></span></div><div class="cl"><span class="ln">5</span><span class="code"><span class="cm"># Si no reconoce el comando, aún no lo has instalado: lo harás en la Sesión 3</span></span></div></div></div><div class="verify-box"><div class="verify-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Verifica que funciona antes de seguir</div><ul><li>Mi matriz tiene criterios con peso, puntajes de 1 a 5 y un total por herramienta.</li><li>Tengo escritas la razón de mi elección de sistema y al menos 3 razones para la plataforma.</li></ul><button type="button" class="btn-done" onclick="marcarPaso('sec-4', this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Marcar este paso como hecho</button></div></section><section id="sec-5" class="doc-section" data-step="sec-5"><div class="step-banner"><div class="step-num">5</div><div><h2 class="sec-h2" style="margin:0;padding:0;border:none;">Redacta la portada, la introducción y el objetivo</h2><div class="step-meta"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Tiempo estimado: 20 min</div></div></div><p>Con las decisiones tomadas, escribe las primeras tres secciones. Los textos de abajo son <strong>modelos</strong>: léelos, entiende la estructura y reescríbelos con los datos y las palabras de tu proyecto. Copiar sin adaptar se nota y no demuestra que lo entendiste.</p><h3 class="sec-h3">Portada</h3><div class="copy-box-container"><div class="copy-box-header"><span class="copy-box-title"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg> Portada (modelo)</span><button class="btn-copy" onclick="copiarAlPortapapeles('cb5', this)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg> Copiar texto</button></div><div class="copy-box-body" id="cb5">INFORME TÉCNICO DE PLAN DE TRABAJO PARA LA CONSTRUCCIÓN DE SOFTWARE
+Herramientas y tecnologías de versionamiento
+
+Evidencia: GA7-220501096-AA1-EV01
+
+Aprendiz: [Nombre y apellidos completos]
+Documento de identidad: [Número]
+Correo electrónico: [tu correo]
+
+Programa: Tecnólogo en Análisis y Desarrollo de Software (ADSO)
+Ficha: 3389010
+Instructor: Julián Andrés Trujillo Morales
+
+Servicio Nacional de Aprendizaje SENA
+Regional Huila, Centro CADPH Garzón
+[Ciudad], [mes] de 2026</div></div><ol class="hazlo"><li>Pon el título centrado, en negrita y tamaño 16 o 18.</li><li>Reemplaza todo lo que está entre corchetes por tus datos reales.</li><li>Agrega el logo del SENA si quieres, pero sin deformarlo.</li></ol><h3 class="sec-h3">Introducción (2 párrafos)</h3><div class="copy-box-container"><div class="copy-box-header"><span class="copy-box-title"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg> Introducción (modelo)</span><button class="btn-copy" onclick="copiarAlPortapapeles('cb6', this)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg> Copiar texto</button></div><div class="copy-box-body" id="cb6">Todo proyecto de software cambia constantemente: se agregan funciones, se corrigen errores y varias personas editan los mismos archivos. Sin un control ordenado de esos cambios es fácil perder trabajo, pisar el código de un compañero o no poder volver a una versión que funcionaba. Los sistemas de control de versiones resuelven este problema porque registran cada cambio, quién lo hizo y cuándo, y permiten regresar a cualquier punto del historial.
+
+Este informe presenta el plan de trabajo en versionamiento del proyecto TechStore Pro, una tienda en línea de tecnología. El documento describe el proyecto, compara los principales sistemas de control de versiones (Git, Subversion y Mercurial) y las plataformas de alojamiento remoto (GitHub, GitLab y Bitbucket), y selecciona con argumentos la herramienta que se usará durante el desarrollo. También describe las herramientas de desarrollo para la codificación y explica la diferencia entre el versionamiento local y el remoto. Al final se presentan las conclusiones y las fuentes consultadas.</div></div><p>Fíjate en la fórmula: el <strong>primer párrafo</strong> explica el problema (por qué se necesita versionar) y el <strong>segundo</strong> dice qué contiene el informe.</p><h3 class="sec-h3">Objetivo (general y específicos)</h3><div class="copy-box-container"><div class="copy-box-header"><span class="copy-box-title"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg> Objetivo (modelo)</span><button class="btn-copy" onclick="copiarAlPortapapeles('cb7', this)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg> Copiar texto</button></div><div class="copy-box-body" id="cb7">Objetivo general
+Seleccionar y justificar las herramientas y tecnologías de versionamiento que se utilizarán en la construcción del proyecto TechStore Pro, de acuerdo con sus características y con la metodología de trabajo del equipo.
+
+Objetivos específicos
+1. Describir las características del proyecto de software que será versionado.
+2. Comparar los sistemas de control de versiones Git, Subversion y Mercurial, y las plataformas GitHub, GitLab y Bitbucket, según criterios técnicos definidos.
+3. Justificar la herramienta seleccionada y definir cómo se usará en el flujo de trabajo del proyecto.
+4. Describir las herramientas de desarrollo (editor, lenguaje, entorno de ejecución, gestor de paquetes, base de datos y depuración) que se usarán para codificar el proyecto.
+5. Diferenciar el versionamiento local del remoto y explicar el flujo de trabajo entre ambos.</div></div><div class="callout rojo"><div class="callout-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg></div><div class="callout-content"><strong>Errores frecuentes:</strong><br>• Objetivos que empiezan con sustantivos («La selección de...»): usa un <strong>verbo en infinitivo</strong> (seleccionar, describir, comparar, justificar).<br>• Dejar corchetes sin reemplazar en la portada.<br>• Una introducción que no menciona el proyecto.</div></div><div class="verify-box"><div class="verify-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Verifica que funciona antes de seguir</div><ul><li>La portada tiene mis datos reales y ningún corchete sin reemplazar.</li><li>La introducción menciona mi proyecto y el objetivo empieza con verbos en infinitivo.</li></ul><button type="button" class="btn-done" onclick="marcarPaso('sec-5', this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Marcar este paso como hecho</button></div></section><section id="sec-13" class="doc-section" data-step="sec-13"><div class="step-banner"><div class="step-num">6</div><div><h2 class="sec-h2" style="margin:0;padding:0;border:none;">Describe las herramientas de desarrollo de tu proyecto</h2><div class="step-meta"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Tiempo estimado: 20 min</div></div></div><p>El indicador 2 del instructor pide que <strong>selecciones y describas las herramientas de desarrollo</strong> que usarás para programar. Son las que usas todos los días, antes incluso de versionar: dónde escribes el código, en qué lenguaje, qué lo ejecuta, cómo instalas librerías, dónde guardas los datos y cómo encuentras errores. No es una lista de nombres: para cada una debes decir <strong>qué es y por qué te sirve en tu proyecto</strong>.</p><h3 class="sec-h3">Tabla 4. Herramientas de desarrollo por categoría</h3><div class="table-card"><table class="doc-table"><thead><tr><th>Categoría</th><th>Para qué sirve</th><th>Opciones frecuentes</th><th>Elegida para TechStore Pro</th></tr></thead><tbody><tr><td><strong>Editor o IDE</strong></td><td>Es donde escribes y organizas el código</td><td>Visual Studio Code, WebStorm, Sublime Text</td><td>Visual Studio Code</td></tr><tr><td><strong>Lenguaje de programación</strong></td><td>Es el idioma en que se escribe la lógica del software</td><td>JavaScript, TypeScript, Python, Java, PHP</td><td>JavaScript (en el navegador y en el servidor)</td></tr><tr><td><strong>Entorno de ejecución y framework</strong></td><td>Ejecuta el código fuera del navegador y estructura el servidor y la interfaz</td><td>Node.js con Express o NestJS; React, Angular, Vue</td><td>Node.js con Express (back-end) y React (front-end)</td></tr><tr><td><strong>Gestor de paquetes</strong></td><td>Instala, actualiza y registra las librerías que usa el proyecto</td><td>npm, Yarn, pnpm</td><td>npm (viene incluido con Node.js)</td></tr><tr><td><strong>Base de datos</strong></td><td>Guarda la información de forma permanente</td><td>MongoDB, MySQL, PostgreSQL</td><td>MongoDB (base de datos de documentos)</td></tr><tr><td><strong>Depuración y pruebas</strong></td><td>Encuentra errores y comprueba que la API responde bien</td><td>Depurador de VS Code, DevTools del navegador, Postman, Thunder Client</td><td>Depurador de VS Code, Chrome DevTools y Postman</td></tr></tbody></table></div><div class="callout tech"><div class="callout-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></div><div class="callout-content"><strong>Es el ejemplo de TechStore Pro, que usa el stack MERN</strong> (MongoDB, Express, React y Node.js). Si tu proyecto usa otras tecnologías (por ejemplo PHP y MySQL, o Python y PostgreSQL), llena la misma tabla con las tuyas. Lo importante es que todas las categorías estén cubiertas y que coincidan con lo que dijiste en la descripción del paso 2.</div></div><h3 class="sec-h3">Tabla 5. Comparación de editores o IDE</h3><p>Elegir el editor también se justifica. Compara al menos tres opciones con criterios que importen a tu equipo:</p><div class="table-card"><table class="doc-table"><thead><tr><th>Criterio</th><th>Visual Studio Code</th><th>WebStorm</th><th>Sublime Text</th></tr></thead><tbody><tr><td>Tipo de herramienta</td><td>Editor extensible que se convierte en IDE con extensiones</td><td>IDE completo de JetBrains para JavaScript</td><td>Editor de texto muy ligero</td></tr><tr><td>Costo y licencia</td><td>Gratuito (verifica los términos vigentes)</td><td>Licencia comercial con opciones gratuitas para algunos usos (verifica el plan vigente)</td><td>Licencia de pago con evaluación (verifica el plan vigente)</td></tr><tr><td>Soporte para JavaScript, Node.js y React</td><td>Muy bueno mediante extensiones</td><td>Integrado de fábrica</td><td>Posible mediante paquetes adicionales</td></tr><tr><td>Git y terminal integrados</td><td>Sí: panel de control de código fuente y terminal en la misma ventana</td><td>Sí</td><td>Limitado: depende de complementos</td></tr><tr><td>Depuración de Node.js</td><td>Depurador integrado</td><td>Depurador integrado</td><td>Requiere complementos</td></tr><tr><td>Consumo de recursos</td><td>Medio</td><td>Alto</td><td>Bajo</td></tr></tbody></table></div><div class="callout naranja"><div class="callout-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg></div><div class="callout-content"><strong>Verifica antes de citar:</strong> las licencias y los planes de pago o gratuitos de los editores cambian con frecuencia. Confirma el dato en la página oficial de cada herramienta el día que redactes.</div></div><p>Ahora redacta la sección 4 de tu informe. Estos son los modelos para TechStore Pro; reescríbelos con las herramientas y las razones de tu proyecto:</p><div class="copy-box-container"><div class="copy-box-header"><span class="copy-box-title"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg> Secciones 4.1 y 4.2: editor, lenguaje, runtime y paquetes (modelo, adáptalo)</span><button class="btn-copy" onclick="copiarAlPortapapeles('cb14', this)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg> Copiar texto</button></div><div class="copy-box-body" id="cb14">4. Herramientas de desarrollo para la codificación
+
+4.1 Editor o IDE y lenguaje de programación
+Para escribir el código de TechStore Pro el equipo usará Visual Studio Code, un editor gratuito y extensible que integra terminal, depurador y control de versiones con Git en una sola ventana. Se eligió frente a WebStorm y Sublime Text porque no tiene costo, ya lo conocen los tres integrantes y cuenta con extensiones para JavaScript, React y Node.js. El lenguaje de programación es JavaScript, que se usa tanto en el navegador (front-end) como en el servidor (back-end); así el equipo aprende y mantiene un solo lenguaje para todo el proyecto.
+
+4.2 Entorno de ejecución y gestor de paquetes
+El back-end se ejecuta sobre Node.js, el entorno que permite correr JavaScript fuera del navegador, y se construye con Express para definir las rutas de la API. El front-end se desarrolla con React. Las librerías (por ejemplo express, mongoose y react) se instalan y actualizan con npm, el gestor de paquetes que viene con Node.js, y quedan registradas en el archivo package.json para que cualquier integrante pueda reproducir el mismo entorno en su equipo.</div></div><div class="copy-box-container"><div class="copy-box-header"><span class="copy-box-title"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg> Sección 4.3: base de datos y depuración (modelo, adáptalo)</span><button class="btn-copy" onclick="copiarAlPortapapeles('cb15', this)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg> Copiar texto</button></div><div class="copy-box-body" id="cb15">4.3 Base de datos y herramientas de depuración
+La información del catálogo, los usuarios y los pedidos se guarda en MongoDB, una base de datos de documentos cuyo formato es muy parecido a JSON, el mismo formato que usa JavaScript, y que facilita cambiar la estructura de los datos durante un desarrollo ágil. Para encontrar errores se usará el depurador integrado de Visual Studio Code en el back-end, las herramientas para desarrolladores (DevTools) de Chrome en el front-end y Postman para probar las rutas de la API sin esperar a que la interfaz esté lista.
+
+Resumen: la combinación de MongoDB, Express, React y Node.js (llamada stack MERN) se eligió porque todo el proyecto se programa en un solo lenguaje y porque cada pieza tiene documentación abundante y versión gratuita.</div></div><ol class="hazlo"><li>Copia la <strong>Tabla 4</strong> y la <strong>Tabla 5</strong> a tu documento y reescribe las celdas con tus herramientas.</li><li>Debajo de cada categoría escribe <strong>una razón ligada a tu proyecto</strong> (equipo, costo, lenguaje que ya conocen).</li><li>Anota la página oficial de cada herramienta: la usarás en las referencias.</li></ol><div class="callout rojo"><div class="callout-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg></div><div class="callout-content"><strong>Error frecuente:</strong> listar herramientas sin describirlas («uso VS Code, Node y MongoDB»). El indicador pide <strong>seleccionar y describir</strong>: cada herramienta necesita su para qué y su porqué.</div></div><div class="verify-box"><div class="verify-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Verifica que funciona antes de seguir</div><ul><li>Mi sección 4 cubre editor o IDE, lenguaje, entorno de ejecución, gestor de paquetes, base de datos y depuración.</li><li>Cada herramienta tiene una descripción y una razón ligada a mi proyecto, y comparé al menos 3 editores o IDE.</li></ul><button type="button" class="btn-done" onclick="marcarPaso('sec-13', this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Marcar este paso como hecho</button></div></section><section id="sec-14" class="doc-section" data-step="sec-14"><div class="step-banner"><div class="step-num">7</div><div><h2 class="sec-h2" style="margin:0;padding:0;border:none;">Explica el versionamiento local y el remoto</h2><div class="step-meta"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Tiempo estimado: 20 min</div></div></div><p>El indicador 1 del instructor pide que <strong>diferencies con claridad el versionamiento local del remoto</strong>. Mucha gente cree que Git y GitHub son lo mismo; no lo son. Tu informe debe dejar claro qué ocurre en tu computador y qué ocurre en el servidor.</p><div class="two-col"><div class="mini-card"><strong>Versionamiento local</strong>: el historial de cambios vive en <strong>tu computador</strong>. Guardas versiones (commits), creas ramas y vuelves atrás <strong>sin internet</strong>. Lo hace Git.</div><div class="mini-card"><strong>Versionamiento remoto</strong>: una copia del repositorio vive en <strong>un servidor</strong> (GitHub, GitLab, Bitbucket). Sirve para respaldar, compartir y revisar código en equipo. Necesita internet.</div></div><h3 class="sec-h3">Tabla 6. Versionamiento local frente a remoto</h3><div class="table-card"><table class="doc-table"><thead><tr><th>Criterio</th><th>Versionamiento local</th><th>Versionamiento remoto</th></tr></thead><tbody><tr><td><strong>Dónde está el repositorio</strong></td><td>En tu computador, en la carpeta oculta .git del proyecto</td><td>En un servidor de internet (GitHub, GitLab o Bitbucket)</td></tr><tr><td><strong>Necesita internet</strong></td><td>No: funciona sin conexión</td><td>Sí: para subir y descargar cambios</td></tr><tr><td><strong>Quién lo ve</strong></td><td>Solo tú, hasta que decidas compartirlo</td><td>Todo el equipo con permiso de acceso</td></tr><tr><td><strong>Para qué sirve</strong></td><td>Guardar versiones, crear ramas y volver atrás sin depender de nadie</td><td>Respaldar el trabajo, sincronizar al equipo y revisar código con pull requests</td></tr><tr><td><strong>Comandos principales</strong></td><td>git init, git add, git commit, git status, git log, git branch</td><td>git clone, git remote, git push, git pull, git fetch</td></tr><tr><td><strong>Si se daña tu equipo</strong></td><td>Pierdes el historial si no hay copia en otro lugar</td><td>El historial sigue disponible en el servidor</td></tr><tr><td><strong>Ejemplo en TechStore Pro</strong></td><td>Guardas la versión del carrito en tu equipo mientras no tienes internet</td><td>Subes esa versión a GitHub para que tus compañeros la revisen</td></tr></tbody></table></div><h3 class="sec-h3">El flujo que conecta los dos mundos</h3><p>Estos cinco comandos muestran cómo el trabajo viaja entre el remoto y tu equipo. Los comandos <code>add</code> y <code>commit</code> son <strong>locales</strong>; <code>clone</code>, <code>push</code> y <code>pull</code> hablan con el <strong>remoto</strong>. Solo es para que lo entiendas: no necesitas ejecutarlos todavía.</p><div class="code-editor-box"><div class="editor-header"><span class="editor-dot r"></span><span class="editor-dot y"></span><span class="editor-dot g"></span><span class="editor-title">flujo_local_remoto.sh</span><span class="editor-badge">GIT</span><button type="button" class="btn-copy-code" onclick="copiarAlPortapapeles('cb16', this)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg> Copiar código</button></div><div class="editor-body" id="cb16"><div class="cl"><span class="ln">1</span><span class="code"><span class="cm"># 1. clone: copia el repositorio remoto a tu equipo</span></span></div><div class="cl"><span class="ln">2</span><span class="code"><span class="syn-func">git</span> <span class="str">clone https://github.com/tu-usuario/techstore-pro.git</span></span></div><div class="cl"><span class="ln">3</span><span class="code"><span class="syn-func">cd</span> <span class="str">techstore-pro</span></span></div><div class="cl"><span class="ln">4</span><span class="code"></span></div><div class="cl"><span class="ln">5</span><span class="code"><span class="cm"># 2. add: prepara los cambios (local)</span></span></div><div class="cl"><span class="ln">6</span><span class="code"><span class="syn-func">git</span> <span class="str">add .</span></span></div><div class="cl"><span class="ln">7</span><span class="code"><span class="cm"># 3. commit: guarda una versión en tu historial (local)</span></span></div><div class="cl"><span class="ln">8</span><span class="code"><span class="syn-func">git</span> <span class="str">commit -m "Agrega el carrito de compras"</span></span></div><div class="cl"><span class="ln">9</span><span class="code"></span></div><div class="cl"><span class="ln">10</span><span class="code"><span class="cm"># 4. push: envía tus commits al repositorio remoto</span></span></div><div class="cl"><span class="ln">11</span><span class="code"><span class="syn-func">git</span> <span class="str">push origin main</span></span></div><div class="cl"><span class="ln">12</span><span class="code"><span class="cm"># 5. pull: trae los cambios de tus compañeros</span></span></div><div class="cl"><span class="ln">13</span><span class="code"><span class="syn-func">git</span> <span class="str">pull origin main</span></span></div></div></div><ol class="hazlo"><li><strong>clone:</strong> descargas a tu equipo una copia del repositorio remoto.</li><li><strong>add:</strong> eliges qué cambios entran en la próxima versión.</li><li><strong>commit:</strong> guardas esa versión en tu historial local.</li><li><strong>push:</strong> subes tus commits al remoto para compartirlos.</li><li><strong>pull:</strong> traes a tu equipo lo que subieron tus compañeros.</li></ol><p>Con esto redacta la sección 5 de tu informe. Modelo para TechStore Pro:</p><div class="copy-box-container"><div class="copy-box-header"><span class="copy-box-title"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg> Sección 5: versionamiento local y remoto (modelo, adáptalo)</span><button class="btn-copy" onclick="copiarAlPortapapeles('cb17', this)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg> Copiar texto</button></div><div class="copy-box-body" id="cb17">5. Versionamiento local y remoto
+
+5.1 Qué es cada uno
+El versionamiento local es el que ocurre en el computador de cada integrante: Git guarda en una carpeta oculta del proyecto (.git) el historial completo de cambios y permite confirmar versiones (commit), crear ramas y volver a estados anteriores sin conexión a internet. El versionamiento remoto ocurre en un servidor, en este caso GitHub, donde se aloja una copia compartida del repositorio. Sirve para respaldar el trabajo, sincronizar al equipo y revisar el código de los compañeros mediante pull requests.
+
+5.2 Tabla comparativa
+Pega aquí tu Tabla 6 (versionamiento local frente a remoto), con una frase de contexto antes y una conclusión después.
+
+5.3 Flujo de trabajo entre el repositorio local y el remoto
+1. clone: cada integrante descarga a su equipo una copia del repositorio remoto de TechStore Pro.
+2. add: selecciona los archivos modificados que entrarán en la próxima versión.
+3. commit: guarda esa versión en el historial local con un mensaje claro.
+4. push: envía los commits locales al repositorio remoto en GitHub.
+5. pull: trae al equipo local los cambios que subieron los compañeros.
+Los pasos add y commit son locales y funcionan sin internet; clone, push y pull necesitan conexión porque se comunican con el remoto.</div></div><div class="callout tech"><div class="callout-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></div><div class="callout-content"><strong>Qué viene después:</strong> en EV01 solo debes explicar la diferencia con claridad. En la Sesión 2 (EV03) harás las dos tablas formales de Git local y remoto con la descripción de los comandos, y en EV04 instalarás Git. Tu sección 5 será la base para ambas.</div></div><div class="callout rojo"><div class="callout-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg></div><div class="callout-content"><strong>Error frecuente:</strong> decir «el remoto es la nube y el local es mi PC» y nada más. Explica qué se guarda en cada lugar, qué necesita internet y qué comandos hacen el puente entre los dos.</div></div><div class="verify-box"><div class="verify-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Verifica que funciona antes de seguir</div><ul><li>Mi sección 5 explica qué es el versionamiento local y qué es el remoto, con una tabla comparativa.</li><li>Incluí el flujo clone, add, commit, push y pull indicando cuáles comandos son locales y cuáles remotos.</li></ul><button type="button" class="btn-done" onclick="marcarPaso('sec-14', this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Marcar este paso como hecho</button></div></section><section id="sec-6" class="doc-section" data-step="sec-6"><div class="step-banner"><div class="step-num">8</div><div><h2 class="sec-h2" style="margin:0;padding:0;border:none;">Redacta la selección de herramientas con su justificación</h2><div class="step-meta"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Tiempo estimado: 30 min</div></div></div><p>Esta es la sección que más puntúa. Reúne lo que hiciste en los pasos 2, 3 y 4 en un orden claro. Tiene cinco subsecciones; estos son los modelos.</p><h3 class="sec-h3">3.1 Descripción del proyecto</h3><p>Usa el texto que adaptaste en el paso 2.</p><h3 class="sec-h3">3.2 y 3.3 Comparaciones</h3><p>Pega aquí tus Tablas 1 y 2 del paso 3. Antes de cada tabla escribe una frase de contexto y después una frase con lo que concluyes. Por ejemplo:</p><div class="copy-box-container"><div class="copy-box-header"><span class="copy-box-title"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg> Texto de apoyo a las tablas (modelo)</span><button class="btn-copy" onclick="copiarAlPortapapeles('cb8', this)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg> Copiar texto</button></div><div class="copy-box-body" id="cb8">La Tabla 1 compara los tres sistemas de control de versiones más conocidos. Se observa que Git y Mercurial son distribuidos, es decir, cada integrante tiene una copia completa del historial, mientras que Subversion es centralizado y depende del servidor para casi todas las operaciones.
+
+La Tabla 2 compara las plataformas de alojamiento remoto. Las tres trabajan con Git; se diferencian en las herramientas que integran: GitHub destaca por su comunidad, GitLab por su ciclo DevOps completo y Bitbucket por su integración con Jira.</div></div><h3 class="sec-h3">3.4 Herramienta seleccionada y 3.5 Flujo de trabajo</h3><p>Aquí va tu decisión, con la matriz y las razones numeradas:</p><div class="copy-box-container"><div class="copy-box-header"><span class="copy-box-title"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg> Herramienta seleccionada y flujo de trabajo (modelo)</span><button class="btn-copy" onclick="copiarAlPortapapeles('cb9', this)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg> Copiar texto</button></div><div class="copy-box-body" id="cb9">3.4 Herramienta seleccionada
+Sistema de control de versiones: Git. Plataforma de alojamiento remoto: GitHub.
+
+Justificación
+1. Trabajo distribuido y sin conexión. Como los integrantes trabajan desde casa y a veces sin internet, Git permite confirmar cambios y consultar el historial en el equipo local, y sincronizar cuando haya conexión. Subversion no ofrece esa ventaja porque depende del servidor central.
+2. Ramas ligeras. Cada funcionalidad (catálogo, carrito, autenticación) se desarrollará en su propia rama y se unirá a la rama principal al terminar. Git hace esto de forma rápida y segura, lo que encaja con la metodología ágil del proyecto.
+3. Estándar de la industria. Git es el sistema más usado, tiene la mayor cantidad de documentación y es compatible con GitHub, GitLab y Bitbucket, así que el proyecto no queda atado a un proveedor.
+4. Costo. Git es software libre y GitHub ofrece repositorios gratuitos, suficientes para el tamaño de TechStore Pro.
+5. Revisión e integración. Con los pull requests de GitHub, cada compañero revisa el código del otro antes de unirlo, y con GitHub Actions se podrán ejecutar pruebas automáticas más adelante.
+6. Coherencia con la formación. Las siguientes evidencias de la actividad (instalación y práctica) se realizan con Git y con GitHub o GitLab.
+
+Resultado de la matriz de decisión: Git obtuvo 75 puntos, Mercurial 48 y Subversion 37 (máximo posible: 75).
+
+3.5 Flujo de trabajo previsto
+- La rama main contiene solo versiones estables y probadas.
+- Cada integrante crea una rama por funcionalidad (por ejemplo, feature/carrito) y confirma cambios pequeños con mensajes claros.
+- Al terminar, abre un pull request en GitHub; un compañero lo revisa y, si está correcto, se une a main.
+- Los archivos que no deben versionarse (contraseñas, carpetas de dependencias, archivos temporales) se excluyen con un archivo .gitignore.</div></div><div class="callout verde"><div class="callout-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="callout-content"><strong>Truco de redacción:</strong> cada razón de tu justificación debería tener la forma «Característica de la herramienta + por qué eso ayuda a MI proyecto». Si una razón podría copiarse a cualquier otro proyecto sin cambiar nada, está demasiado genérica.</div></div><div class="verify-box"><div class="verify-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Verifica que funciona antes de seguir</div><ul><li>Mi sección 3 tiene las 5 subsecciones y mis dos tablas con una frase antes y después.</li><li>Cada razón de mi justificación se relaciona con una característica de mi proyecto.</li><li>Además de la sección 3, mi informe incluye la sección 4 (herramientas de desarrollo, paso 6) y la sección 5 (versionamiento local y remoto, paso 7).</li></ul><button type="button" class="btn-done" onclick="marcarPaso('sec-6', this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Marcar este paso como hecho</button></div></section><section id="sec-7" class="doc-section" data-step="sec-7"><div class="step-banner"><div class="step-num">9</div><div><h2 class="sec-h2" style="margin:0;padding:0;border:none;">Escribe la conclusión y las referencias</h2><div class="step-meta"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Tiempo estimado: 15 min</div></div></div><p>La conclusión cierra el informe: retoma la decisión, explica qué se gana con ella y dice cuál es el siguiente paso. No agregues información nueva aquí.</p><div class="copy-box-container"><div class="copy-box-header"><span class="copy-box-title"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg> Conclusión (modelo)</span><button class="btn-copy" onclick="copiarAlPortapapeles('cb10', this)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg> Copiar texto</button></div><div class="copy-box-body" id="cb10">Después de analizar las características de TechStore Pro y de comparar las herramientas disponibles, se concluye que Git es la opción más adecuada para versionar el proyecto, porque combina trabajo sin conexión, ramas ligeras y una comunidad muy amplia. GitHub complementa a Git como plataforma remota, ya que ofrece repositorios gratuitos, revisión de código mediante pull requests y automatización con GitHub Actions.
+
+Usar un sistema de control de versiones desde el primer día reduce el riesgo de perder trabajo, facilita que el equipo colabore sin pisarse y deja un historial que permite volver a una versión estable. Como siguiente paso del plan de trabajo, se instalará y configurará Git en cada equipo, se creará el repositorio remoto y se definirán los estándares de codificación del proyecto.</div></div><h3 class="sec-h3">Referencias: normas básicas de presentación</h3><p>Toda fuente que consultaste debe aparecer al final. Usa el formato <strong>APA 7.ª edición</strong>, que es el más usado en informes técnicos:</p><ol class="hazlo"><li>Ordena las referencias <strong>alfabéticamente</strong> por el apellido o nombre del autor.</li><li>Estructura: Autor. (año). <em>Título</em>. Editorial o sitio. dirección web.</li><li>Si la página no tiene fecha, escribe <code>(s. f.)</code>.</li><li>Cuando uses una idea de una fuente dentro del texto, cita así: (Chacon y Straub, 2014).</li><li>No pongas fuentes que no consultaste.</li></ol><div class="copy-box-container"><div class="copy-box-header"><span class="copy-box-title"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg> Referencias (modelo en APA, reemplaza o agrega las tuyas)</span><button class="btn-copy" onclick="copiarAlPortapapeles('cb11', this)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg> Copiar texto</button></div><div class="copy-box-body" id="cb11">Chacon, S. y Straub, B. (2014). Pro Git (2.a ed.). Apress. https://git-scm.com/book/es/v2
+
+Collins-Sussman, B., Fitzpatrick, B. W. y Pilato, C. M. (2011). Version control with Subversion. Apache Software Foundation. https://svnbook.red-bean.com/
+
+Git. (s. f.). Git: Distributed version control system. https://git-scm.com/
+
+GitHub. (s. f.). GitHub Docs. https://docs.github.com/es
+
+GitLab. (s. f.). GitLab Documentation. https://docs.gitlab.com/
+
+Atlassian. (s. f.). Bitbucket Cloud documentation. https://support.atlassian.com/bitbucket-cloud/
+
+Mercurial. (s. f.). Mercurial SCM. https://www.mercurial-scm.org/</div></div><h3 class="sec-h3">Presentación del documento</h3><div class="table-card"><table class="doc-table"><thead><tr><th>Elemento</th><th>Recomendación</th></tr></thead><tbody><tr><td>Fuente</td><td>Arial, Calibri o Times New Roman, tamaño 11 o 12</td></tr><tr><td>Interlineado</td><td>1,15 a 1,5</td></tr><tr><td>Márgenes</td><td>2,5 cm en los cuatro lados</td></tr><tr><td>Títulos</td><td>Numerados, en negrita y con la misma jerarquía en todo el documento</td></tr><tr><td>Tablas</td><td>Con título («Tabla 1. ...») y encabezado resaltado</td></tr><tr><td>Páginas</td><td>Número de página abajo; la portada no lleva número</td></tr><tr><td>Ortografía</td><td>Revisa con el corrector y lee en voz alta antes de exportar</td></tr></tbody></table></div><div class="verify-box"><div class="verify-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Verifica que funciona antes de seguir</div><ul><li>Mi conclusión retoma la decisión y menciona el siguiente paso.</li><li>Mis referencias están en orden alfabético y son fuentes que sí consulté.</li><li>El documento tiene fuente, márgenes y títulos uniformes.</li></ul><button type="button" class="btn-done" onclick="marcarPaso('sec-7', this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Marcar este paso como hecho</button></div></section><div class="part-banner naranja"><div class="part-letter">C</div><div><div class="part-title">Parte C · Entrega</div><div class="part-sub">Exporta, nombra y sube tu evidencia a Zajuna</div></div></div><section id="sec-8" class="doc-section" data-step="sec-8"><div class="step-banner"><div class="step-num">10</div><div><h2 class="sec-h2" style="margin:0;padding:0;border:none;">Exporta a PDF y nombra el archivo correctamente</h2><div class="step-meta"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Tiempo estimado: 10 min</div></div></div><p>La evidencia se entrega en <strong>PDF</strong>. Un PDF se ve igual en cualquier computador, mientras que un Word puede descomponerse. No lo envíes como captura de pantalla ni como foto: debe ser el documento exportado.</p><div class="two-col"><div class="mini-card"><strong>Desde Microsoft Word</strong><br>Archivo → Guardar como (o Exportar) → en «Tipo» elige <strong>PDF</strong> → Guardar.</div><div class="mini-card"><strong>Desde Google Docs</strong><br>Archivo → Descargar → <strong>Documento PDF (.pdf)</strong>. El archivo queda en tu carpeta de descargas.</div></div><p>Nombra el archivo exactamente con este formato (cambia solo tu nombre y apellido):</p><div class="copy-box-container"><div class="copy-box-header"><span class="copy-box-title"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg> Nombre del archivo</span><button class="btn-copy" onclick="copiarAlPortapapeles('cb12', this)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg> Copiar texto</button></div><div class="copy-box-body" id="cb12">GA7-220501096-AA1-EV01_Nombre_Apellido.pdf</div></div><ol class="hazlo"><li>Sin tildes, sin espacios (usa guion bajo) y sin la letra ñ en el nombre del archivo.</li><li>Ejemplo: <code>GA7-220501096-AA1-EV01_Maria_Gomez.pdf</code>.</li><li>Abre el PDF ya exportado y revisa página por página: tablas completas, sin cortes raros ni corchetes sin reemplazar.</li></ol><div class="callout rojo"><div class="callout-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg></div><div class="callout-content"><strong>Error frecuente:</strong> subir el archivo con nombres como «Documento1.pdf» o «informe final (2).pdf». Un nombre ordenado le facilita la calificación al instructor y evita confusiones entre aprendices.</div></div><div class="verify-box"><div class="verify-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Verifica que funciona antes de seguir</div><ul><li>Mi archivo es un PDF y se abre sin errores.</li><li>El nombre sigue el formato GA7-220501096-AA1-EV01_Nombre_Apellido.pdf.</li></ul><button type="button" class="btn-done" onclick="marcarPaso('sec-8', this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Marcar este paso como hecho</button></div></section><section id="sec-9" class="doc-section" data-step="sec-9"><div class="step-banner"><div class="step-num">11</div><div><h2 class="sec-h2" style="margin:0;padding:0;border:none;">Sube el PDF a Zajuna en el espacio de EV01</h2><div class="step-meta"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Tiempo estimado: 5 min</div></div></div><p>Cada evidencia tiene su <strong>propio espacio de entrega</strong> en Zajuna. Súbela en el que corresponde, no en el de otra evidencia.</p><ol class="hazlo"><li>Entra a Zajuna y abre tu curso de la ficha 3389010.</li><li>Ve a la actividad de aprendizaje <strong>AA1</strong> y abre el espacio de la evidencia <strong>EV01 · Informe técnico de plan de trabajo para construcción de software</strong>.</li><li>Presiona <strong>Agregar entrega</strong> (o «Editar entrega») y arrastra tu PDF al recuadro.</li><li>Presiona <strong>Guardar cambios</strong>.</li><li>Comprueba que aparezca tu archivo y el estado de la entrega como enviado. Si Zajuna muestra «Borrador», confirma el envío.</li></ol><div class="callout naranja"><div class="callout-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg></div><div class="callout-content"><strong>Fecha límite:</strong> por confirmar en Zajuna. Los nombres de los botones que aparecen en estos pasos (Agregar entrega, Guardar cambios, etc.) son <strong>orientativos</strong>: pueden variar según la configuración del curso en Zajuna. Si algo no coincide, busca la opción equivalente o pregunta en la sesión o por el foro.</div></div><div class="callout tech"><div class="callout-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></div><div class="callout-content"><strong>Si no puedes subirlo:</strong> revisa que el archivo sea PDF, que no pese más de lo permitido por Zajuna y que tengas conexión estable. Guarda una copia en tu correo o en la nube por si algo falla.</div></div><div class="verify-box"><div class="verify-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Verifica que funciona antes de seguir</div><ul><li>Subí el PDF en el espacio de EV01 y vi mi archivo en la entrega.</li><li>Guardé una copia de respaldo del PDF.</li></ul><button type="button" class="btn-done" onclick="marcarPaso('sec-9', this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Marcar este paso como hecho</button></div></section>
+      <section id="sec-10" class="doc-section"><h2 class="sec-h2">Ejemplo completo de un informe EV01 de referencia</h2><p>Así se ve un informe terminado, con el nivel de detalle esperado. Es un ejemplo sobre TechStore Pro para que midas la profundidad y el orden de tu trabajo. <strong>Tu informe debe ser el tuyo</strong>: otro proyecto o, si usas TechStore Pro, tus propias palabras, tus propias tablas y tu propia justificación. Entregar este texto copiado no demuestra que lo aprendiste.</p><div class="callout naranja"><div class="callout-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg></div><div class="callout-content"><strong>Atención:</strong> este ejemplo existe para orientarte. Copiarlo sin adaptarlo se considera trabajo no original y tu calificación puede verse afectada.</div></div><div class="paper"><span class="paper-tag">Ejemplo de referencia - haz el tuyo</span><div class="cover"><p style="font-size:12px;letter-spacing:1px;color:var(--texto-sub);">SERVICIO NACIONAL DE APRENDIZAJE SENA</p><div class="c-title">INFORME TÉCNICO DE PLAN DE TRABAJO PARA LA CONSTRUCCIÓN DE SOFTWARE</div><div class="c-sub">Herramientas y tecnologías de versionamiento</div><p>Evidencia: GA7-220501096-AA1-EV01</p><p>Aprendiz: [Nombre y apellidos completos]</p><p>Documento de identidad: [Número]</p><p>Correo electrónico: [tu correo]</p><p>Programa: Tecnólogo en Análisis y Desarrollo de Software (ADSO)</p><p>Ficha: 3389010</p><p>Instructor: Julián Andrés Trujillo Morales</p><p style="margin-top:16px;">Regional Huila, Centro CADPH Garzón</p><p>Garzón, noviembre de 2026</p></div><h3>1. Introducción</h3><p>Todo proyecto de software cambia constantemente: se agregan funciones, se corrigen errores y varias personas editan los mismos archivos. Sin un control ordenado de esos cambios es fácil perder trabajo, pisar el código de un compañero o no poder volver a una versión que funcionaba. Los sistemas de control de versiones resuelven este problema porque registran cada cambio, quién lo hizo y cuándo, y permiten regresar a cualquier punto del historial.</p><p>Este informe presenta el plan de trabajo en versionamiento del proyecto TechStore Pro, una tienda en línea de tecnología. El documento describe el proyecto, compara los principales sistemas de control de versiones (Git, Subversion y Mercurial) y las plataformas de alojamiento remoto (GitHub, GitLab y Bitbucket), y selecciona con argumentos la herramienta que se usará durante el desarrollo. También describe las herramientas de desarrollo para la codificación y explica la diferencia entre el versionamiento local y el remoto. Al final se presentan las conclusiones y las fuentes consultadas.</p><h3>2. Objetivo</h3><h4>2.1 Objetivo general</h4><p>Seleccionar y justificar las herramientas y tecnologías de versionamiento que se utilizarán en la construcción del proyecto TechStore Pro, de acuerdo con sus características y con la metodología de trabajo del equipo.</p><h4>2.2 Objetivos específicos</h4><ol><li>Describir las características del proyecto de software que será versionado.</li><li>Comparar los sistemas de control de versiones Git, Subversion y Mercurial, y las plataformas GitHub, GitLab y Bitbucket, según criterios técnicos definidos.</li><li>Justificar la herramienta seleccionada y definir cómo se usará en el flujo de trabajo del proyecto.</li><li>Describir las herramientas de desarrollo (editor, lenguaje, entorno de ejecución, gestor de paquetes, base de datos y depuración) que se usarán para codificar el proyecto.</li><li>Diferenciar el versionamiento local del remoto y explicar el flujo de trabajo entre ambos.</li></ol><h3>3. Selección de herramientas de versionamiento</h3><h4>3.1 Descripción del proyecto</h4><p>TechStore Pro es una tienda en línea que vende laptops, celulares y periféricos. El sitio tiene un catálogo de productos, un carrito de compras, inicio de sesión de clientes y un formulario de contacto. Se construye con HTML, CSS y JavaScript (React) en el front-end, y con Node.js, Express y una base de datos MongoDB en el back-end (stack MERN).</p><p><strong>Características que influyen en el versionamiento:</strong></p><ul><li>Tamaño: proyecto pequeño a mediano, con cientos de archivos de texto (código) y algunas imágenes de producto.</li><li>Equipo: 3 aprendices que trabajan al mismo tiempo, cada uno en módulos distintos (catálogo, carrito y autenticación).</li><li>Metodología: desarrollo ágil con entregas cortas; cada funcionalidad nueva se desarrolla de forma aislada y se integra al final de cada ciclo.</li><li>Necesidades: conservar el historial completo, trabajar en ramas paralelas, revisar el código del compañero antes de unirlo y poder volver a una versión estable si algo falla.</li><li>Entorno: los integrantes trabajan desde casa, a veces sin buena conexión a internet.</li></ul><h4>3.2 Comparación de sistemas de control de versiones</h4><p>La Tabla 1 compara los tres sistemas de control de versiones más conocidos. Git y Mercurial son distribuidos; Subversion es centralizado y depende del servidor.</p><p><strong>Tabla 1.</strong> Sistemas de control de versiones</p><div class="table-card"><table class="doc-table"><thead><tr><th>Criterio</th><th>Git</th><th>Subversion (SVN)</th><th>Mercurial</th></tr></thead><tbody><tr><td>Modelo</td><td>Distribuido: cada persona tiene una copia completa del historial</td><td>Centralizado: el historial vive en un servidor</td><td>Distribuido, igual que Git</td></tr><tr><td>Trabajo sin conexión</td><td>Sí: puedes confirmar cambios, ver el historial y crear ramas sin internet</td><td>Limitado: para confirmar cambios necesitas llegar al servidor</td><td>Sí</td></tr><tr><td>Ramas y fusiones</td><td>Ramas muy ligeras y rápidas; son la base del flujo de trabajo</td><td>Las ramas son copias de carpetas; son más pesadas de manejar</td><td>Buen soporte de ramas</td></tr><tr><td>Curva de aprendizaje</td><td>Media: muchos comandos al inicio</td><td>Baja: pocos conceptos</td><td>Baja a media: comandos más uniformes</td></tr><tr><td>Comunidad y ecosistema</td><td>La más grande; es el estándar de la industria</td><td>Amplia en proyectos antiguos y empresariales</td><td>Más pequeña; Bitbucket dejó de alojar repositorios Mercurial en 2020</td></tr><tr><td>Licencia y costo</td><td>Software libre y gratuito (GPL v2)</td><td>Software libre (Apache License 2.0)</td><td>Software libre (GPL v2 o superior)</td></tr></tbody></table></div><h4>3.3 Comparación de plataformas de alojamiento</h4><p>La Tabla 2 compara las plataformas de alojamiento remoto. Las tres trabajan con Git y se diferencian en las herramientas que integran.</p><p><strong>Tabla 2.</strong> Plataformas de alojamiento remoto</p><div class="table-card"><table class="doc-table"><thead><tr><th>Criterio</th><th>GitHub</th><th>GitLab</th><th>Bitbucket</th></tr></thead><tbody><tr><td>Sistema de control que usa</td><td>Git</td><td>Git</td><td>Git</td></tr><tr><td>Repositorios gratuitos</td><td>Públicos y privados (el plan gratuito limita algunas funciones)</td><td>Públicos y privados (el plan gratuito limita usuarios en grupos privados; verifica el límite vigente)</td><td>Públicos y privados (el plan gratuito está pensado para equipos pequeños, hasta 5 usuarios; verifica el límite vigente)</td></tr><tr><td>Revisión de código</td><td>Pull requests</td><td>Merge requests</td><td>Pull requests</td></tr><tr><td>Integración continua (CI/CD)</td><td>GitHub Actions</td><td>GitLab CI/CD integrado</td><td>Bitbucket Pipelines</td></tr><tr><td>Gestión de tareas</td><td>Issues y Projects</td><td>Issues y tableros</td><td>Integración nativa con Jira</td></tr><tr><td>Fortaleza principal</td><td>Mayor comunidad y portafolio público; GitHub Pages</td><td>Ciclo DevOps completo en una sola herramienta; se puede instalar en servidor propio</td><td>Ecosistema Atlassian (Jira, Confluence)</td></tr></tbody></table></div><p><strong>Tabla 3.</strong> Matriz de decisión (puntaje de 1 a 5 por criterio, multiplicado por el peso)</p><div class="table-card"><table class="doc-table"><thead><tr><th>Criterio</th><th>Peso</th><th>Git</th><th>Subversion</th><th>Mercurial</th></tr></thead><tbody><tr><td>Trabajo sin conexión</td><td>3</td><td>5</td><td>1</td><td>5</td></tr><tr><td>Ramas y fusiones</td><td>3</td><td>5</td><td>3</td><td>4</td></tr><tr><td>Comunidad y documentación</td><td>2</td><td>5</td><td>3</td><td>2</td></tr><tr><td>Integración con CI/CD</td><td>2</td><td>5</td><td>3</td><td>2</td></tr><tr><td>Costo</td><td>2</td><td>5</td><td>5</td><td>5</td></tr><tr><td>Lo exige la guía (EV04 y EV05 usan Git)</td><td>3</td><td>5</td><td>1</td><td>1</td></tr><tr><td>Total</td><td></td><td>75</td><td>37</td><td>48</td></tr></tbody></table></div><h4>3.4 Herramienta seleccionada y justificación</h4><p>Sistema de control de versiones: Git. Plataforma de alojamiento remoto: GitHub.</p><p>Justificación<br>1. Trabajo distribuido y sin conexión. Como los integrantes trabajan desde casa y a veces sin internet, Git permite confirmar cambios y consultar el historial en el equipo local, y sincronizar cuando haya conexión. Subversion no ofrece esa ventaja porque depende del servidor central.<br>2. Ramas ligeras. Cada funcionalidad (catálogo, carrito, autenticación) se desarrollará en su propia rama y se unirá a la rama principal al terminar. Git hace esto de forma rápida y segura, lo que encaja con la metodología ágil del proyecto.<br>3. Estándar de la industria. Git es el sistema más usado, tiene la mayor cantidad de documentación y es compatible con GitHub, GitLab y Bitbucket, así que el proyecto no queda atado a un proveedor.<br>4. Costo. Git es software libre y GitHub ofrece repositorios gratuitos, suficientes para el tamaño de TechStore Pro.<br>5. Revisión e integración. Con los pull requests de GitHub, cada compañero revisa el código del otro antes de unirlo, y con GitHub Actions se podrán ejecutar pruebas automáticas más adelante.<br>6. Coherencia con la formación. Las siguientes evidencias de la actividad (instalación y práctica) se realizan con Git y con GitHub o GitLab.</p><p>Resultado de la matriz de decisión: Git obtuvo 75 puntos, Mercurial 48 y Subversion 37 (máximo posible: 75).</p><h4>3.5 Flujo de trabajo previsto</h4><ul><li>La rama main contiene solo versiones estables y probadas.</li><li>Cada integrante crea una rama por funcionalidad (por ejemplo, feature/carrito) y confirma cambios pequeños con mensajes claros.</li><li>Al terminar, abre un pull request en GitHub; un compañero lo revisa y, si está correcto, se une a main.</li><li>Los archivos que no deben versionarse (contraseñas, carpetas de dependencias, archivos temporales) se excluyen con un archivo .gitignore.</li></ul><h3>4. Herramientas de desarrollo para la codificación</h3><h4>4.1 Editor o IDE y lenguaje de programación</h4><p>Para escribir el código de TechStore Pro el equipo usará Visual Studio Code, un editor gratuito y extensible que integra terminal, depurador y control de versiones con Git en una sola ventana. Se eligió frente a WebStorm y Sublime Text porque no tiene costo, ya lo conocen los tres integrantes y cuenta con extensiones para JavaScript, React y Node.js. El lenguaje de programación es JavaScript, que se usa tanto en el navegador (front-end) como en el servidor (back-end); así el equipo aprende y mantiene un solo lenguaje para todo el proyecto.</p><p><strong>Tabla 4.</strong> Herramientas de desarrollo por categoría</p><div class="table-card"><table class="doc-table"><thead><tr><th>Categoría</th><th>Para qué sirve</th><th>Opciones frecuentes</th><th>Elegida para TechStore Pro</th></tr></thead><tbody><tr><td><strong>Editor o IDE</strong></td><td>Es donde escribes y organizas el código</td><td>Visual Studio Code, WebStorm, Sublime Text</td><td>Visual Studio Code</td></tr><tr><td><strong>Lenguaje de programación</strong></td><td>Es el idioma en que se escribe la lógica del software</td><td>JavaScript, TypeScript, Python, Java, PHP</td><td>JavaScript (en el navegador y en el servidor)</td></tr><tr><td><strong>Entorno de ejecución y framework</strong></td><td>Ejecuta el código fuera del navegador y estructura el servidor y la interfaz</td><td>Node.js con Express o NestJS; React, Angular, Vue</td><td>Node.js con Express (back-end) y React (front-end)</td></tr><tr><td><strong>Gestor de paquetes</strong></td><td>Instala, actualiza y registra las librerías que usa el proyecto</td><td>npm, Yarn, pnpm</td><td>npm (viene incluido con Node.js)</td></tr><tr><td><strong>Base de datos</strong></td><td>Guarda la información de forma permanente</td><td>MongoDB, MySQL, PostgreSQL</td><td>MongoDB (base de datos de documentos)</td></tr><tr><td><strong>Depuración y pruebas</strong></td><td>Encuentra errores y comprueba que la API responde bien</td><td>Depurador de VS Code, DevTools del navegador, Postman, Thunder Client</td><td>Depurador de VS Code, Chrome DevTools y Postman</td></tr></tbody></table></div><p><strong>Tabla 5.</strong> Comparación de editores o IDE</p><div class="table-card"><table class="doc-table"><thead><tr><th>Criterio</th><th>Visual Studio Code</th><th>WebStorm</th><th>Sublime Text</th></tr></thead><tbody><tr><td>Tipo de herramienta</td><td>Editor extensible que se convierte en IDE con extensiones</td><td>IDE completo de JetBrains para JavaScript</td><td>Editor de texto muy ligero</td></tr><tr><td>Costo y licencia</td><td>Gratuito (verifica los términos vigentes)</td><td>Licencia comercial con opciones gratuitas para algunos usos (verifica el plan vigente)</td><td>Licencia de pago con evaluación (verifica el plan vigente)</td></tr><tr><td>Soporte para JavaScript, Node.js y React</td><td>Muy bueno mediante extensiones</td><td>Integrado de fábrica</td><td>Posible mediante paquetes adicionales</td></tr><tr><td>Git y terminal integrados</td><td>Sí: panel de control de código fuente y terminal en la misma ventana</td><td>Sí</td><td>Limitado: depende de complementos</td></tr><tr><td>Depuración de Node.js</td><td>Depurador integrado</td><td>Depurador integrado</td><td>Requiere complementos</td></tr><tr><td>Consumo de recursos</td><td>Medio</td><td>Alto</td><td>Bajo</td></tr></tbody></table></div><h4>4.2 Entorno de ejecución y gestor de paquetes</h4><p>El back-end se ejecuta sobre Node.js, el entorno que permite correr JavaScript fuera del navegador, y se construye con Express para definir las rutas de la API. El front-end se desarrolla con React. Las librerías (por ejemplo express, mongoose y react) se instalan y actualizan con npm, el gestor de paquetes que viene con Node.js, y quedan registradas en el archivo package.json para que cualquier integrante pueda reproducir el mismo entorno en su equipo.</p><h4>4.3 Base de datos y herramientas de depuración</h4><p>La información del catálogo, los usuarios y los pedidos se guarda en MongoDB, una base de datos de documentos cuyo formato es muy parecido a JSON, el mismo formato que usa JavaScript, y que facilita cambiar la estructura de los datos durante un desarrollo ágil. Para encontrar errores se usará el depurador integrado de Visual Studio Code en el back-end, las herramientas para desarrolladores (DevTools) de Chrome en el front-end y Postman para probar las rutas de la API sin esperar a que la interfaz esté lista.</p><p>La combinación de MongoDB, Express, React y Node.js (stack MERN) se eligió porque todo el proyecto se programa en un solo lenguaje y porque cada pieza tiene documentación abundante y versión gratuita.</p><h3>5. Versionamiento local y remoto</h3><h4>5.1 Qué es cada uno</h4><p>El versionamiento local es el que ocurre en el computador de cada integrante: Git guarda en una carpeta oculta del proyecto (.git) el historial completo de cambios y permite confirmar versiones (commit), crear ramas y volver a estados anteriores sin conexión a internet. El versionamiento remoto ocurre en un servidor, en este caso GitHub, donde se aloja una copia compartida del repositorio. Sirve para respaldar el trabajo, sincronizar al equipo y revisar el código de los compañeros mediante pull requests.</p><h4>5.2 Tabla comparativa</h4><p>La Tabla 6 resume las diferencias. Lo local es privado e independiente de internet; lo remoto es compartido y depende de la conexión.</p><p><strong>Tabla 6.</strong> Versionamiento local frente a remoto</p><div class="table-card"><table class="doc-table"><thead><tr><th>Criterio</th><th>Versionamiento local</th><th>Versionamiento remoto</th></tr></thead><tbody><tr><td><strong>Dónde está el repositorio</strong></td><td>En tu computador, en la carpeta oculta .git del proyecto</td><td>En un servidor de internet (GitHub, GitLab o Bitbucket)</td></tr><tr><td><strong>Necesita internet</strong></td><td>No: funciona sin conexión</td><td>Sí: para subir y descargar cambios</td></tr><tr><td><strong>Quién lo ve</strong></td><td>Solo tú, hasta que decidas compartirlo</td><td>Todo el equipo con permiso de acceso</td></tr><tr><td><strong>Para qué sirve</strong></td><td>Guardar versiones, crear ramas y volver atrás sin depender de nadie</td><td>Respaldar el trabajo, sincronizar al equipo y revisar código con pull requests</td></tr><tr><td><strong>Comandos principales</strong></td><td>git init, git add, git commit, git status, git log, git branch</td><td>git clone, git remote, git push, git pull, git fetch</td></tr><tr><td><strong>Si se daña tu equipo</strong></td><td>Pierdes el historial si no hay copia en otro lugar</td><td>El historial sigue disponible en el servidor</td></tr><tr><td><strong>Ejemplo en TechStore Pro</strong></td><td>Guardas la versión del carrito en tu equipo mientras no tienes internet</td><td>Subes esa versión a GitHub para que tus compañeros la revisen</td></tr></tbody></table></div><h4>5.3 Flujo de trabajo entre el repositorio local y el remoto</h4><ol><li>clone: cada integrante descarga a su equipo una copia del repositorio remoto de TechStore Pro.</li><li>add: selecciona los archivos modificados que entrarán en la próxima versión.</li><li>commit: guarda esa versión en el historial local con un mensaje claro.</li><li>push: envía los commits locales al repositorio remoto en GitHub.</li><li>pull: trae al equipo local los cambios que subieron los compañeros.</li></ol><p>Los pasos add y commit son locales y funcionan sin internet; clone, push y pull necesitan conexión porque se comunican con el remoto.</p><h3>6. Conclusión</h3><p>Después de analizar las características de TechStore Pro y de comparar las herramientas disponibles, se concluye que Git es la opción más adecuada para versionar el proyecto, porque combina trabajo sin conexión, ramas ligeras y una comunidad muy amplia. GitHub complementa a Git como plataforma remota, ya que ofrece repositorios gratuitos, revisión de código mediante pull requests y automatización con GitHub Actions.</p><p>Usar un sistema de control de versiones desde el primer día reduce el riesgo de perder trabajo, facilita que el equipo colabore sin pisarse y deja un historial que permite volver a una versión estable. Como siguiente paso del plan de trabajo, se instalará y configurará Git en cada equipo, se creará el repositorio remoto y se definirán los estándares de codificación del proyecto.</p><h3>7. Referencias</h3><p style="text-align:left;padding-left:22px;text-indent:-22px;">Chacon, S. y Straub, B. (2014). Pro Git (2.a ed.). Apress. https://git-scm.com/book/es/v2</p><p style="text-align:left;padding-left:22px;text-indent:-22px;">Collins-Sussman, B., Fitzpatrick, B. W. y Pilato, C. M. (2011). Version control with Subversion. Apache Software Foundation. https://svnbook.red-bean.com/</p><p style="text-align:left;padding-left:22px;text-indent:-22px;">Git. (s. f.). Git: Distributed version control system. https://git-scm.com/</p><p style="text-align:left;padding-left:22px;text-indent:-22px;">GitHub. (s. f.). GitHub Docs. https://docs.github.com/es</p><p style="text-align:left;padding-left:22px;text-indent:-22px;">GitLab. (s. f.). GitLab Documentation. https://docs.gitlab.com/</p><p style="text-align:left;padding-left:22px;text-indent:-22px;">Atlassian. (s. f.). Bitbucket Cloud documentation. https://support.atlassian.com/bitbucket-cloud/</p><p style="text-align:left;padding-left:22px;text-indent:-22px;">Mercurial. (s. f.). Mercurial SCM. https://www.mercurial-scm.org/</p></div></section>
+      <section id="sec-11" class="doc-section"><h2 class="sec-h2">Antes de la Sesión 2: lo que viene con EV03</h2><p>En la <strong>Sesión 2 (martes 17/11/2026, 6:30 p. m. a 8:30 p. m.)</strong> trabajaremos la evidencia <strong>EV03 · Identifica herramientas de versionamiento</strong>. Será otro informe en PDF con portada, introducción, objetivo y <strong>dos tablas</strong>: una con las diferencias entre <strong>Git local y Git remoto</strong> y otra con la descripción de los <strong>comandos básicos</strong> de Git local y remoto.</p><p>Para llegar preparado, mira estos comandos y trata de adivinar qué hace cada uno. No necesitas instalarlos todavía:</p><div class="code-editor-box"><div class="editor-header"><span class="editor-dot r"></span><span class="editor-dot y"></span><span class="editor-dot g"></span><span class="editor-title">comandos_adelanto.sh</span><span class="editor-badge">GIT</span><button type="button" class="btn-copy-code" onclick="copiarAlPortapapeles('cb13', this)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg> Copiar código</button></div><div class="editor-body" id="cb13"><div class="cl"><span class="ln">1</span><span class="code"><span class="cm"># Git local: trabajas en tu computador</span></span></div><div class="cl"><span class="ln">2</span><span class="code"><span class="syn-func">git</span> <span class="str">init</span></span></div><div class="cl"><span class="ln">3</span><span class="code"><span class="syn-func">git</span> <span class="str">status</span></span></div><div class="cl"><span class="ln">4</span><span class="code"><span class="syn-func">git</span> <span class="str">add .</span></span></div><div class="cl"><span class="ln">5</span><span class="code"><span class="syn-func">git</span> <span class="str">commit -m "Primer cambio"</span></span></div><div class="cl"><span class="ln">6</span><span class="code"></span></div><div class="cl"><span class="ln">7</span><span class="code"><span class="cm"># Git remoto: te conectas a GitHub o GitLab</span></span></div><div class="cl"><span class="ln">8</span><span class="code"><span class="syn-func">git</span> <span class="str">remote add origin URL</span></span></div><div class="cl"><span class="ln">9</span><span class="code"><span class="syn-func">git</span> <span class="str">push origin main</span></span></div><div class="cl"><span class="ln">10</span><span class="code"><span class="syn-func">git</span> <span class="str">pull</span></span></div></div></div><ol class="hazlo"><li>Aprovecha tu informe de EV01: la <strong>portada, la introducción y el formato</strong> te sirven de plantilla para EV03.</li><li>Piensa en una pregunta: ¿qué cosas haces en tu computador y cuáles necesitan internet?</li><li>Lleva a la sesión tus dudas sobre la comparación de herramientas.</li></ol></section>
+      <section id="sec-12" class="doc-section"><h2 class="sec-h2">Lista de chequeo final (auto-auditoría del aprendiz)</h2><p>Marca cada casilla antes de subir tu evidencia. Si las 13 están marcadas, tu informe cumple lo que pide la guía.</p><div class="checklist-container"><div class="checklist-progress-row"><strong style="font-size:14px;color:var(--texto-main);">Puntos de control de calidad:</strong><span id="checkCounter" class="check-counter">0 de 13 verificados</span></div><div class="checklist-item" onclick="toggleCheck(this)"><div class="check-custom"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div><div class="checklist-text">Mi informe tiene portada, introducción, objetivo y selección de herramientas</div><span class="checklist-tip">Son las cuatro partes mínimas que pide la guía.</span></div></div><div class="checklist-item" onclick="toggleCheck(this)"><div class="check-custom"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div><div class="checklist-text">El informe habla de un proyecto concreto</div><span class="checklist-tip">Describí qué hace, el equipo, la metodología y el entorno.</span></div></div><div class="checklist-item" onclick="toggleCheck(this)"><div class="check-custom"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div><div class="checklist-text">Comparé al menos 3 sistemas de control de versiones y 3 plataformas</div><span class="checklist-tip">Con tablas y mínimo 5 criterios cada una.</span></div></div><div class="checklist-item" onclick="toggleCheck(this)"><div class="check-custom"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div><div class="checklist-text">La herramienta elegida está justificada con razones ligadas a mi proyecto</div><span class="checklist-tip">Usé una matriz de decisión o razones numeradas.</span></div></div><div class="checklist-item" onclick="toggleCheck(this)"><div class="check-custom"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div><div class="checklist-text">Describí las herramientas de desarrollo de mi proyecto: editor o IDE, lenguaje, entorno de ejecución, gestor de paquetes, base de datos y depuración</div><span class="checklist-tip">Indicador 2: cada una con su descripción y su razón (sección 4).</span></div></div><div class="checklist-item" onclick="toggleCheck(this)"><div class="check-custom"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div><div class="checklist-text">Expliqué con claridad la diferencia entre versionamiento local y remoto</div><span class="checklist-tip">Indicador 1: qué es cada uno, dónde vive y si necesita internet (sección 5).</span></div></div><div class="checklist-item" onclick="toggleCheck(this)"><div class="check-custom"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div><div class="checklist-text">Incluí la tabla comparativa local frente a remoto y el flujo clone, add, commit, push, pull</div><span class="checklist-tip">Indica cuáles comandos son locales y cuáles remotos.</span></div></div><div class="checklist-item" onclick="toggleCheck(this)"><div class="check-custom"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div><div class="checklist-text">Escribí una conclusión y las referencias en formato APA</div><span class="checklist-tip">Solo fuentes que sí consulté.</span></div></div><div class="checklist-item" onclick="toggleCheck(this)"><div class="check-custom"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div><div class="checklist-text">El documento es mío: reescribí los modelos con mis palabras</div><span class="checklist-tip">No dejé corchetes ni datos del ejemplo.</span></div></div><div class="checklist-item" onclick="toggleCheck(this)"><div class="check-custom"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div><div class="checklist-text">Revisé ortografía, formato y numeración de páginas</div><span class="checklist-tip">Fuente, márgenes y títulos uniformes.</span></div></div><div class="checklist-item" onclick="toggleCheck(this)"><div class="check-custom"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div><div class="checklist-text">Exporté a PDF y lo abrí para revisarlo</div><span class="checklist-tip">Se ven todas las tablas y páginas.</span></div></div><div class="checklist-item" onclick="toggleCheck(this)"><div class="check-custom"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div><div class="checklist-text">El archivo se llama GA7-220501096-AA1-EV01_Nombre_Apellido.pdf</div><span class="checklist-tip">Sin tildes ni espacios.</span></div></div><div class="checklist-item" onclick="toggleCheck(this)"><div class="check-custom"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div><div class="checklist-text">Lo subí al espacio de EV01 en Zajuna y vi el estado de entrega</div><span class="checklist-tip">Guardé una copia de respaldo.</span></div></div></div><div class="btn-row"><a class="btn-link ghost" href="https://julianon2.github.io/seguimiento-adso-3389010/" target="_blank"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg> Dashboard de Calificaciones</a> <a class="btn-link ghost" href="../../explorar.html"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg> Volver al Hub</a></div></section>
+      <footer style="margin-top:60px;padding-top:20px;border-top:1px solid var(--borde-light);font-size:12px;color:var(--texto-sub);display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+        <div>Servicio Nacional de Aprendizaje (SENA) — Regional Huila | Centro CADPH Garzón</div>
+        <div>Instructor Líder: <strong>Julián Andrés Trujillo Morales</strong></div>
+      </footer>
+    </main>
+  </div>
+  <script>
+    var TOTAL_PASOS = 11;
+    var CLAVE = 'adso3389010_ga7_s1_pasos';
+
+    function copiarAlPortapapeles(idElemento, btn) {
+      var el = document.getElementById(idElemento);
+      if (!el) return;
+      // En las cajas de codigo se copian solo las lineas de codigo (sin los numeros de linea)
+      var lineas = el.querySelectorAll('.code');
+      var texto = lineas.length
+        ? Array.prototype.map.call(lineas, function (n) { return n.textContent; }).join('\n')
+        : (el.innerText || el.textContent);
+      function feedback() {
+        var original = btn.innerHTML;
+        btn.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> ¡Copiado!';
+        btn.style.background = 'var(--sena-verde)'; btn.style.borderColor = 'var(--sena-verde)'; btn.style.color = '#fff';
+        setTimeout(function () { btn.innerHTML = original; btn.style.background = ''; btn.style.borderColor = ''; btn.style.color = ''; }, 2000);
+      }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(texto).then(feedback).catch(function () { copiarAlterno(texto, feedback); });
+      } else { copiarAlterno(texto, feedback); }
+    }
+    function copiarAlterno(texto, cb) {
+      var t = document.createElement('textarea'); t.value = texto; document.body.appendChild(t); t.select();
+      try { document.execCommand('copy'); cb(); } catch (e) {} document.body.removeChild(t);
+    }
+
+    /* Avance guardado en este navegador */
+    function leerPasos() { try { return JSON.parse(localStorage.getItem(CLAVE)) || []; } catch (e) { return []; } }
+    function guardarPasos(a) { try { localStorage.setItem(CLAVE, JSON.stringify(a)); } catch (e) {} }
+    function pintarAvance() {
+      var hechos = leerPasos();
+      document.querySelectorAll('section[data-step]').forEach(function (s) {
+        var h = hechos.indexOf(s.id) !== -1;
+        s.classList.toggle('done', h);
+        var b = s.querySelector('.btn-done');
+        if (b) b.lastChild.textContent = h ? ' Paso hecho (clic para desmarcar)' : ' Marcar este paso como hecho';
+        var link = document.querySelector('.doc-nav-link[data-step="' + s.id + '"]');
+        if (link) link.classList.toggle('done', h);
+      });
+      var n = hechos.length;
+      document.getElementById('progTexto').textContent = n + ' de ' + TOTAL_PASOS + ' pasos';
+      document.getElementById('progBarra').style.width = Math.round(100 * n / TOTAL_PASOS) + '%';
+    }
+    function marcarPaso(id) {
+      var hechos = leerPasos(); var i = hechos.indexOf(id);
+      if (i === -1) hechos.push(id); else hechos.splice(i, 1);
+      guardarPasos(hechos); pintarAvance();
+    }
+
+    function toggleCheck(item) {
+      item.classList.toggle('checked');
+      var total = document.querySelectorAll('.checklist-item').length;
+      var ok = document.querySelectorAll('.checklist-item.checked').length;
+      var c = document.getElementById('checkCounter');
+      if (ok === total) { c.style.background = 'var(--sena-verde)'; c.style.color = '#fff'; c.innerText = '¡100% listo para subir a Zajuna!'; }
+      else { c.style.background = ''; c.style.color = ''; c.innerText = ok + ' de ' + total + ' verificados'; }
+    }
+
+    function toggleSidebar() { document.getElementById('docSidebar').classList.toggle('open'); }
+
+    window.addEventListener('DOMContentLoaded', function () {
+      pintarAvance();
+      var secciones = document.querySelectorAll('section.doc-section');
+      var links = document.querySelectorAll('.doc-nav-link');
+      window.addEventListener('scroll', function () {
+        var actual = '';
+        secciones.forEach(function (s) { if (window.pageYOffset >= s.offsetTop - 140) actual = s.id; });
+        links.forEach(function (l) { l.classList.toggle('active', l.getAttribute('href') === '#' + actual); });
+      });
+      links.forEach(function (l) { l.addEventListener('click', function () { document.getElementById('docSidebar').classList.remove('open'); }); });
+    });
+  </script>
+</body>
+</html>

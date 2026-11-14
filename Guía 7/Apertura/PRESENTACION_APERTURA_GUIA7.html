@@ -1,0 +1,1943 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Apertura & Estructura General Guía 7 — ADSO 3389010 | SENA Virtual</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Syne:wght@700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  /* Paleta SENA Institucional Premium Claras */
+  --sena-verde: #39a900;
+  --sena-verde-dark: #236b00;
+  --sena-verde-soft: #44c702;
+  --sena-verde-bg: rgba(57, 169, 0, 0.08);
+  --sena-verde-border: rgba(57, 169, 0, 0.28);
+  
+  --sena-naranja: #ff6b00;
+  --sena-naranja-dark: #c2410c;
+  --sena-naranja-bg: rgba(255, 107, 0, 0.08);
+  --sena-naranja-border: rgba(255, 107, 0, 0.28);
+
+  --azul-tech: #0284c7;
+  --azul-tech-dark: #0369a1;
+  --azul-bg: rgba(2, 132, 199, 0.08);
+  --azul-border: rgba(2, 132, 199, 0.28);
+
+  --purpura: #7c3aed;
+  --purpura-bg: rgba(124, 58, 237, 0.08);
+
+  /* Fondos y Superficies Claras */
+  --bg-main: #f8fafc;
+  --bg-card: #ffffff;
+  --borde-light: #e2e8f0;
+  --borde-focus: #cbd5e1;
+  
+  --texto-main: #0f172a;
+  --texto-muted: #475569;
+  --texto-sub: #64748b;
+  
+  --shadow-card: 0 10px 30px rgba(15, 23, 42, 0.05), 0 1px 3px rgba(0, 0, 0, 0.03);
+  --shadow-hover: 0 20px 40px rgba(57, 169, 0, 0.12), 0 4px 12px rgba(0, 0, 0, 0.05);
+  --radius-xl: 20px;
+  --radius-lg: 16px;
+  --radius-md: 12px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  color: var(--texto-main);
+  background-color: var(--bg-main);
+  background-image: 
+    radial-gradient(circle at 5% 10%, rgba(57, 169, 0, 0.05) 0%, transparent 40%),
+    radial-gradient(circle at 95% 90%, rgba(255, 107, 0, 0.05) 0%, transparent 40%),
+    radial-gradient(circle at 50% 50%, rgba(2, 132, 199, 0.03) 0%, transparent 60%);
+  background-attachment: fixed;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* ==========================================================
+   SIDEBAR LATERAL OBLIGATORIO (280px)
+   ========================================================== */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 280px;
+  background: rgba(255, 255, 255, 0.98);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-right: 1px solid var(--borde-light);
+  display: flex;
+  flex-direction: column;
+  z-index: 1000;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 4px 0 24px rgba(15, 23, 42, 0.04);
+}
+
+.sidebar.collapsed {
+  transform: translateX(-100%);
+}
+
+.sidebar-header {
+  padding: 18px 16px;
+  border-bottom: 1px solid var(--borde-light);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #ffffff;
+}
+
+.sidebar-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.sidebar-logo {
+  background: var(--sena-verde);
+  color: #fff;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 2px 8px -2px rgba(57, 169, 0, 0.4);
+}
+
+.sidebar-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 13px;
+  font-weight: 800;
+  color: #0f172a;
+  line-height: 1.2;
+}
+
+.sidebar-sub {
+  font-size: 10px;
+  color: #64748b;
+  font-weight: 600;
+}
+
+.sidebar-toggle-btn {
+  background: transparent;
+  border: 1px solid transparent;
+  color: #64748b;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.sidebar-toggle-btn:hover {
+  background: #f1f5f9;
+  color: #0f172a;
+  border-color: #e2e8f0;
+}
+
+/* Botón Flotante Reactivo */
+.floating-sidebar-toggle {
+  position: fixed;
+  top: 18px;
+  left: 20px;
+  z-index: 999;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  color: #1e293b;
+  height: 38px;
+  padding: 0 14px 0 10px;
+  border-radius: 10px;
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.08), 0 2px 4px rgba(0, 0, 0, 0.04);
+  display: none;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-family: 'Outfit', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.floating-sidebar-toggle:hover {
+  background: #ffffff;
+  color: var(--sena-verde-dark);
+  border-color: var(--sena-verde);
+  box-shadow: 0 8px 22px rgba(57, 169, 0, 0.2);
+  transform: translateY(-1px);
+}
+
+.sidebar.collapsed ~ .floating-sidebar-toggle,
+.floating-sidebar-toggle.visible {
+  display: inline-flex !important;
+  animation: fadeInToggle 0.25s ease-out forwards;
+}
+
+@keyframes fadeInToggle {
+  from { opacity: 0; transform: translateX(-12px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+.sidebar-scroll {
+  flex: 1;
+  overflow-y: auto;
+  padding: 14px 10px;
+}
+
+.sidebar-scroll::-webkit-scrollbar {
+  width: 4px;
+}
+
+.sidebar-scroll::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+.nav-group {
+  margin-bottom: 18px;
+}
+
+.nav-group-title {
+  font-size: 9.5px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: #94a3b8;
+  padding: 0 10px 6px 10px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 7px 10px;
+  border-radius: 8px;
+  color: #475569;
+  text-decoration: none;
+  font-size: 11.8px;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  margin-bottom: 2px;
+  position: relative;
+}
+
+.nav-link:hover {
+  background: #f1f5f9;
+  color: #0f172a;
+}
+
+.nav-link.active {
+  background: rgba(57, 169, 0, 0.1);
+  color: var(--sena-verde-dark);
+  font-weight: 700;
+}
+
+.nav-link.active::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 6px;
+  bottom: 6px;
+  width: 3.5px;
+  background: var(--sena-verde);
+  border-radius: 0 4px 4px 0;
+}
+
+.nav-link-num {
+  font-size: 10px;
+  font-weight: 700;
+  color: #94a3b8;
+  min-width: 15px;
+}
+
+.nav-link.active .nav-link-num {
+  color: var(--sena-verde);
+}
+
+.nav-link-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #64748b;
+  flex-shrink: 0;
+}
+
+.nav-link:hover .nav-link-icon {
+  color: #0f172a;
+}
+
+.nav-link.active .nav-link-icon {
+  color: var(--sena-verde-dark);
+}
+
+.nav-link-text {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sidebar-footer {
+  padding: 12px 14px;
+  border-top: 1px solid #e2e8f0;
+  background: #f8fafc;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.sidebar-corte-badge {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(255, 107, 0, 0.08);
+  border: 1px solid rgba(255, 107, 0, 0.22);
+  padding: 6px 10px;
+  border-radius: 8px;
+  font-size: 10.5px;
+  font-weight: 700;
+  color: var(--sena-naranja-dark);
+}
+
+.sidebar-link-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  padding: 6px 10px;
+  border-radius: 8px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #334155;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.sidebar-link-btn:hover {
+  background: #f1f5f9;
+  border-color: #94a3b8;
+  color: #0f172a;
+}
+
+/* ==========================================================
+   CONTENIDO PRINCIPAL ADAPTABLE (.main-content)
+   ========================================================== */
+.main-content {
+  margin-left: 280px;
+  min-height: 100vh;
+  transition: margin-left 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar.collapsed ~ .main-content {
+  margin-left: 0;
+}
+
+/* Barra Superior de Estado y Controles */
+.content-topbar {
+  position: sticky;
+  top: 0;
+  z-index: 900;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--borde-light);
+  padding: 10px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.topbar-breadcrumbs {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--texto-sub);
+  font-weight: 600;
+}
+
+.topbar-breadcrumbs .sep { color: #cbd5e1; }
+.topbar-breadcrumbs .current { color: var(--sena-verde-dark); font-weight: 700; }
+
+.topbar-tools {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.topbar-tool-btn {
+  background: #ffffff;
+  border: 1px solid var(--borde-light);
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--texto-muted);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.topbar-tool-btn:hover {
+  background: #f8fafc;
+  color: var(--texto-main);
+  border-color: #cbd5e1;
+}
+
+/* Barra de Progreso Global */
+.progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--sena-verde), var(--sena-naranja));
+  width: 0%;
+  z-index: 2000;
+  transition: width 0.1s ease;
+}
+
+/* ==========================================================
+   ESTRUCTURA DE CADA SLIDE
+   ========================================================== */
+.slide {
+  min-height: 100vh;
+  padding: 40px 48px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border-bottom: 1px dashed #e2e8f0;
+  position: relative;
+}
+
+.slide-inner {
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.slide-num-indicator {
+  position: absolute;
+  top: 24px;
+  right: 48px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--texto-sub);
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid var(--borde-light);
+  padding: 4px 10px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Headers y Tipografía */
+.slide-header-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--sena-verde-bg);
+  border: 1px solid var(--sena-verde-border);
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--sena-verde-dark);
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  margin-bottom: 14px;
+}
+
+.slide-header-badge.tech {
+  background: var(--azul-bg);
+  border-color: var(--azul-border);
+  color: var(--azul-tech);
+}
+
+.slide-header-badge.naranja {
+  background: var(--sena-naranja-bg);
+  border-color: var(--sena-naranja-border);
+  color: var(--sena-naranja-dark);
+}
+
+.slide-header-badge .dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.sec-title {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(24px, 2.5vw, 34px);
+  font-weight: 800;
+  color: var(--texto-main);
+  line-height: 1.25;
+  margin-bottom: 10px;
+  letter-spacing: -0.5px;
+}
+
+.sec-desc {
+  font-size: 15px;
+  color: var(--texto-muted);
+  max-width: 860px;
+  line-height: 1.6;
+  margin-bottom: 28px;
+}
+
+.grad-verde {
+  background: linear-gradient(135deg, var(--sena-verde), var(--sena-verde-dark));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.grad-naranja {
+  background: linear-gradient(135deg, var(--sena-naranja), #ea580c);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.grad-tech {
+  background: linear-gradient(135deg, var(--azul-tech), #1d4ed8);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* ==========================================================
+   COMPONENTES Y TARJETAS PREMIUM
+   ========================================================== */
+.card-premium {
+  background: linear-gradient(175deg, #ffffff 0%, #fbfcfe 65%, #f8fafc 100%);
+  border: 1px solid var(--borde-light);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  box-shadow: var(--shadow-card);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.card-premium:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-hover);
+  border-color: rgba(57, 169, 0, 0.3);
+}
+
+.card-premium::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3.5px;
+  background: #cbd5e1;
+}
+
+.card-premium.top-verde::before { background: linear-gradient(90deg, var(--sena-verde), var(--sena-verde-dark)); }
+.card-premium.top-naranja::before { background: linear-gradient(90deg, var(--sena-naranja), #ea580c); }
+.card-premium.top-tech::before { background: linear-gradient(90deg, var(--azul-tech), #1d4ed8); }
+
+.card-header-flex {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.card-icon-badge {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f1f5f9;
+  color: var(--texto-main);
+  flex-shrink: 0;
+}
+
+.card-icon-badge.verde { background: var(--sena-verde-bg); color: var(--sena-verde-dark); }
+.card-icon-badge.naranja { background: var(--sena-naranja-bg); color: var(--sena-naranja-dark); }
+.card-icon-badge.tech { background: var(--azul-bg); color: var(--azul-tech); }
+
+.card-pill-tag {
+  font-size: 10.5px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  padding: 3px 9px;
+  border-radius: 14px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.card-pill-tag.verde { background: var(--sena-verde-bg); color: var(--sena-verde-dark); border: 1px solid var(--sena-verde-border); }
+.card-pill-tag.naranja { background: var(--sena-naranja-bg); color: var(--sena-naranja-dark); border: 1px solid var(--sena-naranja-border); }
+.card-pill-tag.tech { background: var(--azul-bg); color: var(--azul-tech); border: 1px solid var(--azul-border); }
+
+.card-title {
+  font-family: 'Outfit', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--texto-main);
+  line-height: 1.3;
+  margin-bottom: 8px;
+}
+
+.card-text {
+  font-size: 13.5px;
+  color: var(--texto-muted);
+  line-height: 1.55;
+  margin-bottom: 16px;
+}
+
+.list-premium {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--texto-muted);
+}
+
+.list-premium li {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.list-premium li svg {
+  flex-shrink: 0;
+  margin-top: 3px;
+}
+
+/* Grillas */
+.grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+.grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
+
+/* Hero Portada */
+.hero-wrapper {
+  display: grid;
+  grid-template-columns: 1.25fr 0.95fr;
+  gap: 40px;
+  align-items: center;
+}
+
+.hero-title {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(30px, 3.8vw, 46px);
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -0.8px;
+  color: var(--texto-main);
+  margin-bottom: 16px;
+}
+
+.hero-subtitle {
+  font-size: 16px;
+  color: var(--texto-muted);
+  line-height: 1.6;
+  margin-bottom: 28px;
+}
+
+.hero-card-widget {
+  background: #ffffff;
+  border-radius: var(--radius-xl);
+  padding: 30px;
+  border: 1px solid var(--borde-light);
+  box-shadow: 0 15px 35px rgba(15, 23, 42, 0.06);
+}
+
+.hero-meta-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.meta-box {
+  background: #f8fafc;
+  border: 1px solid var(--borde-light);
+  border-radius: var(--radius-md);
+  padding: 14px 16px;
+}
+
+.meta-box-title {
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: var(--texto-sub);
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+}
+
+.meta-box-val {
+  font-family: 'Outfit', sans-serif;
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--texto-main);
+  line-height: 1.2;
+}
+
+.meta-box-sub {
+  font-size: 11px;
+  color: var(--texto-sub);
+  margin-top: 4px;
+}
+
+/* Callout Box Institucional */
+.callout-box {
+  background: var(--sena-verde-bg);
+  border: 1.5px solid var(--sena-verde-border);
+  border-radius: var(--radius-lg);
+  padding: 20px 24px;
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.callout-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background: #ffffff;
+  border: 1px solid var(--sena-verde-border);
+  color: var(--sena-verde-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.callout-content h4 {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--sena-verde-dark);
+  margin-bottom: 4px;
+}
+
+.callout-content p {
+  font-size: 13.5px;
+  color: var(--texto-main);
+  line-height: 1.5;
+}
+
+/* Tabla de Matriz de Sesiones */
+.table-wrapper {
+  background: #ffffff;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--borde-light);
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  box-shadow: var(--shadow-card);
+  width: 100%;
+}
+
+.matriz-table {
+  width: 100%;
+  min-width: 720px;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 13px;
+}
+
+.matriz-table th {
+  background: #f8fafc;
+  padding: 12px 18px;
+  font-weight: 700;
+  font-size: 11.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: var(--texto-sub);
+  border-bottom: 1px solid var(--borde-light);
+}
+
+.matriz-table td {
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--borde-light);
+  vertical-align: middle;
+}
+
+.matriz-table tr:hover {
+  background: #fbfcfe;
+}
+
+.sesion-badge {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11.5px;
+  font-weight: 700;
+  background: #f1f5f9;
+  color: var(--texto-main);
+  padding: 4px 10px;
+  border-radius: 6px;
+  border: 1px solid var(--borde-light);
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  white-space: nowrap;
+}
+
+.evidencia-tag {
+  display: inline-block;
+  font-size: 11.5px;
+  font-weight: 600;
+  background: #f1f5f9;
+  border: 1px solid var(--borde-light);
+  padding: 3px 8px;
+  border-radius: 4px;
+  margin: 2px;
+  color: var(--texto-muted);
+  white-space: nowrap;
+}
+
+.deadline-badge {
+  font-size: 11.5px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 6px;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.deadline-badge.corte1 {
+  color: var(--sena-naranja-dark);
+  background: var(--sena-naranja-bg);
+  border: 1px solid var(--sena-naranja-border);
+}
+
+.deadline-badge.corte2 {
+  color: var(--sena-verde-dark);
+  background: var(--sena-verde-bg);
+  border: 1px solid var(--sena-verde-border);
+}
+
+/* Botones Principales */
+.btn-action-pro {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  border: none;
+}
+
+.btn-action-pro.verde {
+  background: linear-gradient(135deg, var(--sena-verde), var(--sena-verde-dark));
+  color: #fff;
+  box-shadow: 0 4px 14px var(--sena-verde-bg);
+}
+
+.btn-action-pro.verde:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(57, 169, 0, 0.25);
+}
+
+.btn-action-pro.tech {
+  background: linear-gradient(135deg, var(--azul-tech), var(--azul-tech-dark));
+  color: #fff;
+  box-shadow: 0 4px 14px rgba(2, 132, 199, 0.25);
+}
+
+.btn-action-pro.tech:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(2, 132, 199, 0.35);
+}
+
+.btn-action-pro.neutral {
+  background: #ffffff;
+  color: var(--texto-main);
+  border: 1px solid var(--borde-light);
+}
+
+.btn-action-pro.neutral:hover {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+}
+
+/* Checklist Interactivo */
+.checklist-card {
+  background: #ffffff;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--borde-light);
+  padding: 24px;
+  box-shadow: var(--shadow-card);
+}
+
+.checklist-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid #f1f5f9;
+  cursor: pointer;
+}
+
+.checklist-item:last-child { border-bottom: none; }
+
+.checklist-checkbox {
+  width: 20px;
+  height: 20px;
+  border-radius: 6px;
+  border: 2px solid #cbd5e1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 2px;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+  background: #ffffff;
+}
+
+.checklist-item.checked .checklist-checkbox {
+  background: var(--sena-verde);
+  border-color: var(--sena-verde);
+  color: #ffffff;
+}
+
+.checklist-item.checked .checklist-text h5 {
+  text-decoration: line-through;
+  color: #94a3b8;
+}
+
+.checklist-text h5 {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--texto-main);
+  margin-bottom: 3px;
+  transition: color 0.2s;
+}
+
+.checklist-text p {
+  font-size: 12.5px;
+  color: var(--texto-sub);
+  line-height: 1.4;
+}
+
+/* Toast de Notificación */
+.toast-notice {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background: #0f172a;
+  color: #ffffff;
+  padding: 12px 20px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+  transform: translateY(100px);
+  opacity: 0;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 3000;
+}
+
+.toast-notice.show {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+/* ==========================================================
+   BACKDROP Y RESPONSIVIDAD MULTIDISPOSITIVO (Móvil / Tablet)
+   ========================================================== */
+.sidebar-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.5);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: 1099;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+.sidebar-backdrop.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+@media (max-width: 1024px) {
+  .sidebar {
+    transform: translateX(-100%);
+    z-index: 1200;
+  }
+  .sidebar.mobile-open {
+    transform: translateX(0);
+    box-shadow: 10px 0 35px rgba(0, 0, 0, 0.25);
+  }
+  .main-content {
+    margin-left: 0 !important;
+  }
+  .floating-sidebar-toggle {
+    display: inline-flex !important;
+    z-index: 1050;
+  }
+  .hero-wrapper {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+  .grid-3 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .grid-4 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .slide {
+    padding: 60px 18px 40px;
+  }
+  .slide-inner {
+    max-width: 100%;
+  }
+  .slide-num-indicator {
+    top: 14px;
+    right: 18px;
+    font-size: 10.5px;
+    padding: 3px 8px;
+  }
+  .floating-sidebar-toggle {
+    top: 12px;
+    left: 14px;
+    height: 34px;
+    padding: 0 10px;
+    font-size: 11px;
+  }
+  .floating-sidebar-toggle span {
+    display: none;
+  }
+  .content-topbar {
+    padding: 8px 14px;
+    padding-left: 56px;
+    font-size: 11px;
+  }
+  .topbar-breadcrumbs {
+    font-size: 10.5px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .topbar-tools {
+    display: none;
+  }
+  .sec-title {
+    font-size: clamp(20px, 5.5vw, 26px);
+  }
+  .sec-desc {
+    font-size: 13.5px;
+    margin-bottom: 20px;
+  }
+  .grid-2, .grid-3, .grid-4 {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+  .hero-cta-buttons {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .cta-btn {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .matriz-table {
+    min-width: 580px;
+    font-size: 12px;
+  }
+  .matriz-table th,
+  .matriz-table td {
+    padding: 10px 12px;
+  }
+  .sesion-badge,
+  .evidencia-tag,
+  .deadline-badge {
+    font-size: 10.5px;
+    padding: 3px 7px;
+  }
+  .callout-content h4 {
+    font-size: 13.5px;
+  }
+  .callout-content p {
+    font-size: 12.5px;
+  }
+}
+
+/* Extensiones Guía 7 */
+.chaos-list { display:flex; flex-direction:column; gap:8px; }
+.chaos-file { display:flex; align-items:center; gap:10px; background:#fff; border:1px solid var(--borde-light); border-radius:10px; padding:9px 12px; font-family:'JetBrains Mono',monospace; font-size:12px; font-weight:500; color:var(--texto-main); }
+.chaos-file svg { flex-shrink:0; color:#64748b; }
+.chaos-file .q { margin-left:auto; font-family:'Plus Jakarta Sans',sans-serif; font-size:10.5px; font-weight:800; color:var(--sena-naranja-dark); background:var(--sena-naranja-bg); border:1px solid var(--sena-naranja-border); padding:2px 8px; border-radius:10px; white-space:nowrap; }
+.commit-line { display:flex; align-items:center; gap:10px; background:#fff; border:1px solid var(--sena-verde-border); border-radius:10px; padding:9px 12px; font-size:12.5px; color:var(--texto-main); }
+.commit-line code { font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:700; color:var(--sena-verde-dark); background:var(--sena-verde-bg); padding:2px 7px; border-radius:6px; }
+.ev-code { font-family:'JetBrains Mono',monospace; font-size:11.5px; font-weight:700; color:var(--azul-tech-dark); background:var(--azul-bg); border:1px solid var(--azul-border); padding:4px 10px; border-radius:6px; white-space:nowrap; }
+.fmt-pill { display:inline-flex; align-items:center; gap:5px; font-size:11.5px; font-weight:800; padding:4px 10px; border-radius:6px; white-space:nowrap; }
+.fmt-pill.pdf { color:var(--azul-tech-dark); background:var(--azul-bg); border:1px solid var(--azul-border); }
+.fmt-pill.mp4 { color:var(--sena-naranja-dark); background:var(--sena-naranja-bg); border:1px solid var(--sena-naranja-border); }
+.deadline-badge.pend { color:#475569; background:#f1f5f9; border:1px solid #cbd5e1; }
+.deadline-badge.final { color:var(--sena-verde-dark); background:var(--sena-verde-bg); border:1px solid var(--sena-verde-border); }
+.matriz-table td.num { font-family:'JetBrains Mono',monospace; font-weight:700; }
+@media (max-width: 768px) { .grid-5 { grid-template-columns: 1fr !important; } }
+
+</style>
+</head>
+<body>
+
+<!-- BARRA DE PROGRESO SUPERIOR -->
+<div class="progress-bar" id="progressBar"></div>
+
+<!-- BACKDROP OVERLAY PARA MÓVIL -->
+<div class="sidebar-backdrop" id="sidebarBackdrop" onclick="toggleSidebar()"></div>
+
+<!-- SIDEBAR LATERAL (280px) -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <div class="sidebar-brand">
+      <div class="sidebar-logo">
+        <svg width="24" height="24" viewBox="0 0 64 62" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
+          <g transform="translate(-377 -19)">
+            <path d="M409.164 19C412.922 19 415.992 22.09 415.992 25.8778 415.992 29.6656 412.932 32.7556 409.164 32.7556 405.397 32.7556 402.336 29.6656 402.336 25.8778 402.336 22.09 405.407 19 409.164 19"/>
+            <path d="M384.305 41.1884 384.305 41.2183C384.285 41.3379 384.275 41.4177 384.275 41.4675 384.275 41.8264 384.474 42.0855 384.873 42.265 385.282 42.4344 385.9 42.5241 386.747 42.5241 387.395 42.5241 387.893 42.4543 388.262 42.3148 388.631 42.1752 388.81 41.9759 388.81 41.7267 388.81 41.3479 388.082 41.0489 386.647 40.8096 386.478 40.7797 386.348 40.7598 386.268 40.7498 386.179 40.7299 386.039 40.71 385.86 40.6801 383.567 40.3013 382.092 39.8926 381.434 39.454 381.115 39.2347 380.876 38.9855 380.706 38.6965 380.547 38.4074 380.467 38.0785 380.467 37.7096 380.467 36.8125 380.995 36.1248 382.052 35.6563 383.109 35.1878 384.654 34.9486 386.677 34.9486 388.7 34.9486 390.166 35.1678 391.133 35.6064 392.1 36.045 392.578 36.7228 392.578 37.6399L392.578 37.7495 388.78 37.7495 388.78 37.7096C388.78 37.3907 388.591 37.1614 388.202 36.992 387.813 36.8325 387.255 36.7428 386.508 36.7428 385.929 36.7428 385.481 36.8026 385.182 36.9122 384.863 37.0318 384.713 37.1913 384.713 37.4006 384.713 37.7794 385.541 38.1084 387.195 38.3675 387.514 38.4174 387.764 38.4572 387.943 38.4871 389.119 38.6865 389.966 38.8559 390.465 38.9955 390.963 39.135 391.392 39.3045 391.761 39.4939 392.159 39.7132 392.478 39.9923 392.698 40.3312 392.917 40.6701 393.027 41.0389 393.027 41.4476 393.027 42.3746 392.448 43.0823 391.302 43.5907 390.156 44.0891 388.501 44.3383 386.348 44.3383 384.195 44.3383 382.67 44.099 381.723 43.6206 380.766 43.1421 380.298 42.3746 380.298 41.308L380.298 41.1685 384.305 41.1685ZM394.711 44.1987 394.711 35.0881 405.546 35.0881 405.546 37.0518 398.778 37.0518 398.778 38.5071 405.028 38.5071 405.028 40.4508 398.778 40.4508 398.778 42.2151 405.795 42.2151 405.795 44.2087 394.711 44.2087ZM407.5 44.1987 407.5 35.0881 412.643 35.0881 418.155 41.2084 418.155 35.0881 422.063 35.0881 422.063 44.1987 416.72 44.1987 411.387 38.0585 411.387 44.1987 407.49 44.1987ZM432.569 40.5604 430.625 37.2511 428.572 40.5604 432.579 40.5604ZM426.369 44.1987 422.292 44.1987 428.592 35.0881 433.107 35.0881 439.118 44.1987 434.592 44.1987 433.675 42.554 427.366 42.554 426.389 44.1987Z"/>
+            <path d="M389.309 76.3351 385.67 72.9161 396.735 53.6881C397.333 52.6415 396.585 51.3257 395.379 51.3257L377.267 51.3257 377.267 46.5113 406.413 46.5113 389.309 76.3351Z"/>
+            <path d="M428.701 76.3351 432.34 72.9161 421.275 53.6881C420.677 52.6415 421.425 51.3257 422.631 51.3257L440.743 51.3257 440.743 46.5113 411.597 46.5113 428.701 76.3351Z"/>
+            <path d="M408.965 51.5949C408.965 51.5949 409.005 51.5251 409.005 51.5251L425.432 78.7174 421.066 80.99 410.48 63.2373C409.852 62.1907 408.347 62.1907 407.729 63.2373 404.2 69.1981 397.213 80.99 397.213 80.99L392.947 78.8768C392.947 78.8768 408.088 53.09 408.965 51.5949"/>
+          </g>
+        </svg>
+      </div>
+      <div>
+        <div class="sidebar-title">ADSO 3389010</div>
+        <div class="sidebar-sub">Apertura Guía 7</div>
+      </div>
+    </div>
+    <button class="sidebar-toggle-btn" onclick="toggleSidebar()" title="Colapsar Menú Lateral">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <rect width="18" height="18" x="3" y="3" rx="2" ry="2"/>
+        <line x1="9" x2="9" y1="3" y2="21"/>
+        <path d="m14 9-3 3 3 3"/>
+      </svg>
+    </button>
+  </div>
+
+  <div class="sidebar-scroll">
+    <div class="nav-group">
+      <div class="nav-group-title">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+        <span>Bloque 1: Guía y Competencia</span>
+      </div>
+      <a href="#slide-1" class="nav-link active" data-slide="1">
+        <span class="nav-link-num">01</span>
+        <span class="nav-link-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></span>
+        <span class="nav-link-text">Portada & Presentación</span>
+      </a>
+      <a href="#slide-2" class="nav-link" data-slide="2">
+        <span class="nav-link-num">02</span>
+        <span class="nav-link-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/></svg></span>
+        <span class="nav-link-text">Guía 7 y Resultado de Aprendizaje</span>
+      </a>
+    </div>
+
+    <div class="nav-group">
+      <div class="nav-group-title">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+        <span>Bloque 2: Actividad AA1</span>
+      </div>
+      <a href="#slide-3" class="nav-link" data-slide="3">
+        <span class="nav-link-num">03</span>
+        <span class="nav-link-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg></span>
+        <span class="nav-link-text">AA1 y sus 5 Evidencias</span>
+      </a>
+      <a href="#slide-4" class="nav-link" data-slide="4">
+        <span class="nav-link-num">04</span>
+        <span class="nav-link-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><polyline points="12 7 12 12 16 14"/></svg></span>
+        <span class="nav-link-text">¿Por qué Versionar?</span>
+      </a>
+    </div>
+
+    <div class="nav-group">
+      <div class="nav-group-title">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"/></svg>
+        <span>Bloque 3: Ruta y Entrega</span>
+      </div>
+      <a href="#slide-5" class="nav-link" data-slide="5">
+        <span class="nav-link-num">05</span>
+        <span class="nav-link-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg></span>
+        <span class="nav-link-text">Calendario de 6 Sesiones</span>
+      </a>
+      <a href="#slide-6" class="nav-link" data-slide="6">
+        <span class="nav-link-num">06</span>
+        <span class="nav-link-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></svg></span>
+        <span class="nav-link-text">Entrega y Evaluación</span>
+      </a>
+    </div>
+
+    <div class="nav-group">
+      <div class="nav-group-title">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        <span>Bloque 4: Alistamiento y Cierre</span>
+      </div>
+      <a href="#slide-7" class="nav-link" data-slide="7">
+        <span class="nav-link-num">07</span>
+        <span class="nav-link-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg></span>
+        <span class="nav-link-text">Qué Instalar y Reglas de Oro</span>
+      </a>
+      <a href="#slide-8" class="nav-link" data-slide="8">
+        <span class="nav-link-num">08</span>
+        <span class="nav-link-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 11 3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></span>
+        <span class="nav-link-text">Checklist y Siguiente Paso</span>
+      </a>
+    </div>
+
+  </div>
+
+  <div class="sidebar-footer">
+    <div class="sidebar-corte-badge">
+      <span>Apertura: 14/Nov</span>
+      <span>Entrega: por confirmar</span>
+    </div>
+    <a href="https://julianon2.github.io/seguimiento-adso-3389010/" target="_blank" class="sidebar-link-btn">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg>
+      Dashboard en Vivo ↗
+    </a>
+    <a href="../../explorar.html" class="sidebar-link-btn" style="background:#f1f5f9;border-color:#e2e8f0;">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m15 18-6-6 6-6"/></svg>
+      Volver al Hub
+    </a>
+  </div>
+</aside>
+
+<!-- BOTÓN FLOTANTE REACTIVO -->
+<button class="floating-sidebar-toggle" id="floatingToggle" onclick="toggleSidebar()">
+  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+    <rect width="18" height="18" x="3" y="3" rx="2" ry="2"/>
+    <line x1="9" x2="9" y1="3" y2="21"/>
+    <path d="m11 9 3 3-3 3"/>
+  </svg>
+  <span>Menú (8 Slides)</span>
+</button>
+
+<div class="main-content" id="mainContent">
+
+  <section class="slide" id="slide-1" data-slide="1" data-title="01. Portada & Presentación">
+    <div class="slide-num-indicator">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      01 / 08
+    </div>
+    <div class="slide-inner">
+      <div class="hero-wrapper">
+        <div>
+          <div class="slide-header-badge">
+            <span class="dot"></span> APERTURA GUÍA DE APRENDIZAJE 7 (AP7)
+          </div>
+          <h1 class="hero-title">
+            Control de versiones con <span class="grad-verde">Git</span> & <span class="grad-naranja">GitHub</span>
+          </h1>
+          <p class="hero-subtitle">
+            Bienvenido a la Guía 7. Hoy entiendes qué vas a construir, cuáles son las <strong>5 evidencias de la actividad AA1</strong>, cómo se reparten las 6 sesiones y qué debes tener instalado para trabajar tu código como lo hace un equipo profesional.
+          </p>
+          <div style="display:flex;gap:12px;flex-wrap:wrap">
+            <a href="#slide-2" class="btn-action-pro verde">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+              Explorar la Guía 7
+            </a>
+            <a href="https://julianon2.github.io/seguimiento-adso-3389010/" target="_blank" class="btn-action-pro tech">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg>
+              Dashboard de Seguimiento ↗
+            </a>
+          </div>
+        </div>
+
+        <div class="hero-card-widget">
+          <div style="font-family:'Syne',sans-serif;font-size:16px;font-weight:800;color:var(--texto-main);margin-bottom:18px;display:flex;align-items:center;justify-content:space-between">
+            <span>DATOS DE LA GUÍA 7</span>
+            <span style="font-size:10.5px;color:var(--sena-verde-dark);background:var(--sena-verde-bg);padding:3px 10px;border-radius:12px;border:1px solid var(--sena-verde-border);font-weight:800">AP7 VIRTUAL</span>
+          </div>
+          <div class="hero-meta-grid">
+            <div class="meta-box">
+              <div class="meta-box-title">Actividad</div>
+              <div class="meta-box-val">AA1</div>
+              <div class="meta-box-sub">GA7-220501096-AA1</div>
+            </div>
+            <div class="meta-box">
+              <div class="meta-box-title">Duración AA1</div>
+              <div class="meta-box-val">40 Horas</div>
+              <div class="meta-box-sub">Guía completa: 498 h</div>
+            </div>
+            <div class="meta-box">
+              <div class="meta-box-title">Apertura + Sesión 1</div>
+              <div class="meta-box-val">14 / Nov / 2026</div>
+              <div class="meta-box-sub">Sábado 6:30 PM (Teams)</div>
+            </div>
+            <div class="meta-box">
+              <div class="meta-box-title">Entrega en Zajuna</div>
+              <div class="meta-box-val" style="font-size:16px">Por confirmar</div>
+              <div class="meta-box-sub">Se informa en Zajuna</div>
+            </div>
+          </div>
+          <div style="margin-top:18px;padding-top:14px;border-top:1px solid var(--borde-light);font-size:12.5px;color:var(--texto-muted);display:flex;align-items:center;justify-content:space-between">
+            <div style="display:flex;align-items:center;gap:8px">
+              <div class="card-icon-badge verde" style="width:26px;height:26px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+              <span><strong>Instructor:</strong> Julián Andrés Trujillo</span>
+            </div>
+            <span style="font-size:11px;color:var(--texto-sub)">Ficha 3389010</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide" id="slide-2" data-slide="2" data-title="02. Guía 7 y Resultado de Aprendizaje">
+    <div class="slide-num-indicator">02 / 08</div>
+    <div class="slide-inner">
+      <div class="slide-header-badge ">
+        <span class="dot"></span> MARCO CURRICULAR INSTITUCIONAL
+      </div>
+      <h2 class="sec-title">Qué es la Guía 7 y qué vas a lograr</h2>
+      <p class="sec-desc">La Guía 7 es la séptima guía del proyecto <em>Construcción de software integrador de tecnologías orientadas a servicios</em>. Empieza con el control de versiones, la base para todo el código que escribirás después.</p>
+<div class="grid-3">
+        <div class="card-premium top-verde">
+          <div>
+            <div class="card-header-flex">
+              <div class="card-icon-badge verde"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/></svg></div>
+              <span class="card-pill-tag verde">Competencia 220501096</span>
+            </div>
+            <h3 class="card-title">Desarrollar la solución de software</h3>
+            <p class="card-text">Eres evaluado en la competencia <strong>220501096</strong>: construir software de acuerdo con el diseño y las metodologías de desarrollo. La Guía 7 corresponde a la actividad de proyecto <strong>AP7 - Codificar los módulos del software</strong>.</p>
+            <ul class="list-premium"><li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--sena-verde)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg><span>Programa: Análisis y Desarrollo de Software (228118)</span></li><li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--sena-verde)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg><span>Fase del proyecto: Ejecución</span></li><li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--sena-verde)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg><span>Duración total de la guía: 498 horas</span></li></ul>
+          </div>
+        </div>
+        <div class="card-premium top-naranja">
+          <div>
+            <div class="card-header-flex">
+              <div class="card-icon-badge naranja"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg></div>
+              <span class="card-pill-tag naranja">2 Resultados de Aprendizaje</span>
+            </div>
+            <h3 class="card-title">Lo que debes lograr</h3>
+            <p class="card-text">La guía trabaja dos resultados de aprendizaje. Con la AA1 aportas sobre todo al primero, porque planear incluye elegir cómo vas a controlar tu código.</p>
+            <ul class="list-premium"><li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--sena-naranja)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg><span><strong>220501096-01:</strong> Planear actividades de construcción del software de acuerdo con el diseño establecido.</span></li><li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--sena-naranja)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg><span><strong>220501096-04:</strong> Codificar el software de acuerdo con el diseño establecido.</span></li></ul>
+          </div>
+        </div>
+        <div class="card-premium top-tech">
+          <div>
+            <div class="card-header-flex">
+              <div class="card-icon-badge tech"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="6" x2="6" y1="3" y2="15"/><circle cx="18" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M18 9a9 9 0 0 1-9 9"/></svg></div>
+              <span class="card-pill-tag tech">Actividad AA1 | 40 h</span>
+            </div>
+            <h3 class="card-title">Configurar herramientas de versionamiento</h3>
+            <p class="card-text">La AA1 se llama <em>Configurar herramientas de versionamiento para control de código, de acuerdo con las metodologías de desarrollo</em>. Puedes escoger la herramienta que más se adapte a tu proyecto.</p>
+            <ul class="list-premium"><li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--azul-tech)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg><span>Consulta los componentes <strong>Aplicación del paradigma orientado a objetos</strong> e <strong>Integración continua</strong>.</span></li><li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--azul-tech)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg><span>Las demás actividades de la guía (AA2, AA3 y siguientes) usan lo que configures aquí.</span></li></ul>
+          </div>
+        </div>
+</div>
+      <div class="callout-box">
+        <div class="callout-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="16" y2="12"/><line x1="12" x2="12.01" y1="8" y2="8"/></svg></div>
+        <div class="callout-content">
+          <h4>Qué significa esto para ti</h4>
+          <p>Al terminar la AA1 sabrás elegir una herramienta de versionamiento, instalarla, conectarla con un repositorio remoto y subir tus cambios. Esa habilidad la vas a usar en todos los módulos de tu proyecto, por eso empezamos por aquí.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="slide" id="slide-3" data-slide="3" data-title="03. AA1 y sus 5 Evidencias">
+    <div class="slide-num-indicator">03 / 08</div>
+    <div class="slide-inner">
+      <div class="slide-header-badge tech">
+        <span class="dot"></span> ACTIVIDAD GA7-220501096-AA1
+      </div>
+      <h2 class="sec-title">La actividad AA1 y sus 5 evidencias</h2>
+      <p class="sec-desc">La AA1 se compone de cinco evidencias: cuatro documentos en PDF y un video en MP4. Las numera la guía de aprendizaje oficial, pero las vamos a trabajar en un orden distinto, por tema.</p>
+      <div class="table-wrapper">
+        <table class="matriz-table">
+          <thead><tr><th>Evidencia</th><th>Qué entregas</th><th>Contenido mínimo</th><th>Formato</th><th>La trabajamos en</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><span class="ev-code">EV01</span></td>
+              <td><strong>Informe técnico de plan de trabajo</strong><br><span style="font-size:12px;color:var(--texto-sub)">Informe con las herramientas y tecnologías de versionamiento que usarás. Incluye también las herramientas de desarrollo para la codificación y el versionamiento local y remoto.</span></td>
+              <td style="font-size:12.5px;color:var(--texto-muted)">Portada, introducción, objetivo y selección de herramientas</td>
+              <td><span class="fmt-pill pdf"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg> PDF</span></td>
+              <td><span class="sesion-badge">Sesión 1</span></td>
+            </tr>
+            <tr>
+              <td><span class="ev-code">EV02</span></td>
+              <td><strong>Definir estándares de codificación</strong><br><span style="font-size:12px;color:var(--texto-sub)">Informe con el estándar de codificación de la plataforma que elegiste.</span></td>
+              <td style="font-size:12.5px;color:var(--texto-muted)">Portada, introducción, objetivo y estándares (variables, clases, métodos)</td>
+              <td><span class="fmt-pill pdf"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg> PDF</span></td>
+              <td><span class="sesion-badge">Sesión 5</span></td>
+            </tr>
+            <tr>
+              <td><span class="ev-code">EV03</span></td>
+              <td><strong>Identifica herramientas de versionamiento</strong><br><span style="font-size:12px;color:var(--texto-sub)">Tabla de diferencias entre Git local y Git remoto, y tabla de comandos básicos.</span></td>
+              <td style="font-size:12.5px;color:var(--texto-muted)">Portada, introducción, objetivo y las tablas</td>
+              <td><span class="fmt-pill pdf"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg> PDF</span></td>
+              <td><span class="sesion-badge">Sesión 2</span></td>
+            </tr>
+            <tr>
+              <td><span class="ev-code">EV04</span></td>
+              <td><strong>Instalación y configuración (local/web)</strong><br><span style="font-size:12px;color:var(--texto-sub)">Paso a paso con pantallazos de la instalación local y remota.</span></td>
+              <td style="font-size:12.5px;color:var(--texto-muted)">Portada, introducción, objetivo y paso a paso con pantallazos</td>
+              <td><span class="fmt-pill pdf"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg> PDF</span></td>
+              <td><span class="sesion-badge">Sesión 3</span></td>
+            </tr>
+            <tr>
+              <td><span class="ev-code">EV05</span></td>
+              <td><strong>Git instalado y configurado</strong><br><span style="font-size:12px;color:var(--texto-sub)">Video donde ejecutas el ejercicio Programa-Git y explicas cada paso.</span></td>
+              <td style="font-size:12.5px;color:var(--texto-muted)">Presentación inicial con tu nombre y los ejercicios, y explicación de cada requerimiento</td>
+              <td><span class="fmt-pill mp4"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m22 8-6 4 6 4V8Z"/><rect width="14" height="12" x="2" y="6" rx="2" ry="2"/></svg> Video MP4</span></td>
+              <td><span class="sesion-badge">Sesión 4</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="callout-box">
+        <div class="callout-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></svg></div>
+        <div class="callout-content">
+          <h4>Cada evidencia tiene su propio espacio en Zajuna</h4>
+          <p>En PDF la extensión es libre, pero el documento debe tener portada, introducción y objetivo. La EV05 es la única en video MP4. No mezcles evidencias: cada una se sube en su espacio con el nombre oficial (por ejemplo, GA7-220501096-AA1-EV01).</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="slide" id="slide-4" data-slide="4" data-title="04. ¿Por qué Versionar?">
+    <div class="slide-num-indicator">04 / 08</div>
+    <div class="slide-inner">
+      <div class="slide-header-badge naranja">
+        <span class="dot"></span> CASO REAL SENCILLO
+      </div>
+      <h2 class="sec-title">Por qué el control de versiones importa</h2>
+      <p class="sec-desc">Antes de instalar nada, entiende el problema que resuelve Git. Seguro lo has vivido con un trabajo de la universidad o del colegio.</p>
+      <div class="grid-2">
+        <div class="card-premium top-naranja">
+          <div>
+            <div class="card-header-flex">
+              <div class="card-icon-badge naranja"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" x2="12.01" y1="17" y2="17"/></svg></div>
+              <span class="card-pill-tag naranja">Sin control de versiones</span>
+            </div>
+            <h3 class="card-title">¿Cuál de los 5 archivos es el bueno?</h3>
+            <p class="card-text">Trabajas en tu informe y guardas una copia cada vez que haces un cambio. A los pocos días tienes esto en tu carpeta:</p>
+            <div class="chaos-list"><div class="chaos-file"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg><span>informe_final.docx</span><span class="q">¿es este?</span></div><div class="chaos-file"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg><span>informe_final_v2.docx</span><span class="q">¿es este?</span></div><div class="chaos-file"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg><span>informe_final_v2_definitivo.docx</span><span class="q">¿es este?</span></div><div class="chaos-file"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg><span>informe_final_v2_definitivo_ahora_si.docx</span><span class="q">¿es este?</span></div><div class="chaos-file"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg><span>informe_final_v3_NO_TOCAR.docx</span><span class="q">¿es este?</span></div></div>
+            <p class="card-text" style="margin-top:14px;margin-bottom:0">No sabes cuál es el último, qué cambió entre uno y otro, ni cuál enviaste. Si un compañero edita al mismo tiempo, el problema se multiplica.</p>
+          </div>
+        </div>
+
+        <div class="card-premium top-verde">
+          <div>
+            <div class="card-header-flex">
+              <div class="card-icon-badge verde"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><polyline points="12 7 12 12 16 14"/></svg></div>
+              <span class="card-pill-tag verde">Con Git</span>
+            </div>
+            <h3 class="card-title">Un solo archivo y toda su historia</h3>
+            <p class="card-text">Con Git conservas un único archivo y cada cambio queda guardado como una versión con autor, fecha y mensaje:</p>
+            <div class="chaos-list"><div class="commit-line"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="6" x2="6" y1="3" y2="15"/><circle cx="18" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M18 9a9 9 0 0 1-9 9"/></svg><code>a1f9c3e</code><span>Crea el informe inicial</span></div><div class="commit-line"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="6" x2="6" y1="3" y2="15"/><circle cx="18" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M18 9a9 9 0 0 1-9 9"/></svg><code>b72d04a</code><span>Agrega la introducción y el objetivo</span></div><div class="commit-line"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="6" x2="6" y1="3" y2="15"/><circle cx="18" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M18 9a9 9 0 0 1-9 9"/></svg><code>c93e5b1</code><span>Corrige las tablas de comandos</span></div><div class="commit-line"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="6" x2="6" y1="3" y2="15"/><circle cx="18" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M18 9a9 9 0 0 1-9 9"/></svg><code>d40a8f7</code><span>Versión lista para entregar</span></div></div>
+            <p class="card-text" style="margin-top:14px;margin-bottom:0">Puedes ver qué cambió, volver a una versión anterior y trabajar en equipo sin pisarte con nadie. Con GitHub, además, tu trabajo queda respaldado en la nube.</p>
+          </div>
+        </div>
+      </div>
+      <div class="callout-box">
+        <div class="callout-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="16" y2="12"/><line x1="12" x2="12.01" y1="8" y2="8"/></svg></div>
+        <div class="callout-content">
+          <h4>Por qué te importa en el SENA y en el trabajo</h4>
+          <p>En tu proyecto formativo vas a entregar código varias veces. Con el control de versiones tienes un respaldo si algo se rompe, y en una empresa es un requisito básico: nadie contrata a un desarrollador que entrega sus cambios por correo.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="slide" id="slide-5" data-slide="5" data-title="05. Calendario de 6 Sesiones">
+    <div class="slide-num-indicator">05 / 08</div>
+    <div class="slide-inner">
+      <div class="slide-header-badge ">
+        <span class="dot"></span> RUTA DE SESIONES SINCRÓNICAS
+      </div>
+      <h2 class="sec-title">Calendario de las 6 sesiones</h2>
+      <p class="sec-desc">Hoy hacemos la apertura y, en la misma jornada, la Sesión 1. Las sesiones siguen el orden por tema, que no coincide con la numeración EV01 a EV05 de la guía oficial. Fíjate en la columna Evidencia.</p>
+      <div class="table-wrapper">
+        <table class="matriz-table">
+          <thead><tr><th>Sesión</th><th>Fecha</th><th>Evidencia</th><th>Tema</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><span class="sesion-badge">Apertura + Sesión 1</span></td>
+              <td class="num">Sáb 14/11/2026</td>
+              <td><span class="ev-code">EV01</span></td>
+              <td>Guía 7, AA1 y herramientas de versionamiento</td>
+            </tr>
+            <tr>
+              <td><span class="sesion-badge">Sesión 2</span></td>
+              <td class="num">Mar 17/11/2026</td>
+              <td><span class="ev-code">EV03</span></td>
+              <td>Git local vs Git remoto y comandos básicos</td>
+            </tr>
+            <tr>
+              <td><span class="sesion-badge">Sesión 3</span></td>
+              <td class="num">Sáb 21/11/2026</td>
+              <td><span class="ev-code">EV04</span></td>
+              <td>Instalación y configuración de Git + GitHub/GitLab</td>
+            </tr>
+            <tr>
+              <td><span class="sesion-badge">Sesión 4</span></td>
+              <td class="num">Mar 24/11/2026</td>
+              <td><span class="ev-code">EV05</span></td>
+              <td>Práctica Programa-Git y video MP4</td>
+            </tr>
+            <tr>
+              <td><span class="sesion-badge">Sesión 5</span></td>
+              <td class="num">Mar 01/12/2026</td>
+              <td><span class="ev-code">EV02</span></td>
+              <td>Estándares de codificación</td>
+            </tr>
+            <tr>
+              <td><span class="sesion-badge">Sesión 6</span></td>
+              <td class="num">Sáb 05/12/2026</td>
+              <td><span class="deadline-badge final">Entrega de notas</span></td>
+              <td>Entrega de notas de todas las evidencias de la Guía 7</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="grid-3" style="margin-top:22px">
+        <div class="card-premium top-verde">
+          <div>
+            <div class="card-header-flex"><div class="card-icon-badge verde"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div><span class="card-pill-tag verde">2 horas</span></div>
+            <h3 class="card-title">Horario fijo</h3>
+            <p class="card-text" style="margin-bottom:0">Todas las sesiones son de 6:30 p. m. a 8:30 p. m. por Microsoft Teams. Cada sesión tiene su propia reunión; el enlace llega en el anuncio de Zajuna.</p>
+          </div>
+        </div>
+        <div class="card-premium top-naranja">
+          <div>
+            <div class="card-header-flex"><div class="card-icon-badge naranja"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" x2="21" y1="6" y2="6"/><line x1="8" x2="21" y1="12" y2="12"/><line x1="8" x2="21" y1="18" y2="18"/><line x1="3" x2="3.01" y1="6" y2="6"/><line x1="3" x2="3.01" y1="12" y2="12"/><line x1="3" x2="3.01" y1="18" y2="18"/></svg></div><span class="card-pill-tag naranja">Orden por tema</span></div>
+            <h3 class="card-title">EV01, EV03, EV04, EV05, EV02</h3>
+            <p class="card-text" style="margin-bottom:0">Primero eliges la herramienta, luego aprendes Git, lo instalas y lo practicas en video. Al final defines estándares de codificación.</p>
+          </div>
+        </div>
+        <div class="card-premium top-tech">
+          <div>
+            <div class="card-header-flex"><div class="card-icon-badge tech"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 8-6 4 6 4V8Z"/><rect width="14" height="12" x="2" y="6" rx="2" ry="2"/></svg></div><span class="card-pill-tag tech">Grabaciones</span></div>
+            <h3 class="card-title">Si no puedes asistir</h3>
+            <p class="card-text" style="margin-bottom:0">Cada sesión se graba y la encuentras en el Hub de materiales junto con la presentación y la Guía de Estudio.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="slide" id="slide-6" data-slide="6" data-title="06. Entrega y Evaluación">
+    <div class="slide-num-indicator">06 / 08</div>
+    <div class="slide-inner">
+      <div class="slide-header-badge naranja">
+        <span class="dot"></span> ESTRATEGIA DE ENTREGA Y EVALUACIÓN
+      </div>
+      <h2 class="sec-title">Cómo entregas y cómo se evalúa</h2>
+      <p class="sec-desc">Entender las reglas del juego desde hoy te ahorra reprocesos. Conoce dónde se sube cada evidencia y con qué criterios se califica.</p>
+      <div class="grid-2">
+        <div class="card-premium top-verde">
+          <div>
+            <div class="card-header-flex">
+              <div class="card-icon-badge verde"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></svg></div>
+              <span class="card-pill-tag verde">Estrategia de entrega</span>
+            </div>
+            <h3 class="card-title">Una evidencia, un espacio en Zajuna</h3>
+            <p class="card-text">Cada evidencia se entrega por separado, apenas la termines. No tienes que esperar al final.</p>
+            <ul class="list-premium"><li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--sena-verde)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg><span>Entra al área de la actividad AA1 y busca el espacio con el nombre exacto de la evidencia.</span></li><li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--sena-verde)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg><span>Sube el PDF (o el MP4 en la EV05) solo en su espacio correspondiente.</span></li><li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--sena-verde)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg><span>Entregar a medida que avanzas te evita acumular todo el último día.</span></li><li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--sena-verde)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg><span><strong>Fecha límite de AA1:</strong> por confirmar en Zajuna. Revisa los anuncios de la plataforma.</span></li></ul>
+          </div>
+        </div>
+
+        <div class="card-premium top-tech">
+          <div>
+            <div class="card-header-flex">
+              <div class="card-icon-badge tech"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 11 3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div>
+              <span class="card-pill-tag tech">Cómo se evalúa</span>
+            </div>
+            <h3 class="card-title">Lista de chequeo por evidencia</h3>
+            <p class="card-text">El instructor evalúa cada evidencia con una lista de chequeo oficial. Estos son los criterios generales de la AA1 (el instrumento oficial los precisa como: interpretar el informe de diseño para definir el plan de trabajo, seleccionar y configurar herramientas de desarrollo según las condiciones del software, y definir estándares de codificación; la lista de chequeo de EV01 está más abajo):</p>
+            <ul class="list-premium"><li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--azul-tech)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg><span>Selecciona y configura herramientas de versionamiento para el control de cambios en el código.</span></li><li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--azul-tech)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg><span>Interpreta el informe de diseño para definir el plan de trabajo.</span></li><li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--azul-tech)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg><span>Define estándares de codificación según las reglas de la plataforma elegida.</span></li></ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-premium top-verde" style="margin-top:22px">
+        <div>
+          <div class="card-header-flex">
+            <div class="card-icon-badge verde"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 11 3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div>
+            <span class="card-pill-tag verde">Lista de chequeo oficial de EV01</span>
+          </div>
+          <h3 class="card-title">Los 4 indicadores con los que se evalúa tu informe</h3>
+          <p class="card-text">Estos son los indicadores literales del instrumento IE-GA7-220501096-AA1-EV01. Tu informe debe permitir que el instructor los verifique uno a uno.</p>
+          <ul class="list-premium"><li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--sena-verde)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg><span>Diferencia con claridad versionamientos locales y remotos.</span></li><li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--sena-verde)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg><span>Selecciona y describe herramientas de desarrollo a utilizar, para la codificación del software.</span></li><li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--sena-verde)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg><span>Selecciona y describe herramientas de versionamiento.</span></li><li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--sena-verde)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg><span>Presenta el informe cumpliendo con las normas básicas de presentación de documentos.</span></li></ul>
+        </div>
+      </div>
+
+      <div class="table-wrapper" style="margin-top:22px">
+        <table class="matriz-table" style="min-width:560px">
+          <thead><tr><th>Evidencia</th><th>Tipo</th><th>Instrumento de evaluación</th></tr></thead>
+          <tbody><tr><td><span class="ev-code">EV01</span></td><td>Evidencia de conocimiento</td><td class="num" style="font-size:11.5px">IE-GA7-220501096-AA1-EV01</td></tr><tr><td><span class="ev-code">EV02</span></td><td>Evidencia de desempeño</td><td class="num" style="font-size:11.5px">IE-GA7-220501096-AA1-EV02</td></tr><tr><td><span class="ev-code">EV03</span></td><td>Evidencia de conocimiento</td><td class="num" style="font-size:11.5px">IE-GA7-220501096-AA1-EV03</td></tr><tr><td><span class="ev-code">EV04</span></td><td>Evidencia de desempeño</td><td class="num" style="font-size:11.5px">IE-GA7-220501096-AA1-EV04</td></tr><tr><td><span class="ev-code">EV05</span></td><td>Evidencia de producto</td><td class="num" style="font-size:11.5px">IE-GA7-220501096-AA1-EV05</td></tr></tbody>
+        </table>
+      </div>
+      <div class="callout-box">
+        <div class="callout-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/></svg></div>
+        <div class="callout-content">
+          <h4>Las notas se entregan en la Sesión 6</h4>
+          <p>El sábado 05/12/2026 revisamos juntos el resultado de cada evidencia de la Guía 7. Antes de esa fecha, aprovecha la retroalimentación en Zajuna para corregir a tiempo lo que haga falta.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="slide" id="slide-7" data-slide="7" data-title="07. Qué Instalar y Reglas de Oro">
+    <div class="slide-num-indicator">07 / 08</div>
+    <div class="slide-inner">
+      <div class="slide-header-badge tech">
+        <span class="dot"></span> ALISTAMIENTO Y BUENAS PRÁCTICAS
+      </div>
+      <h2 class="sec-title">Qué necesitas y reglas de oro</h2>
+      <p class="sec-desc">Tres herramientas y cuatro reglas. Con eso estás listo para arrancar la Guía 7 sin sobresaltos.</p>
+<div class="grid-2">
+        <div class="card-premium top-tech">
+          <div>
+            <div class="card-header-flex">
+              <div class="card-icon-badge tech"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg></div>
+              <span class="card-pill-tag tech">Para la Sesión 1</span>
+            </div>
+            <h3 class="card-title">Qué debes tener listo</h3>
+            <p class="card-text">No necesitas instalar todo hoy, pero sí tener claras estas tres herramientas porque las usamos desde la EV03 en adelante:</p>
+            <ul class="list-premium"><li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--azul-tech)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg><span><strong>Cuenta en GitHub</strong> (gratuita). Si prefieres GitLab también sirve, porque la guía te deja escoger.</span></li><li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--azul-tech)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg><span><strong>Git</strong> instalado en tu equipo. Lo instalamos juntos en la Sesión 3 (EV04).</span></li><li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--azul-tech)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg><span><strong>Visual Studio Code</strong> como editor para escribir y revisar tu código.</span></li></ul>
+          </div>
+        </div>
+        <div class="card-premium top-verde">
+          <div>
+            <div class="card-header-flex">
+              <div class="card-icon-badge verde"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+              <span class="card-pill-tag verde">Estándar SENA</span>
+            </div>
+            <h3 class="card-title">Reglas de oro de la Guía 7</h3>
+            <p class="card-text">Criterios que determinan si tus evidencias se aprueban:</p>
+            <ul class="list-premium"><li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--sena-verde)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg><span><strong>Entrega en PDF:</strong> portada con tu nombre y ficha 3389010, introducción y objetivo. Sin portada no hay evidencia completa.</span></li><li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--sena-verde)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg><span><strong>No copiar:</strong> tu trabajo debe ser propio. Puedes apoyarte en el material, pero redáctalo con tus palabras.</span></li><li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--sena-verde)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg><span><strong>Usa tus propios pantallazos:</strong> la EV04 (pantallazos) y la EV05 (video) deben mostrar tu propio equipo y tu propia cuenta.</span></li><li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--sena-verde)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg><span><strong>Un espacio por evidencia:</strong> sube cada archivo donde corresponde.</span></li></ul>
+          </div>
+        </div>
+</div>
+      <div class="callout-box">
+        <div class="callout-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="16" y2="12"/><line x1="12" x2="12.01" y1="8" y2="8"/></svg></div>
+        <div class="callout-content">
+          <h4>Ten a la mano tu usuario de GitHub</h4>
+          <p>En la EV05 creas un repositorio público llamado <strong>Programa-Git</strong> y subes un archivo con tu nombre de usuario y correo. Si ya tienes la cuenta, esa sesión será mucho más fluida.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="slide" id="slide-8" data-slide="8" data-title="08. Checklist y Siguiente Paso">
+    <div class="slide-num-indicator">08 / 08</div>
+    <div class="slide-inner">
+      <div class="slide-header-badge naranja">
+        <span class="dot"></span> ALISTAMIENTO Y CIERRE
+      </div>
+      <h2 class="sec-title">Checklist de inicio y siguiente paso</h2>
+      <p class="sec-desc">Marca lo que ya tienes resuelto. Lo que te falte, lo cerramos en las primeras sesiones.</p>
+      <div class="grid-2">
+        <div class="checklist-card">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+            <h4 style="font-family:'Outfit',sans-serif;font-size:16px;font-weight:700;color:var(--texto-main);">Checklist de Alistamiento</h4>
+            <span id="checklistCounter" style="font-size:11px;font-weight:800;color:var(--sena-verde-dark);background:var(--sena-verde-bg);padding:3px 9px;border-radius:12px;border:1px solid var(--sena-verde-border)">0 / 5 Completados</span>
+          </div>
+          <div class="checklist-item" onclick="toggleChecklistItem(this)">
+            <div class="checklist-checkbox">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <div class="checklist-text">
+              <h5>Acceso a Zajuna y al Hub de Materiales</h5>
+              <p>Verifiqué mi usuario en Zajuna y guardé en marcadores el Hub de Materiales y el Dashboard de seguimiento.</p>
+            </div>
+          </div>
+          <div class="checklist-item" onclick="toggleChecklistItem(this)">
+            <div class="checklist-checkbox">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <div class="checklist-text">
+              <h5>Cuenta de GitHub creada</h5>
+              <p>Tengo mi usuario de GitHub activo (o GitLab) y recuerdo mi contraseña y correo.</p>
+            </div>
+          </div>
+          <div class="checklist-item" onclick="toggleChecklistItem(this)">
+            <div class="checklist-checkbox">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <div class="checklist-text">
+              <h5>Git y Visual Studio Code a la vista</h5>
+              <p>Sé que Git lo instalamos en la Sesión 3 y tengo VS Code listo en mi equipo.</p>
+            </div>
+          </div>
+          <div class="checklist-item" onclick="toggleChecklistItem(this)">
+            <div class="checklist-checkbox">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <div class="checklist-text">
+              <h5>Claridad de las 5 evidencias y sus formatos</h5>
+              <p>Sé que EV01 a EV04 son PDF, que la EV05 es video MP4 y que cada una va en su propio espacio de Zajuna.</p>
+            </div>
+          </div>
+          <div class="checklist-item" onclick="toggleChecklistItem(this)">
+            <div class="checklist-checkbox">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <div class="checklist-text">
+              <h5>Calendario agendado</h5>
+              <p>Anoté las 6 sesiones (14/11, 17/11, 21/11, 24/11, 01/12 y 05/12) a las 6:30 p. m.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-premium top-verde">
+          <div>
+            <div class="card-header-flex">
+              <div class="card-icon-badge verde"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></div>
+              <span class="card-pill-tag verde">Siguiente paso</span>
+            </div>
+            <h3 class="card-title">Sesión 1 el mismo día</h3>
+            <p class="card-text">Al terminar esta apertura continuamos hoy sábado 14/11/2026 con la <strong>Sesión 1: herramientas de versionamiento (EV01)</strong>. Allí aprendes a elegir tu herramienta y a redactar el informe técnico.</p>
+            <ul class="list-premium"><li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--sena-verde)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg><span>Tema: qué es el versionamiento y cómo elegir una herramienta.</span></li><li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--sena-verde)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg><span>Resultado: sabrás qué debe llevar tu informe EV01.</span></li><li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--sena-verde)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg><span>Material: presentación de la Sesión 1 y Guía de Estudio.</span></li></ul>
+            <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:18px">
+              <a href="../Sesión 1/PRESENTACION_SESION01_VERSIONAMIENTO.html" class="btn-action-pro verde">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                Abrir Presentación Sesión 1
+              </a>
+              <a href="../../docs/Guia_aprendizaje_7.pdf" target="_blank" class="btn-action-pro tech">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg>
+                Guía de Aprendizaje (PDF)
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="text-align:center;margin-top:36px">
+        <a href="../../explorar.html" class="btn-action-pro verde" style="padding:14px 32px;font-size:14px;box-shadow:0 8px 24px rgba(57,169,0,0.3)">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+          Ingresar al Hub de Materiales GA7
+        </a>
+      </div>
+
+    </div>
+  </section>
+
+</div>
+
+<!-- TOAST FLOTANTE -->
+<div class="toast-notice" id="toastNotice">
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+  <span id="toastMessage">Texto copiado al portapapeles</span>
+</div>
+
+<script>
+// Manejo del Sidebar (Colapso y Expansión Responsive)
+function toggleSidebar() {
+  const sidebar = document.getElementById('sidebar');
+  const floatingToggle = document.getElementById('floatingToggle');
+  const backdrop = document.getElementById('sidebarBackdrop');
+  const isMobile = window.innerWidth <= 1024;
+
+  if (isMobile) {
+    sidebar.classList.toggle('mobile-open');
+    if (backdrop) backdrop.classList.toggle('active', sidebar.classList.contains('mobile-open'));
+  } else {
+    sidebar.classList.toggle('collapsed');
+    if (sidebar.classList.contains('collapsed')) {
+      floatingToggle.classList.add('visible');
+    } else {
+      floatingToggle.classList.remove('visible');
+    }
+  }
+}
+
+// Cerrar drawer automáticamente en móvil al hacer clic en un link
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.sidebar .nav-link').forEach(link => {
+    link.addEventListener('click', () => {
+      if (window.innerWidth <= 1024) {
+        const sidebar = document.getElementById('sidebar');
+        const backdrop = document.getElementById('sidebarBackdrop');
+        if (sidebar) sidebar.classList.remove('mobile-open');
+        if (backdrop) backdrop.classList.remove('active');
+      }
+    });
+  });
+});
+
+// ScrollSpy e Indicador de Progreso
+function initScrollSpy() {
+  const slides = document.querySelectorAll('.slide');
+  const navLinks = document.querySelectorAll('.sidebar .nav-link');
+  const breadcrumbTitle = document.getElementById('breadcrumbSlideTitle');
+  const progressBar = document.getElementById('progressBar');
+
+  window.addEventListener('scroll', () => {
+    // Actualizar barra de progreso superior
+    const scrollTop = window.scrollY;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const progress = (scrollTop / docHeight) * 100;
+    progressBar.style.width = progress + '%';
+
+    // Detección de slide visible
+    let currentSlide = null;
+    slides.forEach(slide => {
+      const rect = slide.getBoundingClientRect();
+      if (rect.top <= window.innerHeight * 0.4 && rect.bottom >= window.innerHeight * 0.4) {
+        currentSlide = slide;
+      }
+    });
+
+    if (currentSlide) {
+      const slideId = currentSlide.getAttribute('id');
+      const slideNum = currentSlide.getAttribute('data-slide');
+      const slideTitle = currentSlide.getAttribute('data-title');
+
+      if (breadcrumbTitle && slideTitle) {
+        breadcrumbTitle.textContent = slideTitle;
+      }
+
+      navLinks.forEach(link => {
+        if (link.getAttribute('data-slide') === slideNum) {
+          link.classList.add('active');
+          link.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+        } else {
+          link.classList.remove('active');
+        }
+      });
+    }
+  });
+}
+
+// Checklist Interactivo
+function toggleChecklistItem(item) {
+  item.classList.toggle('checked');
+  updateChecklistCounter();
+}
+
+function updateChecklistCounter() {
+  const total = document.querySelectorAll('.checklist-item').length;
+  const checked = document.querySelectorAll('.checklist-item.checked').length;
+  const counter = document.getElementById('checklistCounter');
+  if (counter) {
+    counter.textContent = `${checked} / ${total} Completados`;
+    if (checked === total) {
+      counter.style.background = 'var(--sena-verde)';
+      counter.style.color = '#ffffff';
+      showToast('¡Felicitaciones! Has completado el alistamiento técnico para la Guía 7.');
+    } else {
+      counter.style.background = 'var(--sena-verde-bg)';
+      counter.style.color = 'var(--sena-verde-dark)';
+    }
+  }
+}
+
+// Toast de retroalimentación
+function showToast(msg) {
+  const toast = document.getElementById('toastNotice');
+  const text = document.getElementById('toastMessage');
+  text.textContent = msg;
+  toast.classList.add('show');
+  setTimeout(() => {
+    toast.classList.remove('show');
+  }, 3200);
+}
+
+// Copiar Ficha Técnica
+function copiarFichaTecnica() {
+  const text = `SENA — ADSO (Ficha 3389010 Virtual)
+Guía de Aprendizaje 7: GA7-220501096
+Actividad AA1 (40 h): Configurar herramientas de versionamiento
+Apertura + Sesión 1: Sábado 14/11/2026 | 6:30 PM - 8:30 PM (Teams)
+Sesiones: 14/11, 17/11, 21/11, 24/11, 01/12 y 05/12/2026
+Entrega en Zajuna: fecha por confirmar`;
+
+  navigator.clipboard.writeText(text).then(() => {
+    showToast('Ficha técnica copiada al portapapeles');
+  }).catch(() => {
+    showToast('Error al copiar ficha técnica');
+  });
+}
+
+// Pantalla Completa
+function toggleFullscreen() {
+  if (!document.fullscreenElement) {
+    document.documentElement.requestFullscreen().catch(err => console.log(err));
+  } else {
+    if (document.exitFullscreen) {
+      document.exitFullscreen();
+    }
+  }
+}
+
+// Navegación por teclado (Flechas)
+document.addEventListener('keydown', (e) => {
+  const activeLink = document.querySelector('.sidebar .nav-link.active');
+  const currentNum = activeLink ? parseInt(activeLink.getAttribute('data-slide')) : 1;
+
+  if (e.key === 'ArrowRight' || e.key === 'PageDown') {
+    if (currentNum < 8) {
+      e.preventDefault();
+      const target = document.getElementById(`slide-${currentNum + 1}`);
+      if (target) target.scrollIntoView({ behavior: 'smooth' });
+    }
+  } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+    if (currentNum > 1) {
+      e.preventDefault();
+      const target = document.getElementById(`slide-${currentNum - 1}`);
+      if (target) target.scrollIntoView({ behavior: 'smooth' });
+    }
+  }
+});
+
+// Inicialización al cargar la página
+document.addEventListener('DOMContentLoaded', () => {
+  initScrollSpy();
+});
+</script>
+</body>
+</html>
