@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Guía de Estudio — Sesión 2 (Git local vs remoto, EV03) | SENA ADSO 3389010</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@600;700;800;900&family=Syne:wght@700;800;900&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --sena-verde: #39a900;
+      --sena-verde-dark: #236b00;
+      --sena-verde-bg: #f0fdf4;
+      --sena-verde-border: #bbf7d0;
+      --sena-naranja: #ff6b00;
+      --sena-naranja-dark: #c2410c;
+      --sena-naranja-bg: #fff7ed;
+      --sena-naranja-border: #fed7aa;
+      --azul-tech: #0284c7;
+      --azul-tech-dark: #0369a1;
+      --azul-bg: #eff6ff;
+      --azul-border: #bfdbfe;
+      --rojo-dc: #dc2626;
+      --rojo-bg: #fef2f2;
+      --rojo-border: #fecaca;
+      --purpura-pro: #7c3aed;
+      --purpura-bg: #faf5ff;
+      --purpura-border: #e9d5ff;
+
+      --bg-page: #f8fafc;
+      --bg-card: #ffffff;
+      --bg-subtle: #f1f5f9;
+      --borde-light: #e2e8f0;
+      --texto-main: #0f172a;
+      --texto-muted: #334155;
+      --texto-sub: #64748b;
+      --texto-dimmer: #94a3b8;
+
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
+      --shadow-card: 0 8px 24px rgba(15,23,42,0.06);
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --radius-xl: 20px;
+    }
+
+    * { margin:0; padding:0; box-sizing:border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg-page);
+      color: var(--texto-main);
+      line-height: 1.7;
+    }
+
+    /* Topbar Fijo */
+    .doc-topbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--borde-light);
+      padding: 12px 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    .topbar-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .sena-badge {
+      background: linear-gradient(135deg, var(--sena-verde), var(--sena-verde-dark));
+      color: #fff;
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 14px;
+      padding: 5px 12px;
+      border-radius: 8px;
+      letter-spacing: 0.5px;
+    }
+    .topbar-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 14.5px;
+      font-weight: 700;
+      color: var(--texto-main);
+    }
+    .topbar-sub {
+      font-size: 11.5px;
+      color: var(--texto-sub);
+    }
+    .topbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .btn-topbar {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 7px 14px;
+      border-radius: 20px;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      cursor: pointer;
+    }
+    .btn-topbar.portal {
+      background: #f1f5f9;
+      color: var(--texto-muted);
+      border: 1px solid var(--borde-light);
+    }
+    .btn-topbar.portal:hover {
+      background: #e2e8f0;
+      color: var(--texto-main);
+    }
+    .btn-topbar.pres {
+      background: linear-gradient(135deg, var(--sena-verde), var(--sena-verde-dark));
+      color: #fff;
+      box-shadow: 0 2px 8px rgba(57,169,0,0.25);
+    }
+    .btn-topbar.pres:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 14px rgba(57,169,0,0.35);
+    }
+    .btn-topbar.print {
+      background: #ffffff;
+      color: var(--azul-tech);
+      border: 1px solid var(--azul-border);
+    }
+    .btn-topbar.print:hover {
+      background: var(--azul-bg);
+    }
+
+    /* Layout Doc: Sidebar + Contenido */
+    .doc-layout {
+      display: flex;
+      max-width: 1440px;
+      margin: 0 auto;
+      min-height: calc(100vh - 65px);
+    }
+
+    /* Sidebar Índice de Navegación */
+    .doc-sidebar {
+      width: 300px;
+      flex-shrink: 0;
+      background: #ffffff;
+      border-right: 1px solid var(--borde-light);
+      position: sticky;
+      top: 61px;
+      height: calc(100vh - 61px);
+      overflow-y: auto;
+      padding: 24px 16px;
+    }
+    .sidebar-heading {
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--texto-sub);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 12px;
+      padding-left: 8px;
+    }
+    .doc-nav-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .doc-nav-link {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--texto-muted);
+      text-decoration: none;
+      transition: all 0.2s ease;
+      line-height: 1.35;
+    }
+    .doc-nav-link:hover {
+      background: #f8fafc;
+      color: var(--sena-verde-dark);
+      padding-left: 15px;
+    }
+    .doc-nav-link.active {
+      background: var(--sena-verde-bg);
+      color: var(--sena-verde-dark);
+      border-left: 3px solid var(--sena-verde);
+      font-weight: 700;
+    }
+    .doc-nav-num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--texto-dimmer);
+      width: 18px;
+      text-align: right;
+    }
+
+    /* Contenedor del Artículo */
+    .doc-main {
+      flex: 1;
+      min-width: 0;
+      padding: 40px 48px 80px;
+      max-width: 960px;
+    }
+
+    @media (max-width: 992px) {
+      .doc-sidebar { display: none; }
+      .doc-main { padding: 24px 20px; }
+    }
+
+    /* Tipografía y Elementos del Manual */
+    .doc-header-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--sena-verde-bg);
+      border: 1px solid var(--sena-verde-border);
+      padding: 5px 14px;
+      border-radius: 30px;
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--sena-verde-dark);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 16px;
+    }
+    .doc-title {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(28px, 3.5vw, 40px);
+      font-weight: 800;
+      color: var(--texto-main);
+      line-height: 1.2;
+      margin-bottom: 12px;
+      letter-spacing: -0.5px;
+    }
+    .doc-subtitle {
+      font-size: 16px;
+      color: var(--texto-muted);
+      margin-bottom: 24px;
+      line-height: 1.6;
+    }
+
+    /* Meta Caja */
+    .meta-box-panel {
+      background: #ffffff;
+      border: 1px solid var(--borde-light);
+      border-radius: var(--radius-md);
+      padding: 16px 20px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 16px;
+      margin-bottom: 40px;
+      box-shadow: var(--shadow-sm);
+    }
+    .meta-item-label {
+      font-size: 10.5px;
+      font-weight: 700;
+      color: var(--texto-sub);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 2px;
+    }
+    .meta-item-val {
+      font-size: 13.5px;
+      font-weight: 800;
+      color: var(--texto-main);
+    }
+
+    /* Secciones de Contenido */
+    .doc-section {
+      margin-bottom: 56px;
+      scroll-margin-top: 80px;
+    }
+    .sec-h2 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--texto-main);
+      margin-bottom: 16px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #f1f5f9;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .sec-h3 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--texto-main);
+      margin: 24px 0 12px;
+    }
+    p { margin-bottom: 16px; font-size: 14.5px; color: var(--texto-muted); }
+
+    /* Callouts / Alertas Didácticas */
+    .callout {
+      border-radius: var(--radius-md);
+      padding: 18px 22px;
+      margin: 20px 0;
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+      border: 1px solid;
+    }
+    .callout-icon { flex-shrink: 0; margin-top: 2px; }
+    .callout-content { font-size: 13.5px; line-height: 1.6; }
+    .callout-content strong { color: var(--texto-main); }
+    .callout.verde {
+      background: var(--sena-verde-bg);
+      border-color: var(--sena-verde-border);
+      color: #14532d;
+    }
+    .callout.naranja {
+      background: var(--sena-naranja-bg);
+      border-color: var(--sena-naranja-border);
+      color: #7c2d12;
+    }
+    .callout.tech {
+      background: var(--azul-bg);
+      border-color: var(--azul-border);
+      color: #0c4a6e;
+    }
+    .callout.rojo {
+      background: var(--rojo-bg);
+      border-color: var(--rojo-border);
+      color: #7f1d1d;
+    }
+
+    /* Cajas de Plantillas Copiables con Botón */
+    .copy-box-container {
+      background: #ffffff;
+      border: 1.5px solid var(--borde-light);
+      border-radius: var(--radius-md);
+      margin: 20px 0;
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+    }
+    .copy-box-header {
+      background: #f8fafc;
+      border-bottom: 1px solid var(--borde-light);
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .copy-box-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--texto-main);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .btn-copy {
+      background: #ffffff;
+      border: 1px solid var(--borde-light);
+      border-radius: 6px;
+      padding: 5px 12px;
+      font-size: 11.5px;
+      font-weight: 700;
+      color: var(--sena-verde-dark);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+    }
+    .btn-copy:hover {
+      background: var(--sena-verde);
+      border-color: var(--sena-verde);
+      color: #ffffff;
+    }
+    .copy-box-body {
+      padding: 16px 18px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      color: #334155;
+      background: #ffffff;
+      white-space: pre-wrap;
+      line-height: 1.6;
+      max-height: 380px;
+      overflow-y: auto;
+    }
+
+    /* Tablas Estructuradas Responsivas */
+    .table-card {
+      background: #ffffff;
+      border: 1px solid var(--borde-light);
+      border-radius: var(--radius-md);
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      margin: 20px 0;
+      box-shadow: var(--shadow-sm);
+      width: 100%;
+    }
+    .doc-table {
+      width: 100%;
+      min-width: 620px;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 13px;
+    }
+    .doc-table th {
+      background: #f8fafc;
+      padding: 12px 16px;
+      font-weight: 700;
+      color: var(--texto-main);
+      border-bottom: 2px solid var(--borde-light);
+      text-transform: uppercase;
+      font-size: 11px;
+      letter-spacing: 0.5px;
+    }
+    .doc-table td {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--borde-light);
+      color: var(--texto-muted);
+      vertical-align: middle;
+    }
+    .doc-table tr:hover { background: #f8fafc; }
+    .badge-pk {
+      background: #fef08a;
+      color: #854d0e;
+      font-weight: 800;
+      font-size: 10.5px;
+      padding: 2px 7px;
+      border-radius: 4px;
+      border: 1px solid #fde047;
+    }
+    .badge-fk {
+      background: #e0f2fe;
+      color: #0369a1;
+      font-weight: 800;
+      font-size: 10.5px;
+      padding: 2px 7px;
+      border-radius: 4px;
+      border: 1px solid #bae6fd;
+    }
+
+    /* Lista de Chequeo Interactiva */
+    .checklist-container {
+      background: #ffffff;
+      border: 1.5px solid var(--borde-light);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      margin: 24px 0;
+      box-shadow: var(--shadow-sm);
+    }
+    .checklist-progress-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+    .checklist-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 12px;
+      border-radius: 8px;
+      transition: background 0.2s ease;
+      cursor: pointer;
+      user-select: none;
+    }
+    .checklist-item:hover { background: #f8fafc; }
+    .check-custom {
+      width: 20px;
+      height: 20px;
+      border-radius: 6px;
+      border: 2px solid #cbd5e1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 2px;
+      transition: all 0.2s ease;
+    }
+    .checklist-item.checked .check-custom {
+      background: var(--sena-verde);
+      border-color: var(--sena-verde);
+      color: #fff;
+    }
+    .checklist-item.checked .checklist-text {
+      text-decoration: line-through;
+      color: var(--texto-dimmer);
+    }
+    .checklist-text {
+      font-size: 13.5px;
+      color: var(--texto-main);
+      line-height: 1.5;
+    }
+    .checklist-tip {
+      font-size: 11px;
+      color: var(--texto-sub);
+      display: block;
+      margin-top: 2px;
+    }
+
+    /* Estilos de Impresión */
+    @media print {
+      .doc-topbar, .doc-sidebar, .btn-copy, .btn-topbar { display: none !important; }
+      .doc-main { max-width: 100% !important; padding: 0 !important; }
+      body { background: #fff !important; color: #000 !important; }
+      .copy-box-container, .table-card, .checklist-container { box-shadow: none !important; border-color: #ccc !important; }
+    }
+  
+    /* ===== Guía de Estudio Sesión 6: layout sin topbar (estándar del Hub) y pasos ===== */
+    .doc-layout { max-width: none; min-height: 100vh; }
+    .doc-sidebar { top: 0; height: 100vh; width: 310px; padding: 0; display: flex; flex-direction: column; box-shadow: 2px 0 20px rgba(15,23,42,0.04); z-index: 300; }
+    .side-brand { display: flex; align-items: center; gap: 11px; padding: 16px 18px; border-bottom: 1px solid var(--borde-light); }
+    .side-logo { width: 40px; height: 40px; border-radius: 10px; background: var(--sena-verde); color: #fff; display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 2px 8px -2px rgba(57,169,0,.4); }
+    .side-brand h1 { font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 800; line-height: 1.25; }
+    .side-brand p { font-size: 10.5px; color: var(--texto-sub); font-weight: 600; }
+    .side-progress { padding: 12px 18px; border-bottom: 1px solid var(--borde-light); background: #f8fafc; }
+    .side-progress-top { display: flex; justify-content: space-between; font-size: 11px; font-weight: 800; color: var(--texto-muted); margin-bottom: 6px; }
+    .side-bar { height: 8px; background: #e2e8f0; border-radius: 8px; overflow: hidden; }
+    .side-bar > div { height: 100%; width: 0%; background: linear-gradient(90deg, var(--azul-tech), var(--sena-verde)); transition: width .3s ease; }
+    .side-scroll { flex: 1; overflow-y: auto; padding: 12px; }
+    .nav-part { font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: .8px; color: var(--texto-dimmer); padding: 14px 8px 6px; list-style: none; }
+    .nav-part:first-child { padding-top: 4px; }
+    .doc-nav-num { width: 26px; font-weight: 700; }
+    .nav-done { margin-left: auto; color: var(--sena-verde); display: none; }
+    .doc-nav-link.done .nav-done { display: inline-flex; }
+    .doc-nav-link.done { color: var(--texto-sub); }
+    .side-footer { padding: 12px 14px; border-top: 1px solid var(--borde-light); background: #f8fafc; display: flex; flex-direction: column; gap: 6px; }
+    .side-pill { display: flex; align-items: center; gap: 6px; background: rgba(255,107,0,.08); border: 1px solid rgba(255,107,0,.22); border-radius: 6px; padding: 5px 8px; font-size: 10.5px; font-weight: 700; color: #c2410c; }
+    .side-link { display: flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 700; color: var(--texto-muted); text-decoration: none; padding: 5px 6px; border-radius: 6px; }
+    .side-link:hover { background: #e2e8f0; color: var(--texto-main); }
+    .doc-main { max-width: 980px; margin: 0 auto; }
+    .floating-toggle { display: none; position: fixed; top: 14px; left: 14px; z-index: 310; height: 38px; padding: 0 14px 0 10px; align-items: center; gap: 8px; background: #fff; border: 1px solid #cbd5e1; border-radius: 10px; box-shadow: 0 6px 18px rgba(15,23,42,.1); font-family: 'Syne', sans-serif; font-size: 12px; font-weight: 700; cursor: pointer; }
+    @media (max-width: 992px) {
+      .doc-sidebar { display: flex; position: fixed; left: 0; transform: translateX(-100%); transition: transform .3s ease; }
+      .doc-sidebar.open { transform: none; }
+      .floating-toggle { display: inline-flex; }
+      .doc-main { padding-top: 64px; }
+    }
+    .part-banner { display: flex; align-items: center; gap: 16px; margin: 56px 0 26px; padding: 18px 22px; border-radius: 16px; border: 1px solid; }
+    .part-banner.verde { background: var(--sena-verde-bg); border-color: var(--sena-verde-border); }
+    .part-banner.azul { background: var(--azul-bg); border-color: var(--azul-border); }
+    .part-banner.naranja { background: var(--sena-naranja-bg); border-color: var(--sena-naranja-border); }
+    .part-letter { width: 48px; height: 48px; border-radius: 14px; background: var(--texto-main); color: #fff; display: flex; align-items: center; justify-content: center; font-family: 'Syne', sans-serif; font-weight: 800; font-size: 22px; flex-shrink: 0; }
+    .part-title { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 19px; }
+    .part-sub { font-size: 13px; color: var(--texto-muted); }
+    .step-banner { display: flex; align-items: center; gap: 14px; margin-bottom: 14px; }
+    .step-num { min-width: 46px; height: 46px; padding: 0 8px; border-radius: 12px; background: var(--sena-verde); color: #fff; display: flex; align-items: center; justify-content: center; font-family: 'Syne', sans-serif; font-weight: 800; font-size: 17px; flex-shrink: 0; box-shadow: 0 4px 12px rgba(57,169,0,.3); }
+    .step-meta { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--texto-sub); margin-top: 2px; }
+    .hazlo { margin: 14px 0 6px 0; padding-left: 0; list-style: none; counter-reset: h; }
+    .hazlo li { counter-increment: h; position: relative; padding: 9px 12px 9px 46px; margin-bottom: 6px; background: #fff; border: 1px solid var(--borde-light); border-radius: 10px; font-size: 14px; line-height: 1.6; }
+    .hazlo li::before { content: counter(h); position: absolute; left: 12px; top: 9px; width: 24px; height: 24px; border-radius: 50%; background: var(--azul-bg); color: var(--azul-tech-dark); border: 1px solid var(--azul-border); font-weight: 800; font-size: 12px; text-align: center; line-height: 22px; }
+    .verify-box { margin: 22px 0 6px; padding: 16px 18px; background: var(--sena-verde-bg); border: 1.5px solid var(--sena-verde-border); border-radius: 14px; }
+    .verify-title { display: flex; align-items: center; gap: 8px; font-family: 'Syne', sans-serif; font-weight: 800; font-size: 14.5px; color: var(--sena-verde-dark); margin-bottom: 8px; }
+    .verify-box ul { margin: 0 0 12px 22px; font-size: 13.5px; line-height: 1.7; color: var(--texto-muted); }
+    .btn-done { display: inline-flex; align-items: center; gap: 8px; background: #fff; border: 1.5px solid var(--sena-verde); color: var(--sena-verde-dark); font-weight: 800; font-size: 12.5px; padding: 8px 16px; border-radius: 10px; cursor: pointer; }
+    .btn-done:hover { background: var(--sena-verde); color: #fff; }
+    .doc-section.done .btn-done { background: var(--sena-verde); color: #fff; }
+    .doc-section.done .step-num { background: var(--texto-main); }
+    .tree { background: #1a1a2e; color: #e2e8f0; font-family: 'JetBrains Mono', monospace; font-size: 12.5px; line-height: 1.8; padding: 16px 20px; border-radius: 12px; white-space: pre; overflow-x: auto; margin: 14px 0; }
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 12px 0; }
+    .mini-card { background: #fff; border: 1px solid var(--borde-light); border-radius: 12px; padding: 14px 16px; font-size: 13.5px; line-height: 1.65; box-shadow: var(--shadow-sm); }
+    @media (max-width: 760px) { .two-col { grid-template-columns: 1fr; } }
+    .btn-row { display: flex; flex-wrap: wrap; gap: 10px; margin: 14px 0; }
+    .btn-link { display: inline-flex; align-items: center; gap: 8px; padding: 9px 16px; border-radius: 10px; font-size: 13px; font-weight: 700; text-decoration: none; }
+    .btn-link.primary { background: var(--azul-tech); color: #fff; box-shadow: 0 4px 12px rgba(2,132,199,.25); }
+    .btn-link.primary:hover { background: var(--azul-tech-dark); }
+    .btn-link.ghost { background: #fff; color: var(--azul-tech-dark); border: 1.5px solid var(--azul-border); }
+    .btn-link.ghost:hover { background: var(--azul-bg); }
+    .check-counter { font-size: 12px; font-weight: 800; color: var(--sena-verde-dark); background: var(--sena-verde-bg); padding: 4px 10px; border-radius: 20px; border: 1px solid var(--sena-verde-border); }
+    .copy-box-body { max-height: 440px; }
+    .doc-section code { background: #f1f5f9; padding: 1px 6px; border-radius: 5px; font-size: 0.92em; }
+    .copy-box-body code, .tree code { background: none; padding: 0; }
+    /* Codebox con el diseño de la presentación (estándar: terminal con semáforo) */
+    .code-editor-box {
+      background: #1a1a2e;
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 20px 50px rgba(0,0,0,.25);
+      font-family: 'JetBrains Mono', Consolas, 'Courier New', monospace;
+      margin: 14px auto;
+      max-width: 760px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .editor-header {
+      background: #12121f;
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-sizing: border-box;
+    }
+
+    .editor-dot { width: 11px; height: 11px; border-radius: 50%; }
+    .editor-dot.r { background: #ff5f57; }
+    .editor-dot.y { background: #febc2e; }
+    .editor-dot.g { background: #28c840; }
+
+    .editor-title {
+      margin-left: 8px;
+      font-family: 'JetBrains Mono', Consolas, monospace;
+      font-size: 11px;
+      color: #8892a4;
+      flex: 1;
+    }
+
+    .editor-badge {
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 3px 9px;
+      border-radius: 5px;
+      background: rgba(74,222,128,.15);
+      color: #4ade80;
+    }
+
+    .editor-body {
+      padding: 10px 0;
+      font-family: 'JetBrains Mono', Consolas, 'Courier New', monospace;
+      font-size: 12.5px;
+      line-height: 1.9;
+      flex: 1;
+      overflow-x: auto;
+      background: #1a1a2e;
+      box-sizing: border-box;
+    }
+
+    .cl {
+      display: grid;
+      grid-template-columns: 34px 1fr;
+      column-gap: 12px;
+      padding: 0 20px;
+      white-space: pre;
+    }
+
+    .cl .ln {
+      color: #4a5178;
+      user-select: none;
+      text-align: right;
+    }
+
+    .cl .code { color: #e2e8f0; }
+    .cl.indent-1 .code { padding-left: 18px; }
+    .cl.indent-2 .code { padding-left: 36px; }
+
+    /* TOKENS DE SINTAXIS JSON / BSON / MONGODB (paleta Tokyo Night, patrón Sesión 19) */
+    .tok-key, .sel, .syn-key, .syn-prop { color: #7dcfff; }
+    .tok-str, .str, .prop, .syn-str { color: #9ece6a; }
+    .tok-num, .val, .syn-num { color: #e2e8f0; }
+    .tok-bool, .syn-keyword { color: #f7768e; font-weight: 700; }
+    .tok-bson, .var, .syn-method, .syn-func { color: #e0af68; }
+    .tok-comment, .cm, .syn-comment { color: #565f89; font-style: italic; }
+    .tok-op, .punc { color: #8892a4; }
+    .tag { color: #f7768e; }
+    .attr { color: #e0af68; }
+    .tok-id-badge { background: rgba(78, 201, 176, 0.2); color: #4ec9b0; border: 1px solid rgba(78, 201, 176, 0.4); font-size: 9px; font-weight: 800; padding: 0 5px; border-radius: 3px; height: 16px; line-height: 14px; display: inline-block; vertical-align: middle; margin-left: 6px; }
+    .tok-embed-badge { background: rgba(255, 107, 0, 0.2); color: #ff9800; border: 1px solid rgba(255, 107, 0, 0.4); font-size: 9px; font-weight: 800; padding: 0 5px; border-radius: 3px; height: 16px; line-height: 14px; display: inline-block; vertical-align: middle; margin-left: 6px; }
+    .tok-ref-badge { background: rgba(59, 130, 246, 0.2); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.4); font-size: 9px; font-weight: 800; padding: 0 5px; border-radius: 3px; height: 16px; line-height: 14px; display: inline-block; vertical-align: middle; margin-left: 6px; }
+
+    
+    .editor-body { max-height: 460px; overflow-y: auto; }
+    .btn-copy-code { display: inline-flex; align-items: center; gap: 6px; margin-left: 10px; background: #2a2a45; color: #e2e8f0; border: 1px solid #3a3a5c; padding: 3px 10px; border-radius: 6px; font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 700; cursor: pointer; transition: all .2s ease; }
+    .btn-copy-code:hover { background: var(--sena-verde); border-color: var(--sena-verde); color: #fff; }
+    @media print { .btn-copy-code { display: none !important; } .editor-body { max-height: none; } }
+    @media print { .doc-sidebar, .floating-toggle, .btn-done, .btn-row { display: none !important; } .verify-box { break-inside: avoid; } }
+  
+    /* Extras Guia 7 */
+    .paper { background:#fff; border:1px solid var(--borde-light); border-radius:14px; padding:34px 40px; margin:18px 0; box-shadow:var(--shadow-card); position:relative; }
+    .paper h3 { font-family:'Outfit',sans-serif; font-size:17px; margin:22px 0 8px; color:var(--texto-main); }
+    .paper h4 { font-size:14px; margin:14px 0 6px; color:var(--texto-main); }
+    .paper p { font-size:13.5px; text-align:justify; }
+    .paper .cover { text-align:center; padding:30px 10px 34px; border-bottom:2px dashed var(--borde-light); margin-bottom:10px; }
+    .paper .cover .c-title { font-family:'Syne',sans-serif; font-weight:800; font-size:20px; line-height:1.3; margin:26px 0 8px; }
+    .paper .cover .c-sub { font-size:15px; color:var(--texto-muted); margin-bottom:26px; }
+    .paper .cover p { text-align:center; margin-bottom:4px; font-size:13.5px; }
+    .paper-tag { position:absolute; top:-12px; right:18px; background:var(--sena-naranja); color:#fff; font-size:10.5px; font-weight:800; letter-spacing:.6px; text-transform:uppercase; padding:4px 12px; border-radius:20px; }
+    .paper .doc-table { min-width:520px; font-size:12.5px; }
+    .paper ul, .paper ol { margin:0 0 14px 22px; font-size:13.5px; color:var(--texto-muted); line-height:1.7; }
+    @media (max-width: 760px) { .paper { padding:22px 18px; } }
+    @media print { .paper { box-shadow:none; } }
+</style>
+</head>
+<body>
+  <button type="button" class="floating-toggle" onclick="toggleSidebar()"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg><span>Índice</span></button>
+  <div class="doc-layout">
+    <aside class="doc-sidebar" id="docSidebar"><div class="side-brand"><div class="side-logo"><svg width="24" height="24" viewBox="0 0 64 62" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
+            <g transform="translate(-377 -19)">
+              <path d="M409.164 19C412.922 19 415.992 22.09 415.992 25.8778 415.992 29.6656 412.932 32.7556 409.164 32.7556 405.397 32.7556 402.336 29.6656 402.336 25.8778 402.336 22.09 405.407 19 409.164 19"/>
+              <path d="M384.305 41.1884 384.305 41.2183C384.285 41.3379 384.275 41.4177 384.275 41.4675 384.275 41.8264 384.474 42.0855 384.873 42.265 385.282 42.4344 385.9 42.5241 386.747 42.5241 387.395 42.5241 387.893 42.4543 388.262 42.3148 388.631 42.1752 388.81 41.9759 388.81 41.7267 388.81 41.3479 388.082 41.0489 386.647 40.8096 386.478 40.7797 386.348 40.7598 386.268 40.7498 386.179 40.7299 386.039 40.71 385.86 40.6801 383.567 40.3013 382.092 39.8926 381.434 39.454 381.115 39.2347 380.876 38.9855 380.706 38.6965 380.547 38.4074 380.467 38.0785 380.467 37.7096 380.467 36.8125 380.995 36.1248 382.052 35.6563 383.109 35.1878 384.654 34.9486 386.677 34.9486 388.7 34.9486 390.166 35.1678 391.133 35.6064 392.1 36.045 392.578 36.7228 392.578 37.6399L392.578 37.7495 388.78 37.7495 388.78 37.7096C388.78 37.3907 388.591 37.1614 388.202 36.992 387.813 36.8325 387.255 36.7428 386.508 36.7428 385.929 36.7428 385.481 36.8026 385.182 36.9122 384.863 37.0318 384.713 37.1913 384.713 37.4006 384.713 37.7794 385.541 38.1084 387.195 38.3675 387.514 38.4174 387.764 38.4572 387.943 38.4871 389.119 38.6865 389.966 38.8559 390.465 38.9955 390.963 39.135 391.392 39.3045 391.761 39.4939 392.159 39.7132 392.478 39.9923 392.698 40.3312 392.917 40.6701 393.027 41.0389 393.027 41.4476 393.027 42.3746 392.448 43.0823 391.302 43.5907 390.156 44.0891 388.501 44.3383 386.348 44.3383 384.195 44.3383 382.67 44.099 381.723 43.6206 380.766 43.1421 380.298 42.3746 380.298 41.308L380.298 41.1685 384.305 41.1685ZM394.711 44.1987 394.711 35.0881 405.546 35.0881 405.546 37.0518 398.778 37.0518 398.778 38.5071 405.028 38.5071 405.028 40.4508 398.778 40.4508 398.778 42.2151 405.795 42.2151 405.795 44.2087 394.711 44.2087ZM407.5 44.1987 407.5 35.0881 412.643 35.0881 418.155 41.2084 418.155 35.0881 422.063 35.0881 422.063 44.1987 416.72 44.1987 411.387 38.0585 411.387 44.1987 407.49 44.1987ZM432.569 40.5604 430.625 37.2511 428.572 40.5604 432.579 40.5604ZM426.369 44.1987 422.292 44.1987 428.592 35.0881 433.107 35.0881 439.118 44.1987 434.592 44.1987 433.675 42.554 427.366 42.554 426.389 44.1987Z"/>
+              <path d="M389.309 76.3351 385.67 72.9161 396.735 53.6881C397.333 52.6415 396.585 51.3257 395.379 51.3257L377.267 51.3257 377.267 46.5113 406.413 46.5113 389.309 76.3351Z"/>
+              <path d="M428.701 76.3351 432.34 72.9161 421.275 53.6881C420.677 52.6415 421.425 51.3257 422.631 51.3257L440.743 51.3257 440.743 46.5113 411.597 46.5113 428.701 76.3351Z"/>
+              <path d="M408.965 51.5949C408.965 51.5949 409.005 51.5251 409.005 51.5251L425.432 78.7174 421.066 80.99 410.48 63.2373C409.852 62.1907 408.347 62.1907 407.729 63.2373 404.2 69.1981 397.213 80.99 397.213 80.99L392.947 78.8768C392.947 78.8768 408.088 53.09 408.965 51.5949"/>
+            </g>
+          </svg></div><div><h1>ADSO 3389010</h1><p>Sesión 2 · Guía de Estudio</p></div></div><div class="side-progress"><div class="side-progress-top"><span>Tu avance</span><span id="progTexto">0 de 11 pasos</span></div><div class="side-bar"><div id="progBarra"></div></div></div><div class="side-scroll"><ul class="doc-nav-list"><li class="nav-part">Antes de empezar</li><li><a href="#sec-0" class="doc-nav-link active"><span class="doc-nav-num">0</span> Qué construyes y cómo usar la guía</a></li><li class="nav-part">Parte A · Prepara</li><li><a href="#sec-1" class="doc-nav-link" data-step="sec-1"><span class="doc-nav-num">1</span> Entiende qué pide EV03<span class="nav-done"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span></a></li><li><a href="#sec-2" class="doc-nav-link" data-step="sec-2"><span class="doc-nav-num">2</span> Elige tu proyecto<span class="nav-done"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span></a></li><li><a href="#sec-3" class="doc-nav-link" data-step="sec-3"><span class="doc-nav-num">3</span> Clasifica por tipo<span class="nav-done"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span></a></li><li class="nav-part">Parte B · Redacta</li><li><a href="#sec-4" class="doc-nav-link" data-step="sec-4"><span class="doc-nav-num">4</span> Portada, intro y objetivo<span class="nav-done"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span></a></li><li><a href="#sec-5" class="doc-nav-link" data-step="sec-5"><span class="doc-nav-num">5</span> Git local<span class="nav-done"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span></a></li><li><a href="#sec-6" class="doc-nav-link" data-step="sec-6"><span class="doc-nav-num">6</span> Git remoto<span class="nav-done"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span></a></li><li><a href="#sec-7" class="doc-nav-link" data-step="sec-7"><span class="doc-nav-num">7</span> Tabla de diferencias<span class="nav-done"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span></a></li><li><a href="#sec-8" class="doc-nav-link" data-step="sec-8"><span class="doc-nav-num">8</span> Comandos básicos<span class="nav-done"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span></a></li><li><a href="#sec-9" class="doc-nav-link" data-step="sec-9"><span class="doc-nav-num">9</span> Conclusiones y referencias<span class="nav-done"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span></a></li><li class="nav-part">Parte C · Entrega</li><li><a href="#sec-10" class="doc-nav-link" data-step="sec-10"><span class="doc-nav-num">10</span> Formato y PDF<span class="nav-done"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span></a></li><li><a href="#sec-11" class="doc-nav-link" data-step="sec-11"><span class="doc-nav-num">11</span> Sube a Zajuna<span class="nav-done"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span></a></li><li class="nav-part">Material de apoyo</li><li><a href="#sec-12" class="doc-nav-link"><span class="doc-nav-num">·</span> Ejemplo completo</a></li><li><a href="#sec-13" class="doc-nav-link"><span class="doc-nav-num">·</span> Antes de la Sesión 3</a></li><li><a href="#sec-14" class="doc-nav-link"><span class="doc-nav-num">·</span> Lista de chequeo final</a></li></ul></div></aside>
+    <main class="doc-main"><header style="margin-bottom:28px;"><div class="doc-header-badge"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Guía de Estudio — Sesión 2</div><h1 class="doc-title">Construye tu evidencia AA1-EV03: Git local vs Git remoto y comandos básicos</h1><p class="doc-subtitle">Sigue esta guía en orden y tendrás listo tu documento en PDF: clasificarás herramientas de versionamiento, describirás Git local y Git remoto, los compararás en una tabla, describirás sus comandos básicos y subirás la evidencia a Zajuna.</p><div class="meta-box-panel"><div><div class="meta-item-label">Programa</div><div class="meta-item-val">ADSO (Ficha 3389010)</div></div><div><div class="meta-item-label">Guía</div><div class="meta-item-val">GA7-220501096 · AA1</div></div><div><div class="meta-item-label">Evidencia</div><div class="meta-item-val">EV03 · Documento (PDF)</div></div><div><div class="meta-item-label">Fecha Límite Zajuna</div><div class="meta-item-val" style="color:var(--sena-naranja-dark);">Por confirmar en Zajuna</div></div></div></header><section id="sec-0" class="doc-section"><h2 class="sec-h2">Antes de empezar: qué vas a construir y cómo usar esta guía</h2><p>Esta <strong>Guía de Estudio</strong> es un paso a paso para que construyas tu evidencia <strong>GA7-220501096-AA1-EV03</strong>. No necesitas ejecutar nada en esta evidencia: vas a <strong>identificar, describir y comparar</strong>. Cada paso te da textos y tablas modelo que adaptas con tus palabras y te indica cómo comprobar que quedó bien.</p><div class="table-card"><table class="doc-table"><thead><tr><th>Parte</th><th>Qué haces</th><th>Tiempo</th></tr></thead><tbody><tr><td><strong>A · Prepara</strong></td><td>Entiendes la evidencia, eliges tu proyecto y clasificas las herramientas</td><td>≈ 28 min</td></tr><tr><td><strong>B · Redacta</strong></td><td>Escribes portada, introducción, objetivo, Git local, Git remoto, tabla de diferencias, tablas de comandos y conclusiones</td><td>≈ 88 min</td></tr><tr><td><strong>C · Entrega</strong></td><td>Revisas formato, exportas a PDF y subes a Zajuna</td><td>≈ 20 min</td></tr></tbody></table></div><div class="btn-row"><a class="btn-link primary" href="./PRESENTACION_SESION02_GIT_LOCAL_REMOTO.html" target="_blank"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg> Presentación</a><a class="btn-link ghost" href="#sec-12"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg> Ir al ejemplo completo</a></div></section><div class="part-banner verde"><div class="part-letter">A</div><div><div class="part-title">Parte A · Prepara</div><div class="part-sub">Entiende la evidencia, elige tu proyecto y clasifica las herramientas</div></div></div><section id="sec-1" class="doc-section" data-step="sec-1"><div class="step-banner"><div class="step-num">1</div><div><h2 class="sec-h2" style="margin:0;padding:0;border:none;">Entiende qué pide EV03 y qué revisa el instructor</h2><div class="step-meta"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Tiempo estimado: 8 min</div></div></div><p>Antes de escribir, tienes que saber <strong>exactamente</strong> qué se te pide. La evidencia <strong>GA7-220501096-AA1-EV03</strong> se llama «Identifica herramientas de versionamiento». En palabras simples: un documento donde clasificas herramientas de versionamiento, explicas cómo es el Git <strong>local</strong> y cómo es el <strong>remoto</strong>, los comparas en una tabla y describes sus comandos básicos.</p><p>El instrumento de evaluación oficial revisa estos <strong>4 indicadores</strong>. Cada uno se marca como cumple o no cumple:</p><div class="table-card"><table class="doc-table"><thead><tr><th>N.º</th><th>Indicador oficial</th><th>Dónde lo cubres en este documento</th></tr></thead><tbody><tr><td>1</td><td><strong>Selecciona herramientas de versionamiento según su tipo.</strong></td><td>Paso 3: tabla de tipos de herramientas</td></tr><tr><td>2</td><td><strong>Describe las características de herramientas de versionamiento local.</strong></td><td>Pasos 5, 7 y 8: sección de Git local, tabla de diferencias y comandos locales</td></tr><tr><td>3</td><td><strong>Describe las características de herramientas de versionamiento remoto.</strong></td><td>Pasos 6, 7 y 8: sección de Git remoto, tabla de diferencias y comandos remotos</td></tr><tr><td>4</td><td><strong>Presenta el informe cumpliendo con las normas básicas de presentación de documentos.</strong></td><td>Pasos 4 y 10: portada, introducción, objetivo, formato y PDF</td></tr></tbody></table></div><p>La guía además pide, como mínimo: portada, introducción, objetivo, <strong>tablas con diferencias y características</strong> y <strong>comandos de Git local y Git remoto</strong>. Este es el esqueleto que seguirás; cópialo a un documento nuevo (Word o Google Docs):</p><div class="copy-box-container"><div class="copy-box-header"><span class="copy-box-title"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg> Esqueleto del documento EV03</span><button class="btn-copy" onclick="copiarAlPortapapeles('cb1', this)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg> Copiar texto</button></div><div class="copy-box-body" id="cb1">PORTADA
+1. INTRODUCCIÓN
+2. OBJETIVO
+3. TIPOS DE HERRAMIENTAS DE VERSIONAMIENTO (tabla)
+4. CARACTERÍSTICAS DEL VERSIONAMIENTO LOCAL
+5. CARACTERÍSTICAS DEL VERSIONAMIENTO REMOTO
+6. TABLA DE DIFERENCIAS GIT LOCAL VS GIT REMOTO
+7. COMANDOS BÁSICOS
+   7.1 Comandos de Git local (tabla)
+   7.2 Comandos de Git remoto (tabla)
+8. CONCLUSIONES
+9. REFERENCIAS</div></div><div class="callout naranja"><div class="callout-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg></div><div class="callout-content"><strong>Tres reglas para que tu documento sea bien calificado:</strong> <br>• Cada celda de tus tablas debe tener un <strong>dato comprobable</strong>, no frases vacías.<br>• Escribe sobre <strong>tu proyecto</strong> y tu plataforma remota.<br>• El documento debe ser <strong>tuyo</strong>: los modelos son punto de partida, no para copiar y pegar.</div></div><div class="verify-box"><div class="verify-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Verifica que funciona antes de seguir</div><ul><li>Sé explicar con mis palabras qué es el documento EV03 y cuáles son sus partes mínimas.</li><li>Tengo el esqueleto copiado en un documento nuevo.</li><li>Sé señalar en qué parte de mi documento cumplo cada uno de los 4 indicadores.</li></ul><button type="button" class="btn-done" onclick="marcarPaso('sec-1', this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Marcar este paso como hecho</button></div></section><section id="sec-2" class="doc-section" data-step="sec-2"><div class="step-banner"><div class="step-num">2</div><div><h2 class="sec-h2" style="margin:0;padding:0;border:none;">Elige tu proyecto y tu plataforma remota</h2><div class="step-meta"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Tiempo estimado: 8 min</div></div></div><p>Tu documento se apoya en un proyecto concreto. Puedes usar el que elegiste en la EV01 (lo ideal, para que todo tu AA1 sea coherente) o uno nuevo. Descríbelo en pocas líneas: qué hace, quiénes lo construyen y con qué tecnologías. Elige también tu <strong>plataforma remota</strong>: GitHub, GitLab o Bitbucket.</p><div class="copy-box-container"><div class="copy-box-header"><span class="copy-box-title"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg> Descripción del proyecto (modelo, adáptalo)</span><button class="btn-copy" onclick="copiarAlPortapapeles('cb2', this)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg> Copiar texto</button></div><div class="copy-box-body" id="cb2">Proyecto: TechStore Pro, una tienda en línea de tecnología.
+Equipo: 3 aprendices que trabajan en módulos distintos (catálogo, carrito y autenticación).
+Tecnologías: React en el front-end; Node.js, Express y MongoDB en el back-end.
+Control de versiones: Git en cada equipo (repositorio local) y GitHub como repositorio remoto.</div></div><div class="callout rojo"><div class="callout-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg></div><div class="callout-content"><strong>Error frecuente:</strong> elegir la plataforma remota «porque es la más famosa». Si en la EV01 ya justificaste tu elección, reutiliza esa justificación; si no, basta una razón concreta (por ejemplo, que la guía de la EV05 usa GitHub o GitLab).</div></div><div class="verify-box"><div class="verify-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Verifica que funciona antes de seguir</div><ul><li>Tengo un proyecto elegido y descrito en 3 o 4 líneas.</li><li>Sé cuál plataforma remota usaré (GitHub, GitLab o Bitbucket) y por qué.</li></ul><button type="button" class="btn-done" onclick="marcarPaso('sec-2', this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Marcar este paso como hecho</button></div></section><section id="sec-3" class="doc-section" data-step="sec-3"><div class="step-banner"><div class="step-num">3</div><div><h2 class="sec-h2" style="margin:0;padding:0;border:none;">Clasifica las herramientas según su tipo (indicador 1)</h2><div class="step-meta"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Tiempo estimado: 12 min</div></div></div><p>El primer indicador pide <strong>seleccionar herramientas de versionamiento según su tipo</strong>. Primero las clasificas; luego dices cuáles eliges para tu proyecto. La clave es no confundir un <em>sistema</em> de control de versiones (Git) con una <em>plataforma</em> que aloja repositorios (GitHub).</p><div class="table-card"><table class="doc-table"><thead><tr><th>Tipo</th><th>Cómo funciona</th><th>Herramientas de ejemplo</th><th>¿Funciona sin internet?</th><th>Cuál selecciono para TechStore Pro</th></tr></thead><tbody><tr><td>Local</td><td>El historial vive solo en el equipo del desarrollador</td><td>Git (sin remoto), RCS</td><td>Sí</td><td>Git, para registrar versiones en cada equipo</td></tr><tr><td>Centralizado</td><td>Un servidor central guarda el historial</td><td>Subversion (SVN), CVS</td><td>No, depende del servidor</td><td>No se usa: exige estar conectado</td></tr><tr><td>Distribuido</td><td>Cada integrante tiene una copia completa del historial</td><td>Git, Mercurial</td><td>Sí, salvo al compartir</td><td>Git, por ser distribuido</td></tr><tr><td>Plataforma remota (alojamiento)</td><td>Servicio en la nube que aloja repositorios Git y añade colaboración</td><td>GitHub, GitLab, Bitbucket</td><td>No</td><td>GitHub, para compartir, respaldar y revisar código</td></tr></tbody></table></div><div class="copy-box-container"><div class="copy-box-header"><span class="copy-box-title"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg> Tabla de tipos (texto separado por tabulaciones: pégalo en Word y usa Insertar → Tabla → Convertir texto en tabla)</span><button class="btn-copy" onclick="copiarAlPortapapeles('cb3', this)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg> Copiar texto</button></div><div class="copy-box-body" id="cb3">Tipo	Cómo funciona	Herramientas de ejemplo	¿Funciona sin internet?	Cuál selecciono para TechStore Pro
+Local	El historial vive solo en el equipo del desarrollador	Git (sin remoto), RCS	Sí	Git, para registrar versiones en cada equipo
+Centralizado	Un servidor central guarda el historial	Subversion (SVN), CVS	No, depende del servidor	No se usa: exige estar conectado
+Distribuido	Cada integrante tiene una copia completa del historial	Git, Mercurial	Sí, salvo al compartir	Git, por ser distribuido
+Plataforma remota (alojamiento)	Servicio en la nube que aloja repositorios Git y añade colaboración	GitHub, GitLab, Bitbucket	No	GitHub, para compartir, respaldar y revisar código</div></div><div class="callout verde"><div class="callout-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="callout-content"><strong>Truco de redacción:</strong> después de la tabla escribe una frase de decisión: «Para [mi proyecto] se selecciona Git como sistema distribuido y [plataforma] como repositorio remoto, porque [razón concreta]».</div></div><div class="verify-box"><div class="verify-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Verifica que funciona antes de seguir</div><ul><li>Mi tabla clasifica herramientas locales, centralizadas, distribuidas y plataformas remotas.</li><li>Dejé claro cuáles selecciono para mi proyecto y por qué.</li><li>No presento GitHub como si fuera un sistema de control de versiones.</li></ul><button type="button" class="btn-done" onclick="marcarPaso('sec-3', this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Marcar este paso como hecho</button></div></section><div class="part-banner azul"><div class="part-letter">B</div><div><div class="part-title">Parte B · Redacta</div><div class="part-sub">Escribe cada parte de tu documento</div></div></div><section id="sec-4" class="doc-section" data-step="sec-4"><div class="step-banner"><div class="step-num">4</div><div><h2 class="sec-h2" style="margin:0;padding:0;border:none;">Escribe portada, introducción y objetivo</h2><div class="step-meta"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Tiempo estimado: 15 min</div></div></div><p>Estas tres partes son parte de las <strong>normas básicas de presentación</strong> (indicador 4). Usa los modelos y reescríbelos con tus palabras.</p><div class="copy-box-container"><div class="copy-box-header"><span class="copy-box-title"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg> Portada (modelo)</span><button class="btn-copy" onclick="copiarAlPortapapeles('cb4', this)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg> Copiar texto</button></div><div class="copy-box-body" id="cb4">SERVICIO NACIONAL DE APRENDIZAJE SENA
+IDENTIFICA HERRAMIENTAS DE VERSIONAMIENTO
+Diferencias entre Git local y Git remoto y comandos básicos
+Evidencia: GA7-220501096-AA1-EV03
+Aprendiz: [Nombre y apellidos completos]
+Programa: Tecnólogo en Análisis y Desarrollo de Software (ADSO)
+Ficha: 3389010
+Instructor: Julián Andrés Trujillo Morales
+Regional Huila, Centro CADPH Garzón
+Garzón, [mes y año]</div></div><div class="copy-box-container"><div class="copy-box-header"><span class="copy-box-title"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg> Introducción (modelo)</span><button class="btn-copy" onclick="copiarAlPortapapeles('cb5', this)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg> Copiar texto</button></div><div class="copy-box-body" id="cb5">En un proyecto de software, el control de versiones permite registrar los cambios del código y volver a un estado anterior cuando algo falla. Git trabaja con dos tipos de repositorio: el local, que vive en el equipo de cada desarrollador, y el remoto, alojado en una plataforma como GitHub, que permite compartir y respaldar el trabajo. TechStore Pro es una tienda en línea desarrollada por tres aprendices; por eso necesitan entender cómo se diferencian ambos repositorios y qué comandos los conectan. Este documento presenta una clasificación de las herramientas de versionamiento, las características de Git local y de Git remoto, una tabla de diferencias y la descripción de los comandos básicos.</div></div><div class="copy-box-container"><div class="copy-box-header"><span class="copy-box-title"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg> Objetivo (modelo)</span><button class="btn-copy" onclick="copiarAlPortapapeles('cb6', this)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg> Copiar texto</button></div><div class="copy-box-body" id="cb6">Identificar las diferencias entre Git local y Git remoto y describir sus comandos básicos, para aplicarlos en el control de cambios del código del proyecto TechStore Pro.</div></div><div class="verify-box"><div class="verify-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Verifica que funciona antes de seguir</div><ul><li>Mi portada tiene título, nombre, ficha, programa, instructor, centro, código EV03 y fecha.</li><li>Mi introducción presenta mi proyecto y la diferencia entre repositorio local y remoto.</li><li>Mi objetivo empieza con un verbo en infinitivo.</li></ul><button type="button" class="btn-done" onclick="marcarPaso('sec-4', this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Marcar este paso como hecho</button></div></section><section id="sec-5" class="doc-section" data-step="sec-5"><div class="step-banner"><div class="step-num">5</div><div><h2 class="sec-h2" style="margin:0;padding:0;border:none;">Describe el versionamiento local (indicador 2)</h2><div class="step-meta"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Tiempo estimado: 15 min</div></div></div><p>El segundo indicador pide <strong>describir las características del versionamiento local</strong>. Describir no es solo nombrar: explica cómo funciona y qué límites tiene. Estas son las características que debes cubrir:</p><ul><li><strong>Ubicación:</strong> vive en tu equipo, en la carpeta <code>.git</code>.</li><li><strong>Disponibilidad:</strong> funciona sin internet y es rápido.</li><li><strong>Historial:</strong> guarda cada commit con autor, fecha y mensaje.</li><li><strong>Ramas:</strong> permite probar ideas sin tocar la versión principal.</li><li><strong>Privacidad:</strong> nadie más lo ve hasta que lo compartes.</li><li><strong>Límite:</strong> no es una copia de seguridad.</li></ul><div class="copy-box-container"><div class="copy-box-header"><span class="copy-box-title"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg> Características del versionamiento local (modelo)</span><button class="btn-copy" onclick="copiarAlPortapapeles('cb7', this)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg> Copiar texto</button></div><div class="copy-box-body" id="cb7">El repositorio local de TechStore Pro vive en la carpeta .git de cada equipo. Permite registrar versiones con git commit sin conexión a internet, consultar el historial con git log y crear ramas para probar funciones nuevas sin afectar la versión principal. Es privado: solo su dueño lo ve hasta que decide publicarlo. Su límite es que no sirve como respaldo, porque si el equipo falla se pierde el historial.</div></div><div class="callout rojo"><div class="callout-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg></div><div class="callout-content"><strong>Error frecuente:</strong> hablar solo de comandos sin explicar cómo funciona el repositorio local. Antes de los comandos, describe dónde vive, qué guarda y qué no puede hacer.</div></div><div class="verify-box"><div class="verify-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Verifica que funciona antes de seguir</div><ul><li>Mi sección cubre ubicación, uso sin internet, historial, ramas, privacidad y límite.</li><li>Usé ejemplos de mi proyecto, no frases genéricas.</li></ul><button type="button" class="btn-done" onclick="marcarPaso('sec-5', this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Marcar este paso como hecho</button></div></section><section id="sec-6" class="doc-section" data-step="sec-6"><div class="step-banner"><div class="step-num">6</div><div><h2 class="sec-h2" style="margin:0;padding:0;border:none;">Describe el versionamiento remoto (indicador 3)</h2><div class="step-meta"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Tiempo estimado: 15 min</div></div></div><p>El tercer indicador pide <strong>describir las características del versionamiento remoto</strong>. Aquí aparece lo que el repositorio local no puede darte. Cubre:</p><ul><li><strong>Ubicación:</strong> alojado en un servidor, identificado con una URL (https o SSH).</li><li><strong>Colaboración:</strong> varias personas suben y bajan cambios, con permisos.</li><li><strong>Respaldo:</strong> una copia fuera de tu equipo.</li><li><strong>Sincronización:</strong> <code>push</code>, <code>pull</code>, <code>fetch</code> y <code>clone</code>; requiere internet.</li><li><strong>Herramientas extra:</strong> pull requests, issues y automatización (CI/CD).</li><li><strong>Límite:</strong> depende de la red y de los permisos.</li></ul><div class="copy-box-container"><div class="copy-box-header"><span class="copy-box-title"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg> Características del versionamiento remoto (modelo)</span><button class="btn-copy" onclick="copiarAlPortapapeles('cb8', this)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg> Copiar texto</button></div><div class="copy-box-body" id="cb8">El repositorio remoto de TechStore Pro se aloja en GitHub y se identifica con una URL https. Permite que los tres integrantes compartan su trabajo con git push y lo reciban con git pull, y guarda una copia fuera de los equipos. Además ofrece pull requests para revisar el código antes de unirlo a la rama principal. Depende de la conexión a internet y de los permisos de cada integrante.</div></div><div class="callout rojo"><div class="callout-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg></div><div class="callout-content"><strong>Error frecuente:</strong> describir GitHub como «una página para guardar archivos». Habla del <strong>repositorio remoto</strong>: qué contiene, quién accede y cómo se sincroniza con el local.</div></div><div class="verify-box"><div class="verify-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Verifica que funciona antes de seguir</div><ul><li>Mi sección nombra la plataforma remota y su URL de ejemplo.</li><li>Cubre colaboración, respaldo, sincronización y límite.</li><li>Se nota la diferencia con la sección de Git local.</li></ul><button type="button" class="btn-done" onclick="marcarPaso('sec-6', this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Marcar este paso como hecho</button></div></section><section id="sec-7" class="doc-section" data-step="sec-7"><div class="step-banner"><div class="step-num">7</div><div><h2 class="sec-h2" style="margin:0;padding:0;border:none;">Construye la tabla de diferencias Git local vs Git remoto</h2><div class="step-meta"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Tiempo estimado: 15 min</div></div></div><p>La guía pide expresamente una <strong>tabla con las diferencias entre Git local y Git remoto</strong>. Esta es la tabla modelo; completa cada celda con tu proyecto y tu plataforma. Puedes añadir filas (por ejemplo, «Cuándo lo uso»).</p><div class="table-card"><table class="doc-table"><thead><tr><th>Aspecto</th><th>Git local</th><th>Git remoto</th></tr></thead><tbody><tr><td>Dónde está</td><td>En el computador del desarrollador (carpeta .git)</td><td>En un servidor en la nube (GitHub)</td></tr><tr><td>¿Necesita internet?</td><td>No, salvo para compartir</td><td>Sí, para subir o bajar cambios</td></tr><tr><td>Quién accede</td><td>Solo el dueño del equipo</td><td>El equipo, según los permisos</td></tr><tr><td>Función principal</td><td>Trabajar y registrar versiones del código</td><td>Compartir, respaldar y colaborar</td></tr><tr><td>Velocidad</td><td>Inmediata</td><td>Depende de la conexión</td></tr><tr><td>Colaboración</td><td>No directa</td><td>Pull requests, issues y revisión de código</td></tr><tr><td>Respaldo</td><td>No: si el equipo falla se pierde el historial</td><td>Sí: la copia queda fuera de los equipos</td></tr><tr><td>Comandos típicos</td><td>init, add, commit, status, log, branch</td><td>remote, clone, push, pull, fetch</td></tr><tr><td>Ejemplo en TechStore Pro</td><td>Laura guarda el carrito con git commit sin conexión</td><td>El equipo comparte la rama en GitHub con git push</td></tr></tbody></table></div><div class="copy-box-container"><div class="copy-box-header"><span class="copy-box-title"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg> Tabla de diferencias (texto separado por tabulaciones)</span><button class="btn-copy" onclick="copiarAlPortapapeles('cb9', this)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg> Copiar texto</button></div><div class="copy-box-body" id="cb9">Aspecto	Git local	Git remoto
+Dónde está	En el computador del desarrollador (carpeta .git)	En un servidor en la nube (GitHub)
+¿Necesita internet?	No, salvo para compartir	Sí, para subir o bajar cambios
+Quién accede	Solo el dueño del equipo	El equipo, según los permisos
+Función principal	Trabajar y registrar versiones del código	Compartir, respaldar y colaborar
+Velocidad	Inmediata	Depende de la conexión
+Colaboración	No directa	Pull requests, issues y revisión de código
+Respaldo	No: si el equipo falla se pierde el historial	Sí: la copia queda fuera de los equipos
+Comandos típicos	init, add, commit, status, log, branch	remote, clone, push, pull, fetch
+Ejemplo en TechStore Pro	Laura guarda el carrito con git commit sin conexión	El equipo comparte la rama en GitHub con git push</div></div><div class="callout rojo"><div class="callout-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg></div><div class="callout-content"><strong>Error frecuente:</strong> llenar la tabla con «uno es local y otro es remoto». Cada celda necesita un dato: dónde vive, si necesita internet, quién accede, para qué sirve.</div></div><div class="verify-box"><div class="verify-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Verifica que funciona antes de seguir</div><ul><li>Mi tabla compara al menos 6 aspectos con datos comprobables.</li><li>Incluí un ejemplo de mi proyecto en la tabla.</li><li>La tabla cabe completa en la página y tiene encabezado.</li></ul><button type="button" class="btn-done" onclick="marcarPaso('sec-7', this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Marcar este paso como hecho</button></div></section><section id="sec-8" class="doc-section" data-step="sec-8"><div class="step-banner"><div class="step-num">8</div><div><h2 class="sec-h2" style="margin:0;padding:0;border:none;">Describe los comandos básicos de Git local y remoto</h2><div class="step-meta"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Tiempo estimado: 20 min</div></div></div><p>La guía pide una <strong>tabla con la descripción de los comandos básicos</strong> de Git remoto y de Git local. Hazla en dos tablas: una local y otra remota, con las mismas columnas. Describir es decir <em>qué hace</em> y <em>cuándo se usa</em> cada comando.</p><h3 class="sec-h3">Comandos de Git local</h3><div class="table-card"><table class="doc-table"><thead><tr><th>Comando</th><th>Qué hace</th><th>Cuándo se usa</th><th>Ejemplo</th></tr></thead><tbody><tr><td>git init</td><td>Crea un repositorio local (carpeta .git) en el proyecto</td><td>Una vez, al empezar un proyecto</td><td>git init</td></tr><tr><td>git status</td><td>Muestra qué archivos cambiaron y cuáles están preparados</td><td>Antes de cada add y commit</td><td>git status</td></tr><tr><td>git add</td><td>Pasa archivos al staging para el próximo commit</td><td>Cuando un cambio está listo para guardarse</td><td>git add README.md</td></tr><tr><td>git commit</td><td>Guarda una versión en el repositorio local con un mensaje</td><td>Después del add, con un mensaje claro</td><td>git commit -m "Agrega README"</td></tr><tr><td>git log</td><td>Lista el historial de commits</td><td>Para revisar qué se guardó y cuándo</td><td>git log --oneline</td></tr><tr><td>git diff</td><td>Muestra las líneas cambiadas respecto al último commit</td><td>Antes de preparar un cambio</td><td>git diff</td></tr><tr><td>git branch</td><td>Lista o crea ramas</td><td>Para trabajar una idea sin tocar la versión principal</td><td>git branch prueba-carrito</td></tr></tbody></table></div><div class="copy-box-container"><div class="copy-box-header"><span class="copy-box-title"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg> Tabla de comandos de Git local (texto separado por tabulaciones)</span><button class="btn-copy" onclick="copiarAlPortapapeles('cb11', this)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg> Copiar texto</button></div><div class="copy-box-body" id="cb11">Comando	Qué hace	Cuándo se usa	Ejemplo
+git init	Crea un repositorio local (carpeta .git) en el proyecto	Una vez, al empezar un proyecto	git init
+git status	Muestra qué archivos cambiaron y cuáles están preparados	Antes de cada add y commit	git status
+git add	Pasa archivos al staging para el próximo commit	Cuando un cambio está listo para guardarse	git add README.md
+git commit	Guarda una versión en el repositorio local con un mensaje	Después del add, con un mensaje claro	git commit -m "Agrega README"
+git log	Lista el historial de commits	Para revisar qué se guardó y cuándo	git log --oneline
+git diff	Muestra las líneas cambiadas respecto al último commit	Antes de preparar un cambio	git diff
+git branch	Lista o crea ramas	Para trabajar una idea sin tocar la versión principal	git branch prueba-carrito</div></div><h3 class="sec-h3">Comandos de Git remoto</h3><div class="table-card"><table class="doc-table"><thead><tr><th>Comando</th><th>Qué hace</th><th>Cuándo se usa</th><th>Ejemplo</th></tr></thead><tbody><tr><td>git remote add</td><td>Conecta el repositorio local con uno remoto y le da un nombre</td><td>Una vez, tras crear el repositorio en GitHub</td><td>git remote add origin URL</td></tr><tr><td>git remote -v</td><td>Muestra los remotos configurados y sus URL</td><td>Para verificar la conexión</td><td>git remote -v</td></tr><tr><td>git push</td><td>Envía los commits locales al repositorio remoto</td><td>Cuando se quiere compartir lo guardado</td><td>git push -u origin main</td></tr><tr><td>git fetch</td><td>Descarga los cambios del remoto sin unirlos</td><td>Para ver qué hay de nuevo antes de decidir</td><td>git fetch origin</td></tr><tr><td>git pull</td><td>Descarga los cambios del remoto y los une a la rama actual</td><td>Al empezar a trabajar</td><td>git pull origin main</td></tr><tr><td>git clone</td><td>Copia un repositorio remoto completo al equipo</td><td>Al empezar desde un proyecto existente</td><td>git clone URL</td></tr></tbody></table></div><div class="copy-box-container"><div class="copy-box-header"><span class="copy-box-title"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg> Tabla de comandos de Git remoto (texto separado por tabulaciones)</span><button class="btn-copy" onclick="copiarAlPortapapeles('cb12', this)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg> Copiar texto</button></div><div class="copy-box-body" id="cb12">Comando	Qué hace	Cuándo se usa	Ejemplo
+git remote add	Conecta el repositorio local con uno remoto y le da un nombre	Una vez, tras crear el repositorio en GitHub	git remote add origin URL
+git remote -v	Muestra los remotos configurados y sus URL	Para verificar la conexión	git remote -v
+git push	Envía los commits locales al repositorio remoto	Cuando se quiere compartir lo guardado	git push -u origin main
+git fetch	Descarga los cambios del remoto sin unirlos	Para ver qué hay de nuevo antes de decidir	git fetch origin
+git pull	Descarga los cambios del remoto y los une a la rama actual	Al empezar a trabajar	git pull origin main
+git clone	Copia un repositorio remoto completo al equipo	Al empezar desde un proyecto existente	git clone URL</div></div><p>Si quieres comprobar los comandos locales con tus propias manos, puedes probarlos en una carpeta de práctica. Es opcional: la práctica completa con el repositorio remoto <code>Programa-Git</code> es la evidencia EV05 (Sesión 4).</p><div class="code-editor-box"><div class="editor-header"><span class="editor-dot r"></span><span class="editor-dot y"></span><span class="editor-dot g"></span><span class="editor-title">practica_opcional.sh</span><span class="editor-badge">GIT</span><button type="button" class="btn-copy-code" onclick="copiarAlPortapapeles('cb10', this)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg> Copiar código</button></div><div class="editor-body" id="cb10"><div class="cl"><span class="ln">1</span><span class="code"><span class="cm"># Prueba opcional en una carpeta de práctica (no uses un repositorio ajeno)</span></span></div><div class="cl"><span class="ln">2</span><span class="code"><span class="syn-func">mkdir prueba-git</span></span></div><div class="cl"><span class="ln">3</span><span class="code"><span class="syn-func">cd prueba-git</span></span></div><div class="cl"><span class="ln">4</span><span class="code"><span class="syn-func">git init</span></span></div><div class="cl"><span class="ln">5</span><span class="code"><span class="cm"># Crea un archivo README.md con cualquier texto y luego:</span></span></div><div class="cl"><span class="ln">6</span><span class="code"><span class="syn-func">git status</span></span></div><div class="cl"><span class="ln">7</span><span class="code"><span class="syn-func">git add README.md</span></span></div><div class="cl"><span class="ln">8</span><span class="code"><span class="syn-func">git commit -m "Agrega README"</span></span></div><div class="cl"><span class="ln">9</span><span class="code"><span class="syn-func">git log --oneline</span></span></div></div></div><div class="callout verde"><div class="callout-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="callout-content"><strong>Truco:</strong> agrupa los comandos en dos tablas claramente tituladas. Así el instructor ve de un vistazo que distingues lo local de lo remoto.</div></div><div class="callout rojo"><div class="callout-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg></div><div class="callout-content"><strong>Error frecuente:</strong> describir un comando con «sirve para subir». Di qué sube, desde dónde y hacia dónde. Recuerda: <code>commit</code> guarda en el repositorio local; solo <code>push</code> envía al remoto.</div></div><div class="verify-box"><div class="verify-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Verifica que funciona antes de seguir</div><ul><li>Tengo una tabla de comandos de Git local con qué hace y cuándo se usa.</li><li>Tengo una tabla de comandos de Git remoto con la misma estructura.</li><li>No confundí commit con push.</li></ul><button type="button" class="btn-done" onclick="marcarPaso('sec-8', this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Marcar este paso como hecho</button></div></section><section id="sec-9" class="doc-section" data-step="sec-9"><div class="step-banner"><div class="step-num">9</div><div><h2 class="sec-h2" style="margin:0;padding:0;border:none;">Escribe las conclusiones y las referencias</h2><div class="step-meta"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Tiempo estimado: 8 min</div></div></div><p>Cierra con un párrafo corto que resuma lo aprendido y con las fuentes que consultaste.</p><div class="copy-box-container"><div class="copy-box-header"><span class="copy-box-title"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg> Conclusiones (modelo)</span><button class="btn-copy" onclick="copiarAlPortapapeles('cb13', this)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg> Copiar texto</button></div><div class="copy-box-body" id="cb13">Git local y Git remoto se complementan: el repositorio local permite trabajar y registrar versiones sin conexión, y el remoto permite compartir, respaldar y colaborar. Entender sus diferencias y los comandos que los conectan es la base para que el equipo de TechStore Pro mantenga un flujo de trabajo ordenado durante todo el desarrollo.</div></div><div class="copy-box-container"><div class="copy-box-header"><span class="copy-box-title"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg> Referencias sugeridas</span><button class="btn-copy" onclick="copiarAlPortapapeles('cb14', this)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg> Copiar texto</button></div><div class="copy-box-body" id="cb14">Git. (s. f.). Documentación oficial de Git. https://git-scm.com/doc
+GitHub. (s. f.). Documentación de GitHub. https://docs.github.com
+GitLab. (s. f.). Documentación de GitLab. https://docs.gitlab.com
+SENA. (s. f.). Componente formativo Integración continua. Guía de aprendizaje 7.</div></div><div class="callout naranja"><div class="callout-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg></div><div class="callout-content"><strong>Importante:</strong> cita solo fuentes que realmente consultaste. Si tu centro exige normas APA, aplícalas.</div></div><div class="verify-box"><div class="verify-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Verifica que funciona antes de seguir</div><ul><li>Mis conclusiones resumen la diferencia entre local y remoto con mis palabras.</li><li>Cité las fuentes que consulté.</li></ul><button type="button" class="btn-done" onclick="marcarPaso('sec-9', this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Marcar este paso como hecho</button></div></section><div class="part-banner naranja"><div class="part-letter">C</div><div><div class="part-title">Parte C · Entrega</div><div class="part-sub">Revisa, exporta y sube tu evidencia a Zajuna</div></div></div><section id="sec-10" class="doc-section" data-step="sec-10"><div class="step-banner"><div class="step-num">10</div><div><h2 class="sec-h2" style="margin:0;padding:0;border:none;">Revisa el formato, exporta a PDF y nómbralo</h2><div class="step-meta"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Tiempo estimado: 12 min</div></div></div><p>El cuarto indicador revisa que presentes el informe con las <strong>normas básicas de presentación de documentos</strong>. Antes de exportar, revisa:</p><ul><li>Fuente legible (Arial o Calibri, 11 o 12) y títulos consistentes.</li><li>Tablas con encabezado, bordes y que quepan en la página; si son anchas, divide la tabla.</li><li>Páginas numeradas y ortografía revisada.</li><li>Todas las partes del esqueleto presentes y en orden.</li></ul><p>Para exportar: en Word, Archivo → Guardar como → PDF; en Google Docs, Archivo → Descargar → Documento PDF; en LibreOffice, Archivo → Exportar como PDF. Nombra el archivo, por ejemplo, <code>NOMBRE_APELLIDO_AA1_EV03.pdf</code> (sugerencia), y <strong>ábrelo y revísalo de principio a fin</strong>.</p><div class="callout rojo"><div class="callout-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg></div><div class="callout-content"><strong>Error frecuente:</strong> entregar el documento con las tablas cortadas, sin portada o en Word en vez de PDF.</div></div><div class="verify-box"><div class="verify-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Verifica que funciona antes de seguir</div><ul><li>Abrí el PDF final y se ve completo, con las tablas en su sitio.</li><li>Está numerado y sin errores de ortografía evidentes.</li><li>El archivo tiene un nombre claro.</li></ul><button type="button" class="btn-done" onclick="marcarPaso('sec-10', this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Marcar este paso como hecho</button></div></section><section id="sec-11" class="doc-section" data-step="sec-11"><div class="step-banner"><div class="step-num">11</div><div><h2 class="sec-h2" style="margin:0;padding:0;border:none;">Sube tu evidencia a Zajuna</h2><div class="step-meta"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Tiempo estimado: 8 min</div></div></div><p>Entra a Zajuna, al área de la actividad <strong>AA1</strong>, y abre el espacio <em>Identifica herramientas de versionamiento. GA7-220501096-AA1-EV03</em>. Adjunta el PDF, guarda o envía según el botón que muestre la plataforma y confirma que aparece como entregado. La fecha límite es <strong>por confirmar en Zajuna</strong>: revísala allí.</p><div class="callout naranja"><div class="callout-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg></div><div class="callout-content"><strong>Atención:</strong> sube la evidencia al espacio de <strong>EV03</strong>. Subirla en otra evidencia (por ejemplo, la EV01) hace que el instructor no la encuentre.</div></div><div class="verify-box"><div class="verify-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Verifica que funciona antes de seguir</div><ul><li>Subí el PDF al espacio de EV03 y vi el estado de entrega.</li><li>Guardé una copia de respaldo.</li></ul><button type="button" class="btn-done" onclick="marcarPaso('sec-11', this)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Marcar este paso como hecho</button></div></section><section id="sec-12" class="doc-section"><h2 class="sec-h2">Ejemplo completo de un documento EV03 de referencia</h2><p>Así se ve un documento terminado, con el nivel de detalle esperado. Es un ejemplo sobre TechStore Pro para que midas la profundidad y el orden de tu trabajo. <strong>Tu documento debe ser el tuyo</strong>: otro proyecto o, si usas TechStore Pro, tus propias palabras y tus propias tablas.</p><div class="callout naranja"><div class="callout-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg></div><div class="callout-content"><strong>Atención:</strong> este ejemplo existe para orientarte. Copiarlo sin adaptarlo se considera trabajo no original y tu calificación puede verse afectada.</div></div><div class="paper"><span class="paper-tag">Ejemplo de referencia - haz el tuyo</span><div class="cover"><p style="font-size:12px;letter-spacing:1px;color:var(--texto-sub);">SERVICIO NACIONAL DE APRENDIZAJE SENA</p><div class="c-title">IDENTIFICA HERRAMIENTAS DE VERSIONAMIENTO</div><div class="c-sub">Diferencias entre Git local y Git remoto y comandos básicos</div><p>Evidencia: GA7-220501096-AA1-EV03</p><p>Aprendiz: [Nombre y apellidos completos]</p><p>Programa: Tecnólogo en Análisis y Desarrollo de Software (ADSO)</p><p>Ficha: 3389010</p><p>Instructor: Julián Andrés Trujillo Morales</p><p style="margin-top:16px;">Regional Huila, Centro CADPH Garzón</p><p>Garzón, noviembre de 2026</p></div><h3>1. Introducción</h3><p>En un proyecto de software, el control de versiones permite registrar los cambios del código y volver a un estado anterior cuando algo falla. Git trabaja con dos tipos de repositorio: el local, que vive en el equipo de cada desarrollador, y el remoto, alojado en una plataforma como GitHub, que permite compartir y respaldar el trabajo. TechStore Pro es una tienda en línea desarrollada por tres aprendices; por eso necesitan entender cómo se diferencian ambos repositorios y qué comandos los conectan.</p><h3>2. Objetivo</h3><p>Identificar las diferencias entre Git local y Git remoto y describir sus comandos básicos, para aplicarlos en el control de cambios del código del proyecto TechStore Pro.</p><h3>3. Tipos de herramientas de versionamiento</h3><p><strong>Tabla 1.</strong> Tipos de herramientas de versionamiento</p><div class="table-card"><table class="doc-table"><thead><tr><th>Tipo</th><th>Cómo funciona</th><th>Herramientas de ejemplo</th><th>¿Funciona sin internet?</th><th>Cuál selecciono para TechStore Pro</th></tr></thead><tbody><tr><td>Local</td><td>El historial vive solo en el equipo del desarrollador</td><td>Git (sin remoto), RCS</td><td>Sí</td><td>Git, para registrar versiones en cada equipo</td></tr><tr><td>Centralizado</td><td>Un servidor central guarda el historial</td><td>Subversion (SVN), CVS</td><td>No, depende del servidor</td><td>No se usa: exige estar conectado</td></tr><tr><td>Distribuido</td><td>Cada integrante tiene una copia completa del historial</td><td>Git, Mercurial</td><td>Sí, salvo al compartir</td><td>Git, por ser distribuido</td></tr><tr><td>Plataforma remota (alojamiento)</td><td>Servicio en la nube que aloja repositorios Git y añade colaboración</td><td>GitHub, GitLab, Bitbucket</td><td>No</td><td>GitHub, para compartir, respaldar y revisar código</td></tr></tbody></table></div><p>Para TechStore Pro se selecciona Git como sistema distribuido, porque permite trabajar sin conexión, y GitHub como plataforma remota, porque facilita compartir el código y revisarlo mediante pull requests.</p><h3>4. Características del versionamiento local</h3><p>El repositorio local de TechStore Pro vive en la carpeta .git de cada equipo. Permite registrar versiones con git commit sin conexión a internet, consultar el historial con git log y crear ramas para probar funciones nuevas. Es privado y su límite es que no sirve como respaldo.</p><h3>5. Características del versionamiento remoto</h3><p>El repositorio remoto se aloja en GitHub y se identifica con una URL https. Permite compartir el trabajo con git push, recibirlo con git pull y mantener una copia fuera de los equipos. Ofrece pull requests para revisar el código. Depende de la conexión a internet y de los permisos.</p><h3>6. Tabla de diferencias Git local vs Git remoto</h3><p><strong>Tabla 2.</strong> Diferencias entre Git local y Git remoto</p><div class="table-card"><table class="doc-table"><thead><tr><th>Aspecto</th><th>Git local</th><th>Git remoto</th></tr></thead><tbody><tr><td>Dónde está</td><td>En el computador del desarrollador (carpeta .git)</td><td>En un servidor en la nube (GitHub)</td></tr><tr><td>¿Necesita internet?</td><td>No, salvo para compartir</td><td>Sí, para subir o bajar cambios</td></tr><tr><td>Quién accede</td><td>Solo el dueño del equipo</td><td>El equipo, según los permisos</td></tr><tr><td>Función principal</td><td>Trabajar y registrar versiones del código</td><td>Compartir, respaldar y colaborar</td></tr><tr><td>Velocidad</td><td>Inmediata</td><td>Depende de la conexión</td></tr><tr><td>Colaboración</td><td>No directa</td><td>Pull requests, issues y revisión de código</td></tr><tr><td>Respaldo</td><td>No: si el equipo falla se pierde el historial</td><td>Sí: la copia queda fuera de los equipos</td></tr><tr><td>Comandos típicos</td><td>init, add, commit, status, log, branch</td><td>remote, clone, push, pull, fetch</td></tr><tr><td>Ejemplo en TechStore Pro</td><td>Laura guarda el carrito con git commit sin conexión</td><td>El equipo comparte la rama en GitHub con git push</td></tr></tbody></table></div><h3>7. Comandos básicos</h3><h4>7.1 Comandos de Git local</h4><p><strong>Tabla 3.</strong> Comandos básicos de Git local</p><div class="table-card"><table class="doc-table"><thead><tr><th>Comando</th><th>Qué hace</th><th>Cuándo se usa</th><th>Ejemplo</th></tr></thead><tbody><tr><td>git init</td><td>Crea un repositorio local (carpeta .git) en el proyecto</td><td>Una vez, al empezar un proyecto</td><td>git init</td></tr><tr><td>git status</td><td>Muestra qué archivos cambiaron y cuáles están preparados</td><td>Antes de cada add y commit</td><td>git status</td></tr><tr><td>git add</td><td>Pasa archivos al staging para el próximo commit</td><td>Cuando un cambio está listo para guardarse</td><td>git add README.md</td></tr><tr><td>git commit</td><td>Guarda una versión en el repositorio local con un mensaje</td><td>Después del add, con un mensaje claro</td><td>git commit -m "Agrega README"</td></tr><tr><td>git log</td><td>Lista el historial de commits</td><td>Para revisar qué se guardó y cuándo</td><td>git log --oneline</td></tr><tr><td>git diff</td><td>Muestra las líneas cambiadas respecto al último commit</td><td>Antes de preparar un cambio</td><td>git diff</td></tr><tr><td>git branch</td><td>Lista o crea ramas</td><td>Para trabajar una idea sin tocar la versión principal</td><td>git branch prueba-carrito</td></tr></tbody></table></div><h4>7.2 Comandos de Git remoto</h4><p><strong>Tabla 4.</strong> Comandos básicos de Git remoto</p><div class="table-card"><table class="doc-table"><thead><tr><th>Comando</th><th>Qué hace</th><th>Cuándo se usa</th><th>Ejemplo</th></tr></thead><tbody><tr><td>git remote add</td><td>Conecta el repositorio local con uno remoto y le da un nombre</td><td>Una vez, tras crear el repositorio en GitHub</td><td>git remote add origin URL</td></tr><tr><td>git remote -v</td><td>Muestra los remotos configurados y sus URL</td><td>Para verificar la conexión</td><td>git remote -v</td></tr><tr><td>git push</td><td>Envía los commits locales al repositorio remoto</td><td>Cuando se quiere compartir lo guardado</td><td>git push -u origin main</td></tr><tr><td>git fetch</td><td>Descarga los cambios del remoto sin unirlos</td><td>Para ver qué hay de nuevo antes de decidir</td><td>git fetch origin</td></tr><tr><td>git pull</td><td>Descarga los cambios del remoto y los une a la rama actual</td><td>Al empezar a trabajar</td><td>git pull origin main</td></tr><tr><td>git clone</td><td>Copia un repositorio remoto completo al equipo</td><td>Al empezar desde un proyecto existente</td><td>git clone URL</td></tr></tbody></table></div><h3>8. Conclusiones</h3><p>Git local y Git remoto se complementan: el repositorio local permite trabajar y registrar versiones sin conexión, y el remoto permite compartir, respaldar y colaborar. Entender sus diferencias y los comandos que los conectan es la base para mantener un flujo de trabajo ordenado.</p><h3>9. Referencias</h3><p>Git. (s. f.). Documentación oficial de Git. https://git-scm.com/doc<br>GitHub. (s. f.). Documentación de GitHub. https://docs.github.com</p></div></section><section id="sec-13" class="doc-section"><h2 class="sec-h2">Antes de la Sesión 3: lo que viene con EV04</h2><p>En la <strong>Sesión 3 (sábado 21/11/2026, 6:30 p. m. a 8:30 p. m.)</strong> trabajaremos la evidencia <strong>EV04: instalación y configuración de la herramienta de versionamiento (local/web)</strong>. Será un documento en PDF con portada, introducción, objetivo y el <strong>paso a paso con pantallazos</strong> de la instalación de Git (local) y de GitHub o GitLab (remoto).</p><p>Para llegar preparado: crea (o verifica) tu cuenta gratuita en <strong>github.com</strong> o <strong>gitlab.com</strong> con el correo que usarás en la configuración, y comprueba si ya tienes Git con el primer comando de esta caja. Aunque no lo tengas, no te preocupes: lo instalamos paso a paso en la sesión.</p><div class="code-editor-box"><div class="editor-header"><span class="editor-dot r"></span><span class="editor-dot y"></span><span class="editor-dot g"></span><span class="editor-title">comandos_adelanto.sh</span><span class="editor-badge">GIT</span><button type="button" class="btn-copy-code" onclick="copiarAlPortapapeles('cb15', this)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg> Copiar código</button></div><div class="editor-body" id="cb15"><div class="cl"><span class="ln">1</span><span class="code"><span class="cm"># Sesión 3 (EV04): instalarás y configurarás Git y GitHub o GitLab</span></span></div><div class="cl"><span class="ln">2</span><span class="code"><span class="syn-func">git --version</span></span></div><div class="cl"><span class="ln">3</span><span class="code"><span class="syn-func">git config --global user.name "Tu Nombre"</span></span></div><div class="cl"><span class="ln">4</span><span class="code"><span class="syn-func">git config --global user.email "tu_correo@ejemplo.com"</span></span></div><div class="cl"><span class="ln">5</span><span class="code"><span class="syn-func">git config --global --list</span></span></div></div></div></section><section id="sec-14" class="doc-section"><h2 class="sec-h2">Lista de chequeo final (auto-auditoría del aprendiz)</h2><p>Marca cada casilla antes de subir tu evidencia. Si las 13 están marcadas, tu documento cumple lo que pide la guía y el instrumento de evaluación.</p><div class="checklist-container"><div class="checklist-progress-row"><strong style="font-size:14px;color:var(--texto-main);">Puntos de control de calidad:</strong><span id="checkCounter" class="check-counter">0 de 13 verificados</span></div><div class="checklist-item" onclick="toggleCheck(this)"><div class="check-custom"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div><div class="checklist-text">Mi documento tiene portada, introducción y objetivo</div><span class="checklist-tip">Son las partes mínimas que pide la guía.</span></div></div><div class="checklist-item" onclick="toggleCheck(this)"><div class="check-custom"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div><div class="checklist-text">Clasifiqué las herramientas según su tipo y dije cuáles selecciono</div><span class="checklist-tip">Indicador 1: tabla de tipos y frase de decisión.</span></div></div><div class="checklist-item" onclick="toggleCheck(this)"><div class="check-custom"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div><div class="checklist-text">Describí las características del versionamiento local</div><span class="checklist-tip">Indicador 2: ubicación, uso sin internet, historial, ramas, privacidad y límite.</span></div></div><div class="checklist-item" onclick="toggleCheck(this)"><div class="check-custom"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div><div class="checklist-text">Describí las características del versionamiento remoto</div><span class="checklist-tip">Indicador 3: servidor, URL, colaboración, respaldo, sincronización y límite.</span></div></div><div class="checklist-item" onclick="toggleCheck(this)"><div class="check-custom"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div><div class="checklist-text">Incluí la tabla de diferencias Git local vs Git remoto</div><span class="checklist-tip">Con datos comprobables en cada celda.</span></div></div><div class="checklist-item" onclick="toggleCheck(this)"><div class="check-custom"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div><div class="checklist-text">Incluí la tabla de comandos de Git local</div><span class="checklist-tip">Qué hace y cuándo se usa cada comando.</span></div></div><div class="checklist-item" onclick="toggleCheck(this)"><div class="check-custom"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div><div class="checklist-text">Incluí la tabla de comandos de Git remoto</div><span class="checklist-tip">Qué hace y cuándo se usa cada comando.</span></div></div><div class="checklist-item" onclick="toggleCheck(this)"><div class="check-custom"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div><div class="checklist-text">No confundí Git con GitHub ni commit con push</div><span class="checklist-tip">Son los errores más frecuentes.</span></div></div><div class="checklist-item" onclick="toggleCheck(this)"><div class="check-custom"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div><div class="checklist-text">Escribí conclusiones y cité mis fuentes</div><span class="checklist-tip">Solo fuentes que consulté.</span></div></div><div class="checklist-item" onclick="toggleCheck(this)"><div class="check-custom"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div><div class="checklist-text">Revisé formato: fuente, títulos, tablas completas y páginas numeradas</div><span class="checklist-tip">Indicador 4: normas básicas de presentación.</span></div></div><div class="checklist-item" onclick="toggleCheck(this)"><div class="check-custom"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div><div class="checklist-text">Revisé la ortografía</div><span class="checklist-tip">Léelo en voz alta una vez.</span></div></div><div class="checklist-item" onclick="toggleCheck(this)"><div class="check-custom"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div><div class="checklist-text">Exporté a PDF y abrí el archivo final</div><span class="checklist-tip">Verifica que todo se vea completo.</span></div></div><div class="checklist-item" onclick="toggleCheck(this)"><div class="check-custom"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div><div class="checklist-text">Lo subí al espacio de EV03 en Zajuna y vi el estado de entrega</div><span class="checklist-tip">Guardé una copia de respaldo.</span></div></div></div><div class="btn-row"><a class="btn-link ghost" href="https://julianon2.github.io/seguimiento-adso-3389010/" target="_blank"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg> Dashboard de Calificaciones</a> <a class="btn-link ghost" href="../explorar.html"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg> Volver al Hub</a></div></section><footer style="margin-top:60px;padding-top:20px;border-top:1px solid var(--borde-light);font-size:12px;color:var(--texto-sub);display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;"><div>Servicio Nacional de Aprendizaje (SENA) · Regional Huila | Centro CADPH Garzón</div><div>Instructor Líder: <strong>Julián Andrés Trujillo Morales</strong></div></footer></main>
+  </div>
+  <script>
+    var TOTAL_PASOS = 11;
+    var CLAVE = 'adso3389010_ga7_s2_pasos';
+
+    function copiarAlPortapapeles(idElemento, btn) {
+      var el = document.getElementById(idElemento);
+      if (!el) return;
+      // En las cajas de codigo se copian solo las lineas de codigo (sin los numeros de linea)
+      var lineas = el.querySelectorAll('.code');
+      var texto = lineas.length
+        ? Array.prototype.map.call(lineas, function (n) { return n.textContent; }).join('\n')
+        : (el.innerText || el.textContent);
+      function feedback() {
+        var original = btn.innerHTML;
+        btn.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> ¡Copiado!';
+        btn.style.background = 'var(--sena-verde)'; btn.style.borderColor = 'var(--sena-verde)'; btn.style.color = '#fff';
+        setTimeout(function () { btn.innerHTML = original; btn.style.background = ''; btn.style.borderColor = ''; btn.style.color = ''; }, 2000);
+      }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(texto).then(feedback).catch(function () { copiarAlterno(texto, feedback); });
+      } else { copiarAlterno(texto, feedback); }
+    }
+    function copiarAlterno(texto, cb) {
+      var t = document.createElement('textarea'); t.value = texto; document.body.appendChild(t); t.select();
+      try { document.execCommand('copy'); cb(); } catch (e) {} document.body.removeChild(t);
+    }
+
+    /* Avance guardado en este navegador */
+    function leerPasos() { try { return JSON.parse(localStorage.getItem(CLAVE)) || []; } catch (e) { return []; } }
+    function guardarPasos(a) { try { localStorage.setItem(CLAVE, JSON.stringify(a)); } catch (e) {} }
+    function pintarAvance() {
+      var hechos = leerPasos();
+      document.querySelectorAll('section[data-step]').forEach(function (s) {
+        var h = hechos.indexOf(s.id) !== -1;
+        s.classList.toggle('done', h);
+        var b = s.querySelector('.btn-done');
+        if (b) b.lastChild.textContent = h ? ' Paso hecho (clic para desmarcar)' : ' Marcar este paso como hecho';
+        var link = document.querySelector('.doc-nav-link[data-step="' + s.id + '"]');
+        if (link) link.classList.toggle('done', h);
+      });
+      var n = hechos.length;
+      document.getElementById('progTexto').textContent = n + ' de ' + TOTAL_PASOS + ' pasos';
+      document.getElementById('progBarra').style.width = Math.round(100 * n / TOTAL_PASOS) + '%';
+    }
+    function marcarPaso(id) {
+      var hechos = leerPasos(); var i = hechos.indexOf(id);
+      if (i === -1) hechos.push(id); else hechos.splice(i, 1);
+      guardarPasos(hechos); pintarAvance();
+    }
+
+    function toggleCheck(item) {
+      item.classList.toggle('checked');
+      var total = document.querySelectorAll('.checklist-item').length;
+      var ok = document.querySelectorAll('.checklist-item.checked').length;
+      var c = document.getElementById('checkCounter');
+      if (ok === total) { c.style.background = 'var(--sena-verde)'; c.style.color = '#fff'; c.innerText = '¡100% listo para subir a Zajuna!'; }
+      else { c.style.background = ''; c.style.color = ''; c.innerText = ok + ' de ' + total + ' verificados'; }
+    }
+
+    function toggleSidebar() { document.getElementById('docSidebar').classList.toggle('open'); }
+
+    window.addEventListener('DOMContentLoaded', function () {
+      pintarAvance();
+      var secciones = document.querySelectorAll('section.doc-section');
+      var links = document.querySelectorAll('.doc-nav-link');
+      window.addEventListener('scroll', function () {
+        var actual = '';
+        secciones.forEach(function (s) { if (window.pageYOffset >= s.offsetTop - 140) actual = s.id; });
+        links.forEach(function (l) { l.classList.toggle('active', l.getAttribute('href') === '#' + actual); });
+      });
+      links.forEach(function (l) { l.addEventListener('click', function () { document.getElementById('docSidebar').classList.remove('open'); }); });
+    });
+  </script>
+</body>
+</html>
