@@ -1,0 +1,1846 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sesión 3 — Instalación y configuración de Git y GitHub (AA1-EV04) | SENA ADSO GA7</title>
+
+  <!-- Tipografías Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Syne:wght@700;800;900&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --sena-verde: #39a900;
+      --sena-verde-dark: #236b00;
+      --sena-verde-soft: #44c702;
+      --sena-verde-bg: rgba(57, 169, 0, 0.08);
+      --sena-verde-border: rgba(57, 169, 0, 0.28);
+      --sena-verde-glow: rgba(57, 169, 0, 0.15);
+
+      --sena-naranja: #ff6b00;
+      --sena-naranja-dark: #c2410c;
+      --sena-naranja-bg: rgba(255, 107, 0, 0.08);
+      --sena-naranja-border: rgba(255, 107, 0, 0.28);
+
+      --azul-tech: #0284c7;
+      --azul-tech-dark: #0369a1;
+      --azul-bg: rgba(2, 132, 199, 0.08);
+      --azul-border: rgba(2, 132, 199, 0.28);
+      --azul-glow: rgba(2, 132, 199, 0.15);
+
+      --mongo-verde: #00ed64;
+      --mongo-verde-dark: #00684a;
+      --mongo-verde-bg: rgba(0, 237, 100, 0.08);
+      --mongo-verde-border: rgba(0, 104, 74, 0.28);
+
+      --purpura: #7c3aed;
+      --purpura-bg: rgba(124, 58, 237, 0.08);
+      --purpura-border: rgba(124, 58, 237, 0.28);
+
+      --bg-main: #f8fafc;
+      --bg-card: #ffffff;
+      --borde-light: #e2e8f0;
+      --borde-focus: #cbd5e1;
+
+      --texto-main: #0f172a;
+      --texto-muted: #334155;
+      --texto-sub: #64748b;
+      --texto-dimmer: #94a3b8;
+
+      --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.04);
+      --shadow-card: 0 10px 30px rgba(15, 23, 42, 0.05), 0 1px 3px rgba(0, 0, 0, 0.03);
+      --shadow-hover: 0 20px 40px rgba(2, 132, 199, 0.12), 0 4px 12px rgba(0, 0, 0, 0.05);
+
+      --radius-xl: 20px;
+      --radius-lg: 16px;
+      --radius-md: 12px;
+      --radius-sm: 8px;
+    }
+
+    * { margin:0; padding:0; box-sizing:border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: var(--bg-main);
+      color: var(--texto-main);
+      line-height: 1.6;
+      overflow-x: hidden;
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* ==========================================================================
+       SIDEBAR INSTITUCIONAL 280PX (PATRÓN OFICIAL)
+       ========================================================================== */
+    .sidebar {
+      width: 280px;
+      background: #ffffff;
+      border-right: 1px solid var(--borde-light);
+      position: fixed;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 2px 0 16px rgba(15, 23, 42, 0.04);
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .sidebar.collapsed {
+      transform: translateX(-100%);
+    }
+
+    .sidebar-logo {
+      width: 40px;
+      height: 40px;
+      background: var(--sena-verde, #39a900);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+      flex-shrink: 0;
+      box-shadow: 0 4px 10px rgba(57, 169, 0, 0.25);
+    }
+    .sidebar-header {
+      padding: 18px 20px;
+      border-bottom: 1px solid var(--borde-light);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .brand-link {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .brand-logo-svg {
+      width: 36px;
+      height: 36px;
+      flex-shrink: 0;
+    }
+
+    .brand-info h1 {
+      font-family: 'Syne', sans-serif;
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--texto-main);
+      line-height: 1.2;
+    }
+
+    .brand-info p {
+      font-size: 11px;
+      color: var(--azul-tech);
+      font-weight: 600;
+      letter-spacing: 0.3px;
+    }
+
+    .sidebar-toggle-btn {
+      background: transparent;
+      border: 1px solid var(--borde-light);
+      border-radius: 8px;
+      padding: 6px;
+      cursor: pointer;
+      color: var(--texto-sub);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+
+    .sidebar-toggle-btn:hover {
+      background: var(--bg-main);
+      color: var(--azul-tech);
+      border-color: var(--azul-border);
+    }
+
+    .sidebar-nav {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .nav-group-title {
+      font-size: 10.5px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--texto-dimmer);
+      padding: 0 10px 6px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nav-links-list {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .nav-link {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 12px;
+      border-radius: 8px;
+      color: var(--texto-muted);
+      text-decoration: none;
+      font-size: 12.5px;
+      font-weight: 600;
+      transition: all 0.2s ease;
+      position: relative;
+    }
+
+    .nav-link:hover {
+      background: var(--azul-bg);
+      color: var(--azul-tech-dark);
+    }
+
+    .nav-link.active {
+      background: rgba(2, 132, 199, 0.1);
+      color: var(--azul-tech-dark);
+      font-weight: 700;
+    }
+
+    .nav-link.active::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 6px;
+      bottom: 6px;
+      width: 3.5px;
+      background: var(--azul-tech);
+      border-radius: 0 4px 4px 0;
+    }
+
+    .nav-link-num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--texto-dimmer);
+      min-width: 18px;
+    }
+
+    .nav-link.active .nav-link-num {
+      color: var(--azul-tech);
+      font-weight: 700;
+    }
+
+    .nav-link-title {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .sidebar-footer {
+      padding: 14px 16px;
+      border-top: 1px solid var(--borde-light);
+      background: #fafbfe;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .sidebar-footer-pill {
+      background: var(--azul-bg);
+      border: 1px solid var(--azul-border);
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 11px;
+      color: var(--azul-tech-dark);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 600;
+    }
+
+    .btn-return-hub {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 8px 12px;
+      background: #ffffff;
+      border: 1px solid var(--borde-light);
+      border-radius: 8px;
+      color: var(--texto-muted);
+      font-size: 12px;
+      font-weight: 700;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+
+    .btn-return-hub:hover {
+      background: var(--sena-verde-bg);
+      color: var(--sena-verde-dark);
+      border-color: var(--sena-verde-border);
+    }
+
+    /* BOTÓN FLOTANTE DE REAPERTURA DEL SIDEBAR */
+    .floating-sidebar-toggle {
+      position: fixed;
+      top: 18px;
+      left: 20px;
+      z-index: 999;
+      height: 38px;
+      padding: 0 14px 0 10px;
+      background: #ffffff;
+      border: 1px solid var(--borde-focus);
+      border-radius: 10px;
+      box-shadow: 0 6px 18px rgba(15, 23, 42, 0.08);
+      color: var(--texto-main);
+      font-size: 12.5px;
+      font-weight: 700;
+      display: none;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      transition: all 0.25s ease;
+    }
+
+    .floating-sidebar-toggle:hover {
+      border-color: var(--azul-tech);
+      color: var(--azul-tech);
+      box-shadow: 0 8px 24px rgba(2, 132, 199, 0.2);
+    }
+
+    .sidebar.collapsed ~ .floating-sidebar-toggle,
+    .floating-sidebar-toggle.visible {
+      display: inline-flex !important;
+      animation: fadeInToggle 0.25s ease-out forwards;
+    }
+
+    @keyframes fadeInToggle {
+      from { opacity: 0; transform: translateX(-12px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    /* ==========================================================================
+       MAIN CONTENT CONTAINER
+       ========================================================================== */
+    .main-content {
+      margin-left: 280px;
+      flex: 1;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      transition: margin-left 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .main-content.expanded {
+      margin-left: 0;
+    }
+
+    .slide-section {
+      padding: 64px 54px;
+      border-bottom: 1px solid var(--borde-light);
+      position: relative;
+      scroll-margin-top: 0px;
+    }
+
+    .slide-container {
+      max-width: 1140px;
+      margin: 0 auto;
+    }
+
+    /* HEADER DE CADA SLIDE */
+    .slide-badge-category {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 11.5px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      padding: 4px 12px;
+      border-radius: 20px;
+      margin-bottom: 12px;
+    }
+
+    .badge-blue { background: var(--azul-bg); color: var(--azul-tech-dark); border: 1px solid var(--azul-border); }
+    .badge-green { background: var(--sena-verde-bg); color: var(--sena-verde-dark); border: 1px solid var(--sena-verde-border); }
+    .badge-mongo { background: var(--mongo-verde-bg); color: var(--mongo-verde-dark); border: 1px solid var(--mongo-verde-border); }
+    .badge-orange { background: var(--sena-naranja-bg); color: var(--sena-naranja-dark); border: 1px solid var(--sena-naranja-border); }
+
+    .slide-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 32px;
+      font-weight: 800;
+      color: var(--texto-main);
+      line-height: 1.25;
+      margin-bottom: 12px;
+      letter-spacing: -0.5px;
+    }
+
+    .slide-subtitle {
+      font-size: 15.5px;
+      color: var(--texto-muted);
+      line-height: 1.6;
+      max-width: 880px;
+      margin-bottom: 28px;
+    }
+
+    /* ==========================================================================
+       TARJETAS Y GRIDS PREMIUM
+       ========================================================================== */
+    .cards-grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+
+    .cards-grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    .card-pro {
+      background: linear-gradient(175deg, #ffffff 0%, #fbfcfe 65%, #f8fafc 100%);
+      border: 1px solid var(--borde-light);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      box-shadow: var(--shadow-card);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: all 0.25s ease;
+    }
+
+    .card-pro:hover {
+      box-shadow: var(--shadow-hover);
+      transform: translateY(-2px);
+    }
+
+    .card-pro.top-azul { border-top: 4px solid var(--azul-tech); }
+    .card-pro.top-verde { border-top: 4px solid var(--sena-verde); }
+    .card-pro.top-mongo { border-top: 4px solid #13aa52; }
+    .card-pro.top-naranja { border-top: 4px solid var(--sena-naranja); }
+    .card-pro.top-purpura { border-top: 4px solid var(--purpura); }
+
+    .card-header-flex {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+
+    .card-icon-badge {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .icon-badge-blue { background: var(--azul-bg); color: var(--azul-tech); }
+    .icon-badge-green { background: var(--sena-verde-bg); color: var(--sena-verde); }
+    .icon-badge-mongo { background: rgba(19, 170, 82, 0.1); color: #13aa52; }
+    .icon-badge-orange { background: var(--sena-naranja-bg); color: var(--sena-naranja); }
+    .icon-badge-purpura { background: var(--purpura-bg); color: var(--purpura); }
+
+    .card-pill-tag {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 20px;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .card-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--texto-main);
+      margin-bottom: 8px;
+      line-height: 1.3;
+    }
+
+    .card-desc {
+      font-size: 13.5px;
+      color: var(--texto-muted);
+      line-height: 1.6;
+    }
+
+    /* ==========================================================================
+       TABLA COMPARATIVA SQL VS NOSQL MONGODB
+       ========================================================================== */
+    .table-container-card {
+      background: #ffffff;
+      border: 1px solid var(--borde-light);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: var(--shadow-card);
+      margin-top: 16px;
+    }
+
+    .table-comparativa {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      text-align: left;
+    }
+
+    .table-comparativa th {
+      background: #f1f5f9;
+      color: var(--texto-main);
+      font-weight: 800;
+      padding: 14px 18px;
+      border-bottom: 2px solid var(--borde-light);
+      font-family: 'Syne', sans-serif;
+      font-size: 13.5px;
+    }
+
+    .table-comparativa td {
+      padding: 13px 18px;
+      border-bottom: 1px solid var(--borde-light);
+      color: var(--texto-muted);
+      vertical-align: middle;
+    }
+
+    .table-comparativa tr:hover td {
+      background: #fafcfe;
+    }
+
+    .concept-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 700;
+      color: var(--texto-main);
+    }
+
+    .badge-sql {
+      background: #fef2f2;
+      color: #991b1b;
+      border: 1px solid #fecaca;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .badge-nosql {
+      background: #f0fdf4;
+      color: #166534;
+      border: 1px solid #bbf7d0;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    /* ==========================================================================
+       ESTÁNDAR DE CODEBOXES (ESTILO TERMINAL CON SEMÁFORO - PATRÓN SESIÓN 19)
+       ========================================================================== */
+    .code-editor-box {
+      background: #1a1a2e;
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 20px 50px rgba(0,0,0,.25);
+      font-family: 'JetBrains Mono', Consolas, 'Courier New', monospace;
+      margin: 14px auto;
+      max-width: 760px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .editor-header {
+      background: #12121f;
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-sizing: border-box;
+    }
+
+    .editor-dot { width: 11px; height: 11px; border-radius: 50%; }
+    .editor-dot.r { background: #ff5f57; }
+    .editor-dot.y { background: #febc2e; }
+    .editor-dot.g { background: #28c840; }
+
+    .editor-title {
+      margin-left: 8px;
+      font-family: 'JetBrains Mono', Consolas, monospace;
+      font-size: 11px;
+      color: #8892a4;
+      flex: 1;
+    }
+
+    .editor-badge {
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 3px 9px;
+      border-radius: 5px;
+      background: rgba(74,222,128,.15);
+      color: #4ade80;
+    }
+
+    .editor-body {
+      padding: 10px 0;
+      font-family: 'JetBrains Mono', Consolas, 'Courier New', monospace;
+      font-size: 12.5px;
+      line-height: 1.9;
+      flex: 1;
+      overflow-x: auto;
+      background: #1a1a2e;
+      box-sizing: border-box;
+    }
+
+    .cl {
+      display: grid;
+      grid-template-columns: 34px 1fr;
+      column-gap: 12px;
+      padding: 0 20px;
+      white-space: pre;
+    }
+
+    .cl .ln {
+      color: #4a5178;
+      user-select: none;
+      text-align: right;
+    }
+
+    .cl .code { color: #e2e8f0; }
+    .cl.indent-1 .code { padding-left: 18px; }
+    .cl.indent-2 .code { padding-left: 36px; }
+
+    /* TOKENS DE SINTAXIS JSON / BSON / MONGODB (paleta Tokyo Night, patrón Sesión 19) */
+    .tok-key, .sel, .syn-key, .syn-prop { color: #7dcfff; }
+    .tok-str, .str, .prop, .syn-str { color: #9ece6a; }
+    .tok-num, .val, .syn-num { color: #e2e8f0; }
+    .tok-bool, .syn-keyword { color: #f7768e; font-weight: 700; }
+    .tok-bson, .var, .syn-method, .syn-func { color: #e0af68; }
+    .tok-comment, .cm, .syn-comment { color: #565f89; font-style: italic; }
+    .tok-op, .punc { color: #8892a4; }
+    .tag { color: #f7768e; }
+    .attr { color: #e0af68; }
+    .tok-id-badge { background: rgba(78, 201, 176, 0.2); color: #4ec9b0; border: 1px solid rgba(78, 201, 176, 0.4); font-size: 9px; font-weight: 800; padding: 0 5px; border-radius: 3px; height: 16px; line-height: 14px; display: inline-block; vertical-align: middle; margin-left: 6px; }
+    .tok-embed-badge { background: rgba(255, 107, 0, 0.2); color: #ff9800; border: 1px solid rgba(255, 107, 0, 0.4); font-size: 9px; font-weight: 800; padding: 0 5px; border-radius: 3px; height: 16px; line-height: 14px; display: inline-block; vertical-align: middle; margin-left: 6px; }
+    .tok-ref-badge { background: rgba(59, 130, 246, 0.2); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.4); font-size: 9px; font-weight: 800; padding: 0 5px; border-radius: 3px; height: 16px; line-height: 14px; display: inline-block; vertical-align: middle; margin-left: 6px; }
+
+    /* ==========================================================================
+       STEPPER DIDÁCTICO & MODALES GUIADOS
+       ========================================================================== */
+    .stepper-steps-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 16px;
+      margin-top: 18px;
+    }
+
+    .stepper-card-btn {
+      background: #ffffff;
+      border: 1px solid var(--borde-light);
+      border-radius: var(--radius-md);
+      padding: 18px;
+      text-align: left;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      transition: all 0.2s ease;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .stepper-card-btn:hover {
+      border-color: var(--azul-tech);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-card);
+    }
+
+    .step-pill-number {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--azul-bg);
+      color: var(--azul-tech-dark);
+      font-size: 12px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .step-card-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 14.5px;
+      font-weight: 700;
+      color: var(--texto-main);
+      line-height: 1.3;
+    }
+
+    .step-card-action-hint {
+      font-size: 11.5px;
+      color: var(--azul-tech);
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      margin-top: auto;
+    }
+
+    /* TABLA ESTRUCTURADA DE PARÁMETROS (.cweijan-params-table) */
+    .cweijan-params-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      background: #ffffff;
+      border: 1px solid var(--borde-light);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      margin: 14px 0;
+    }
+
+    .cweijan-params-table th {
+      background: #f8fafc;
+      padding: 12px 16px;
+      font-weight: 800;
+      color: var(--texto-main);
+      border-bottom: 2px solid var(--borde-light);
+      font-family: 'Syne', sans-serif;
+    }
+
+    .cpt-row td {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--borde-light);
+      color: var(--texto-muted);
+    }
+
+    .cpt-row.highlight {
+      background: #fffbeb;
+    }
+
+    .cpt-row.highlight td:first-child {
+      border-left: 4px solid var(--sena-naranja);
+      font-weight: 700;
+      color: #92400e;
+    }
+
+    /* MODALES DE STEPPER */
+    .ddl-modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(15, 23, 42, 0.75);
+      backdrop-filter: blur(6px);
+      z-index: 2000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .ddl-modal-overlay.active {
+      display: flex;
+      animation: modalFadeIn 0.25s ease-out forwards;
+    }
+
+    /* TOAST INSTITUCIONAL (reemplaza alert() nativo) */
+    .app-toast {
+      position: fixed;
+      bottom: 28px;
+      left: 50%;
+      transform: translateX(-50%) translateY(16px);
+      background: #ffffff;
+      color: var(--texto-main, #1a1a2e);
+      border: 1px solid #bbf7d0;
+      border-left: 4px solid #39a900;
+      border-radius: 10px;
+      padding: 12px 18px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 13.5px;
+      font-weight: 600;
+      box-shadow: 0 12px 32px rgba(15, 23, 42, 0.18);
+      z-index: 9999;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease, transform 0.25s ease;
+      max-width: 90vw;
+    }
+
+    .app-toast svg { color: #39a900; }
+
+    .app-toast.visible {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    @keyframes modalFadeIn {
+      from { opacity: 0; transform: scale(0.96); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .ddl-modal-box {
+      background: #ffffff;
+      border-radius: var(--radius-lg);
+      width: 100%;
+      max-width: 1080px;
+      max-height: 94vh;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.25);
+      overflow: hidden;
+    }
+
+    .modal-header-nav {
+      padding: 16px 22px;
+      border-bottom: 1px solid var(--borde-light);
+      background: #f8fafc;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .modal-nav-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .modal-pill-btn {
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 11.5px;
+      font-weight: 700;
+      background: #ffffff;
+      border: 1px solid var(--borde-light);
+      color: var(--texto-sub);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .modal-pill-btn.active {
+      background: var(--azul-tech);
+      color: #ffffff;
+      border-color: var(--azul-tech);
+    }
+
+    .col-tab-pill {
+      background: #2d2d30;
+      color: #94a3b8;
+      border: 1px solid #475569;
+      border-radius: 6px;
+      padding: 5px 12px;
+      font-size: 11.5px;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .col-tab-pill:hover {
+      background: #3e3e42;
+      color: #ffffff;
+      border-color: #64748b;
+    }
+
+    .col-tab-pill.active {
+      background: rgba(0, 237, 100, 0.15);
+      color: #00ed64;
+      border-color: #00ed64;
+      box-shadow: 0 0 8px rgba(0, 237, 100, 0.2);
+    }
+
+    .modal-close-btn {
+      background: transparent;
+      border: none;
+      font-size: 20px;
+      color: var(--texto-sub);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+    }
+
+    .modal-close-btn:hover {
+      background: #fee2e2;
+      color: #ef4444;
+    }
+
+    .modal-body-scroll {
+      padding: 24px;
+      overflow-y: auto;
+      flex: 1;
+    }
+
+    /* ==========================================================================
+       CHECKLIST INTERACTIVO EV03 (CORTES & RÚBRICA)
+       ========================================================================== */
+    .checklist-card {
+      background: #ffffff;
+      border: 1px solid var(--borde-light);
+      border-radius: var(--radius-lg);
+      padding: 28px;
+      box-shadow: var(--shadow-card);
+      margin-top: 18px;
+    }
+
+    .checklist-progress-bar-wrap {
+      background: #e2e8f0;
+      border-radius: 10px;
+      height: 10px;
+      overflow: hidden;
+      margin: 14px 0 20px 0;
+    }
+
+    .checklist-progress-bar {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--azul-tech) 0%, #00ed64 100%);
+      transition: width 0.3s ease;
+    }
+
+    .checklist-items-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .check-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 12px 14px;
+      border-radius: var(--radius-md);
+      background: #f8fafc;
+      border: 1px solid var(--borde-light);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .check-item:hover {
+      background: #f1f5f9;
+    }
+
+    .check-item.completed {
+      background: #f0fdf4;
+      border-color: #bbf7d0;
+    }
+
+    .check-checkbox {
+      margin-top: 3px;
+      width: 18px;
+      height: 18px;
+      accent-color: var(--azul-tech);
+      cursor: pointer;
+    }
+
+    .check-text h4 {
+      font-size: 13.5px;
+      font-weight: 700;
+      color: var(--texto-main);
+      margin-bottom: 2px;
+    }
+
+    .check-text p {
+      font-size: 12px;
+      color: var(--texto-sub);
+      line-height: 1.5;
+    }
+
+    /* BOTONES DE ACCIÓN */
+    .btn-action-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--azul-tech);
+      color: #ffffff;
+      padding: 10px 18px;
+      border-radius: 10px;
+      font-size: 13.5px;
+      font-weight: 700;
+      text-decoration: none;
+      transition: all 0.2s;
+      box-shadow: 0 4px 12px rgba(2, 132, 199, 0.25);
+    }
+
+    .btn-action-primary:hover {
+      background: var(--azul-tech-dark);
+      transform: translateY(-1px);
+    }
+
+    .btn-copy-code {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #333333;
+      color: #ffffff;
+      border: 1px solid #444444;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 11px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-copy-code:hover {
+      background: #444444;
+      border-color: #555555;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 992px) {
+      .sidebar { transform: translateX(-100%); }
+      .main-content { margin-left: 0; }
+      .floating-sidebar-toggle { display: inline-flex !important; }
+      .cards-grid-2, .cards-grid-3, .stepper-steps-grid { grid-template-columns: 1fr; }
+      .slide-section { padding: 40px 20px; }
+      .slide-title { font-size: 26px; }
+    }
+
+    /* ===== EXTRAS GA7 SESION 1 ===== */
+    .callout { margin-top:20px; background:linear-gradient(135deg,#f0fdf4 0%,#e0f2fe 100%); border:1.5px solid #86efac; border-radius:12px; padding:16px 20px; }
+    .callout.warn { background:linear-gradient(135deg,#fff7ed 0%,#fef3c7 100%); border-color:#fdba74; }
+    .callout-title { color:#166534; font-size:14px; font-weight:700; display:flex; align-items:center; gap:8px; margin-bottom:8px; }
+    .callout.warn .callout-title { color:#9a3412; }
+    .callout p, .callout li { margin:0 0 8px 0; font-size:13px; color:#334155; line-height:1.65; }
+    .callout ul { margin:0; padding-left:20px; }
+    .diagram-card { background:#fff; border:1px solid var(--borde-light); border-radius:14px; padding:16px; margin:16px 0; box-shadow:0 2px 8px rgba(0,0,0,.04); }
+    .diagram-card svg { width:100%; height:auto; display:block; }
+    .doc-preview { background:#fff; border:1px solid var(--borde-light); border-left:5px solid var(--sena-verde); border-radius:10px; padding:16px 20px; margin-bottom:14px; box-shadow:0 2px 8px rgba(0,0,0,.04); }
+    .doc-preview h4 { margin:0 0 4px 0; font-family:'Syne',sans-serif; font-size:15px; color:var(--texto-main); }
+    .doc-preview .doc-tag { font-size:11px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; color:var(--sena-verde-dark); margin-bottom:8px; display:block; }
+    .doc-preview p { margin:0 0 8px 0; font-size:13px; line-height:1.7; color:#334155; }
+    .doc-preview blockquote { margin:8px 0 0 0; padding:10px 14px; background:#f8fafc; border-radius:8px; font-size:12.5px; line-height:1.7; color:#475569; font-style:italic; }
+    .steps-list { counter-reset:st; list-style:none; padding:0; margin:0; }
+    .steps-list li { counter-increment:st; position:relative; padding:10px 14px 10px 52px; margin-bottom:10px; background:#fff; border:1px solid var(--borde-light); border-radius:10px; font-size:13px; line-height:1.65; color:#334155; }
+    .steps-list li::before { content:counter(st); position:absolute; left:14px; top:10px; width:26px; height:26px; border-radius:50%; background:var(--sena-verde); color:#fff; font-weight:800; font-size:13px; display:flex; align-items:center; justify-content:center; }
+    .score-cell { font-family:'JetBrains Mono',monospace; font-weight:700; text-align:center; }
+    .score-win { background:rgba(57,169,0,.12); color:#236b00; }
+    .btn-row { display:flex; gap:10px; flex-wrap:wrap; margin-top:18px; }
+    .reset-link { background:none; border:none; color:var(--azul-tech-dark); font-size:12.5px; cursor:pointer; text-decoration:underline; padding:0; font-family:inherit; }
+  </style>
+<style>
+  .fb-grid { display:grid; grid-template-columns: 1fr 76px 1fr; gap:14px; align-items:stretch; margin-top:6px; }
+  .fb-panel { border-radius:16px; padding:16px 16px 14px; display:flex; flex-direction:column; background:#fff; }
+  .fb-bad { border:1.5px solid rgba(255,107,0,0.38); background:linear-gradient(180deg,#fff7ed 0%,#ffffff 55%); }
+  .fb-good { border:1.5px solid rgba(57,169,0,0.38); background:linear-gradient(180deg,#f0fdf4 0%,#ffffff 55%); }
+  .fb-ptitle { display:flex; align-items:center; gap:8px; font-family:'Syne',sans-serif; font-weight:800; font-size:18px; margin:0 0 4px; }
+  .fb-bad .fb-ptitle { color:#c2410c; }
+  .fb-good .fb-ptitle { color:#236b00; }
+  .fb-psub { font-size:13px; color:#475569; margin:0 0 8px; line-height:1.5; }
+  .fb-svg { width:100%; height:auto; display:block; }
+  .fb-svg text { font-family:'Plus Jakarta Sans',sans-serif; }
+  .fb-svg .fb-mono { font-family:'JetBrains Mono',monospace; }
+  .fb-result { margin-top:auto; border-radius:12px; padding:11px 14px; font-size:14px; line-height:1.55; font-weight:600; }
+  .fb-bad .fb-result { background:rgba(255,107,0,0.10); color:#9a3412; border:1px solid rgba(255,107,0,0.3); }
+  .fb-good .fb-result { background:rgba(57,169,0,0.10); color:#1b5200; border:1px solid rgba(57,169,0,0.3); }
+  .fb-result b { font-weight:800; }
+  .fb-mid { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px; }
+  .fb-mid span { font-family:'JetBrains Mono',monospace; font-weight:800; font-size:14px; color:#236b00; background:rgba(57,169,0,0.12); border:1px solid rgba(57,169,0,0.35); border-radius:20px; padding:3px 11px; }
+  .fb-ind { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-top:16px; }
+  .fb-ind-card { background:#fff; border:1px solid #e2e8f0; border-radius:14px; padding:14px 16px; box-shadow:0 4px 14px rgba(15,23,42,0.05); }
+  .fb-ind-q { font-weight:800; font-size:15px; color:#0f172a; margin:0 0 10px; }
+  .fb-ind-row { display:flex; align-items:center; gap:10px; font-size:13.5px; font-weight:700; padding:5px 0; }
+  .fb-ind-row.no { color:#c2410c; }
+  .fb-ind-row.si { color:#236b00; }
+  .fb-ind-row svg { flex:none; }
+  @media (max-width: 992px) {
+    .fb-grid { grid-template-columns:1fr; }
+    .fb-mid { flex-direction:row; justify-content:center; padding:2px 0; }
+    .fb-mid svg { transform:rotate(90deg); }
+    .fb-ind { grid-template-columns:1fr; }
+  }
+</style><style>
+  .fc-card .fc-art { background:#f8fafc; border:1px solid var(--borde-light, #e2e8f0); border-radius:12px; padding:8px; margin-bottom:14px; }
+  .fc-card .fc-art svg { width:100%; height:auto; display:block; }
+  .fc-card .fc-idea { font-family:'Syne',sans-serif; font-size:17px; font-weight:800; line-height:1.3; margin:0 0 6px; color:var(--texto-main, #0f172a); }
+  .fc-card .fc-short { font-size:14px; line-height:1.5; color:var(--texto-muted, #475569); margin:0 0 12px; }
+  .fc-card .fc-term { border-top:1px dashed var(--borde-light, #cbd5e1); padding-top:12px; margin-bottom:12px; font-size:14px; line-height:1.55; }
+  .fc-card .fc-term b { display:block; font-size:11.5px; text-transform:uppercase; letter-spacing:.6px; color:var(--sena-verde-dark, #236b00); margin-bottom:4px; }
+  .fc-card .fc-term code { background:#1a1a2e; color:#9ece6a; padding:2px 8px; border-radius:6px; font-size:13px; margin-right:4px; display:inline-block; }
+  .fc-quiz { margin-top:auto; background:#fff; border:1px solid var(--borde-light, #e2e8f0); border-radius:10px; padding:12px; }
+  .fc-quiz-q { font-size:13px; font-weight:700; margin:0 0 8px; color:var(--texto-main, #0f172a); }
+  .fc-quiz-q span { font-weight:500; color:var(--texto-muted, #475569); }
+  .fc-opts { display:flex; flex-wrap:wrap; gap:6px; }
+  .fc-opt { font-family:'JetBrains Mono',Consolas,monospace; font-size:12.5px; padding:7px 10px; border-radius:8px; border:1px solid #cbd5e1; background:#f8fafc; color:#0f172a; cursor:pointer; }
+  .fc-opt:hover:not(:disabled) { border-color:var(--sena-verde, #39a900); background:var(--sena-verde-bg, rgba(57,169,0,.08)); }
+  .fc-opt:disabled { cursor:default; }
+  .fc-opt.fc-ok { background:var(--sena-verde, #39a900); border-color:var(--sena-verde, #39a900); color:#fff; }
+  .fc-opt.fc-bad { background:#fee2e2; border-color:#dc2626; color:#991b1b; }
+  .fc-fb { font-size:13px; font-weight:600; margin:8px 0 0; min-height:18px; }
+  .fc-fb.fc-ok-t { color:var(--sena-verde-dark, #236b00); }
+  .fc-fb.fc-bad-t { color:#b91c1c; }
+  .fc-remote { display:flex; align-items:center; gap:14px; flex-wrap:wrap; margin-top:18px; padding:14px 18px; border-radius:12px; background:rgba(2,132,199,.07); border:1px solid rgba(2,132,199,.28); font-size:14.5px; line-height:1.5; }
+  .fc-remote svg.fc-cloud { flex-shrink:0; }
+  .fc-remote code { background:#1a1a2e; color:#7dcfff; padding:2px 8px; border-radius:6px; font-size:13px; }
+  .fc-score { margin-top:12px; text-align:right; font-size:12.5px; color:var(--texto-muted, #475569); }
+  .fc-score strong { color:var(--sena-verde-dark, #236b00); }
+  .fc-takeaway { margin-top:18px; padding:14px 18px; border-left:4px solid var(--sena-naranja, #ff6b00); background:rgba(255,107,0,.06); border-radius:0 10px 10px 0; font-size:14.5px; line-height:1.55; }
+</style><style>
+.fa-wrap{background:#fff;border:1px solid #e2e8f0;border-radius:14px;padding:12px;overflow-x:auto;-webkit-overflow-scrolling:touch;scroll-behavior:smooth;box-shadow:0 2px 8px rgba(0,0,0,.04)}
+.fa-svg{display:block;width:100%;min-width:820px;height:auto}
+.fa-hint{display:none;font-size:12px;color:#64748b;margin:6px 0 0}
+.fa-why{margin-top:18px;background:linear-gradient(135deg,#f0fdf4 0%,#e0f2fe 100%);border:1.5px solid #86efac;border-left:5px solid #39a900;border-radius:12px;padding:16px 20px}
+.fa-why-title{color:#166534;font-size:15px;font-weight:700;display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.fa-why p{margin:0 0 8px;font-size:14px;color:#334155;line-height:1.65}
+.fa-take{margin-top:14px;font-size:14px;color:#0f172a;line-height:1.6;padding:12px 16px;border-left:4px solid #ff6b00;background:rgba(255,107,0,.08);border-radius:0 10px 10px 0}
+@media(max-width:760px){.fa-hint{display:block}}
+</style><style>
+  .fd-widget { background:#fff; border:1px solid var(--borde-light); border-radius:16px; padding:18px; box-shadow:var(--shadow-card); outline:none; }
+  .fd-widget:focus-visible { box-shadow:0 0 0 3px rgba(2,132,199,.35); }
+  .fd-scroll { overflow-x:auto; }
+  .fd-svg { display:block; width:100%; min-width:720px; height:auto; font-family:'Inter',system-ui,sans-serif; }
+  .fd-zone { fill:#f8fafc; stroke:#cbd5e1; stroke-width:2; }
+  .fd-zone-title { font-size:16px; font-weight:800; fill:#0f172a; }
+  .fd-zone-sub { font-size:14px; fill:#64748b; }
+  .fd-arrow { stroke:#cbd5e1; stroke-width:4; fill:none; transition:stroke .3s; }
+  .fd-arrow-head { fill:#cbd5e1; transition:fill .3s; }
+  .fd-arrow.fd-on { stroke:#39a900; }
+  .fd-arrow-head.fd-on { fill:#39a900; }
+  .fd-pill rect { fill:#fff; stroke:#cbd5e1; stroke-width:2; transition:fill .3s, stroke .3s; }
+  .fd-pill text { font-family:'JetBrains Mono',Consolas,monospace; font-size:14px; font-weight:700; fill:#64748b; }
+  .fd-pill.fd-on rect { fill:#39a900; stroke:#236b00; }
+  .fd-pill.fd-on text { fill:#fff; }
+  .fd-packet { transition:transform .7s cubic-bezier(.4,0,.2,1); }
+  .fd-packet-box { stroke-width:3; transition:fill .4s, stroke .4s; }
+  .fd-packet-t1 { font-family:'JetBrains Mono',Consolas,monospace; font-size:16px; font-weight:800; fill:#0f172a; }
+  .fd-packet-t2 { font-size:14px; font-weight:700; fill:#334155; }
+  .fd-ghost { fill:none; stroke:#94a3b8; stroke-width:2; stroke-dasharray:6 5; opacity:0; transition:opacity .4s; }
+  .fd-ghost-t { font-family:'JetBrains Mono',Consolas,monospace; font-size:14px; fill:#64748b; opacity:0; transition:opacity .4s; }
+  .fd-ghost.fd-show, .fd-ghost-t.fd-show { opacity:1; }
+  .fd-state-mod { fill:#fff7ed; stroke:#ff6b00; }
+  .fd-state-stg { fill:#e0f2fe; stroke:#0284c7; }
+  .fd-state-com { fill:#f0fdf4; stroke:#39a900; }
+  .fd-controls { display:flex; flex-wrap:wrap; align-items:center; gap:10px; margin:14px 0 4px; }
+  .fd-btn { font:inherit; font-size:14px; font-weight:700; padding:9px 18px; border-radius:10px; border:1.5px solid var(--borde-focus); background:#fff; color:var(--texto-main); cursor:pointer; transition:background .2s, border-color .2s; }
+  .fd-btn:hover:not(:disabled) { border-color:var(--sena-verde); background:var(--sena-verde-bg); }
+  .fd-btn:focus-visible { outline:3px solid rgba(2,132,199,.45); outline-offset:2px; }
+  .fd-btn:disabled { opacity:.45; cursor:not-allowed; }
+  .fd-btn.fd-primary { background:var(--sena-verde); border-color:var(--sena-verde-dark); color:#fff; }
+  .fd-btn.fd-primary:hover:not(:disabled) { background:var(--sena-verde-dark); }
+  .fd-counter { margin-left:auto; font-size:13px; font-weight:700; color:var(--texto-sub); }
+  .fd-hint { font-size:12.5px; color:var(--texto-sub); margin:0 0 10px; }
+  .fd-what { margin:12px 0 4px; padding:14px 18px; border-left:5px solid var(--sena-verde); background:var(--sena-verde-bg); border-radius:0 10px 10px 0; font-size:15px; line-height:1.6; color:var(--texto-muted); }
+  .fd-what strong { color:var(--texto-main); }
+  .fd-boxes { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:8px; }
+  .fd-boxes .code-editor-box { margin:8px 0; max-width:none; }
+  .fd-boxes .editor-body { min-height:96px; }
+  @media (max-width: 900px) { .fd-boxes { grid-template-columns:1fr; } }
+  @media (prefers-reduced-motion: reduce) {
+    .fd-packet, .fd-packet-box, .fd-arrow, .fd-arrow-head, .fd-pill rect, .fd-ghost, .fd-ghost-t { transition:none !important; }
+  }
+</style>
+<style>.fs7-note{margin:2px 0 10px;padding:8px 11px;border-radius:9px;font-size:13px;line-height:1.45;border:1px solid}.fs7-bad{background:#fef2f2;color:#b91c1c;border-color:#fecaca}.fs7-good{background:#f0fdf4;color:#236b00;border-color:#bbf7d0}</style>
+<style>.s13-steps{margin:8px 0 0;padding-left:20px;font-size:13.5px;line-height:1.55;color:#334155}.s13-steps li{margin-bottom:6px}.s13-h{margin:18px 0 8px;font-size:17px;font-weight:800;color:#0f172a}</style>
+<style>
+.s2q-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;margin:12px 0 4px}
+.s2q-item{background:#fff;border:1px solid var(--borde-light,#e2e8f0);border-radius:12px;padding:12px 14px}
+.s2q-cmd{display:inline-block;background:#1a1a2e;color:#e0af68;padding:4px 10px;border-radius:7px;font-size:14px;margin-bottom:8px;font-family:'JetBrains Mono',Consolas,monospace}
+.s2q-opts{display:flex;gap:8px;flex-wrap:wrap}
+.s2q-item .fc-fb{margin:8px 0 0;font-size:13px;line-height:1.4;min-height:1px}
+.s2q-item .fc-fb.fc-ok-t{color:#236b00}.s2q-item .fc-fb.fc-bad-t{color:#b91c1c}
+.table-container-card{overflow-x:auto}
+.table-container-card table{min-width:560px}
+</style>
+<style>.s3-gallery{margin:14px 0}.s3-gallery-title{font-weight:800;font-size:14px;margin-bottom:8px}.s3-gallery-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px}.s3-shot{margin:0;background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:10px;box-shadow:0 2px 8px rgba(0,0,0,.05)}.s3-shot img{width:100%;height:auto;display:block;border-radius:8px;border:1px solid #cbd5e1;cursor:zoom-in}.s3-shot figcaption{font-size:12.5px;line-height:1.5;color:#475569;margin-top:8px}.cmd-explain{margin:10px 0 16px}.cmd-explain td code{white-space:normal;word-break:break-word}.cmd-explain td:nth-child(3){font-size:12.5px;line-height:1.7}</style>
+</head>
+<body>
+
+  <!-- SIDEBAR (ESTANDAR UNIFICADO) -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <a href="../explorar.html" class="brand-link" title="Ir al Portal de Materiales">
+        <!-- Logo Vectorial Oficial SENA -->
+        <div class="sidebar-logo" title="Servicio Nacional de Aprendizaje SENA">
+          <svg width="24" height="24" viewBox="0 0 64 62" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
+            <g transform="translate(-377 -19)">
+              <path d="M409.164 19C412.922 19 415.992 22.09 415.992 25.8778 415.992 29.6656 412.932 32.7556 409.164 32.7556 405.397 32.7556 402.336 29.6656 402.336 25.8778 402.336 22.09 405.407 19 409.164 19"/>
+              <path d="M384.305 41.1884 384.305 41.2183C384.285 41.3379 384.275 41.4177 384.275 41.4675 384.275 41.8264 384.474 42.0855 384.873 42.265 385.282 42.4344 385.9 42.5241 386.747 42.5241 387.395 42.5241 387.893 42.4543 388.262 42.3148 388.631 42.1752 388.81 41.9759 388.81 41.7267 388.81 41.3479 388.082 41.0489 386.647 40.8096 386.478 40.7797 386.348 40.7598 386.268 40.7498 386.179 40.7299 386.039 40.71 385.86 40.6801 383.567 40.3013 382.092 39.8926 381.434 39.454 381.115 39.2347 380.876 38.9855 380.706 38.6965 380.547 38.4074 380.467 38.0785 380.467 37.7096 380.467 36.8125 380.995 36.1248 382.052 35.6563 383.109 35.1878 384.654 34.9486 386.677 34.9486 388.7 34.9486 390.166 35.1678 391.133 35.6064 392.1 36.045 392.578 36.7228 392.578 37.6399L392.578 37.7495 388.78 37.7495 388.78 37.7096C388.78 37.3907 388.591 37.1614 388.202 36.992 387.813 36.8325 387.255 36.7428 386.508 36.7428 385.929 36.7428 385.481 36.8026 385.182 36.9122 384.863 37.0318 384.713 37.1913 384.713 37.4006 384.713 37.7794 385.541 38.1084 387.195 38.3675 387.514 38.4174 387.764 38.4572 387.943 38.4871 389.119 38.6865 389.966 38.8559 390.465 38.9955 390.963 39.135 391.392 39.3045 391.761 39.4939 392.159 39.7132 392.478 39.9923 392.698 40.3312 392.917 40.6701 393.027 41.0389 393.027 41.4476 393.027 42.3746 392.448 43.0823 391.302 43.5907 390.156 44.0891 388.501 44.3383 386.348 44.3383 384.195 44.3383 382.67 44.099 381.723 43.6206 380.766 43.1421 380.298 42.3746 380.298 41.308L380.298 41.1685 384.305 41.1685ZM394.711 44.1987 394.711 35.0881 405.546 35.0881 405.546 37.0518 398.778 37.0518 398.778 38.5071 405.028 38.5071 405.028 40.4508 398.778 40.4508 398.778 42.2151 405.795 42.2151 405.795 44.2087 394.711 44.2087ZM407.5 44.1987 407.5 35.0881 412.643 35.0881 418.155 41.2084 418.155 35.0881 422.063 35.0881 422.063 44.1987 416.72 44.1987 411.387 38.0585 411.387 44.1987 407.49 44.1987ZM432.569 40.5604 430.625 37.2511 428.572 40.5604 432.579 40.5604ZM426.369 44.1987 422.292 44.1987 428.592 35.0881 433.107 35.0881 439.118 44.1987 434.592 44.1987 433.675 42.554 427.366 42.554 426.389 44.1987Z"/>
+              <path d="M389.309 76.3351 385.67 72.9161 396.735 53.6881C397.333 52.6415 396.585 51.3257 395.379 51.3257L377.267 51.3257 377.267 46.5113 406.413 46.5113 389.309 76.3351Z"/>
+              <path d="M428.701 76.3351 432.34 72.9161 421.275 53.6881C420.677 52.6415 421.425 51.3257 422.631 51.3257L440.743 51.3257 440.743 46.5113 411.597 46.5113 428.701 76.3351Z"/>
+              <path d="M408.965 51.5949C408.965 51.5949 409.005 51.5251 409.005 51.5251L425.432 78.7174 421.066 80.99 410.48 63.2373C409.852 62.1907 408.347 62.1907 407.729 63.2373 404.2 69.1981 397.213 80.99 397.213 80.99L392.947 78.8768C392.947 78.8768 408.088 53.09 408.965 51.5949"/>
+            </g>
+          </svg>
+        </div>
+        <div class="brand-info">
+          <h1>ADSO 3389010</h1>
+          <p>Sesión 3 · Instalación de Git y GitHub</p>
+        </div>
+      </a>
+      <button type="button" class="sidebar-toggle-btn" onclick="toggleSidebar()" title="Contraer panel lateral">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><line x1="9" x2="9" y1="3" y2="21"/><path d="m14 9-3 3 3 3"/></svg>
+      </button>
+    </div>
+
+    <nav class="sidebar-nav" id="sidebarNav">
+      <div class="nav-group">
+        <div class="nav-group-title">Bloque 1 · Portada & Regla de Oro</div>
+        <div class="nav-links-list">
+          <a href="#slide-01" class="nav-link active">
+            <span class="nav-link-num">01</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            <span class="nav-link-title">Portada & Datos de la Sesión</span>
+          </a>
+          <a href="#slide-02" class="nav-link">
+            <span class="nav-link-num">02</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <span class="nav-link-title">Regla de Oro: Qué entregas</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="nav-group">
+        <div class="nav-group-title">Bloque 2 · Mapa y Requisitos</div>
+        <div class="nav-links-list">
+          <a href="#slide-03" class="nav-link">
+            <span class="nav-link-num">03</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+            <span class="nav-link-title">Mapa: qué instalas y para qué</span>
+          </a>
+          <a href="#slide-04" class="nav-link">
+            <span class="nav-link-num">04</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+            <span class="nav-link-title">Requisitos y Paso 0</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="nav-group">
+        <div class="nav-group-title">Bloque 3 · Demo & Práctica</div>
+        <div class="nav-links-list">
+          <a href="#slide-05" class="nav-link">
+            <span class="nav-link-num">05</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
+            <span class="nav-link-title">Instalar Git en Windows</span>
+          </a>
+          <a href="#slide-06" class="nav-link">
+            <span class="nav-link-num">06</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 17 10 11 4 5"/><line x1="12" x2="20" y1="19" y2="19"/></svg>
+            <span class="nav-link-title">Instalar en macOS y Linux</span>
+          </a>
+          <a href="#slide-07" class="nav-link">
+            <span class="nav-link-num">07</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+            <span class="nav-link-title">Verificar con git --version</span>
+          </a>
+          <a href="#slide-08" class="nav-link">
+            <span class="nav-link-num">08</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            <span class="nav-link-title">Configurar identidad</span>
+          </a>
+          <a href="#slide-09" class="nav-link">
+            <span class="nav-link-num">09</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 17 10 11 4 5"/><line x1="12" x2="20" y1="19" y2="19"/></svg>
+            <span class="nav-link-title">Probar Git local</span>
+          </a>
+          <a href="#slide-10" class="nav-link">
+            <span class="nav-link-num">10</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            <span class="nav-link-title">Crear cuenta de GitHub</span>
+          </a>
+          <a href="#slide-11" class="nav-link">
+            <span class="nav-link-num">11</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="7.5" cy="15.5" r="5.5"/><path d="m21 2-9.6 9.6"/><path d="m15.5 7.5 3 3L22 7l-3-3"/></svg>
+            <span class="nav-link-title">Autenticación: GCM, token, SSH</span>
+          </a>
+          <a href="#slide-12" class="nav-link">
+            <span class="nav-link-num">12</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/></svg>
+            <span class="nav-link-title">Crear el repositorio remoto</span>
+          </a>
+          <a href="#slide-13" class="nav-link">
+            <span class="nav-link-num">13</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22v-5"/><path d="M9 8V2"/><path d="M15 8V2"/><path d="M18 8v5a4 4 0 0 1-4 4h-4a4 4 0 0 1-4-4V8Z"/></svg>
+            <span class="nav-link-title">Conectar y primer push</span>
+          </a>
+          <a href="#slide-14" class="nav-link">
+            <span class="nav-link-num">14</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>
+            <span class="nav-link-title">Errores frecuentes</span>
+          </a>
+          <a href="#slide-15" class="nav-link">
+            <span class="nav-link-num">15</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.09-3.09a2 2 0 0 0-2.82 0L6 21"/></svg>
+            <span class="nav-link-title">Cómo tomar pantallazos</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="nav-group">
+        <div class="nav-group-title">Bloque 4 · Construye tu EV04</div>
+        <div class="nav-links-list">
+          <a href="#slide-16" class="nav-link">
+            <span class="nav-link-num">16</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            <span class="nav-link-title">Estructura del documento EV04</span>
+          </a>
+          <a href="#slide-17" class="nav-link">
+            <span class="nav-link-num">17</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg>
+            <span class="nav-link-title">Ejemplo de redacción</span>
+          </a>
+          <a href="#slide-18" class="nav-link">
+            <span class="nav-link-num">18</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="M7 21h10"/><path d="M12 3v18"/><path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"/></svg>
+            <span class="nav-link-title">Los 4 Indicadores Oficiales</span>
+          </a>
+          <a href="#slide-19" class="nav-link">
+            <span class="nav-link-num">19</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+            <span class="nav-link-title">Checklist y Entrega en Zajuna</span>
+          </a>
+        </div>
+      </div>
+
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="sidebar-footer-pill">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        <span>Entrega EV04: por confirmar en Zajuna</span>
+      </div>
+      <a href="../explorar.html" class="btn-return-hub">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+        Volver al Hub
+      </a>
+    </div>
+  </aside>
+
+  <button type="button" class="floating-sidebar-toggle" id="floatingToggle" onclick="toggleSidebar()" title="Abrir Menú de Navegación">
+    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><line x1="9" x2="9" y1="3" y2="21"/><path d="m10 9 3 3-3 3"/></svg>
+    <span>Menú (19 Slides)</span>
+  </button>
+
+  <main class="main-content" id="mainContent">
+
+    <section class="slide-section" id="slide-01">
+      <div class="slide-container">
+        <span class="slide-badge-category badge-green"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg> Sesión Sincrónica 3 · Guía 7 (GA7-220501096) · AA1</span>
+        <h2 class="slide-title">Instala y configura Git y GitHub, y documenta cada paso</h2>
+        <p class="slide-subtitle">Hoy dejas funcionando tu herramienta de versionamiento local (Git) y la remota (GitHub), las conectas con una prueba mínima y aprendes a contarlo en un documento con pantallazos: tu evidencia AA1-EV04.</p>
+<div class="cards-grid-3"><div class="card-pro top-azul"><div class="card-header-flex"><div class="card-icon-badge icon-badge-blue"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div><span class="card-pill-tag badge-blue">Sincrónico</span></div><h3 class="card-title">Datos de la Sesión</h3><p class="card-desc"><strong>Fecha:</strong> Sábado, 21 de Noviembre de 2026<br><strong>Horario:</strong> 6:30 PM - 8:30 PM (Teams)<br><strong>Instructor:</strong> Julián Andrés Trujillo Morales<br><strong>Regional:</strong> Huila | CADPH Garzón</p></div><div class="card-pro top-verde"><div class="card-header-flex"><div class="card-icon-badge icon-badge-green"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg></div><span class="card-pill-tag badge-green">Tema de hoy</span></div><h3 class="card-title">Qué vas a hacer</h3><p class="card-desc">Instalar Git, configurar tu identidad, probar un repositorio local, crear tu cuenta de GitHub, autenticarte, crear un repositorio remoto de prueba y hacer tu primer <code>push</code>.</p></div><div class="card-pro top-naranja"><div class="card-header-flex"><div class="card-icon-badge icon-badge-orange"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div><span class="card-pill-tag badge-orange">Evidencia</span></div><h3 class="card-title">AA1-EV04 · Instalación y configuración (local/web)</h3><p class="card-desc"><strong>Producto:</strong> documento en PDF con portada, introducción, objetivo y el paso a paso con pantallazos de la instalación de la herramienta local y de la remota.<br><strong>Fecha límite en Zajuna:</strong> por confirmar en Zajuna.</p></div></div>
+        <div class="btn-row"><a href="./MANUAL_SESION03.html" class="btn-action-primary"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg> Abrir la Guía de Estudio</a></div>
+      </div>
+    </section>
+
+
+    <section class="slide-section" id="slide-02">
+      <div class="slide-container">
+        <span class="slide-badge-category badge-orange"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> Bloque 1 · Regla de Oro de la Evidencia</span>
+        <h2 class="slide-title">Regla de oro: instala de verdad y demuéstralo con pantallazos</h2>
+        <p class="slide-subtitle">Esta evidencia no se aprueba copiando teoría: se aprueba mostrando que tú instalaste y configuraste las herramientas. Todo lo demás de la sesión existe para que lo logres.</p>
+<div class="cards-grid-2"><div class="card-pro top-verde"><div class="card-header-flex"><div class="card-icon-badge icon-badge-green"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div><span class="card-pill-tag badge-green">Regla de oro</span></div><h3 class="card-title">Un solo producto: un PDF con tu paso a paso</h3><p class="card-desc">La guía te pide un <strong>documento en formato PDF</strong> (extensión libre) con <strong>portada, introducción, objetivo</strong> y el <strong>paso a paso con pantallazos de la instalación</strong> de las herramientas de control de versionamiento, <strong>tanto local como remota</strong>.</p></div><div class="card-pro top-naranja"><div class="card-header-flex"><div class="card-icon-badge icon-badge-orange"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.09-3.09a2 2 0 0 0-2.82 0L6 21"/></svg></div><span class="card-pill-tag badge-orange">Contenido mínimo</span></div><h3 class="card-title">Lo que no puede faltar</h3><p class="card-desc">Portada, introducción, objetivo, instalación de <strong>Git (local)</strong> con su verificación, configuración de identidad, cuenta y repositorio en <strong>GitHub (remoto)</strong>, conexión entre ambos y un pantallazo por cada paso importante.</p></div></div>
+<div class="callout"><div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg> Qué te pide exactamente la guía (texto oficial resumido)</div><p>Tomando como referencia el componente formativo <strong>Integración continua</strong>, realizas la instalación y configuración de las herramientas de control de versionamiento tanto local como remoto, siguiendo las normas básicas de presentación de un documento escrito.</p></div><div class="callout warn"><div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> El instructor evalúa 4 indicadores</div><p>(1) que <strong>realices la instalación correctamente</strong>, (2) que <strong>instales sin errores la herramienta local</strong>, (3) que <strong>configures la herramienta remota</strong> y (4) que presentes el informe con las <strong>normas básicas de presentación</strong>. Los verás literales en el <a href="#slide-18" style="color:var(--azul-tech-dark);font-weight:700;">slide 18</a>.</p></div><div class="callout"><div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg> Enfoque de la ficha</div><p>Trabajamos con <strong>Git</strong> (local) y <strong>GitHub</strong> (remoto). Existen otras plataformas, como GitLab o Bitbucket, pero no las instalamos ni las comparamos aquí. La práctica completa con el repositorio <code>Programa-Git</code> y el video es la <strong>EV05</strong> (Sesión 4): hoy solo haces una prueba mínima de conexión.</p></div>
+      </div>
+    </section>
+
+
+    <section class="slide-section" id="slide-03">
+      <div class="slide-container">
+        <span class="slide-badge-category badge-blue"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg> Bloque 2 · Mapa de la Sesión</span>
+        <h2 class="slide-title">Mapa de hoy: qué instalas y para qué sirve cada cosa</h2>
+        <p class="slide-subtitle">Siete pasos en dos lugares. Al final de la sesión tendrás los dos extremos funcionando y conectados.</p>
+<div class="cards-grid-2"><div class="card-pro top-verde"><div class="card-header-flex"><div class="card-icon-badge icon-badge-green"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" x2="16" y1="21" y2="21"/><line x1="12" x2="12" y1="17" y2="21"/></svg></div><span class="card-pill-tag badge-green">Local</span></div><h3 class="card-title">Git: el programa en tu computador</h3><p class="card-desc"><strong>Git</strong> es la herramienta que registra las versiones de tu código. Se instala en tu equipo, trabaja sin internet y es lo que evalúa el indicador 2.</p></div><div class="card-pro top-azul"><div class="card-header-flex"><div class="card-icon-badge icon-badge-blue"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/></svg></div><span class="card-pill-tag badge-blue">Remoto</span></div><h3 class="card-title">GitHub: la cuenta y el repositorio en la nube</h3><p class="card-desc"><strong>GitHub</strong> no se instala: creas una cuenta y un repositorio en la web, y lo conectas con tu Git. Es lo que evalúa el indicador 3.</p></div></div>
+<div class="diagram-card">
+<svg viewBox="0 0 900 300" role="img" aria-label="Tu computador con Git instalado y configurado, conectado por internet con una cuenta y un repositorio en GitHub" xmlns="http://www.w3.org/2000/svg" font-family="Plus Jakarta Sans, Arial, sans-serif" style="width:100%;height:auto;display:block">
+<defs>
+<marker id="s3a-r" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0 10 5 0 10z" fill="#236b00"/></marker>
+</defs>
+<rect x="20" y="20" width="360" height="260" rx="16" fill="#f0fdf4" stroke="#39a900" stroke-width="2.5"/>
+<text x="200" y="52" text-anchor="middle" font-size="17" font-weight="800" fill="#236b00">TU COMPUTADOR · Git (local)</text>
+<rect x="45" y="72" width="310" height="44" rx="10" fill="#fff" stroke="#86efac" stroke-width="2"/>
+<text x="200" y="100" text-anchor="middle" font-size="14" font-weight="800" fill="#0f172a">1. Instalas Git y verificas versión</text>
+<rect x="45" y="128" width="310" height="44" rx="10" fill="#fff" stroke="#86efac" stroke-width="2"/>
+<text x="200" y="156" text-anchor="middle" font-size="14" font-weight="800" fill="#0f172a">2. Configuras tu nombre y tu correo</text>
+<rect x="45" y="184" width="310" height="44" rx="10" fill="#dcfce7" stroke="#39a900" stroke-width="2"/>
+<text x="200" y="212" text-anchor="middle" font-size="14" font-weight="800" fill="#0f172a">3. Pruebas un repositorio local</text>
+<text x="200" y="258" text-anchor="middle" font-size="13" fill="#236b00" font-weight="800">Funciona sin internet</text>
+
+<rect x="520" y="20" width="360" height="260" rx="16" fill="#eff6ff" stroke="#0284c7" stroke-width="2.5"/>
+<text x="700" y="52" text-anchor="middle" font-size="17" font-weight="800" fill="#0369a1">INTERNET · GitHub (remoto)</text>
+<rect x="545" y="72" width="310" height="44" rx="10" fill="#fff" stroke="#7dd3fc" stroke-width="2"/>
+<text x="700" y="100" text-anchor="middle" font-size="14" font-weight="800" fill="#0f172a">4. Creas tu cuenta de GitHub</text>
+<rect x="545" y="128" width="310" height="44" rx="10" fill="#fff" stroke="#7dd3fc" stroke-width="2"/>
+<text x="700" y="156" text-anchor="middle" font-size="14" font-weight="800" fill="#0f172a">5. Te autenticas (GCM o token)</text>
+<rect x="545" y="184" width="310" height="44" rx="10" fill="#e0f2fe" stroke="#0284c7" stroke-width="2"/>
+<text x="700" y="212" text-anchor="middle" font-size="14" font-weight="800" fill="#0f172a">6. Creas el repositorio de prueba</text>
+<text x="700" y="258" text-anchor="middle" font-size="13" fill="#0369a1" font-weight="800">Necesita internet</text>
+
+<line x1="392" y1="150" x2="508" y2="150" stroke="#236b00" stroke-width="3" marker-end="url(#s3a-r)"/>
+<text x="450" y="138" text-anchor="middle" font-size="14" font-weight="800" fill="#236b00">push</text>
+<text x="450" y="176" text-anchor="middle" font-size="12" fill="#475569">paso 7</text>
+</svg></div>
+<div class="callout"><div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg> Analogía: el cuaderno y la nube</div><p>Instalar Git es como comprar tu cuaderno y aprender a anotar en él; crear la cuenta de GitHub es abrir un casillero compartido en la nube; el <code>push</code> es llevar una copia de tu cuaderno al casillero.</p></div><div class="callout warn"><div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg> Error frecuente</div><p>Instalar solo Git y creer que ya "tienes GitHub", o crear la cuenta de GitHub y no instalar Git. La evidencia exige <strong>las dos partes</strong>, local y remota.</p></div><div class="fa-take"><strong>Qué te llevas para tu informe EV04:</strong> la introducción de tu documento puede explicar este mapa: qué es Git, qué es GitHub y por qué necesitas ambos para controlar los cambios de tu código.</div>
+      </div>
+    </section>
+
+
+    <section class="slide-section" id="slide-04">
+      <div class="slide-container">
+        <span class="slide-badge-category badge-blue"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg> Bloque 2 · Requisitos y Paso 0</span>
+        <h2 class="slide-title">Paso 0: antes de instalar, ten esto listo</h2>
+        <p class="slide-subtitle">La mayoría de los errores de instalación vienen de empezar sin revisar lo básico. Dedícale cinco minutos.</p>
+<div class="table-container-card"><table class="table-comparativa"><thead><tr><th>Requisito</th><th>Qué debes revisar</th><th>Por qué importa</th></tr></thead><tbody>
+<tr><td><strong>Sistema operativo</strong></td><td>Windows 10 u 11, macOS o Linux. Anota la versión (en Windows: Configuración &rarr; Sistema &rarr; Acerca de)</td><td>Cambia el instalador y los comandos. Lo pondrás en tu documento</td></tr>
+<tr><td><strong>Permisos de instalación</strong></td><td>Poder instalar programas (en Windows, cuenta con permisos de administrador)</td><td>Sin permisos el instalador se detiene o instala en un lugar limitado</td></tr>
+<tr><td><strong>Internet estable</strong></td><td>Para descargar el instalador y para GitHub</td><td>Una descarga cortada genera un instalador dañado</td></tr>
+<tr><td><strong>Correo electrónico</strong></td><td>Uno al que tengas acceso, para verificar la cuenta de GitHub</td><td>GitHub envía un código de verificación</td></tr>
+<tr><td><strong>Navegador y herramienta de capturas</strong></td><td>Recortes de Windows (Win + Shift + S), Captura de pantalla de macOS (Cmd + Shift + 4) o la de tu distribución Linux</td><td>Tus pantallazos son la prueba de la evidencia</td></tr>
+<tr><td><strong>Carpeta de trabajo</strong></td><td>Crea una carpeta, por ejemplo <code>C:\proyectos\prueba-git</code>, sin tildes ni espacios</td><td>Evita errores de ruta al probar Git</td></tr>
+</tbody></table></div>
+<div class="callout"><div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg> Haz ya tu primer pantallazo</div><p>Captura la pantalla de <em>Acerca de</em> de tu sistema (o <code>winver</code>, o <code>Acerca de este Mac</code>). Será el <strong>pantallazo 1</strong> de tu documento y demuestra en qué equipo trabajaste.</p></div><div class="callout warn"><div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg> Error frecuente</div><p>Usar el correo del colegio o uno que ya no revisas y quedar sin poder verificar la cuenta de GitHub. Elige uno al que entres hoy.</p></div><div class="fa-take"><strong>Qué te llevas para tu informe EV04:</strong> una sección <em>Requisitos previos</em> con tu sistema operativo y versión, y el pantallazo del equipo donde instalas.</div>
+      </div>
+    </section>
+
+
+    <section class="slide-section" id="slide-05">
+      <div class="slide-container">
+        <span class="slide-badge-category badge-green"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg> Bloque 3 · Demo en Vivo · Instalar Git en Windows</span>
+        <h2 class="slide-title">Instalar Git en Windows, paso a paso</h2>
+        <p class="slide-subtitle">Sigue el instalador pantalla por pantalla. Haz un pantallazo de las pantallas donde elijas algo (editor, rama inicial, PATH, credential helper).</p>
+<ol class="steps-list"><li><strong>Descarga el instalador.</strong> Entra a <a href="https://git-scm.com/install/windows" target="_blank" rel="noopener" style="color:var(--azul-tech-dark);font-weight:700;">git-scm.com/install/windows ↗</a> y descarga el instalador de 64 bits. Descarga solo desde la página oficial.</li><li><strong>Ejecuta el archivo</strong> descargado (<code>Git-...-64-bit.exe</code>) y acepta el control de cuentas de usuario si Windows lo pide. Las pantallas de abajo son de la versión 2.56.1; si tu versión es distinta, pueden variar un poco.</li><li><strong>Pantalla 1 · Licencia.</strong> Lee y presiona <em>Next</em>. (Después puede aparecer la carpeta de instalación: deja la ruta por defecto.)</li><li><strong>Pantalla 2 · Componentes.</strong> Deja marcados los que vienen por defecto, incluido <em>Open Git Bash here</em>.</li><li><strong>Pantalla 3 · Editor por defecto.</strong> Cambia Vim por <em>Visual Studio Code</em> (o el editor que conozcas).</li><li><strong>Pantalla 4 · Rama inicial.</strong> Marca <em>Override the default branch name</em> y escribe <code>main</code>.</li><li><strong>Pantalla 5 · PATH.</strong> Deja la opción recomendada: <em>Git from the command line and also from 3rd-party software</em>.</li><li><strong>Pantalla 6 · SSH.</strong> Deja <em>Use bundled OpenSSH</em>.</li><li><strong>Pantalla 7 · HTTPS.</strong> Deja <em>Use the native Windows Secure Channel library</em>.</li><li><strong>Pantalla 8 · Finales de línea.</strong> Deja <em>Checkout Windows-style, commit Unix-style line endings</em>.</li><li><strong>Pantalla 9 · Terminal.</strong> Deja <em>Use MinTTY</em>.</li><li><strong>Pantalla 10 · <code>git pull</code>.</strong> Deja <em>Merge</em>.</li><li><strong>Pantalla 11 · Credential helper.</strong> Deja <em>Git Credential Manager</em>: lo usarás para autenticarte con GitHub (slide 11).</li><li><strong>Pantalla 12 · Opciones extra e Install.</strong> Deja <em>file system caching</em> marcada, presiona <em>Install</em>, espera y finaliza. Puedes desmarcar abrir las notas de la versión.</li></ol>
+<div class="s3-gallery"><div class="s3-gallery-title">Así se ve en el instalador (referencia)</div><div class="s3-gallery-grid"><figure class="s3-shot"><a href="img/git_instalador_01_licencia.png" target="_blank" rel="noopener" title="Clic para ampliar"><img src="img/git_instalador_01_licencia.png" alt="Pantalla 1 · Licencia (Information)" loading="lazy"></a><figcaption><strong>Pantalla 1 · Licencia (Information)</strong><br>Es la primera pantalla del instalador: muestra la licencia GNU General Public License. Léela si quieres y presiona Next. Toma aquí tu pantallazo del inicio de la instalación.</figcaption></figure><figure class="s3-shot"><a href="img/git_instalador_02_componentes.png" target="_blank" rel="noopener" title="Clic para ampliar"><img src="img/git_instalador_02_componentes.png" alt="Pantalla 2 · Select Components (componentes)" loading="lazy"></a><figcaption><strong>Pantalla 2 · Select Components (componentes)</strong><br>El instalador propone los componentes ya marcados (iconos, integración con el Explorador de Windows con «Open Git Bash here», Git LFS, asociación de archivos .git* y .sh, actualizaciones y perfil en Windows Terminal). Déjalos como vienen y presiona Next. Abajo indica el espacio necesario en disco (en este equipo, unos 342 MB).</figcaption></figure><figure class="s3-shot"><a href="img/git_instalador_03_editor.png" target="_blank" rel="noopener" title="Clic para ampliar"><img src="img/git_instalador_03_editor.png" alt="Pantalla 3 · Choosing the default editor (editor por defecto)" loading="lazy"></a><figcaption><strong>Pantalla 3 · Choosing the default editor (editor por defecto)</strong><br>Por defecto el instalador propone Vim, y él mismo advierte que es difícil de usar y que se recomienda cambiarlo por un editor moderno. Abre la lista y elige «Use Visual Studio Code as Git&#x27;s default editor» (o el editor que conozcas). Presiona Next.</figcaption></figure><figure class="s3-shot"><a href="img/git_instalador_04_rama.png" target="_blank" rel="noopener" title="Clic para ampliar"><img src="img/git_instalador_04_rama.png" alt="Pantalla 4 · Adjusting the name of the initial branch (rama inicial)" loading="lazy"></a><figcaption><strong>Pantalla 4 · Adjusting the name of the initial branch (rama inicial)</strong><br>Por defecto está marcada «Let Git decide», que usa el nombre actual de Git para la rama inicial (en esta versión, «master»). Marca «Override the default branch name for new repositories» y escribe main, que es el nombre que usa GitHub. Así no tendrás que renombrar la rama después. Presiona Next.</figcaption></figure><figure class="s3-shot"><a href="img/git_instalador_05_path.png" target="_blank" rel="noopener" title="Clic para ampliar"><img src="img/git_instalador_05_path.png" alt="Pantalla 5 · Adjusting your PATH environment (PATH)" loading="lazy"></a><figcaption><strong>Pantalla 5 · Adjusting your PATH environment (PATH)</strong><br>Deja marcada la opción del medio, «Git from the command line and also from 3rd-party software» (la recomendada). Así puedes usar git en Git Bash, en el Símbolo del sistema y en PowerShell, sin cambiar herramientas de Windows como find y sort. Es la que evita el error «git no se reconoce como un comando».</figcaption></figure><figure class="s3-shot"><a href="img/git_instalador_06_ssh.png" target="_blank" rel="noopener" title="Clic para ampliar"><img src="img/git_instalador_06_ssh.png" alt="Pantalla 6 · Choosing the SSH executable (cliente SSH)" loading="lazy"></a><figcaption><strong>Pantalla 6 · Choosing the SSH executable (cliente SSH)</strong><br>Deja «Use bundled OpenSSH», que usa el ssh.exe que viene con Git. Solo lo necesitarás si luego conectas con GitHub mediante llaves SSH; para esta evidencia con HTTPS no cambia nada. Presiona Next.</figcaption></figure><figure class="s3-shot"><a href="img/git_instalador_07_https.png" target="_blank" rel="noopener" title="Clic para ampliar"><img src="img/git_instalador_07_https.png" alt="Pantalla 7 · Choosing HTTPS transport backend (conexiones HTTPS)" loading="lazy"></a><figcaption><strong>Pantalla 7 · Choosing HTTPS transport backend (conexiones HTTPS)</strong><br>Define qué librería usa Git para validar los certificados cuando te conectas a GitHub por HTTPS. Deja marcada la opción que viene por defecto, «Use the native Windows Secure Channel library», que usa los certificados de Windows (también sirve en redes de empresa o de centros de formación). Presiona Next.</figcaption></figure><figure class="s3-shot"><a href="img/git_instalador_08_finales_linea.png" target="_blank" rel="noopener" title="Clic para ampliar"><img src="img/git_instalador_08_finales_linea.png" alt="Pantalla 8 · Configuring the line ending conversions (finales de línea)" loading="lazy"></a><figcaption><strong>Pantalla 8 · Configuring the line ending conversions (finales de línea)</strong><br>Define cómo trata Git los saltos de línea de los archivos de texto, que en Windows y en Linux o macOS se guardan distinto. Deja marcada la opción por defecto, «Checkout Windows-style, commit Unix-style line endings», que es la recomendada en Windows para proyectos que se comparten entre sistemas. Presiona Next.</figcaption></figure><figure class="s3-shot"><a href="img/git_instalador_09_terminal.png" target="_blank" rel="noopener" title="Clic para ampliar"><img src="img/git_instalador_09_terminal.png" alt="Pantalla 9 · Configuring the terminal emulator (terminal de Git Bash)" loading="lazy"></a><figcaption><strong>Pantalla 9 · Configuring the terminal emulator (terminal de Git Bash)</strong><br>Elige la ventana que usará Git Bash. Deja marcada «Use MinTTY (the default terminal of MSYS2)», la opción por defecto: permite cambiar el tamaño de la ventana, seleccionar texto cómodamente y mostrar acentos. Presiona Next.</figcaption></figure><figure class="s3-shot"><a href="img/git_instalador_10_pull.png" target="_blank" rel="noopener" title="Clic para ampliar"><img src="img/git_instalador_10_pull.png" alt="Pantalla 10 · Choose the default behavior of git pull (comportamiento de git pull)" loading="lazy"></a><figcaption><strong>Pantalla 10 · Choose the default behavior of git pull (comportamiento de git pull)</strong><br>Define qué hace git pull cuando tu rama y la del remoto avanzaron por separado. Deja marcada la opción por defecto, «Merge»: crea un commit que une ambas ramas y conserva el historial del trabajo en paralelo. Las otras dos, Rebase y Fast-forward only, son para quien ya domina el flujo de ramas. Presiona Next.</figcaption></figure><figure class="s3-shot"><a href="img/git_instalador_11_credential.png" target="_blank" rel="noopener" title="Clic para ampliar"><img src="img/git_instalador_11_credential.png" alt="Pantalla 11 · Choose a credential helper (Git Credential Manager)" loading="lazy"></a><figcaption><strong>Pantalla 11 · Choose a credential helper (Git Credential Manager)</strong><br>Esta es la pantalla clave para conectarte con GitHub. Deja marcado «Git Credential Manager»: al hacer tu primer push se abre una ventana del navegador para iniciar sesión en GitHub y Git guarda la credencial, sin que escribas contraseña. Si eliges «None», Git te pedirá usuario y token en cada operación HTTPS. Presiona Next.</figcaption></figure><figure class="s3-shot"><a href="img/git_instalador_12_extras.png" target="_blank" rel="noopener" title="Clic para ampliar"><img src="img/git_instalador_12_extras.png" alt="Pantalla 12 · Configuring extra options (opciones extra) y botón Install" loading="lazy"></a><figcaption><strong>Pantalla 12 · Configuring extra options (opciones extra) y botón Install</strong><br>Última pantalla de opciones. Deja «Enable file system caching» marcada (acelera Git) y «Enable symbolic links» sin marcar, tal como vienen. Aquí el botón Next cambia a «Install»: presiónalo para empezar la instalación y espera a que termine.</figcaption></figure></div></div><div class="code-editor-box"><div class="editor-header"><div class="editor-dot r"></div><div class="editor-dot y"></div><div class="editor-dot g"></div><div class="editor-title"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span>05_verificar_windows.sh</span></div><div class="editor-badge">Windows · Git Bash o PowerShell</div></div><div class="editor-body"><div class="cl"><span class="ln">1</span><span class="code"><span class="syn-comment"># Alternativa: instalar con winget (administrador de paquetes de Windows)</span></span></div>
+<div class="cl"><span class="ln">2</span><span class="code"><span class="syn-method">winget install --id Git.Git -e --source winget</span></span></div>
+<div class="cl"><span class="ln">3</span><span class="code"></span></div>
+<div class="cl"><span class="ln">4</span><span class="code"><span class="syn-comment"># Después de instalar, abre una terminal NUEVA y comprueba</span></span></div>
+<div class="cl"><span class="ln">5</span><span class="code"><span class="syn-method">git --version</span></span></div>
+<div class="cl"><span class="ln">6</span><span class="code"><span class="punc">git version 2.xx.x.windows.x</span></span></div></div></div>
+<div class="cmd-explain"><h3 class="s13-h">Qué hace cada comando</h3><div class="table-container-card"><table class="table-comparativa"><thead><tr><th>Comando</th><th>Qué hace</th><th>Cómo se lee, parte por parte</th></tr></thead><tbody>
+<tr><td><code>winget install --id Git.Git -e --source winget</code></td><td>Instala Git desde el administrador de paquetes de Windows, sin usar el instalador gráfico.</td><td><code>winget</code> = el administrador de paquetes de Windows<br><code>install</code> = instalar un programa<br><code>--id Git.Git</code> = el programa exacto: Git<br><code>-e</code> = coincidencia exacta del nombre<br><code>--source winget</code> = usa el catálogo oficial de winget</td></tr>
+<tr><td><code>git --version</code></td><td>Muestra la versión de Git instalada. Si responde, Git está instalado y la terminal lo encuentra (está en el PATH).</td><td><code>git</code> = el programa<br><code>--version</code> = pide que muestre su versión</td></tr>
+</tbody></table></div></div>
+
+<div class="callout"><div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg> Por qué estas opciones</div><ul><li><strong>PATH recomendado:</strong> evita el error <code>git no se reconoce como un comando</code>.</li><li><strong>Rama <code>main</code>:</strong> coincide con la rama que crea GitHub y te ahorra renombrarla después.</li><li><strong>Credential Manager:</strong> abre una ventana del navegador para iniciar sesión, sin que escribas contraseñas en la terminal.</li></ul></div><div class="callout warn"><div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg> Importante</div><p>Los textos exactos de las pantallas pueden variar un poco entre versiones del instalador. Si una pantalla no coincide con esta lista, deja la opción recomendada y continúa.</p></div><div class="fa-take"><strong>Qué te llevas para tu informe EV04:</strong> la sección <em>Instalación de Git (herramienta local)</em> con un pantallazo del instalador por cada decisión importante (<strong>indicadores 1 y 2</strong>).</div>
+      </div>
+    </section>
+
+
+    <section class="slide-section" id="slide-06">
+      <div class="slide-container">
+        <span class="slide-badge-category badge-green"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 17 10 11 4 5"/><line x1="12" x2="20" y1="19" y2="19"/></svg> Bloque 3 · Demo en Vivo · macOS y Linux</span>
+        <h2 class="slide-title">Instalar Git en macOS y en Linux</h2>
+        <p class="slide-subtitle">Si usas Windows puedes pasar a la verificación, pero conoce estas rutas: tu documento puede mencionarlas y alguien de tu equipo puede usarlas.</p>
+<div class="cards-grid-2"><div class="card-pro top-azul"><div class="card-header-flex"><div class="card-icon-badge icon-badge-blue"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" x2="16" y1="21" y2="21"/><line x1="12" x2="12" y1="17" y2="21"/></svg></div><span class="card-pill-tag badge-blue">macOS</span></div><h3 class="card-title">Herramientas de línea de comandos o Homebrew</h3><p class="card-desc">Abre la app <em>Terminal</em> y escribe <code>git --version</code>. Si Git no está, macOS te ofrece instalar las <strong>herramientas de línea de comandos</strong>: acepta y espera. Con Homebrew también puedes usar <code>brew install git</code>.</p></div><div class="card-pro top-verde"><div class="card-header-flex"><div class="card-icon-badge icon-badge-green"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 17 10 11 4 5"/><line x1="12" x2="20" y1="19" y2="19"/></svg></div><span class="card-pill-tag badge-green">Linux</span></div><h3 class="card-title">Con el gestor de paquetes de tu distribución</h3><p class="card-desc">Abre una terminal y usa el comando de tu distribución (<code>apt</code>, <code>dnf</code> o <code>pacman</code>). Pide la contraseña de tu usuario para instalar con <code>sudo</code>.</p></div></div>
+<div class="code-editor-box"><div class="editor-header"><div class="editor-dot r"></div><div class="editor-dot y"></div><div class="editor-dot g"></div><div class="editor-title"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span>06_instalar_macos_linux.sh</span></div><div class="editor-badge">macOS · Linux</div></div><div class="editor-body"><div class="cl"><span class="ln">1</span><span class="code"><span class="syn-comment"># macOS: la primera vez, git ofrece instalar las herramientas de línea de comandos</span></span></div>
+<div class="cl"><span class="ln">2</span><span class="code"><span class="syn-method">git --version</span></span></div>
+<div class="cl"><span class="ln">3</span><span class="code"><span class="syn-comment"># macOS con Homebrew (si lo tienes instalado)</span></span></div>
+<div class="cl"><span class="ln">4</span><span class="code"><span class="syn-method">brew install git</span></span></div>
+<div class="cl"><span class="ln">5</span><span class="code"></span></div>
+<div class="cl"><span class="ln">6</span><span class="code"><span class="syn-comment"># Ubuntu, Debian y derivadas</span></span></div>
+<div class="cl"><span class="ln">7</span><span class="code"><span class="syn-method">sudo apt update</span></span></div>
+<div class="cl"><span class="ln">8</span><span class="code"><span class="syn-method">sudo apt install git</span></span></div>
+<div class="cl"><span class="ln">9</span><span class="code"></span></div>
+<div class="cl"><span class="ln">10</span><span class="code"><span class="syn-comment"># Fedora</span></span></div>
+<div class="cl"><span class="ln">11</span><span class="code"><span class="syn-method">sudo dnf install git</span></span></div>
+<div class="cl"><span class="ln">12</span><span class="code"></span></div>
+<div class="cl"><span class="ln">13</span><span class="code"><span class="syn-comment"># Arch Linux</span></span></div>
+<div class="cl"><span class="ln">14</span><span class="code"><span class="syn-method">sudo pacman -S git</span></span></div></div></div>
+<div class="cmd-explain"><h3 class="s13-h">Qué hace cada comando</h3><div class="table-container-card"><table class="table-comparativa"><thead><tr><th>Comando</th><th>Qué hace</th><th>Cómo se lee, parte por parte</th></tr></thead><tbody>
+<tr><td><code>git --version</code></td><td>Muestra la versión de Git instalada. Si responde, Git está instalado y la terminal lo encuentra (está en el PATH).</td><td><code>git</code> = el programa<br><code>--version</code> = pide que muestre su versión</td></tr>
+<tr><td><code>brew install git</code></td><td>Instala Git con Homebrew, el administrador de paquetes de macOS.</td><td><code>brew</code> = Homebrew<br><code>install</code> = instalar<br><code>git</code> = el paquete a instalar</td></tr>
+<tr><td><code>sudo apt update</code></td><td>En Ubuntu o Debian, actualiza la lista de paquetes disponibles antes de instalar.</td><td><code>sudo</code> = ejecutar como administrador<br><code>apt</code> = el administrador de paquetes<br><code>update</code> = actualizar la lista de paquetes</td></tr>
+<tr><td><code>sudo apt install git</code></td><td>En Ubuntu o Debian, instala Git.</td><td><code>sudo</code> = ejecutar como administrador<br><code>apt install</code> = instalar un paquete<br><code>git</code> = el paquete a instalar</td></tr>
+<tr><td><code>sudo dnf install git</code></td><td>En Fedora, instala Git.</td><td><code>sudo</code> = ejecutar como administrador<br><code>dnf install</code> = instalar un paquete<br><code>git</code> = el paquete a instalar</td></tr>
+<tr><td><code>sudo pacman -S git</code></td><td>En Arch Linux, instala Git.</td><td><code>sudo</code> = ejecutar como administrador<br><code>pacman -S</code> = instalar (sincronizar) un paquete<br><code>git</code> = el paquete a instalar</td></tr>
+</tbody></table></div></div>
+
+<div class="callout"><div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg> Autenticación en macOS y Linux</div><p>En estos sistemas no siempre viene el Git Credential Manager. Si no lo tienes, usarás un <strong>Personal Access Token</strong> como contraseña (slide 11). Es igual de válido para la evidencia.</p></div><div class="callout warn"><div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg> Error frecuente</div><p>Copiar los comandos con el <code>$</code> del inicio de línea. Ese símbolo solo indica el prompt: no lo escribas.</p></div><div class="fa-take"><strong>Qué te llevas para tu informe EV04:</strong> si trabajas en macOS o Linux, indica en tu documento la distribución o versión y el comando exacto que usaste, con su pantallazo.</div>
+      </div>
+    </section>
+
+
+    <section class="slide-section" id="slide-07">
+      <div class="slide-container">
+        <span class="slide-badge-category badge-green"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg> Bloque 3 · Verificar la instalación</span>
+        <h2 class="slide-title">Verifica con git --version y reconoce los errores comunes</h2>
+        <p class="slide-subtitle">Un solo comando demuestra que la instalación funcionó. Ábrelo en una terminal <strong>nueva</strong>, porque las terminales abiertas antes no ven el cambio del PATH.</p>
+<div class="code-editor-box"><div class="editor-header"><div class="editor-dot r"></div><div class="editor-dot y"></div><div class="editor-dot g"></div><div class="editor-title"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span>07_verificar_git.sh</span></div><div class="editor-badge">Terminal</div></div><div class="editor-body"><div class="cl"><span class="ln">1</span><span class="code"><span class="syn-comment"># Comprueba que Git quedó instalado y está en el PATH</span></span></div>
+<div class="cl"><span class="ln">2</span><span class="code"><span class="syn-method">git --version</span></span></div>
+<div class="cl"><span class="ln">3</span><span class="code"><span class="punc">git version 2.xx.x</span></span></div>
+<div class="cl"><span class="ln">4</span><span class="code"></span></div>
+<div class="cl"><span class="ln">5</span><span class="code"><span class="syn-comment"># Comprueba dónde está instalado (Windows PowerShell)</span></span></div>
+<div class="cl"><span class="ln">6</span><span class="code"><span class="syn-method">where.exe git</span></span></div>
+<div class="cl"><span class="ln">7</span><span class="code"><span class="syn-comment"># macOS o Linux</span></span></div>
+<div class="cl"><span class="ln">8</span><span class="code"><span class="syn-method">which git</span></span></div></div></div>
+<div class="cmd-explain"><h3 class="s13-h">Qué hace cada comando</h3><div class="table-container-card"><table class="table-comparativa"><thead><tr><th>Comando</th><th>Qué hace</th><th>Cómo se lee, parte por parte</th></tr></thead><tbody>
+<tr><td><code>git --version</code></td><td>Muestra la versión de Git instalada. Si responde, Git está instalado y la terminal lo encuentra (está en el PATH).</td><td><code>git</code> = el programa<br><code>--version</code> = pide que muestre su versión</td></tr>
+<tr><td><code>where.exe git</code></td><td>En Windows muestra la ruta donde está instalado Git.</td><td><code>where.exe</code> = busca un programa en el PATH<br><code>git</code> = el programa que buscas</td></tr>
+<tr><td><code>which git</code></td><td>En macOS o Linux muestra la ruta donde está instalado Git.</td><td><code>which</code> = busca un programa en el PATH<br><code>git</code> = el programa que buscas</td></tr>
+</tbody></table></div></div>
+
+<div class="table-container-card"><table class="table-comparativa"><thead><tr><th>Si ves esto</th><th>Qué significa</th><th>Qué haces</th></tr></thead><tbody>
+<tr><td><code>git version 2.xx.x...</code></td><td>Instalación correcta</td><td>Haz el pantallazo y sigue con el slide 8</td></tr>
+<tr><td><code>git no se reconoce como un comando</code> / <code>command not found</code></td><td>La terminal no encuentra Git</td><td>Cierra y abre la terminal; si persiste, reinstala y elige la opción recomendada del PATH</td></tr>
+<tr><td>El instalador se detiene o falla</td><td>Permisos o descarga dañada</td><td>Ejecuta como administrador y descarga de nuevo desde git-scm.com/install/windows</td></tr>
+</tbody></table></div>
+<div class="callout"><div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg> Dónde hacer el pantallazo</div><p>Captura la terminal completa mostrando el comando que escribiste y su respuesta. Ese es tu pantallazo de prueba para el <strong>indicador 2</strong>: instalación local sin errores.</p></div><div class="fa-take"><strong>Qué te llevas para tu informe EV04:</strong> un pantallazo de <code>git --version</code> con la versión visible y una frase que diga qué comprobaste (<strong>indicadores 1 y 2</strong>).</div>
+      </div>
+    </section>
+
+
+    <section class="slide-section" id="slide-08">
+      <div class="slide-container">
+        <span class="slide-badge-category badge-green"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> Bloque 3 · Configurar tu identidad</span>
+        <h2 class="slide-title">Configura tu identidad en Git: nombre y correo</h2>
+        <p class="slide-subtitle">Git firma cada commit con tu nombre y tu correo. Sin esta configuración, el primer <code>commit</code> falla o queda con datos incorrectos.</p>
+<div class="code-editor-box"><div class="editor-header"><div class="editor-dot r"></div><div class="editor-dot y"></div><div class="editor-dot g"></div><div class="editor-title"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span>08_configurar_identidad.sh</span></div><div class="editor-badge">Terminal · Git Bash</div></div><div class="editor-body"><div class="cl"><span class="ln">1</span><span class="code"><span class="syn-comment"># Tu nombre: aparecerá como autor de cada commit</span></span></div>
+<div class="cl"><span class="ln">2</span><span class="code"><span class="syn-method">git config --global user.name "Tu Nombre Apellido"</span></span></div>
+<div class="cl"><span class="ln">3</span><span class="code"><span class="syn-comment"># Tu correo: usa el mismo de tu cuenta de GitHub</span></span></div>
+<div class="cl"><span class="ln">4</span><span class="code"><span class="syn-method">git config --global user.email "tu_correo@ejemplo.com"</span></span></div>
+<div class="cl"><span class="ln">5</span><span class="code"><span class="syn-comment"># Rama inicial para repositorios nuevos (opcional)</span></span></div>
+<div class="cl"><span class="ln">6</span><span class="code"><span class="syn-method">git config --global init.defaultBranch main</span></span></div>
+<div class="cl"><span class="ln">7</span><span class="code"></span></div>
+<div class="cl"><span class="ln">8</span><span class="code"><span class="syn-comment"># Verifica lo que quedó guardado</span></span></div>
+<div class="cl"><span class="ln">9</span><span class="code"><span class="syn-method">git config --global --list</span></span></div>
+<div class="cl"><span class="ln">10</span><span class="code"><span class="punc">user.name=Tu Nombre Apellido</span></span></div>
+<div class="cl"><span class="ln">11</span><span class="code"><span class="punc">user.email=tu_correo@ejemplo.com</span></span></div>
+<div class="cl"><span class="ln">12</span><span class="code"><span class="punc">init.defaultbranch=main</span></span></div></div></div>
+<div class="cmd-explain"><h3 class="s13-h">Qué hace cada comando</h3><div class="table-container-card"><table class="table-comparativa"><thead><tr><th>Comando</th><th>Qué hace</th><th>Cómo se lee, parte por parte</th></tr></thead><tbody>
+<tr><td><code>git config --global user.name &quot;Tu Nombre Apellido&quot;</code></td><td>Guarda tu nombre. Git lo escribe como autor en cada commit que hagas.</td><td><code>git config</code> = leer o cambiar la configuración de Git<br><code>--global</code> = para todos tus repositorios en este equipo<br><code>user.name</code> = el dato que cambias: tu nombre<br><code>"Tu Nombre Apellido"</code> = el valor, entre comillas; cámbialo por el tuyo</td></tr>
+<tr><td><code>git config --global user.email &quot;tu_correo@ejemplo.com&quot;</code></td><td>Guarda tu correo. Usa el mismo de tu cuenta de GitHub para que tus commits se asocien a tu cuenta.</td><td><code>git config --global</code> = configuración para todo el equipo<br><code>user.email</code> = el dato que cambias: tu correo<br><code>"tu_correo@ejemplo.com"</code> = el valor; cámbialo por el tuyo</td></tr>
+<tr><td><code>git config --global init.defaultBranch main</code></td><td>Hace que los repositorios nuevos empiecen con la rama principal llamada main, igual que GitHub.</td><td><code>init.defaultBranch</code> = el nombre de la rama inicial al hacer git init<br><code>main</code> = el nombre elegido</td></tr>
+<tr><td><code>git config --global --list</code></td><td>Muestra todo lo que quedó guardado en la configuración global. Sirve para comprobar tu nombre y tu correo.</td><td><code>--list</code> = listar la configuración</td></tr>
+</tbody></table></div></div>
+
+<div class="callout"><div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg> Para ti: qué error previene cada línea</div><ul><li><code>user.name</code> y <code>user.email</code> evitan el mensaje <em>Please tell me who you are</em> al hacer tu primer commit.</li><li>Usar el mismo correo de GitHub hace que tus commits se asocien a tu cuenta.</li><li><code>--global</code> guarda la configuración para todos tus repositorios; sin él, solo vale para el repositorio actual.</li><li><code>git config --global --list</code> es tu prueba: muestra lo que Git guardó.</li></ul></div><div class="callout warn"><div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg> Importante</div><p>Reemplaza el nombre y el correo del ejemplo por los tuyos. El pantallazo de <code>git config --global --list</code> muestra tus datos: es normal, pero <strong>nunca</strong> incluyas contraseñas ni tokens.</p></div><div class="fa-take"><strong>Qué te llevas para tu informe EV04:</strong> la sección <em>Configuración inicial de Git</em> con los tres comandos y el pantallazo de <code>git config --global --list</code> (<strong>indicador 2</strong>).</div>
+      </div>
+    </section>
+
+
+    <section class="slide-section" id="slide-09">
+      <div class="slide-container">
+        <span class="slide-badge-category badge-green"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 17 10 11 4 5"/><line x1="12" x2="20" y1="19" y2="19"/></svg> Bloque 3 · Probar Git local</span>
+        <h2 class="slide-title">Prueba tu Git local con un repositorio de práctica</h2>
+        <p class="slide-subtitle">Instalar no basta: demuestra que Git funciona haciendo tu primer commit. Es una prueba corta; la práctica completa es la EV05.</p>
+<div class="code-editor-box"><div class="editor-header"><div class="editor-dot r"></div><div class="editor-dot y"></div><div class="editor-dot g"></div><div class="editor-title"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span>09_probar_git_local.sh</span></div><div class="editor-badge">Terminal · Git Bash</div></div><div class="editor-body"><div class="cl"><span class="ln">1</span><span class="code"><span class="syn-comment"># 1) Crea la carpeta de prueba y entra en ella</span></span></div>
+<div class="cl"><span class="ln">2</span><span class="code"><span class="syn-method">mkdir prueba-git</span></span></div>
+<div class="cl"><span class="ln">3</span><span class="code"><span class="syn-method">cd prueba-git</span></span></div>
+<div class="cl"><span class="ln">4</span><span class="code"></span></div>
+<div class="cl"><span class="ln">5</span><span class="code"><span class="syn-comment"># 2) Inicia el repositorio local</span></span></div>
+<div class="cl"><span class="ln">6</span><span class="code"><span class="syn-method">git init</span></span></div>
+<div class="cl"><span class="ln">7</span><span class="code"><span class="punc">Initialized empty Git repository in .../prueba-git/.git/</span></span></div>
+<div class="cl"><span class="ln">8</span><span class="code"></span></div>
+<div class="cl"><span class="ln">9</span><span class="code"><span class="syn-comment"># 3) Crea un archivo, prepáralo y guarda la versión</span></span></div>
+<div class="cl"><span class="ln">10</span><span class="code"><span class="syn-method">echo "# Prueba de Git" > README.md</span></span></div>
+<div class="cl"><span class="ln">11</span><span class="code"><span class="syn-method">git add README.md</span></span></div>
+<div class="cl"><span class="ln">12</span><span class="code"><span class="syn-method">git commit -m "Primer commit de prueba"</span></span></div>
+<div class="cl"><span class="ln">13</span><span class="code"></span></div>
+<div class="cl"><span class="ln">14</span><span class="code"><span class="syn-comment"># 4) Comprueba el historial</span></span></div>
+<div class="cl"><span class="ln">15</span><span class="code"><span class="syn-method">git log --oneline</span></span></div>
+<div class="cl"><span class="ln">16</span><span class="code"><span class="punc">a1b2c3d Primer commit de prueba</span></span></div></div></div>
+<div class="cmd-explain"><h3 class="s13-h">Qué hace cada comando</h3><div class="table-container-card"><table class="table-comparativa"><thead><tr><th>Comando</th><th>Qué hace</th><th>Cómo se lee, parte por parte</th></tr></thead><tbody>
+<tr><td><code>mkdir prueba-git</code></td><td>Crea una carpeta nueva con ese nombre en la ubicación donde estás.</td><td><code>mkdir</code> = make directory: crear carpeta<br><code>el nombre</code> = cómo se llamará la carpeta</td></tr>
+<tr><td><code>cd prueba-git</code></td><td>Entra a la carpeta indicada. Desde ahí se ejecutarán los siguientes comandos.</td><td><code>cd</code> = change directory: cambiar de carpeta<br><code>el nombre</code> = la carpeta a la que entras</td></tr>
+<tr><td><code>git init</code></td><td>Convierte la carpeta actual en un repositorio local: crea la carpeta oculta .git donde Git guarda el historial.</td><td><code>git</code> = el programa<br><code>init</code> = iniciar un repositorio</td></tr>
+<tr><td><code>echo &quot;# Prueba de Git&quot; &gt; README.md</code></td><td>Crea el archivo con ese texto dentro (si ya existía, lo reemplaza).</td><td><code>echo</code> = escribe un texto<br><code>></code> = en lugar de mostrarlo, lo guarda en un archivo<br><code>README.md</code> = el nombre del archivo que se crea</td></tr>
+<tr><td><code>git add README.md</code></td><td>Prepara el archivo para el próximo commit (lo pasa al staging).</td><td><code>add</code> = agregar al área de preparación<br><code>README.md</code> = el archivo que preparas; con . se preparan todos</td></tr>
+<tr><td><code>git commit -m &quot;Primer commit de prueba&quot;</code></td><td>Guarda una versión con lo que preparaste, con un mensaje que explica el cambio. Queda solo en tu equipo.</td><td><code>commit</code> = guardar una versión<br><code>-m</code> = incluir el mensaje en el mismo comando<br><code>"mensaje"</code> = qué cambiaste, entre comillas</td></tr>
+<tr><td><code>git log --oneline</code></td><td>Lista el historial de commits, uno por línea: su código corto y su mensaje.</td><td><code>log</code> = mostrar el historial<br><code>--oneline</code> = formato resumido de una línea por commit</td></tr>
+</tbody></table></div></div>
+
+<div class="callout"><div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg> Qué demuestra cada resultado</div><ul><li><code>git init</code> responde que inicializó un repositorio vacío: Git local funciona.</li><li>El <code>commit</code> sin errores confirma que tu identidad quedó bien configurada.</li><li><code>git log --oneline</code> muestra tu commit: ya tienes historial local. El identificador (<code>a1b2c3d</code>) es ficticio; el tuyo será distinto.</li></ul></div><div class="callout warn"><div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg> Error frecuente</div><p>Ejecutar <code>git init</code> en una carpeta equivocada, por ejemplo tu carpeta de usuario o el escritorio completo. Crea siempre una carpeta de prueba propia y comprueba con <code>pwd</code> dónde estás.</p></div><div class="fa-take"><strong>Qué te llevas para tu informe EV04:</strong> un pantallazo de <code>git log --oneline</code> con tu primer commit y una frase que explique que esto prueba que la herramienta local funciona sin errores (<strong>indicador 2</strong>).</div>
+      </div>
+    </section>
+
+
+    <section class="slide-section" id="slide-10">
+      <div class="slide-container">
+        <span class="slide-badge-category badge-blue"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> Bloque 3 · Crear tu cuenta de GitHub</span>
+        <h2 class="slide-title">Crea tu cuenta de GitHub (herramienta remota)</h2>
+        <p class="slide-subtitle">GitHub no se instala: se usa desde el navegador. Si ya tienes cuenta, inicia sesión y salta a la autenticación.</p>
+<ol class="steps-list"><li><strong>Entra a <code>github.com</code></strong> y presiona <em>Sign up</em>.</li><li><strong>Escribe tu correo</strong>, una contraseña segura y un nombre de usuario. Elige un usuario sobrio, porque se verá en la URL de tus repositorios.</li><li><strong>Resuelve la verificación</strong> (el rompecabezas de seguridad) y confirma el código que llega a tu correo.</li><li><strong>Responde el cuestionario de bienvenida</strong> o ábrelo más tarde; el plan <em>Free</em> es suficiente para esta evidencia.</li><li><strong>Verifica que entraste</strong>: arriba a la derecha debe aparecer tu foto o avatar, y al abrirlo, tu nombre de usuario.</li></ol>
+<div class="callout"><div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg> Seguridad básica</div><p>Usa una contraseña que no repitas en otros sitios y activa la verificación en dos pasos cuando puedas (Settings &rarr; Password and authentication). No es obligatorio para la evidencia, pero protege tu cuenta.</p></div><div class="callout warn"><div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg> Error frecuente</div><p>No confirmar el correo. Sin esa verificación, GitHub limita algunas funciones. Revisa también la carpeta de spam.</p></div><div class="fa-take"><strong>Qué te llevas para tu informe EV04:</strong> el paso <em>Creación de la cuenta en GitHub</em> con un pantallazo de tu perfil ya iniciado. Si ya tenías cuenta, muestra tu página principal con la sesión abierta.</div>
+      </div>
+    </section>
+
+
+    <section class="slide-section" id="slide-11">
+      <div class="slide-container">
+        <span class="slide-badge-category badge-blue"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="7.5" cy="15.5" r="5.5"/><path d="m21 2-9.6 9.6"/><path d="m15.5 7.5 3 3L22 7l-3-3"/></svg> Bloque 3 · Autenticación con GitHub</span>
+        <h2 class="slide-title">Autenticación: Git Credential Manager, token y SSH</h2>
+        <p class="slide-subtitle">GitHub <strong>ya no acepta la contraseña de tu cuenta</strong> al hacer <code>git push</code> por HTTPS. Necesitas una de estas tres vías.</p>
+<div class="table-container-card"><table class="table-comparativa"><thead><tr><th>Vía</th><th>Cómo funciona</th><th>Cuándo usarla</th></tr></thead><tbody>
+<tr><td><strong>Git Credential Manager</strong></td><td>Viene con Git para Windows. Al primer <code>push</code> abre el navegador, inicias sesión y queda guardado</td><td>Es la más simple en Windows: úsala si dejaste la opción por defecto al instalar</td></tr>
+<tr><td><strong>Personal Access Token (PAT)</strong></td><td>Una clave generada en GitHub que reemplaza la contraseña en la terminal</td><td>macOS, Linux o si el Credential Manager no se abre</td></tr>
+<tr><td><strong>SSH</strong></td><td>Un par de llaves (pública y privada); la pública se registra en GitHub</td><td>Alternativa avanzada; en esta sesión basta con mencionarla</td></tr>
+</tbody></table></div>
+<div class="code-editor-box"><div class="editor-header"><div class="editor-dot r"></div><div class="editor-dot y"></div><div class="editor-dot g"></div><div class="editor-title"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span>11_autenticacion.sh</span></div><div class="editor-badge">Terminal · Git Bash</div></div><div class="editor-body"><div class="cl"><span class="ln">1</span><span class="code"><span class="syn-comment"># Con Git Credential Manager (Windows): al hacer push se abre una ventana</span></span></div>
+<div class="cl"><span class="ln">2</span><span class="code"><span class="syn-comment"># del navegador; inicia sesión en GitHub y autoriza. No escribes contraseña.</span></span></div>
+<div class="cl"><span class="ln">3</span><span class="code"></span></div>
+<div class="cl"><span class="ln">4</span><span class="code"><span class="syn-comment"># Con Personal Access Token (macOS, Linux o si no usas GCM):</span></span></div>
+<div class="cl"><span class="ln">5</span><span class="code"><span class="syn-comment"># 1) GitHub > Settings > Developer settings > Personal access tokens</span></span></div>
+<div class="cl"><span class="ln">6</span><span class="code"><span class="syn-comment"># 2) Genera un token con permiso sobre tu repositorio (por ejemplo, repo)</span></span></div>
+<div class="cl"><span class="ln">7</span><span class="code"><span class="syn-comment"># 3) Cuando Git pida Username escribe tu usuario de GitHub</span></span></div>
+<div class="cl"><span class="ln">8</span><span class="code"><span class="syn-comment"># 4) Cuando pida Password pega el TOKEN (no tu contraseña de la cuenta)</span></span></div>
+<div class="cl"><span class="ln">9</span><span class="code"></span></div>
+<div class="cl"><span class="ln">10</span><span class="code"><span class="syn-comment"># Alternativa avanzada: SSH (genera un par de llaves y súbela a GitHub)</span></span></div>
+<div class="cl"><span class="ln">11</span><span class="code"><span class="syn-method">ssh-keygen -t ed25519 -C "tu_correo@ejemplo.com"</span></span></div></div></div>
+<div class="cmd-explain"><h3 class="s13-h">Qué hace cada comando</h3><div class="table-container-card"><table class="table-comparativa"><thead><tr><th>Comando</th><th>Qué hace</th><th>Cómo se lee, parte por parte</th></tr></thead><tbody>
+<tr><td><code>ssh-keygen -t ed25519 -C &quot;tu_correo@ejemplo.com&quot;</code></td><td>Genera un par de llaves SSH (pública y privada). La pública se registra en GitHub; la privada nunca se comparte.</td><td><code>ssh-keygen</code> = generador de llaves SSH<br><code>-t ed25519</code> = tipo de llave moderno y seguro<br><code>-C</code> = comentario que identifica la llave<br><code>"tu_correo@ejemplo.com"</code> = tu correo, como etiqueta</td></tr>
+</tbody></table></div></div>
+
+<h3 class="s13-h">Cómo crear tu token paso a paso</h3><ol class="steps-list"><li><strong>Entra a Settings.</strong> Con tu sesión iniciada en <code>github.com</code>, abre el menú de tu foto (arriba a la derecha) y elige <em>Settings</em>.</li><li><strong>Developer settings.</strong> En el menú de la izquierda, baja hasta el final y entra a <em>Developer settings</em>.</li><li><strong>Tokens (classic).</strong> Entra a <em>Personal access tokens</em> &rarr; <em>Tokens (classic)</em> y presiona <em>Generate new token</em> &rarr; <em>Generate new token (classic)</em>. GitHub puede pedirte confirmar tu contraseña o tu código de verificación.</li><li><strong>Nombre y vencimiento.</strong> En <em>Note</em> escribe un nombre que reconozcas, por ejemplo <code>VSCode-prueba-git</code>, y en <em>Expiration</em> elige una fecha corta (7 o 30 días).</li><li><strong>Permiso.</strong> En <em>Select scopes</em> marca la casilla <code>repo</code>: permite leer y escribir en tus repositorios. Con eso basta para esta práctica.</li><li><strong>Generate token y copia.</strong> Presiona <em>Generate token</em> y <strong>copia el código de inmediato</strong> (empieza por <code>ghp_</code>). GitHub lo muestra una sola vez.</li><li><strong>Guárdalo con cuidado.</strong> Guárdalo en un lugar seguro. No lo pegues en tu documento ni en un pantallazo.</li></ol><div class="s3-gallery"><div class="s3-gallery-title">Así se ve en GitHub (referencia)</div><div class="s3-gallery-grid"><figure class="s3-shot"><a href="img/github_token_01_menu_settings.png" target="_blank" rel="noopener" title="Clic para ampliar"><img src="img/github_token_01_menu_settings.png" alt="Pantalla 1 · Menú de tu foto de perfil → Settings" loading="lazy"></a><figcaption><strong>Pantalla 1 · Menú de tu foto de perfil → Settings</strong><br>Con la sesión iniciada en github.com, presiona tu foto de perfil (arriba a la derecha). Se abre este menú: elige «Settings», que está en el grupo de opciones de abajo, junto a «Copilot settings». Desde ahí llegarás a «Developer settings», donde se crean los tokens.</figcaption></figure><figure class="s3-shot"><a href="img/github_token_03_tokens_classic.png" target="_blank" rel="noopener" title="Clic para ampliar"><img src="img/github_token_03_tokens_classic.png" alt="Pantalla 3 · Developer settings → Personal access tokens → Tokens (classic)" loading="lazy"></a><figcaption><strong>Pantalla 3 · Developer settings → Personal access tokens → Tokens (classic)</strong><br>Dentro de Developer settings, el menú de la izquierda tiene «GitHub Apps», «OAuth Apps» y «Personal access tokens». Despliega «Personal access tokens» y elige «Tokens (classic)» (la otra opción es «Fine-grained tokens»). En la pantalla que se abre presionarás «Generate new token».</figcaption></figure><figure class="s3-shot"><a href="img/github_token_04_generate.png" target="_blank" rel="noopener" title="Clic para ampliar"><img src="img/github_token_04_generate.png" alt="Pantalla 4 · Personal access tokens (classic) → Generate new token" loading="lazy"></a><figcaption><strong>Pantalla 4 · Personal access tokens (classic) → Generate new token</strong><br>Esta es la lista de tus tokens classic; si es tu primera vez aparece «No personal access token created». Presiona el botón «Generate new token» y, en el menú que se despliega, elige «Generate new token (classic)». GitHub puede pedirte confirmar tu contraseña o un código de verificación.</figcaption></figure></div></div><div class="callout"><div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg> Classic o fine-grained</div><p>GitHub recomienda los tokens <em>fine-grained</em> (Developer settings &rarr; Fine-grained tokens), que se limitan a un repositorio: eliges <em>Only select repositories</em> &rarr; <code>prueba-git</code> y en <em>Repository permissions</em> pones <em>Contents</em> en <em>Read and write</em>. El <em>classic</em> es más rápido de crear, pero puede acceder a todos tus repositorios; por eso conviene que caduque pronto. Los nombres de los menús pueden cambiar con el tiempo.</p></div><h3 class="s13-h">Cómo conectarte desde tu editor de código (Visual Studio Code)</h3><div class="table-container-card"><table class="table-comparativa"><thead><tr><th>Forma</th><th>Qué haces en VS Code</th><th>Cuándo usarla</th></tr></thead><tbody>
+<tr><td><strong>A. Iniciar sesión con tu cuenta</strong></td><td>Abajo en la barra lateral izquierda presiona el icono de <em>Cuentas</em> y elige <em>Sign in with GitHub</em>; se abre el navegador, autorizas y vuelves al editor. También aparece el aviso de inicio de sesión la primera vez que haces <em>Push</em> o <em>Publish</em></td><td>Si el navegador se abre sin problema (la más simple)</td></tr>
+<tr><td><strong>B. Usar el token como contraseña</strong></td><td>En la terminal integrada de VS Code haz el <code>git push</code>; cuando pida <em>Username</em> escribe tu usuario y cuando pida <em>Password</em> pega el <strong>token</strong> (al pegar no se ve nada: es normal)</td><td>Si el navegador no se abre o usas macOS o Linux sin gestor de credenciales</td></tr>
+</tbody></table></div><ol class="steps-list"><li><strong>Abre tu carpeta de práctica en VS Code:</strong> <em>File</em> &rarr; <em>Open Folder</em> y elige <code>prueba-git</code>, o escribe <code>code .</code> en Git Bash dentro de la carpeta.</li><li><strong>Abre la terminal integrada:</strong> <em>Terminal</em> &rarr; <em>New Terminal</em>. Ya estás dentro de tu repositorio.</li><li><strong>Haz el push</strong> (lo harás completo en el slide 13, cuando tengas el repositorio remoto creado).</li></ol><div class="code-editor-box"><div class="editor-header"><div class="editor-dot r"></div><div class="editor-dot y"></div><div class="editor-dot g"></div><div class="editor-title"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span>11b_token_en_vscode.sh</span></div><div class="editor-badge">Terminal integrada de VS Code</div></div><div class="editor-body"><div class="cl"><span class="ln">1</span><span class="code"><span class="syn-comment"># Abre la carpeta de práctica en VS Code (desde Git Bash, dentro de la carpeta)</span></span></div>
+<div class="cl"><span class="ln">2</span><span class="code"><span class="syn-method">code .</span></span></div>
+<div class="cl"><span class="ln">3</span><span class="code"><span class="syn-comment"># En la terminal integrada de VS Code (cuando ya exista el repositorio remoto):</span></span></div>
+<div class="cl"><span class="ln">4</span><span class="code"><span class="syn-method">git push -u origin main</span></span></div>
+<div class="cl"><span class="ln">5</span><span class="code"><span class="syn-comment"># Username: escribe tu usuario de GitHub</span></span></div>
+<div class="cl"><span class="ln">6</span><span class="code"><span class="syn-comment"># Password: pega el TOKEN (no tu contraseña de la cuenta)</span></span></div></div></div>
+<div class="cmd-explain"><h3 class="s13-h">Qué hace cada comando</h3><div class="table-container-card"><table class="table-comparativa"><thead><tr><th>Comando</th><th>Qué hace</th><th>Cómo se lee, parte por parte</th></tr></thead><tbody>
+<tr><td><code>code .</code></td><td>Abre la carpeta actual en Visual Studio Code.</td><td><code>code</code> = el comando que abre VS Code<br><code>.</code> = la carpeta en la que estás parado</td></tr>
+<tr><td><code>git push -u origin main</code></td><td>Sube tus commits de la rama main a GitHub, y deja recordado que main de tu equipo sigue a origin/main.</td><td><code>push</code> = subir commits al remoto<br><code>-u</code> = recuerda esta conexión para los próximos git push y git pull<br><code>origin</code> = a qué remoto se sube<br><code>main</code> = qué rama se sube</td></tr>
+</tbody></table></div></div>
+<div class="callout warn"><div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> Nunca muestres tu token</div><p>Un token es como una contraseña. Si aparece en un pantallazo o lo subes a un repositorio, cualquiera puede usar tu cuenta. Tápalo con un recuadro o no lo captures, y si lo expones, revócalo de inmediato en GitHub.</p></div><div class="fa-take"><strong>Qué te llevas para tu informe EV04:</strong> una explicación breve de la vía de autenticación que usaste y por qué, con pantallazo de la ventana de inicio de sesión (sin datos sensibles) (<strong>indicador 3</strong>).</div>
+      </div>
+    </section>
+
+
+    <section class="slide-section" id="slide-12">
+      <div class="slide-container">
+        <span class="slide-badge-category badge-blue"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/></svg> Bloque 3 · Crear el repositorio remoto</span>
+        <h2 class="slide-title">Crea el repositorio remoto de prueba en GitHub</h2>
+        <p class="slide-subtitle">Este repositorio vacío será el destino de tu primer <code>push</code>. Créalo desde el navegador.</p>
+<ol class="steps-list"><li><strong>Abre el menú <em>+</em></strong> (arriba a la derecha) y elige <em>New repository</em>.</li><li><strong>Nombre del repositorio:</strong> por ejemplo <code>prueba-git</code>, en minúsculas y con guiones, sin espacios.</li><li><strong>Descripción</strong> (opcional): una frase como "Repositorio de prueba de la evidencia EV04".</li><li><strong>Visibilidad:</strong> <em>Public</em> para que el instructor pueda verlo.</li><li><strong>Déjalo vacío:</strong> NO marques <em>Add a README</em>, <em>.gitignore</em> ni licencia, porque tu repositorio local ya tiene su primer commit y GitHub lo rechazaría por historiales distintos.</li><li><strong>Presiona <em>Create repository</em></strong> y copia la URL HTTPS que aparece en la sección <em>Quick setup</em> (termina en <code>.git</code>).</li></ol>
+<div class="s3-gallery"><div class="s3-gallery-title">Así se ve en GitHub (referencia)</div><div class="s3-gallery-grid"><figure class="s3-shot"><a href="img/github_repo_01_nuevo.png" target="_blank" rel="noopener" title="Clic para ampliar"><img src="img/github_repo_01_nuevo.png" alt="Pantalla 1 · Menú + → New repository y formulario «Create a new repository»" loading="lazy"></a><figcaption><strong>Pantalla 1 · Menú + → New repository y formulario «Create a new repository»</strong><br>Arriba a la derecha, el signo + abre un menú: elige «New repository». En el formulario, escribe en «Repository name» el nombre (por ejemplo, prueba-git); deja «Public»; y deja en «Off» el interruptor de «Add README», en «No .gitignore» y en «No license». Presiona «Create repository». Aquí el formulario aparece todavía vacío.</figcaption></figure></div></div><div class="callout"><div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg> Qué obtienes</div><p>Una dirección como <code>https://github.com/TU_USUARIO/prueba-git.git</code>. Es la dirección del remoto: la usarás en el siguiente slide con <code>git remote add</code>.</p></div><div class="callout warn"><div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg> Error frecuente</div><p>Crear el repositorio con README y luego recibir <code>rejected ... fetch first</code> o <code>unrelated histories</code> al hacer push. Si te pasa, crea un repositorio vacío nuevo.</p></div><div class="fa-take"><strong>Qué te llevas para tu informe EV04:</strong> el paso <em>Creación del repositorio remoto</em> con un pantallazo de la pantalla Quick setup con tu URL visible (<strong>indicador 3</strong>).</div>
+      </div>
+    </section>
+
+
+    <section class="slide-section" id="slide-13">
+      <div class="slide-container">
+        <span class="slide-badge-category badge-blue"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22v-5"/><path d="M9 8V2"/><path d="M15 8V2"/><path d="M18 8v5a4 4 0 0 1-4 4h-4a4 4 0 0 1-4-4V8Z"/></svg> Bloque 3 · Conectar local y remoto</span>
+        <h2 class="slide-title">Conecta tu repositorio local con GitHub y haz el primer push</h2>
+        <p class="slide-subtitle">Aquí se juntan las dos mitades. Si el <code>push</code> funciona, tu herramienta remota quedó bien configurada.</p>
+<div class="code-editor-box"><div class="editor-header"><div class="editor-dot r"></div><div class="editor-dot y"></div><div class="editor-dot g"></div><div class="editor-title"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span>13_conectar_y_push.sh</span></div><div class="editor-badge">Terminal · Git Bash</div></div><div class="editor-body"><div class="cl"><span class="ln">1</span><span class="code"><span class="syn-comment"># Estando dentro de la carpeta prueba-git (tu repositorio local)</span></span></div>
+<div class="cl"><span class="ln">2</span><span class="code"><span class="syn-comment"># 1) Conecta el local con el remoto; cambia TU_USUARIO por el tuyo</span></span></div>
+<div class="cl"><span class="ln">3</span><span class="code"><span class="syn-method">git remote add origin https://github.com/TU_USUARIO/prueba-git.git</span></span></div>
+<div class="cl"><span class="ln">4</span><span class="code"></span></div>
+<div class="cl"><span class="ln">5</span><span class="code"><span class="syn-comment"># 2) Verifica la conexión</span></span></div>
+<div class="cl"><span class="ln">6</span><span class="code"><span class="syn-method">git remote -v</span></span></div>
+<div class="cl"><span class="ln">7</span><span class="code"><span class="punc">origin  https://github.com/TU_USUARIO/prueba-git.git (fetch)</span></span></div>
+<div class="cl"><span class="ln">8</span><span class="code"><span class="punc">origin  https://github.com/TU_USUARIO/prueba-git.git (push)</span></span></div>
+<div class="cl"><span class="ln">9</span><span class="code"></span></div>
+<div class="cl"><span class="ln">10</span><span class="code"><span class="syn-comment"># 3) Asegura que la rama principal se llame main</span></span></div>
+<div class="cl"><span class="ln">11</span><span class="code"><span class="syn-method">git branch -M main</span></span></div>
+<div class="cl"><span class="ln">12</span><span class="code"></span></div>
+<div class="cl"><span class="ln">13</span><span class="code"><span class="syn-comment"># 4) Sube tu commit al remoto</span></span></div>
+<div class="cl"><span class="ln">14</span><span class="code"><span class="syn-method">git push -u origin main</span></span></div>
+<div class="cl"><span class="ln">15</span><span class="code"><span class="punc">Writing objects: 100% (3/3), done.</span></span></div>
+<div class="cl"><span class="ln">16</span><span class="code"><span class="punc">branch 'main' set up to track 'origin/main'.</span></span></div></div></div>
+<div class="cmd-explain"><h3 class="s13-h">Qué hace cada comando</h3><div class="table-container-card"><table class="table-comparativa"><thead><tr><th>Comando</th><th>Qué hace</th><th>Cómo se lee, parte por parte</th></tr></thead><tbody>
+<tr><td><code>git remote add origin https://github.com/TU_USUARIO/prueba-git.git</code></td><td>Conecta tu repositorio local con el repositorio de GitHub. Todavía no sube nada: solo guarda la dirección.</td><td><code>git remote</code> = administra las conexiones con repositorios remotos<br><code>add</code> = agregar una conexión nueva<br><code>origin</code> = el nombre corto de esa conexión; por convención se llama origin<br><code>https://github.com/TU_USUARIO/prueba-git.git</code> = la URL del repositorio en GitHub; cambia TU_USUARIO por tu usuario</td></tr>
+<tr><td><code>git remote -v</code></td><td>Muestra las conexiones remotas guardadas y sus URL. Comprueba que el origin quedó bien escrito.</td><td><code>remote</code> = conexiones remotas<br><code>-v</code> = verbose: muestra también las URL (fetch para bajar, push para subir)</td></tr>
+<tr><td><code>git branch -M main</code></td><td>Renombra la rama actual a main para que coincida con la de GitHub.</td><td><code>branch</code> = trabajar con ramas<br><code>-M</code> = renombrar la rama actual aunque ya exista otra con ese nombre<br><code>main</code> = el nombre nuevo</td></tr>
+<tr><td><code>git push -u origin main</code></td><td>Sube tus commits de la rama main a GitHub, y deja recordado que main de tu equipo sigue a origin/main.</td><td><code>push</code> = subir commits al remoto<br><code>-u</code> = recuerda esta conexión para los próximos git push y git pull<br><code>origin</code> = a qué remoto se sube<br><code>main</code> = qué rama se sube</td></tr>
+</tbody></table></div></div>
+
+<div class="callout"><div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg> Cómo comprobar que funcionó</div><ul><li>La terminal termina sin <code>error</code> ni <code>fatal</code> y muestra que la rama quedó enlazada con <code>origin/main</code>.</li><li>Actualiza la página del repositorio en GitHub: debes ver tu archivo <code>README.md</code> y tu mensaje de commit.</li><li>Haz un pantallazo de la terminal <strong>y otro</strong> del repositorio en GitHub: juntos son tu evidencia.</li></ul></div><div class="callout warn"><div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg> Importante</div><p>Aquí se abre la ventana del Credential Manager o la terminal te pide usuario y token (slide 11). Esos datos no se capturan. Esta es solo una prueba de conexión: la práctica completa con <code>Programa-Git</code> y el video es la <strong>EV05</strong>, en la Sesión 4.</p></div><div class="fa-take"><strong>Qué te llevas para tu informe EV04:</strong> un pantallazo de <code>git remote -v</code>, uno del resultado del <code>push</code> y uno del repositorio en GitHub con tu archivo (<strong>indicador 3</strong>).</div>
+      </div>
+    </section>
+
+
+    <section class="slide-section" id="slide-14">
+      <div class="slide-container">
+        <span class="slide-badge-category badge-blue"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg> Bloque 3 · Errores frecuentes</span>
+        <h2 class="slide-title">Errores frecuentes y cómo resolverlos</h2>
+        <p class="slide-subtitle">Si algo falla, casi siempre es una de estas causas. Documentar un error y cómo lo resolviste también enriquece tu informe.</p>
+<div class="table-container-card"><table class="table-comparativa"><thead><tr><th>Error o mensaje</th><th>Causa más común</th><th>Solución</th></tr></thead><tbody>
+<tr><td><code>git no se reconoce como un comando</code> / <code>command not found</code></td><td>Git no está en el PATH o la terminal es anterior a la instalación</td><td>Abre una terminal nueva; si sigue, reinstala eligiendo la opción recomendada del PATH</td></tr>
+<tr><td><code>Please tell me who you are</code></td><td>No configuraste <code>user.name</code> y <code>user.email</code></td><td>Ejecuta los dos <code>git config --global</code> del slide 8</td></tr>
+<tr><td><code>fatal: not a git repository</code></td><td>Estás fuera de la carpeta del repositorio o no hiciste <code>git init</code></td><td>Entra a la carpeta con <code>cd</code> y comprueba con <code>pwd</code>; ejecuta <code>git init</code> si falta</td></tr>
+<tr><td><code>remote origin already exists</code></td><td>Ya habías añadido el remoto</td><td>Revisa con <code>git remote -v</code> y, si la URL es errónea, usa <code>git remote set-url origin URL</code></td></tr>
+<tr><td><code>Repository not found</code> / <code>fatal: unable to access</code></td><td>URL mal escrita, repositorio privado de otra cuenta o sin internet</td><td>Copia de nuevo la URL desde GitHub y revisa tu usuario y tu conexión</td></tr>
+<tr><td><code>Authentication failed</code> / <code>Support for password authentication was removed</code></td><td>Escribiste la contraseña de la cuenta en lugar de un token</td><td>Usa Git Credential Manager o un Personal Access Token (slide 11)</td></tr>
+<tr><td><code>src refspec main does not match any</code></td><td>No hay commits todavía o la rama se llama <code>master</code></td><td>Haz tu primer commit y ejecuta <code>git branch -M main</code></td></tr>
+<tr><td><code>rejected ... fetch first</code> / <code>unrelated histories</code></td><td>El repositorio remoto se creó con README o archivos</td><td>Crea un repositorio vacío nuevo, o consulta al instructor</td></tr>
+</tbody></table></div>
+<div class="callout"><div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg> Cómo usar esta tabla</div><p>Lee el mensaje de error completo, no solo la primera línea. Git suele indicar el remedio en el propio texto. Si resuelves un error, haz un pantallazo del error y otro de la solución: demuestra tu proceso.</p></div><div class="fa-take"><strong>Qué te llevas para tu informe EV04:</strong> una sección opcional <em>Problemas encontrados y soluciones</em>. Aporta valor y muestra que entiendes lo que instalaste, aunque tu instalación haya salido a la primera.</div>
+      </div>
+    </section>
+
+
+    <section class="slide-section" id="slide-15">
+      <div class="slide-container">
+        <span class="slide-badge-category badge-orange"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.09-3.09a2 2 0 0 0-2.82 0L6 21"/></svg> Bloque 3 · Cómo tomar buenos pantallazos</span>
+        <h2 class="slide-title">Cómo tomar buenos pantallazos para tu documento</h2>
+        <p class="slide-subtitle">Los pantallazos son la prueba de que instalaste. Un buen pantallazo se lee solo, sin que el instructor tenga que adivinar qué muestra.</p>
+<div class="cards-grid-2"><div class="card-pro top-verde"><div class="card-header-flex"><div class="card-icon-badge icon-badge-green"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div><span class="card-pill-tag badge-green">Haz esto</span></div><h3 class="card-title">Un pantallazo claro</h3><p class="card-desc">• Muestra el <strong>comando y su respuesta</strong> en la misma imagen.<br>• Recorta solo la ventana relevante, legible a tamaño normal.<br>• Usa letra grande o acerca la terminal si el texto sale pequeño.<br>• Captura la <strong>pantalla del instalador</strong> donde eliges una opción.<br>• Ponle un <strong>pie de figura</strong>: número y descripción.</p></div><div class="card-pro top-naranja"><div class="card-header-flex"><div class="card-icon-badge icon-badge-orange"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg></div><span class="card-pill-tag badge-orange">Evita esto</span></div><h3 class="card-title">Lo que resta puntos</h3><p class="card-desc">• Mostrar <strong>tokens, contraseñas</strong> o códigos de verificación.<br>• Fotos de la pantalla con el celular.<br>• Imágenes borrosas, cortadas o gigantes que se salen de la página.<br>• Capturas sin explicación.<br>• Pantallazos copiados de internet o de otro compañero.</p></div></div>
+<div style="max-width:560px;margin:10px auto 4px;border:1px solid #e2e8f0;border-radius:12px;overflow:hidden;background:#fff"><div style="background:#1a1a2e;color:#cbd5e1;font-family:'JetBrains Mono',Consolas,monospace;font-size:13px;padding:14px 16px;line-height:1.6">git --version<br><span style="color:#9ece6a">git version 2.xx.x.windows.x</span></div><div style="padding:8px 14px;font-size:13px;color:#475569;text-align:center;background:#f8fafc"><strong>Figura 1.</strong> Verificación de la versión de Git instalada (Git Bash, Windows 11).</div></div>
+<div class="table-container-card"><table class="table-comparativa"><thead><tr><th>Pantallazo</th><th>Qué debe verse</th><th>Indicador</th></tr></thead><tbody>
+<tr><td>1. Equipo y sistema operativo</td><td>Versión de Windows, macOS o Linux</td><td>Requisitos</td></tr>
+<tr><td>2. Instalador de Git</td><td>Pantallas donde eliges editor, rama inicial, PATH y credential helper</td><td>1 y 2</td></tr>
+<tr><td>3. <code>git --version</code></td><td>Comando y versión</td><td>1 y 2</td></tr>
+<tr><td>4. <code>git config --global --list</code></td><td>Tu nombre y correo configurados</td><td>2</td></tr>
+<tr><td>5. Prueba local</td><td><code>git init</code>, <code>commit</code> y <code>git log --oneline</code></td><td>2</td></tr>
+<tr><td>6. Cuenta de GitHub</td><td>Tu perfil con la sesión abierta</td><td>3</td></tr>
+<tr><td>7. Repositorio remoto creado</td><td>Pantalla con tu URL (sin token)</td><td>3</td></tr>
+<tr><td>8. Conexión y push</td><td><code>git remote -v</code>, resultado del <code>push</code> y el repositorio en GitHub</td><td>3</td></tr>
+</tbody></table></div>
+<div class="callout warn"><div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> Datos sensibles</div><p>Antes de insertar cada imagen, revísala: si aparece un token, una contraseña o un código, <strong>tápalo con un recuadro opaco</strong> o vuelve a tomar la captura. Si publicaste un token por accidente, revócalo en GitHub y genera otro.</p></div><div class="fa-take"><strong>Qué te llevas para tu informe EV04:</strong> entre ocho y quince pantallazos legibles, cada uno con número de figura, pie explicativo y colocado en el paso que demuestra (<strong>indicador 4</strong>).</div>
+      </div>
+    </section>
+
+
+    <section class="slide-section" id="slide-16">
+      <div class="slide-container">
+        <span class="slide-badge-category badge-orange"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> Bloque 4 · Construye tu Evidencia AA1-EV04</span>
+        <h2 class="slide-title">La estructura de tu documento EV04, parte por parte</h2>
+        <p class="slide-subtitle">Esta es tu hoja de ruta. Cada parte tiene una función: sigue el orden y no te saltes ninguna.</p>
+<ol class="steps-list"><li><strong>Portada.</strong> Título, tu nombre, ficha 3389010, programa (Análisis y Desarrollo de Software), instructor, centro (SENA Regional Huila, CADPH Garzón), código GA7-220501096-AA1-EV04 y fecha.</li><li><strong>Introducción.</strong> Qué es el control de versiones, qué son Git y GitHub y para qué sirve instalarlos (ver <a href="#slide-03" style="color:var(--azul-tech-dark);font-weight:700;">slide 3</a>).</li><li><strong>Objetivo.</strong> Una frase con verbo en infinitivo: instalar y configurar Git y GitHub como herramientas de control de versiones local y remota.</li><li><strong>Requisitos previos.</strong> Sistema operativo, versión y pantallazo del equipo (ver <a href="#slide-04" style="color:var(--azul-tech-dark);font-weight:700;">slide 4</a>).</li><li><strong>Instalación de Git (local).</strong> Descarga, instalador, verificación con <code>git --version</code> y configuración de identidad, cada paso con pantallazo (ver <a href="#slide-05" style="color:var(--azul-tech-dark);font-weight:700;">slide 5</a> a <a href="#slide-08" style="color:var(--azul-tech-dark);font-weight:700;">slide 8</a>). Indicadores 1 y 2.</li><li><strong>Prueba del repositorio local.</strong> <code>init</code>, <code>add</code>, <code>commit</code> y <code>log</code> (ver <a href="#slide-09" style="color:var(--azul-tech-dark);font-weight:700;">slide 9</a>). Indicador 2.</li><li><strong>Configuración de GitHub (remoto).</strong> Cuenta, autenticación y repositorio de prueba (ver <a href="#slide-10" style="color:var(--azul-tech-dark);font-weight:700;">slide 10</a> a <a href="#slide-12" style="color:var(--azul-tech-dark);font-weight:700;">slide 12</a>). Indicador 3.</li><li><strong>Conexión local y remoto.</strong> <code>remote add</code>, <code>remote -v</code> y <code>push</code>, con el repositorio visible en GitHub (ver <a href="#slide-13" style="color:var(--azul-tech-dark);font-weight:700;">slide 13</a>). Indicador 3.</li><li><strong>Problemas y soluciones (opcional), conclusiones y referencias.</strong> Documentación oficial de Git y de GitHub.</li></ol>
+<div class="callout"><div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg> Normas básicas de presentación</div><p>Fuente legible (Arial o Calibri 11 o 12), títulos claros, párrafos cortos, imágenes centradas con número y pie de figura, numeración de páginas y ortografía revisada. Si tu centro exige APA para las referencias, aplícala. Exporta siempre a <strong>PDF</strong>.</p></div><div class="fa-take"><strong>Qué te llevas para tu informe EV04:</strong> una tabla de contenido sencilla al inicio y los títulos de las secciones con los mismos nombres de arriba: así el instructor encuentra cada indicador de inmediato.</div>
+      </div>
+    </section>
+
+
+    <section class="slide-section" id="slide-17">
+      <div class="slide-container">
+        <span class="slide-badge-category badge-orange"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg> Bloque 4 · Ejemplo de Redacción</span>
+        <h2 class="slide-title">Ejemplo de redacción: portada, introducción, objetivo y un paso con pantallazo</h2>
+        <p class="slide-subtitle">Mira cómo suena un texto técnico claro y corto, y cómo se presenta un paso con su pantallazo. Úsalo como molde.</p>
+<div class="doc-preview"><span class="doc-tag">Ejemplo · Portada</span><h4>Instalación y configuración de herramienta de versionamiento (local/web)</h4><p>Git (local) y GitHub (remoto)<br>GA7-220501096-AA1-EV04<br>Aprendiz: <em>[Tu nombre completo]</em> | Ficha 3389010 | Análisis y Desarrollo de Software<br>Instructor: Julián Andrés Trujillo Morales | SENA Regional Huila, CADPH Garzón<br>Fecha: <em>[día de entrega]</em></p></div><div class="doc-preview"><span class="doc-tag">Ejemplo · Introducción</span><h4>Introducción</h4><blockquote>"Cuando varias personas programan un mismo proyecto, necesitan registrar quién cambió qué y poder volver a una versión anterior si algo falla. Esto se logra con un sistema de control de versiones. Git es la herramienta que se instala en cada equipo para llevar ese registro, y GitHub es el servicio en la nube donde se aloja el repositorio remoto para compartir y respaldar el trabajo. Este documento presenta, con pantallazos, la instalación y configuración de Git en un equipo con Windows 11 y la creación y conexión de un repositorio en GitHub."</blockquote></div><div class="doc-preview"><span class="doc-tag">Ejemplo · Objetivo</span><h4>Objetivo</h4><blockquote>"Instalar y configurar Git y GitHub como herramientas de control de versiones local y remota, verificando su funcionamiento con un repositorio de prueba."</blockquote></div><div class="doc-preview"><span class="doc-tag">Ejemplo · Un paso con pantallazo</span><h4>Paso 3. Verificación de la instalación de Git</h4><blockquote>"Terminada la instalación, se abrió una terminal nueva (Git Bash) y se ejecutó el comando <code>git --version</code> para comprobar que Git quedó disponible. La terminal respondió con la versión instalada, lo que confirma que la instalación se realizó sin errores."</blockquote><div style="max-width:520px;margin:8px auto;border:2px dashed #94a3b8;border-radius:10px;padding:22px 14px;text-align:center;color:#475569;font-size:14px;background:#f8fafc">[Pantallazo 3: git --version en Git Bash]</div><p style="text-align:center;font-size:13px;color:#475569"><strong>Figura 3.</strong> Verificación de la versión de Git instalada.</p></div>
+<div class="callout"><div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg> Cómo adaptarlo a tu caso</div><p>Cambia el sistema operativo, tu nombre, tus versiones y las acciones que tú realizaste. <strong>No copies estos textos:</strong> escríbelos con tus palabras y con tus propios pantallazos.</p></div><div class="callout warn"><div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg> Lo que más baja la calidad del documento</div><ul><li>Pantallazos sin explicación o sin número de figura.</li><li>Describir pasos que no hiciste o con capturas que no son tuyas.</li><li>Olvidar la portada, la introducción o el objetivo.</li><li>Mostrar un token o una contraseña en una imagen.</li></ul></div><div class="fa-take"><strong>Qué te llevas para tu informe EV04:</strong> este patrón en cada paso: una frase de qué hiciste, el pantallazo y el pie de figura con su resultado.</div>
+      </div>
+    </section>
+
+
+    <section class="slide-section" id="slide-18">
+      <div class="slide-container">
+        <span class="slide-badge-category badge-orange"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="M7 21h10"/><path d="M12 3v18"/><path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"/></svg> Bloque 4 · Instrumento de Evaluación Oficial</span>
+        <h2 class="slide-title">Lo que revisa el instructor: los 4 indicadores oficiales</h2>
+        <p class="slide-subtitle">Esta es la lista de chequeo del instrumento de evaluación de la evidencia GA7-220501096-AA1-EV04. Cada indicador se marca como cumple o no cumple: son tu guía real de calificación.</p>
+<div class="table-container-card"><table class="table-comparativa"><thead><tr><th>N.º</th><th>Indicador (texto del instrumento)</th><th>Cómo lo demuestras en tu documento</th><th>Error frecuente</th><th>Dónde lo aprendes</th></tr></thead><tbody>
+<tr><td><strong>1</strong></td><td><strong>Realiza la instalación de la herramienta de versionamiento correctamente.</strong></td><td>Pantallazos del instalador y de <code>git --version</code> con la versión visible, en el orden en que lo hiciste</td><td>Mostrar solo la descarga, sin pantallazo de la verificación</td><td><a href="#slide-05" style="color:var(--azul-tech-dark);font-weight:700;">Slide 5</a>, <a href="#slide-06" style="color:var(--azul-tech-dark);font-weight:700;">slide 6</a> y <a href="#slide-07" style="color:var(--azul-tech-dark);font-weight:700;">slide 7</a></td></tr>
+<tr><td><strong>2</strong></td><td><strong>Instala sin errores herramienta de versionamiento local.</strong></td><td>Verificación de Git, <code>git config --global --list</code> y la prueba local con <code>init</code>, <code>commit</code> y <code>log</code></td><td>No configurar nombre y correo y que el primer commit falle</td><td><a href="#slide-07" style="color:var(--azul-tech-dark);font-weight:700;">Slide 7</a>, <a href="#slide-08" style="color:var(--azul-tech-dark);font-weight:700;">slide 8</a> y <a href="#slide-09" style="color:var(--azul-tech-dark);font-weight:700;">slide 9</a></td></tr>
+<tr><td><strong>3</strong></td><td><strong>Configura herramienta de versionamiento remota.</strong></td><td>Cuenta de GitHub, autenticación, repositorio creado, <code>git remote -v</code> y el primer <code>push</code> visible en GitHub</td><td>Crear la cuenta y no conectarla, o intentar el push con la contraseña de la cuenta</td><td><a href="#slide-10" style="color:var(--azul-tech-dark);font-weight:700;">Slides 10</a> a <a href="#slide-13" style="color:var(--azul-tech-dark);font-weight:700;">13</a></td></tr>
+<tr><td><strong>4</strong></td><td><strong>Presenta el informe cumpliendo con las normas básicas de presentación de documentos.</strong></td><td>Portada, introducción, objetivo, paso a paso numerado, figuras con pie, fuente legible, páginas numeradas y PDF final</td><td>Entregar sin portada, sin objetivo o con pantallazos ilegibles</td><td><a href="#slide-15" style="color:var(--azul-tech-dark);font-weight:700;">Slides 15</a>, <a href="#slide-16" style="color:var(--azul-tech-dark);font-weight:700;">16</a> y <a href="#slide-17" style="color:var(--azul-tech-dark);font-weight:700;">17</a></td></tr>
+</tbody></table></div>
+<div class="callout"><div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg> Criterio de evaluación del instrumento</div><p><strong>Selecciona y configura herramientas de versionamiento para el control de cambios en el código.</strong> Es el criterio general; los 4 indicadores se marcan uno por uno. La evidencia aporta al resultado de aprendizaje 220501096-01: planear actividades de construcción del software de acuerdo con el diseño establecido.</p></div><div class="callout warn"><div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg> Evidencia de desempeño</div><p>El instrumento la clasifica como evidencia de <strong>desempeño</strong>: lo que cuenta es que hayas hecho la instalación y la configuración, y que lo puedas demostrar con tu documento. Por eso el pantallazo no es decorativo, es tu prueba.</p></div><div class="fa-take"><strong>Qué te llevas para tu informe EV04:</strong> antes de exportar a PDF, revisa tu documento indicador por indicador y pregúntate: "¿el instructor puede marcar Sí con solo leer mi informe?".</div>
+      </div>
+    </section>
+
+
+    <section class="slide-section" id="slide-19">
+      <div class="slide-container">
+        <span class="slide-badge-category badge-green"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg> Bloque 4 · Aseguramiento de Calidad</span>
+        <h2 class="slide-title">Checklist al 100% antes de subir tu evidencia</h2>
+        <p class="slide-subtitle">Marca cada casilla antes de enviar. Tu progreso se guarda en este navegador para que lo retomes cuando quieras.</p>
+<div class="checklist-card"><div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;"><div style="font-family:'Syne',sans-serif;font-size:16px;font-weight:800;color:var(--texto-main);">Progreso de tu evidencia AA1-EV04:</div><div id="checklistScoreText" style="font-family:'JetBrains Mono',monospace;font-size:15px;font-weight:800;color:var(--azul-tech);">0% (0 de 12 ítems)</div></div><div class="checklist-progress-bar-wrap"><div class="checklist-progress-bar" id="checklistBar"></div></div><div class="checklist-items-list"><label class="check-item"><input type="checkbox" class="check-checkbox" data-idx="0"><div class="check-text"><h4>1. Portada completa</h4><p>Título, tu nombre, ficha 3389010, programa, instructor, centro, código GA7-220501096-AA1-EV04 y fecha.</p></div></label>
+<label class="check-item"><input type="checkbox" class="check-checkbox" data-idx="1"><div class="check-text"><h4>2. Introducción, objetivo y requisitos</h4><p>Explicas qué son Git y GitHub, el objetivo en infinitivo y tu sistema operativo con su pantallazo.</p></div></label>
+<label class="check-item"><input type="checkbox" class="check-checkbox" data-idx="2"><div class="check-text"><h4>3. Git instalado y verificado</h4><p>Pantallazos del instalador y de git --version con la versión visible (indicadores 1 y 2).</p></div></label>
+<label class="check-item"><input type="checkbox" class="check-checkbox" data-idx="3"><div class="check-text"><h4>4. Identidad configurada</h4><p>Pantallazo de git config --global --list con tu nombre y correo (indicador 2).</p></div></label>
+<label class="check-item"><input type="checkbox" class="check-checkbox" data-idx="4"><div class="check-text"><h4>5. Prueba local realizada</h4><p>git init, add, commit y git log --oneline en la carpeta de práctica (indicador 2).</p></div></label>
+<label class="check-item"><input type="checkbox" class="check-checkbox" data-idx="5"><div class="check-text"><h4>6. Cuenta de GitHub creada</h4><p>Pantallazo de tu perfil con la sesión abierta (indicador 3).</p></div></label>
+<label class="check-item"><input type="checkbox" class="check-checkbox" data-idx="6"><div class="check-text"><h4>7. Autenticación resuelta</h4><p>Indicas si usaste Credential Manager o token, sin mostrar datos sensibles (indicador 3).</p></div></label>
+<label class="check-item"><input type="checkbox" class="check-checkbox" data-idx="7"><div class="check-text"><h4>8. Repositorio remoto creado y conectado</h4><p>Pantallazo de la URL, de git remote -v y del push exitoso (indicador 3).</p></div></label>
+<label class="check-item"><input type="checkbox" class="check-checkbox" data-idx="8"><div class="check-text"><h4>9. Repositorio visible en GitHub</h4><p>Pantallazo del repositorio en GitHub con tu archivo y tu commit (indicador 3).</p></div></label>
+<label class="check-item"><input type="checkbox" class="check-checkbox" data-idx="9"><div class="check-text"><h4>10. Pantallazos legibles y sin datos sensibles</h4><p>Cada imagen con número y pie de figura; sin tokens ni contraseñas (indicador 4).</p></div></label>
+<label class="check-item"><input type="checkbox" class="check-checkbox" data-idx="10"><div class="check-text"><h4>11. Normas de presentación y ortografía revisadas</h4><p>Fuente legible, títulos consistentes, páginas numeradas y sin errores evidentes (indicador 4).</p></div></label>
+<label class="check-item"><input type="checkbox" class="check-checkbox" data-idx="11"><div class="check-text"><h4>12. Exportado a PDF y subido a Zajuna</h4><p>Abres el PDF final, confirmas que se ve completo y lo subes al espacio GA7-220501096-AA1-EV04.</p></div></label>
+</div><div style="margin-top:12px;"><button type="button" class="reset-link" onclick="reiniciarChecklist()">Reiniciar checklist</button> <span style="font-size:12px;color:var(--texto-sub);">Tu avance se guarda en este navegador.</span></div></div>
+<h3 class="card-title" style="margin:28px 0 12px 0;">Cómo exportar a PDF y subir a Zajuna</h3><ol class="steps-list"><li><strong>Exporta a PDF.</strong> En Word: Archivo &rarr; Guardar como &rarr; tipo PDF. En Google Docs: Archivo &rarr; Descargar &rarr; Documento PDF. En LibreOffice: Archivo &rarr; Exportar como PDF.</li><li><strong>Nombra el archivo</strong> de forma clara, por ejemplo <code>NOMBRE_APELLIDO_AA1_EV04.pdf</code> (sugerencia; la extensión del documento es libre).</li><li><strong>Ábrelo y revísalo</strong> de principio a fin: portada, pantallazos y numeración deben verse completos y legibles.</li><li><strong>Entra a Zajuna</strong>, al área de la actividad AA1 y abre el espacio <em>Instalación y configuración de herramienta de versionamiento (local/web). GA7-220501096-AA1-EV04</em>.</li><li><strong>Adjunta el PDF</strong>, guarda o envía según el botón que muestre la plataforma y confirma que aparece como entregado. Fecha límite: <strong>por confirmar en Zajuna</strong>.</li></ol>
+<div class="btn-row"><a href="./MANUAL_SESION03.html" class="btn-action-primary"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg> Abrir la Guía de Estudio</a><a href="https://julianon2.github.io/seguimiento-adso-3389010/" target="_blank" rel="noopener" class="btn-action-primary" style="background:var(--azul-tech);"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" x2="18" y1="20" y2="10"/><line x1="12" x2="12" y1="20" y2="4"/><line x1="6" x2="6" y1="20" y2="14"/></svg> Dashboard de Seguimiento</a><a href="../explorar.html" class="btn-return-hub"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg> Volver al Hub</a></div>
+      </div>
+    </section>
+
+
+  </main>
+
+  <script>
+    function toggleSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      const mainContent = document.getElementById('mainContent');
+      const floatingToggle = document.getElementById('floatingToggle');
+      if (sidebar && mainContent) {
+        sidebar.classList.toggle('collapsed');
+        mainContent.classList.toggle('expanded');
+        if (floatingToggle) floatingToggle.classList.toggle('visible', sidebar.classList.contains('collapsed'));
+      }
+    }
+
+    // ScrollSpy
+    const sections = document.querySelectorAll('.slide-section');
+    const navLinks = document.querySelectorAll('.nav-link');
+    const spyObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const currentId = entry.target.getAttribute('id');
+          navLinks.forEach(link => {
+            if (link.getAttribute('href').substring(1) === currentId) {
+              link.classList.add('active');
+              link.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+            } else {
+              link.classList.remove('active');
+            }
+          });
+        }
+      });
+    }, { root: null, rootMargin: '-20% 0px -70% 0px', threshold: 0 });
+    sections.forEach(sec => spyObserver.observe(sec));
+
+    // Checklist con localStorage
+    const CHECK_KEY = 'ga7_s3_ev04_checklist';
+    const checkboxes = Array.from(document.querySelectorAll('.check-checkbox'));
+
+    function guardarChecklist() {
+      const estado = checkboxes.map(cb => cb.checked);
+      try { localStorage.setItem(CHECK_KEY, JSON.stringify(estado)); } catch (e) { /* almacenamiento no disponible */ }
+    }
+
+    function actualizarProgresoChecklist() {
+      const total = checkboxes.length;
+      let marcados = 0;
+      checkboxes.forEach(cb => {
+        const label = cb.closest('.check-item');
+        if (cb.checked) { marcados++; if (label) label.classList.add('completed'); }
+        else if (label) label.classList.remove('completed');
+      });
+      const pct = total ? Math.round((marcados / total) * 100) : 0;
+      const bar = document.getElementById('checklistBar');
+      const text = document.getElementById('checklistScoreText');
+      if (bar) bar.style.width = pct + '%';
+      if (text) text.textContent = pct + '% (' + marcados + ' de ' + total + ' ítems)';
+    }
+
+    function reiniciarChecklist() {
+      checkboxes.forEach(cb => { cb.checked = false; });
+      guardarChecklist();
+      actualizarProgresoChecklist();
+    }
+
+    (function initChecklist() {
+      try {
+        const guardado = JSON.parse(localStorage.getItem(CHECK_KEY) || '[]');
+        checkboxes.forEach((cb, i) => { cb.checked = !!guardado[i]; });
+      } catch (e) { /* sin datos previos */ }
+      checkboxes.forEach(cb => cb.addEventListener('change', () => { guardarChecklist(); actualizarProgresoChecklist(); }));
+      actualizarProgresoChecklist();
+    })();
+  </script>
+</body>
+</html>
