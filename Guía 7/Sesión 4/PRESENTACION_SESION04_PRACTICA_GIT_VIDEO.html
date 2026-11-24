@@ -1,0 +1,1909 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sesión 4 — Práctica Git local y remoto con video: Programa-Git (AA1-EV05) | SENA ADSO GA7</title>
+
+  <!-- Tipografías Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Syne:wght@700;800;900&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --sena-verde: #39a900;
+      --sena-verde-dark: #236b00;
+      --sena-verde-soft: #44c702;
+      --sena-verde-bg: rgba(57, 169, 0, 0.08);
+      --sena-verde-border: rgba(57, 169, 0, 0.28);
+      --sena-verde-glow: rgba(57, 169, 0, 0.15);
+
+      --sena-naranja: #ff6b00;
+      --sena-naranja-dark: #c2410c;
+      --sena-naranja-bg: rgba(255, 107, 0, 0.08);
+      --sena-naranja-border: rgba(255, 107, 0, 0.28);
+
+      --azul-tech: #0284c7;
+      --azul-tech-dark: #0369a1;
+      --azul-bg: rgba(2, 132, 199, 0.08);
+      --azul-border: rgba(2, 132, 199, 0.28);
+      --azul-glow: rgba(2, 132, 199, 0.15);
+
+      --mongo-verde: #00ed64;
+      --mongo-verde-dark: #00684a;
+      --mongo-verde-bg: rgba(0, 237, 100, 0.08);
+      --mongo-verde-border: rgba(0, 104, 74, 0.28);
+
+      --purpura: #7c3aed;
+      --purpura-bg: rgba(124, 58, 237, 0.08);
+      --purpura-border: rgba(124, 58, 237, 0.28);
+
+      --bg-main: #f8fafc;
+      --bg-card: #ffffff;
+      --borde-light: #e2e8f0;
+      --borde-focus: #cbd5e1;
+
+      --texto-main: #0f172a;
+      --texto-muted: #334155;
+      --texto-sub: #64748b;
+      --texto-dimmer: #94a3b8;
+
+      --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.04);
+      --shadow-card: 0 10px 30px rgba(15, 23, 42, 0.05), 0 1px 3px rgba(0, 0, 0, 0.03);
+      --shadow-hover: 0 20px 40px rgba(2, 132, 199, 0.12), 0 4px 12px rgba(0, 0, 0, 0.05);
+
+      --radius-xl: 20px;
+      --radius-lg: 16px;
+      --radius-md: 12px;
+      --radius-sm: 8px;
+    }
+
+    * { margin:0; padding:0; box-sizing:border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: var(--bg-main);
+      color: var(--texto-main);
+      line-height: 1.6;
+      overflow-x: hidden;
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* ==========================================================================
+       SIDEBAR INSTITUCIONAL 280PX (PATRÓN OFICIAL)
+       ========================================================================== */
+    .sidebar {
+      width: 280px;
+      background: #ffffff;
+      border-right: 1px solid var(--borde-light);
+      position: fixed;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 2px 0 16px rgba(15, 23, 42, 0.04);
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .sidebar.collapsed {
+      transform: translateX(-100%);
+    }
+
+    .sidebar-logo {
+      width: 40px;
+      height: 40px;
+      background: var(--sena-verde, #39a900);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+      flex-shrink: 0;
+      box-shadow: 0 4px 10px rgba(57, 169, 0, 0.25);
+    }
+    .sidebar-header {
+      padding: 18px 20px;
+      border-bottom: 1px solid var(--borde-light);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .brand-link {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .brand-logo-svg {
+      width: 36px;
+      height: 36px;
+      flex-shrink: 0;
+    }
+
+    .brand-info h1 {
+      font-family: 'Syne', sans-serif;
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--texto-main);
+      line-height: 1.2;
+    }
+
+    .brand-info p {
+      font-size: 11px;
+      color: var(--azul-tech);
+      font-weight: 600;
+      letter-spacing: 0.3px;
+    }
+
+    .sidebar-toggle-btn {
+      background: transparent;
+      border: 1px solid var(--borde-light);
+      border-radius: 8px;
+      padding: 6px;
+      cursor: pointer;
+      color: var(--texto-sub);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+
+    .sidebar-toggle-btn:hover {
+      background: var(--bg-main);
+      color: var(--azul-tech);
+      border-color: var(--azul-border);
+    }
+
+    .sidebar-nav {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .nav-group-title {
+      font-size: 10.5px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--texto-dimmer);
+      padding: 0 10px 6px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nav-links-list {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .nav-link {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 12px;
+      border-radius: 8px;
+      color: var(--texto-muted);
+      text-decoration: none;
+      font-size: 12.5px;
+      font-weight: 600;
+      transition: all 0.2s ease;
+      position: relative;
+    }
+
+    .nav-link:hover {
+      background: var(--azul-bg);
+      color: var(--azul-tech-dark);
+    }
+
+    .nav-link.active {
+      background: rgba(2, 132, 199, 0.1);
+      color: var(--azul-tech-dark);
+      font-weight: 700;
+    }
+
+    .nav-link.active::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 6px;
+      bottom: 6px;
+      width: 3.5px;
+      background: var(--azul-tech);
+      border-radius: 0 4px 4px 0;
+    }
+
+    .nav-link-num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--texto-dimmer);
+      min-width: 18px;
+    }
+
+    .nav-link.active .nav-link-num {
+      color: var(--azul-tech);
+      font-weight: 700;
+    }
+
+    .nav-link-title {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .sidebar-footer {
+      padding: 14px 16px;
+      border-top: 1px solid var(--borde-light);
+      background: #fafbfe;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .sidebar-footer-pill {
+      background: var(--azul-bg);
+      border: 1px solid var(--azul-border);
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 11px;
+      color: var(--azul-tech-dark);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 600;
+    }
+
+    .btn-return-hub {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 8px 12px;
+      background: #ffffff;
+      border: 1px solid var(--borde-light);
+      border-radius: 8px;
+      color: var(--texto-muted);
+      font-size: 12px;
+      font-weight: 700;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+
+    .btn-return-hub:hover {
+      background: var(--sena-verde-bg);
+      color: var(--sena-verde-dark);
+      border-color: var(--sena-verde-border);
+    }
+
+    /* BOTÓN FLOTANTE DE REAPERTURA DEL SIDEBAR */
+    .floating-sidebar-toggle {
+      position: fixed;
+      top: 18px;
+      left: 20px;
+      z-index: 999;
+      height: 38px;
+      padding: 0 14px 0 10px;
+      background: #ffffff;
+      border: 1px solid var(--borde-focus);
+      border-radius: 10px;
+      box-shadow: 0 6px 18px rgba(15, 23, 42, 0.08);
+      color: var(--texto-main);
+      font-size: 12.5px;
+      font-weight: 700;
+      display: none;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      transition: all 0.25s ease;
+    }
+
+    .floating-sidebar-toggle:hover {
+      border-color: var(--azul-tech);
+      color: var(--azul-tech);
+      box-shadow: 0 8px 24px rgba(2, 132, 199, 0.2);
+    }
+
+    .sidebar.collapsed ~ .floating-sidebar-toggle,
+    .floating-sidebar-toggle.visible {
+      display: inline-flex !important;
+      animation: fadeInToggle 0.25s ease-out forwards;
+    }
+
+    @keyframes fadeInToggle {
+      from { opacity: 0; transform: translateX(-12px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    /* ==========================================================================
+       MAIN CONTENT CONTAINER
+       ========================================================================== */
+    .main-content {
+      margin-left: 280px;
+      flex: 1;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      transition: margin-left 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .main-content.expanded {
+      margin-left: 0;
+    }
+
+    .slide-section {
+      padding: 64px 54px;
+      border-bottom: 1px solid var(--borde-light);
+      position: relative;
+      scroll-margin-top: 0px;
+    }
+
+    .slide-container {
+      max-width: 1140px;
+      margin: 0 auto;
+    }
+
+    /* HEADER DE CADA SLIDE */
+    .slide-badge-category {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 11.5px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      padding: 4px 12px;
+      border-radius: 20px;
+      margin-bottom: 12px;
+    }
+
+    .badge-blue { background: var(--azul-bg); color: var(--azul-tech-dark); border: 1px solid var(--azul-border); }
+    .badge-green { background: var(--sena-verde-bg); color: var(--sena-verde-dark); border: 1px solid var(--sena-verde-border); }
+    .badge-mongo { background: var(--mongo-verde-bg); color: var(--mongo-verde-dark); border: 1px solid var(--mongo-verde-border); }
+    .badge-orange { background: var(--sena-naranja-bg); color: var(--sena-naranja-dark); border: 1px solid var(--sena-naranja-border); }
+
+    .slide-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 32px;
+      font-weight: 800;
+      color: var(--texto-main);
+      line-height: 1.25;
+      margin-bottom: 12px;
+      letter-spacing: -0.5px;
+    }
+
+    .slide-subtitle {
+      font-size: 15.5px;
+      color: var(--texto-muted);
+      line-height: 1.6;
+      max-width: 880px;
+      margin-bottom: 28px;
+    }
+
+    /* ==========================================================================
+       TARJETAS Y GRIDS PREMIUM
+       ========================================================================== */
+    .cards-grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+
+    .cards-grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    .card-pro {
+      background: linear-gradient(175deg, #ffffff 0%, #fbfcfe 65%, #f8fafc 100%);
+      border: 1px solid var(--borde-light);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      box-shadow: var(--shadow-card);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: all 0.25s ease;
+    }
+
+    .card-pro:hover {
+      box-shadow: var(--shadow-hover);
+      transform: translateY(-2px);
+    }
+
+    .card-pro.top-azul { border-top: 4px solid var(--azul-tech); }
+    .card-pro.top-verde { border-top: 4px solid var(--sena-verde); }
+    .card-pro.top-mongo { border-top: 4px solid #13aa52; }
+    .card-pro.top-naranja { border-top: 4px solid var(--sena-naranja); }
+    .card-pro.top-purpura { border-top: 4px solid var(--purpura); }
+
+    .card-header-flex {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+
+    .card-icon-badge {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .icon-badge-blue { background: var(--azul-bg); color: var(--azul-tech); }
+    .icon-badge-green { background: var(--sena-verde-bg); color: var(--sena-verde); }
+    .icon-badge-mongo { background: rgba(19, 170, 82, 0.1); color: #13aa52; }
+    .icon-badge-orange { background: var(--sena-naranja-bg); color: var(--sena-naranja); }
+    .icon-badge-purpura { background: var(--purpura-bg); color: var(--purpura); }
+
+    .card-pill-tag {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 20px;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .card-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--texto-main);
+      margin-bottom: 8px;
+      line-height: 1.3;
+    }
+
+    .card-desc {
+      font-size: 13.5px;
+      color: var(--texto-muted);
+      line-height: 1.6;
+    }
+
+    /* ==========================================================================
+       TABLA COMPARATIVA SQL VS NOSQL MONGODB
+       ========================================================================== */
+    .table-container-card {
+      background: #ffffff;
+      border: 1px solid var(--borde-light);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: var(--shadow-card);
+      margin-top: 16px;
+    }
+
+    .table-comparativa {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      text-align: left;
+    }
+
+    .table-comparativa th {
+      background: #f1f5f9;
+      color: var(--texto-main);
+      font-weight: 800;
+      padding: 14px 18px;
+      border-bottom: 2px solid var(--borde-light);
+      font-family: 'Syne', sans-serif;
+      font-size: 13.5px;
+    }
+
+    .table-comparativa td {
+      padding: 13px 18px;
+      border-bottom: 1px solid var(--borde-light);
+      color: var(--texto-muted);
+      vertical-align: middle;
+    }
+
+    .table-comparativa tr:hover td {
+      background: #fafcfe;
+    }
+
+    .concept-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 700;
+      color: var(--texto-main);
+    }
+
+    .badge-sql {
+      background: #fef2f2;
+      color: #991b1b;
+      border: 1px solid #fecaca;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .badge-nosql {
+      background: #f0fdf4;
+      color: #166534;
+      border: 1px solid #bbf7d0;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    /* ==========================================================================
+       ESTÁNDAR DE CODEBOXES (ESTILO TERMINAL CON SEMÁFORO - PATRÓN SESIÓN 19)
+       ========================================================================== */
+    .code-editor-box {
+      background: #1a1a2e;
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 20px 50px rgba(0,0,0,.25);
+      font-family: 'JetBrains Mono', Consolas, 'Courier New', monospace;
+      margin: 14px auto;
+      max-width: 760px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .editor-header {
+      background: #12121f;
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-sizing: border-box;
+    }
+
+    .editor-dot { width: 11px; height: 11px; border-radius: 50%; }
+    .editor-dot.r { background: #ff5f57; }
+    .editor-dot.y { background: #febc2e; }
+    .editor-dot.g { background: #28c840; }
+
+    .editor-title {
+      margin-left: 8px;
+      font-family: 'JetBrains Mono', Consolas, monospace;
+      font-size: 11px;
+      color: #8892a4;
+      flex: 1;
+    }
+
+    .editor-badge {
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 3px 9px;
+      border-radius: 5px;
+      background: rgba(74,222,128,.15);
+      color: #4ade80;
+    }
+
+    .editor-body {
+      padding: 10px 0;
+      font-family: 'JetBrains Mono', Consolas, 'Courier New', monospace;
+      font-size: 12.5px;
+      line-height: 1.9;
+      flex: 1;
+      overflow-x: auto;
+      background: #1a1a2e;
+      box-sizing: border-box;
+    }
+
+    .cl {
+      display: grid;
+      grid-template-columns: 34px 1fr;
+      column-gap: 12px;
+      padding: 0 20px;
+      white-space: pre;
+    }
+
+    .cl .ln {
+      color: #4a5178;
+      user-select: none;
+      text-align: right;
+    }
+
+    .cl .code { color: #e2e8f0; }
+    .cl.indent-1 .code { padding-left: 18px; }
+    .cl.indent-2 .code { padding-left: 36px; }
+
+    /* TOKENS DE SINTAXIS JSON / BSON / MONGODB (paleta Tokyo Night, patrón Sesión 19) */
+    .tok-key, .sel, .syn-key, .syn-prop { color: #7dcfff; }
+    .tok-str, .str, .prop, .syn-str { color: #9ece6a; }
+    .tok-num, .val, .syn-num { color: #e2e8f0; }
+    .tok-bool, .syn-keyword { color: #f7768e; font-weight: 700; }
+    .tok-bson, .var, .syn-method, .syn-func { color: #e0af68; }
+    .tok-comment, .cm, .syn-comment { color: #565f89; font-style: italic; }
+    .tok-op, .punc { color: #8892a4; }
+    .tag { color: #f7768e; }
+    .attr { color: #e0af68; }
+    .tok-id-badge { background: rgba(78, 201, 176, 0.2); color: #4ec9b0; border: 1px solid rgba(78, 201, 176, 0.4); font-size: 9px; font-weight: 800; padding: 0 5px; border-radius: 3px; height: 16px; line-height: 14px; display: inline-block; vertical-align: middle; margin-left: 6px; }
+    .tok-embed-badge { background: rgba(255, 107, 0, 0.2); color: #ff9800; border: 1px solid rgba(255, 107, 0, 0.4); font-size: 9px; font-weight: 800; padding: 0 5px; border-radius: 3px; height: 16px; line-height: 14px; display: inline-block; vertical-align: middle; margin-left: 6px; }
+    .tok-ref-badge { background: rgba(59, 130, 246, 0.2); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.4); font-size: 9px; font-weight: 800; padding: 0 5px; border-radius: 3px; height: 16px; line-height: 14px; display: inline-block; vertical-align: middle; margin-left: 6px; }
+
+    /* ==========================================================================
+       STEPPER DIDÁCTICO & MODALES GUIADOS
+       ========================================================================== */
+    .stepper-steps-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 16px;
+      margin-top: 18px;
+    }
+
+    .stepper-card-btn {
+      background: #ffffff;
+      border: 1px solid var(--borde-light);
+      border-radius: var(--radius-md);
+      padding: 18px;
+      text-align: left;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      transition: all 0.2s ease;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .stepper-card-btn:hover {
+      border-color: var(--azul-tech);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-card);
+    }
+
+    .step-pill-number {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--azul-bg);
+      color: var(--azul-tech-dark);
+      font-size: 12px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .step-card-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 14.5px;
+      font-weight: 700;
+      color: var(--texto-main);
+      line-height: 1.3;
+    }
+
+    .step-card-action-hint {
+      font-size: 11.5px;
+      color: var(--azul-tech);
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      margin-top: auto;
+    }
+
+    /* TABLA ESTRUCTURADA DE PARÁMETROS (.cweijan-params-table) */
+    .cweijan-params-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      background: #ffffff;
+      border: 1px solid var(--borde-light);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      margin: 14px 0;
+    }
+
+    .cweijan-params-table th {
+      background: #f8fafc;
+      padding: 12px 16px;
+      font-weight: 800;
+      color: var(--texto-main);
+      border-bottom: 2px solid var(--borde-light);
+      font-family: 'Syne', sans-serif;
+    }
+
+    .cpt-row td {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--borde-light);
+      color: var(--texto-muted);
+    }
+
+    .cpt-row.highlight {
+      background: #fffbeb;
+    }
+
+    .cpt-row.highlight td:first-child {
+      border-left: 4px solid var(--sena-naranja);
+      font-weight: 700;
+      color: #92400e;
+    }
+
+    /* MODALES DE STEPPER */
+    .ddl-modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(15, 23, 42, 0.75);
+      backdrop-filter: blur(6px);
+      z-index: 2000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .ddl-modal-overlay.active {
+      display: flex;
+      animation: modalFadeIn 0.25s ease-out forwards;
+    }
+
+    /* TOAST INSTITUCIONAL (reemplaza alert() nativo) */
+    .app-toast {
+      position: fixed;
+      bottom: 28px;
+      left: 50%;
+      transform: translateX(-50%) translateY(16px);
+      background: #ffffff;
+      color: var(--texto-main, #1a1a2e);
+      border: 1px solid #bbf7d0;
+      border-left: 4px solid #39a900;
+      border-radius: 10px;
+      padding: 12px 18px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 13.5px;
+      font-weight: 600;
+      box-shadow: 0 12px 32px rgba(15, 23, 42, 0.18);
+      z-index: 9999;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease, transform 0.25s ease;
+      max-width: 90vw;
+    }
+
+    .app-toast svg { color: #39a900; }
+
+    .app-toast.visible {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    @keyframes modalFadeIn {
+      from { opacity: 0; transform: scale(0.96); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .ddl-modal-box {
+      background: #ffffff;
+      border-radius: var(--radius-lg);
+      width: 100%;
+      max-width: 1080px;
+      max-height: 94vh;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.25);
+      overflow: hidden;
+    }
+
+    .modal-header-nav {
+      padding: 16px 22px;
+      border-bottom: 1px solid var(--borde-light);
+      background: #f8fafc;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .modal-nav-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .modal-pill-btn {
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 11.5px;
+      font-weight: 700;
+      background: #ffffff;
+      border: 1px solid var(--borde-light);
+      color: var(--texto-sub);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .modal-pill-btn.active {
+      background: var(--azul-tech);
+      color: #ffffff;
+      border-color: var(--azul-tech);
+    }
+
+    .col-tab-pill {
+      background: #2d2d30;
+      color: #94a3b8;
+      border: 1px solid #475569;
+      border-radius: 6px;
+      padding: 5px 12px;
+      font-size: 11.5px;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .col-tab-pill:hover {
+      background: #3e3e42;
+      color: #ffffff;
+      border-color: #64748b;
+    }
+
+    .col-tab-pill.active {
+      background: rgba(0, 237, 100, 0.15);
+      color: #00ed64;
+      border-color: #00ed64;
+      box-shadow: 0 0 8px rgba(0, 237, 100, 0.2);
+    }
+
+    .modal-close-btn {
+      background: transparent;
+      border: none;
+      font-size: 20px;
+      color: var(--texto-sub);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+    }
+
+    .modal-close-btn:hover {
+      background: #fee2e2;
+      color: #ef4444;
+    }
+
+    .modal-body-scroll {
+      padding: 24px;
+      overflow-y: auto;
+      flex: 1;
+    }
+
+    /* ==========================================================================
+       CHECKLIST INTERACTIVO EV03 (CORTES & RÚBRICA)
+       ========================================================================== */
+    .checklist-card {
+      background: #ffffff;
+      border: 1px solid var(--borde-light);
+      border-radius: var(--radius-lg);
+      padding: 28px;
+      box-shadow: var(--shadow-card);
+      margin-top: 18px;
+    }
+
+    .checklist-progress-bar-wrap {
+      background: #e2e8f0;
+      border-radius: 10px;
+      height: 10px;
+      overflow: hidden;
+      margin: 14px 0 20px 0;
+    }
+
+    .checklist-progress-bar {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--azul-tech) 0%, #00ed64 100%);
+      transition: width 0.3s ease;
+    }
+
+    .checklist-items-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .check-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 12px 14px;
+      border-radius: var(--radius-md);
+      background: #f8fafc;
+      border: 1px solid var(--borde-light);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .check-item:hover {
+      background: #f1f5f9;
+    }
+
+    .check-item.completed {
+      background: #f0fdf4;
+      border-color: #bbf7d0;
+    }
+
+    .check-checkbox {
+      margin-top: 3px;
+      width: 18px;
+      height: 18px;
+      accent-color: var(--azul-tech);
+      cursor: pointer;
+    }
+
+    .check-text h4 {
+      font-size: 13.5px;
+      font-weight: 700;
+      color: var(--texto-main);
+      margin-bottom: 2px;
+    }
+
+    .check-text p {
+      font-size: 12px;
+      color: var(--texto-sub);
+      line-height: 1.5;
+    }
+
+    /* BOTONES DE ACCIÓN */
+    .btn-action-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--azul-tech);
+      color: #ffffff;
+      padding: 10px 18px;
+      border-radius: 10px;
+      font-size: 13.5px;
+      font-weight: 700;
+      text-decoration: none;
+      transition: all 0.2s;
+      box-shadow: 0 4px 12px rgba(2, 132, 199, 0.25);
+    }
+
+    .btn-action-primary:hover {
+      background: var(--azul-tech-dark);
+      transform: translateY(-1px);
+    }
+
+    .btn-copy-code {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #333333;
+      color: #ffffff;
+      border: 1px solid #444444;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 11px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-copy-code:hover {
+      background: #444444;
+      border-color: #555555;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 992px) {
+      .sidebar { transform: translateX(-100%); }
+      .main-content { margin-left: 0; }
+      .floating-sidebar-toggle { display: inline-flex !important; }
+      .cards-grid-2, .cards-grid-3, .stepper-steps-grid { grid-template-columns: 1fr; }
+      .slide-section { padding: 40px 20px; }
+      .slide-title { font-size: 26px; }
+    }
+
+    /* ===== EXTRAS GA7 SESION 1 ===== */
+    .callout { margin-top:20px; background:linear-gradient(135deg,#f0fdf4 0%,#e0f2fe 100%); border:1.5px solid #86efac; border-radius:12px; padding:16px 20px; }
+    .callout.warn { background:linear-gradient(135deg,#fff7ed 0%,#fef3c7 100%); border-color:#fdba74; }
+    .callout-title { color:#166534; font-size:14px; font-weight:700; display:flex; align-items:center; gap:8px; margin-bottom:8px; }
+    .callout.warn .callout-title { color:#9a3412; }
+    .callout p, .callout li { margin:0 0 8px 0; font-size:13px; color:#334155; line-height:1.65; }
+    .callout ul { margin:0; padding-left:20px; }
+    .diagram-card { background:#fff; border:1px solid var(--borde-light); border-radius:14px; padding:16px; margin:16px 0; box-shadow:0 2px 8px rgba(0,0,0,.04); }
+    .diagram-card svg { width:100%; height:auto; display:block; }
+    .doc-preview { background:#fff; border:1px solid var(--borde-light); border-left:5px solid var(--sena-verde); border-radius:10px; padding:16px 20px; margin-bottom:14px; box-shadow:0 2px 8px rgba(0,0,0,.04); }
+    .doc-preview h4 { margin:0 0 4px 0; font-family:'Syne',sans-serif; font-size:15px; color:var(--texto-main); }
+    .doc-preview .doc-tag { font-size:11px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; color:var(--sena-verde-dark); margin-bottom:8px; display:block; }
+    .doc-preview p { margin:0 0 8px 0; font-size:13px; line-height:1.7; color:#334155; }
+    .doc-preview blockquote { margin:8px 0 0 0; padding:10px 14px; background:#f8fafc; border-radius:8px; font-size:12.5px; line-height:1.7; color:#475569; font-style:italic; }
+    .steps-list { counter-reset:st; list-style:none; padding:0; margin:0; }
+    .steps-list li { counter-increment:st; position:relative; padding:10px 14px 10px 52px; margin-bottom:10px; background:#fff; border:1px solid var(--borde-light); border-radius:10px; font-size:13px; line-height:1.65; color:#334155; }
+    .steps-list li::before { content:counter(st); position:absolute; left:14px; top:10px; width:26px; height:26px; border-radius:50%; background:var(--sena-verde); color:#fff; font-weight:800; font-size:13px; display:flex; align-items:center; justify-content:center; }
+    .score-cell { font-family:'JetBrains Mono',monospace; font-weight:700; text-align:center; }
+    .score-win { background:rgba(57,169,0,.12); color:#236b00; }
+    .btn-row { display:flex; gap:10px; flex-wrap:wrap; margin-top:18px; }
+    .reset-link { background:none; border:none; color:var(--azul-tech-dark); font-size:12.5px; cursor:pointer; text-decoration:underline; padding:0; font-family:inherit; }
+  </style>
+<style>
+  .fb-grid { display:grid; grid-template-columns: 1fr 76px 1fr; gap:14px; align-items:stretch; margin-top:6px; }
+  .fb-panel { border-radius:16px; padding:16px 16px 14px; display:flex; flex-direction:column; background:#fff; }
+  .fb-bad { border:1.5px solid rgba(255,107,0,0.38); background:linear-gradient(180deg,#fff7ed 0%,#ffffff 55%); }
+  .fb-good { border:1.5px solid rgba(57,169,0,0.38); background:linear-gradient(180deg,#f0fdf4 0%,#ffffff 55%); }
+  .fb-ptitle { display:flex; align-items:center; gap:8px; font-family:'Syne',sans-serif; font-weight:800; font-size:18px; margin:0 0 4px; }
+  .fb-bad .fb-ptitle { color:#c2410c; }
+  .fb-good .fb-ptitle { color:#236b00; }
+  .fb-psub { font-size:13px; color:#475569; margin:0 0 8px; line-height:1.5; }
+  .fb-svg { width:100%; height:auto; display:block; }
+  .fb-svg text { font-family:'Plus Jakarta Sans',sans-serif; }
+  .fb-svg .fb-mono { font-family:'JetBrains Mono',monospace; }
+  .fb-result { margin-top:auto; border-radius:12px; padding:11px 14px; font-size:14px; line-height:1.55; font-weight:600; }
+  .fb-bad .fb-result { background:rgba(255,107,0,0.10); color:#9a3412; border:1px solid rgba(255,107,0,0.3); }
+  .fb-good .fb-result { background:rgba(57,169,0,0.10); color:#1b5200; border:1px solid rgba(57,169,0,0.3); }
+  .fb-result b { font-weight:800; }
+  .fb-mid { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px; }
+  .fb-mid span { font-family:'JetBrains Mono',monospace; font-weight:800; font-size:14px; color:#236b00; background:rgba(57,169,0,0.12); border:1px solid rgba(57,169,0,0.35); border-radius:20px; padding:3px 11px; }
+  .fb-ind { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-top:16px; }
+  .fb-ind-card { background:#fff; border:1px solid #e2e8f0; border-radius:14px; padding:14px 16px; box-shadow:0 4px 14px rgba(15,23,42,0.05); }
+  .fb-ind-q { font-weight:800; font-size:15px; color:#0f172a; margin:0 0 10px; }
+  .fb-ind-row { display:flex; align-items:center; gap:10px; font-size:13.5px; font-weight:700; padding:5px 0; }
+  .fb-ind-row.no { color:#c2410c; }
+  .fb-ind-row.si { color:#236b00; }
+  .fb-ind-row svg { flex:none; }
+  @media (max-width: 992px) {
+    .fb-grid { grid-template-columns:1fr; }
+    .fb-mid { flex-direction:row; justify-content:center; padding:2px 0; }
+    .fb-mid svg { transform:rotate(90deg); }
+    .fb-ind { grid-template-columns:1fr; }
+  }
+</style><style>
+  .fc-card .fc-art { background:#f8fafc; border:1px solid var(--borde-light, #e2e8f0); border-radius:12px; padding:8px; margin-bottom:14px; }
+  .fc-card .fc-art svg { width:100%; height:auto; display:block; }
+  .fc-card .fc-idea { font-family:'Syne',sans-serif; font-size:17px; font-weight:800; line-height:1.3; margin:0 0 6px; color:var(--texto-main, #0f172a); }
+  .fc-card .fc-short { font-size:14px; line-height:1.5; color:var(--texto-muted, #475569); margin:0 0 12px; }
+  .fc-card .fc-term { border-top:1px dashed var(--borde-light, #cbd5e1); padding-top:12px; margin-bottom:12px; font-size:14px; line-height:1.55; }
+  .fc-card .fc-term b { display:block; font-size:11.5px; text-transform:uppercase; letter-spacing:.6px; color:var(--sena-verde-dark, #236b00); margin-bottom:4px; }
+  .fc-card .fc-term code { background:#1a1a2e; color:#9ece6a; padding:2px 8px; border-radius:6px; font-size:13px; margin-right:4px; display:inline-block; }
+  .fc-quiz { margin-top:auto; background:#fff; border:1px solid var(--borde-light, #e2e8f0); border-radius:10px; padding:12px; }
+  .fc-quiz-q { font-size:13px; font-weight:700; margin:0 0 8px; color:var(--texto-main, #0f172a); }
+  .fc-quiz-q span { font-weight:500; color:var(--texto-muted, #475569); }
+  .fc-opts { display:flex; flex-wrap:wrap; gap:6px; }
+  .fc-opt { font-family:'JetBrains Mono',Consolas,monospace; font-size:12.5px; padding:7px 10px; border-radius:8px; border:1px solid #cbd5e1; background:#f8fafc; color:#0f172a; cursor:pointer; }
+  .fc-opt:hover:not(:disabled) { border-color:var(--sena-verde, #39a900); background:var(--sena-verde-bg, rgba(57,169,0,.08)); }
+  .fc-opt:disabled { cursor:default; }
+  .fc-opt.fc-ok { background:var(--sena-verde, #39a900); border-color:var(--sena-verde, #39a900); color:#fff; }
+  .fc-opt.fc-bad { background:#fee2e2; border-color:#dc2626; color:#991b1b; }
+  .fc-fb { font-size:13px; font-weight:600; margin:8px 0 0; min-height:18px; }
+  .fc-fb.fc-ok-t { color:var(--sena-verde-dark, #236b00); }
+  .fc-fb.fc-bad-t { color:#b91c1c; }
+  .fc-remote { display:flex; align-items:center; gap:14px; flex-wrap:wrap; margin-top:18px; padding:14px 18px; border-radius:12px; background:rgba(2,132,199,.07); border:1px solid rgba(2,132,199,.28); font-size:14.5px; line-height:1.5; }
+  .fc-remote svg.fc-cloud { flex-shrink:0; }
+  .fc-remote code { background:#1a1a2e; color:#7dcfff; padding:2px 8px; border-radius:6px; font-size:13px; }
+  .fc-score { margin-top:12px; text-align:right; font-size:12.5px; color:var(--texto-muted, #475569); }
+  .fc-score strong { color:var(--sena-verde-dark, #236b00); }
+  .fc-takeaway { margin-top:18px; padding:14px 18px; border-left:4px solid var(--sena-naranja, #ff6b00); background:rgba(255,107,0,.06); border-radius:0 10px 10px 0; font-size:14.5px; line-height:1.55; }
+</style><style>
+.fa-wrap{background:#fff;border:1px solid #e2e8f0;border-radius:14px;padding:12px;overflow-x:auto;-webkit-overflow-scrolling:touch;scroll-behavior:smooth;box-shadow:0 2px 8px rgba(0,0,0,.04)}
+.fa-svg{display:block;width:100%;min-width:820px;height:auto}
+.fa-hint{display:none;font-size:12px;color:#64748b;margin:6px 0 0}
+.fa-why{margin-top:18px;background:linear-gradient(135deg,#f0fdf4 0%,#e0f2fe 100%);border:1.5px solid #86efac;border-left:5px solid #39a900;border-radius:12px;padding:16px 20px}
+.fa-why-title{color:#166534;font-size:15px;font-weight:700;display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.fa-why p{margin:0 0 8px;font-size:14px;color:#334155;line-height:1.65}
+.fa-take{margin-top:14px;font-size:14px;color:#0f172a;line-height:1.6;padding:12px 16px;border-left:4px solid #ff6b00;background:rgba(255,107,0,.08);border-radius:0 10px 10px 0}
+@media(max-width:760px){.fa-hint{display:block}}
+</style><style>
+  .fd-widget { background:#fff; border:1px solid var(--borde-light); border-radius:16px; padding:18px; box-shadow:var(--shadow-card); outline:none; }
+  .fd-widget:focus-visible { box-shadow:0 0 0 3px rgba(2,132,199,.35); }
+  .fd-scroll { overflow-x:auto; }
+  .fd-svg { display:block; width:100%; min-width:720px; height:auto; font-family:'Inter',system-ui,sans-serif; }
+  .fd-zone { fill:#f8fafc; stroke:#cbd5e1; stroke-width:2; }
+  .fd-zone-title { font-size:16px; font-weight:800; fill:#0f172a; }
+  .fd-zone-sub { font-size:14px; fill:#64748b; }
+  .fd-arrow { stroke:#cbd5e1; stroke-width:4; fill:none; transition:stroke .3s; }
+  .fd-arrow-head { fill:#cbd5e1; transition:fill .3s; }
+  .fd-arrow.fd-on { stroke:#39a900; }
+  .fd-arrow-head.fd-on { fill:#39a900; }
+  .fd-pill rect { fill:#fff; stroke:#cbd5e1; stroke-width:2; transition:fill .3s, stroke .3s; }
+  .fd-pill text { font-family:'JetBrains Mono',Consolas,monospace; font-size:14px; font-weight:700; fill:#64748b; }
+  .fd-pill.fd-on rect { fill:#39a900; stroke:#236b00; }
+  .fd-pill.fd-on text { fill:#fff; }
+  .fd-packet { transition:transform .7s cubic-bezier(.4,0,.2,1); }
+  .fd-packet-box { stroke-width:3; transition:fill .4s, stroke .4s; }
+  .fd-packet-t1 { font-family:'JetBrains Mono',Consolas,monospace; font-size:16px; font-weight:800; fill:#0f172a; }
+  .fd-packet-t2 { font-size:14px; font-weight:700; fill:#334155; }
+  .fd-ghost { fill:none; stroke:#94a3b8; stroke-width:2; stroke-dasharray:6 5; opacity:0; transition:opacity .4s; }
+  .fd-ghost-t { font-family:'JetBrains Mono',Consolas,monospace; font-size:14px; fill:#64748b; opacity:0; transition:opacity .4s; }
+  .fd-ghost.fd-show, .fd-ghost-t.fd-show { opacity:1; }
+  .fd-state-mod { fill:#fff7ed; stroke:#ff6b00; }
+  .fd-state-stg { fill:#e0f2fe; stroke:#0284c7; }
+  .fd-state-com { fill:#f0fdf4; stroke:#39a900; }
+  .fd-controls { display:flex; flex-wrap:wrap; align-items:center; gap:10px; margin:14px 0 4px; }
+  .fd-btn { font:inherit; font-size:14px; font-weight:700; padding:9px 18px; border-radius:10px; border:1.5px solid var(--borde-focus); background:#fff; color:var(--texto-main); cursor:pointer; transition:background .2s, border-color .2s; }
+  .fd-btn:hover:not(:disabled) { border-color:var(--sena-verde); background:var(--sena-verde-bg); }
+  .fd-btn:focus-visible { outline:3px solid rgba(2,132,199,.45); outline-offset:2px; }
+  .fd-btn:disabled { opacity:.45; cursor:not-allowed; }
+  .fd-btn.fd-primary { background:var(--sena-verde); border-color:var(--sena-verde-dark); color:#fff; }
+  .fd-btn.fd-primary:hover:not(:disabled) { background:var(--sena-verde-dark); }
+  .fd-counter { margin-left:auto; font-size:13px; font-weight:700; color:var(--texto-sub); }
+  .fd-hint { font-size:12.5px; color:var(--texto-sub); margin:0 0 10px; }
+  .fd-what { margin:12px 0 4px; padding:14px 18px; border-left:5px solid var(--sena-verde); background:var(--sena-verde-bg); border-radius:0 10px 10px 0; font-size:15px; line-height:1.6; color:var(--texto-muted); }
+  .fd-what strong { color:var(--texto-main); }
+  .fd-boxes { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:8px; }
+  .fd-boxes .code-editor-box { margin:8px 0; max-width:none; }
+  .fd-boxes .editor-body { min-height:96px; }
+  @media (max-width: 900px) { .fd-boxes { grid-template-columns:1fr; } }
+  @media (prefers-reduced-motion: reduce) {
+    .fd-packet, .fd-packet-box, .fd-arrow, .fd-arrow-head, .fd-pill rect, .fd-ghost, .fd-ghost-t { transition:none !important; }
+  }
+</style>
+<style>.fs7-note{margin:2px 0 10px;padding:8px 11px;border-radius:9px;font-size:13px;line-height:1.45;border:1px solid}.fs7-bad{background:#fef2f2;color:#b91c1c;border-color:#fecaca}.fs7-good{background:#f0fdf4;color:#236b00;border-color:#bbf7d0}</style>
+<style>.s13-steps{margin:8px 0 0;padding-left:20px;font-size:13.5px;line-height:1.55;color:#334155}.s13-steps li{margin-bottom:6px}.s13-h{margin:18px 0 8px;font-size:17px;font-weight:800;color:#0f172a}</style>
+<style>
+.s2q-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;margin:12px 0 4px}
+.s2q-item{background:#fff;border:1px solid var(--borde-light,#e2e8f0);border-radius:12px;padding:12px 14px}
+.s2q-cmd{display:inline-block;background:#1a1a2e;color:#e0af68;padding:4px 10px;border-radius:7px;font-size:14px;margin-bottom:8px;font-family:'JetBrains Mono',Consolas,monospace}
+.s2q-opts{display:flex;gap:8px;flex-wrap:wrap}
+.s2q-item .fc-fb{margin:8px 0 0;font-size:13px;line-height:1.4;min-height:1px}
+.s2q-item .fc-fb.fc-ok-t{color:#236b00}.s2q-item .fc-fb.fc-bad-t{color:#b91c1c}
+.table-container-card{overflow-x:auto}
+.table-container-card table{min-width:560px}
+</style>
+</head>
+<body>
+
+  <!-- SIDEBAR (ESTANDAR UNIFICADO) -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <a href="../explorar.html" class="brand-link" title="Ir al Portal de Materiales">
+        <!-- Logo Vectorial Oficial SENA -->
+        <div class="sidebar-logo" title="Servicio Nacional de Aprendizaje SENA">
+          <svg width="24" height="24" viewBox="0 0 64 62" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
+            <g transform="translate(-377 -19)">
+              <path d="M409.164 19C412.922 19 415.992 22.09 415.992 25.8778 415.992 29.6656 412.932 32.7556 409.164 32.7556 405.397 32.7556 402.336 29.6656 402.336 25.8778 402.336 22.09 405.407 19 409.164 19"/>
+              <path d="M384.305 41.1884 384.305 41.2183C384.285 41.3379 384.275 41.4177 384.275 41.4675 384.275 41.8264 384.474 42.0855 384.873 42.265 385.282 42.4344 385.9 42.5241 386.747 42.5241 387.395 42.5241 387.893 42.4543 388.262 42.3148 388.631 42.1752 388.81 41.9759 388.81 41.7267 388.81 41.3479 388.082 41.0489 386.647 40.8096 386.478 40.7797 386.348 40.7598 386.268 40.7498 386.179 40.7299 386.039 40.71 385.86 40.6801 383.567 40.3013 382.092 39.8926 381.434 39.454 381.115 39.2347 380.876 38.9855 380.706 38.6965 380.547 38.4074 380.467 38.0785 380.467 37.7096 380.467 36.8125 380.995 36.1248 382.052 35.6563 383.109 35.1878 384.654 34.9486 386.677 34.9486 388.7 34.9486 390.166 35.1678 391.133 35.6064 392.1 36.045 392.578 36.7228 392.578 37.6399L392.578 37.7495 388.78 37.7495 388.78 37.7096C388.78 37.3907 388.591 37.1614 388.202 36.992 387.813 36.8325 387.255 36.7428 386.508 36.7428 385.929 36.7428 385.481 36.8026 385.182 36.9122 384.863 37.0318 384.713 37.1913 384.713 37.4006 384.713 37.7794 385.541 38.1084 387.195 38.3675 387.514 38.4174 387.764 38.4572 387.943 38.4871 389.119 38.6865 389.966 38.8559 390.465 38.9955 390.963 39.135 391.392 39.3045 391.761 39.4939 392.159 39.7132 392.478 39.9923 392.698 40.3312 392.917 40.6701 393.027 41.0389 393.027 41.4476 393.027 42.3746 392.448 43.0823 391.302 43.5907 390.156 44.0891 388.501 44.3383 386.348 44.3383 384.195 44.3383 382.67 44.099 381.723 43.6206 380.766 43.1421 380.298 42.3746 380.298 41.308L380.298 41.1685 384.305 41.1685ZM394.711 44.1987 394.711 35.0881 405.546 35.0881 405.546 37.0518 398.778 37.0518 398.778 38.5071 405.028 38.5071 405.028 40.4508 398.778 40.4508 398.778 42.2151 405.795 42.2151 405.795 44.2087 394.711 44.2087ZM407.5 44.1987 407.5 35.0881 412.643 35.0881 418.155 41.2084 418.155 35.0881 422.063 35.0881 422.063 44.1987 416.72 44.1987 411.387 38.0585 411.387 44.1987 407.49 44.1987ZM432.569 40.5604 430.625 37.2511 428.572 40.5604 432.579 40.5604ZM426.369 44.1987 422.292 44.1987 428.592 35.0881 433.107 35.0881 439.118 44.1987 434.592 44.1987 433.675 42.554 427.366 42.554 426.389 44.1987Z"/>
+              <path d="M389.309 76.3351 385.67 72.9161 396.735 53.6881C397.333 52.6415 396.585 51.3257 395.379 51.3257L377.267 51.3257 377.267 46.5113 406.413 46.5113 389.309 76.3351Z"/>
+              <path d="M428.701 76.3351 432.34 72.9161 421.275 53.6881C420.677 52.6415 421.425 51.3257 422.631 51.3257L440.743 51.3257 440.743 46.5113 411.597 46.5113 428.701 76.3351Z"/>
+              <path d="M408.965 51.5949C408.965 51.5949 409.005 51.5251 409.005 51.5251L425.432 78.7174 421.066 80.99 410.48 63.2373C409.852 62.1907 408.347 62.1907 407.729 63.2373 404.2 69.1981 397.213 80.99 397.213 80.99L392.947 78.8768C392.947 78.8768 408.088 53.09 408.965 51.5949"/>
+            </g>
+          </svg>
+        </div>
+        <div class="brand-info">
+          <h1>ADSO 3389010</h1>
+          <p>Sesión 4 · Práctica Git con video</p>
+        </div>
+      </a>
+      <button type="button" class="sidebar-toggle-btn" onclick="toggleSidebar()" title="Contraer panel lateral">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><line x1="9" x2="9" y1="3" y2="21"/><path d="m14 9-3 3 3 3"/></svg>
+      </button>
+    </div>
+
+    <nav class="sidebar-nav" id="sidebarNav">
+      <div class="nav-group">
+        <div class="nav-group-title">Bloque 1 · Portada & Regla de Oro</div>
+        <div class="nav-links-list">
+          <a href="#slide-01" class="nav-link active">
+            <span class="nav-link-num">01</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            <span class="nav-link-title">Portada & Datos de la Sesión</span>
+          </a>
+          <a href="#slide-02" class="nav-link">
+            <span class="nav-link-num">02</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <span class="nav-link-title">Regla de Oro: Qué entregas</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="nav-group">
+        <div class="nav-group-title">Bloque 2 · Mapa y Preparación</div>
+        <div class="nav-links-list">
+          <a href="#slide-03" class="nav-link">
+            <span class="nav-link-num">03</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+            <span class="nav-link-title">Mapa: los 3 pasos del ejercicio</span>
+          </a>
+          <a href="#slide-04" class="nav-link">
+            <span class="nav-link-num">04</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+            <span class="nav-link-title">Paso 0: tu repositorio local</span>
+          </a>
+          <a href="#slide-05" class="nav-link">
+            <span class="nav-link-num">05</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>
+            <span class="nav-link-title">Nombres: remoto y rama</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="nav-group">
+        <div class="nav-group-title">Bloque 3 · Demo & Práctica</div>
+        <div class="nav-links-list">
+          <a href="#slide-06" class="nav-link">
+            <span class="nav-link-num">06</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/></svg>
+            <span class="nav-link-title">Paso 1: crear el repo remoto</span>
+          </a>
+          <a href="#slide-07" class="nav-link">
+            <span class="nav-link-num">07</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22v-5"/><path d="M9 8V2"/><path d="M15 8V2"/><path d="M18 8v5a4 4 0 0 1-4 4h-4a4 4 0 0 1-4-4V8Z"/></svg>
+            <span class="nav-link-title">Paso 1: conectar (remote)</span>
+          </a>
+          <a href="#slide-08" class="nav-link">
+            <span class="nav-link-num">08</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></svg>
+            <span class="nav-link-title">Paso 2: push e historial</span>
+          </a>
+          <a href="#slide-09" class="nav-link">
+            <span class="nav-link-num">09</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            <span class="nav-link-title">Paso 3: crear kotlin.txt</span>
+          </a>
+          <a href="#slide-10" class="nav-link">
+            <span class="nav-link-num">10</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+            <span class="nav-link-title">Paso 3: add, commit, push</span>
+          </a>
+          <a href="#slide-11" class="nav-link">
+            <span class="nav-link-num">11</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" x2="21" y1="6" y2="6"/><line x1="8" x2="21" y1="12" y2="12"/><line x1="8" x2="21" y1="18" y2="18"/><line x1="3" x2="3.01" y1="6" y2="6"/><line x1="3" x2="3.01" y1="12" y2="12"/><line x1="3" x2="3.01" y1="18" y2="18"/></svg>
+            <span class="nav-link-title">Recorrido completo</span>
+          </a>
+          <a href="#slide-12" class="nav-link">
+            <span class="nav-link-num">12</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>
+            <span class="nav-link-title">Errores frecuentes</span>
+          </a>
+          <a href="#slide-13" class="nav-link">
+            <span class="nav-link-num">13</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></svg>
+            <span class="nav-link-title">Seguridad en el video</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="nav-group">
+        <div class="nav-group-title">Bloque 4 · Construye tu EV05</div>
+        <div class="nav-links-list">
+          <a href="#slide-14" class="nav-link">
+            <span class="nav-link-num">14</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m16 13 5.223 3.482a.5.5 0 0 0 .777-.416V7.87a.5.5 0 0 0-.752-.432L16 10.5"/><rect x="2" y="6" width="14" height="12" rx="2"/></svg>
+            <span class="nav-link-title">Cómo grabar tu video MP4</span>
+          </a>
+          <a href="#slide-15" class="nav-link">
+            <span class="nav-link-num">15</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" x2="12" y1="19" y2="22"/></svg>
+            <span class="nav-link-title">Estructura y guion modelo</span>
+          </a>
+          <a href="#slide-16" class="nav-link">
+            <span class="nav-link-num">16</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.09-3.09a2 2 0 0 0-2.82 0L6 21"/></svg>
+            <span class="nav-link-title">El cartel de presentación</span>
+          </a>
+          <a href="#slide-17" class="nav-link">
+            <span class="nav-link-num">17</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="M7 21h10"/><path d="M12 3v18"/><path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"/></svg>
+            <span class="nav-link-title">Los 4 Indicadores Oficiales</span>
+          </a>
+          <a href="#slide-18" class="nav-link">
+            <span class="nav-link-num">18</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+            <span class="nav-link-title">Checklist y Entrega en Zajuna</span>
+          </a>
+        </div>
+      </div>
+
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="sidebar-footer-pill">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        <span>Entrega EV05: por confirmar en Zajuna</span>
+      </div>
+      <a href="../explorar.html" class="btn-return-hub">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+        Volver al Hub
+      </a>
+    </div>
+  </aside>
+
+  <button type="button" class="floating-sidebar-toggle" id="floatingToggle" onclick="toggleSidebar()" title="Abrir Menú de Navegación">
+    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><line x1="9" x2="9" y1="3" y2="21"/><path d="m10 9 3 3-3 3"/></svg>
+    <span>Menú (18 Slides)</span>
+  </button>
+
+  <main class="main-content" id="mainContent">
+
+    <section class="slide-section" id="slide-01">
+      <div class="slide-container">
+        <span class="slide-badge-category badge-green"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg> Sesión Sincrónica 4 · Guía 7 (GA7-220501096) · AA1</span>
+        <h2 class="slide-title">Práctica Git local y remoto con el repositorio Programa-Git, y cómo grabar tu video</h2>
+        <p class="slide-subtitle">Hoy conectas tu computador con GitHub ejecutando los comandos básicos de Git, y aprendes a grabar y explicar ese ejercicio en un video MP4: tu evidencia AA1-EV05.</p>
+<div class="cards-grid-3"><div class="card-pro top-azul"><div class="card-header-flex"><div class="card-icon-badge icon-badge-blue"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div><span class="card-pill-tag badge-blue">Sincrónico</span></div><h3 class="card-title">Datos de la Sesión</h3><p class="card-desc"><strong>Fecha:</strong> Martes, 24 de Noviembre de 2026<br><strong>Horario:</strong> 6:30 PM - 8:30 PM (Teams)<br><strong>Instructor:</strong> Julián Andrés Trujillo Morales<br><strong>Regional:</strong> Huila | CADPH Garzón</p></div><div class="card-pro top-verde"><div class="card-header-flex"><div class="card-icon-badge icon-badge-green"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="18" r="3"/><circle cx="6" cy="6" r="3"/><circle cx="18" cy="6" r="3"/><path d="M18 9v2c0 .6-.4 1-1 1H7c-.6 0-1-.4-1-1V9"/><path d="M12 12v3"/></svg></div><span class="card-pill-tag badge-green">Tema de hoy</span></div><h3 class="card-title">Qué vas a hacer</h3><p class="card-desc">Crear el repositorio público <code>Programa-Git</code>, conectarlo con tu repositorio local, subir tus cambios, agregar <code>kotlin.txt</code> y grabar todo explicándolo.</p></div><div class="card-pro top-naranja"><div class="card-header-flex"><div class="card-icon-badge icon-badge-orange"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m16 13 5.223 3.482a.5.5 0 0 0 .777-.416V7.87a.5.5 0 0 0-.752-.432L16 10.5"/><rect x="2" y="6" width="14" height="12" rx="2"/></svg></div><span class="card-pill-tag badge-orange">Evidencia</span></div><h3 class="card-title">AA1-EV05 · Herramientas de versionamiento (GIT) instalada y configurada</h3><p class="card-desc"><strong>Producto:</strong> un video en formato MP4 donde ejecutas y explicas cada punto del ejercicio, con una presentación inicial con tu nombre y los ejercicios.<br><strong>Fecha límite en Zajuna:</strong> por confirmar en Zajuna.</p></div></div>
+        <div class="btn-row"><a href="./MANUAL_SESION04.html" class="btn-action-primary"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg> Abrir la Guía de Estudio</a></div>
+      </div>
+    </section>
+
+
+    <section class="slide-section" id="slide-02">
+      <div class="slide-container">
+        <span class="slide-badge-category badge-orange"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> Bloque 1 · Regla de Oro de la Evidencia</span>
+        <h2 class="slide-title">Regla de oro: lo que no se ve y no se explica en el video, no existe</h2>
+        <p class="slide-subtitle">Esta evidencia se aprueba cuando el instructor puede ver, en tu video, cada comando funcionando y escucharte explicar qué hace y por qué.</p>
+<div class="cards-grid-2"><div class="card-pro top-verde"><div class="card-header-flex"><div class="card-icon-badge icon-badge-green"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m16 13 5.223 3.482a.5.5 0 0 0 .777-.416V7.87a.5.5 0 0 0-.752-.432L16 10.5"/><rect x="2" y="6" width="14" height="12" rx="2"/></svg></div><span class="card-pill-tag badge-green">Regla de oro</span></div><h3 class="card-title">Un solo producto: un video MP4</h3><p class="card-desc">La guía pide un <strong>video en formato MP4</strong> donde <strong>ejecutas cada punto del ejercicio</strong> con las herramientas instaladas y <strong>explicas cada requerimiento</strong>. Debe empezar con <strong>una presentación con tu nombre y los ejercicios a realizar</strong>.</p></div><div class="card-pro top-naranja"><div class="card-header-flex"><div class="card-icon-badge icon-badge-orange"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" x2="21" y1="6" y2="6"/><line x1="8" x2="21" y1="12" y2="12"/><line x1="8" x2="21" y1="18" y2="18"/><line x1="3" x2="3.01" y1="6" y2="6"/><line x1="3" x2="3.01" y1="12" y2="12"/><line x1="3" x2="3.01" y1="18" y2="18"/></svg></div><span class="card-pill-tag badge-orange">Qué se evalúa</span></div><h3 class="card-title">4 indicadores del instrumento</h3><p class="card-desc">(1) ejecutas bien las herramientas de versionamiento, (2) ejecutas bien cada comando básico de Git local y remoto, (3) haces un ejemplo funcional con local y remoto y (4) presentas el video cumpliendo los requerimientos. Los verás literales en el <a href="#slide-17" style="color:var(--azul-tech-dark);font-weight:700;">slide 17</a>.</p></div></div>
+<div class="callout"><div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg> Qué te pide exactamente la guía (texto oficial resumido)</div><p>Tomando como referencia el componente formativo <strong>Integración continua</strong>, conectas el equipo local con el repositorio remoto por medio de Git y ejecutas los comandos básicos de Git local y remoto en un ejercicio de tres pasos con el repositorio <code>Programa-Git</code>. Entregas el video en <strong>MP4</strong> en el espacio de Zajuna de la EV05.</p></div><div class="callout warn"><div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg> La guía no fija la duración del video</div><p>El documento oficial no dice cuántos minutos debe durar. En esta sesión te propongo una estructura de unos 8 a 10 minutos (sugerencia del instructor, no una exigencia): lo importante es que se vea y se explique cada punto.</p></div><div class="callout"><div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg> Enfoque de la ficha</div><p>La guía permite GitHub, GitLab u otra herramienta. En esta ficha trabajamos con <strong>Git</strong> (local) y <strong>GitHub</strong> (remoto): usa GitHub para que todo coincida con lo que viste en la Sesión 3.</p></div>
+      </div>
+    </section>
+
+
+    <section class="slide-section" id="slide-03">
+      <div class="slide-container">
+        <span class="slide-badge-category badge-blue"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg> Bloque 2 · Mapa del Ejercicio</span>
+        <h2 class="slide-title">Mapa del ejercicio: tres pasos entre tu computador y GitHub</h2>
+        <p class="slide-subtitle">Todo el ejercicio es una sola idea repetida: trabajas en tu repositorio local y mandas esas versiones al remoto para que queden respaldadas y visibles.</p>
+<div class="diagram-card">
+<svg viewBox="0 0 900 330" role="img" aria-label="Tu repositorio local Programa-Git y el repositorio remoto Programa-Git en GitHub, conectados en tres pasos: conectar, subir y subir kotlin.txt" xmlns="http://www.w3.org/2000/svg" font-family="Plus Jakarta Sans, Arial, sans-serif" style="width:100%;height:auto;display:block">
+<defs>
+<marker id="s4a-r" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0 10 5 0 10z" fill="#236b00"/></marker>
+</defs>
+<rect x="20" y="20" width="300" height="290" rx="16" fill="#f0fdf4" stroke="#39a900" stroke-width="2.5"/>
+<text x="170" y="52" text-anchor="middle" font-size="16" font-weight="800" fill="#236b00">TU COMPUTADOR · Git local</text>
+<rect x="45" y="72" width="250" height="44" rx="10" fill="#fff" stroke="#86efac" stroke-width="2"/>
+<text x="170" y="99" text-anchor="middle" font-size="14" font-weight="800" fill="#0f172a">Carpeta Programa-Git</text>
+<rect x="45" y="128" width="250" height="44" rx="10" fill="#fff" stroke="#86efac" stroke-width="2"/>
+<text x="170" y="155" text-anchor="middle" font-size="14" font-weight="800" fill="#0f172a">README.md (primer commit)</text>
+<rect x="45" y="184" width="250" height="44" rx="10" fill="#dcfce7" stroke="#39a900" stroke-width="2"/>
+<text x="170" y="211" text-anchor="middle" font-size="14" font-weight="800" fill="#0f172a">kotlin.txt (paso 3)</text>
+<text x="170" y="272" text-anchor="middle" font-size="13" fill="#236b00" font-weight="800">Aquí ejecutas los comandos</text>
+
+<rect x="580" y="20" width="300" height="290" rx="16" fill="#eff6ff" stroke="#0284c7" stroke-width="2.5"/>
+<text x="730" y="52" text-anchor="middle" font-size="16" font-weight="800" fill="#0369a1">GITHUB · Git remoto</text>
+<rect x="605" y="72" width="250" height="44" rx="10" fill="#fff" stroke="#7dd3fc" stroke-width="2"/>
+<text x="730" y="99" text-anchor="middle" font-size="14" font-weight="800" fill="#0f172a">Repositorio Programa-Git</text>
+<rect x="605" y="128" width="250" height="44" rx="10" fill="#fff" stroke="#7dd3fc" stroke-width="2"/>
+<text x="730" y="155" text-anchor="middle" font-size="14" font-weight="800" fill="#0f172a">Visibilidad: pública</text>
+<rect x="605" y="184" width="250" height="44" rx="10" fill="#e0f2fe" stroke="#0284c7" stroke-width="2"/>
+<text x="730" y="211" text-anchor="middle" font-size="14" font-weight="800" fill="#0f172a">Historial de versiones</text>
+<text x="730" y="272" text-anchor="middle" font-size="13" fill="#0369a1" font-weight="800">Aquí compruebas el resultado</text>
+
+<line x1="335" y1="92" x2="565" y2="92" stroke="#236b00" stroke-width="3" stroke-dasharray="8 6" marker-end="url(#s4a-r)"/>
+<text x="450" y="76" text-anchor="middle" font-size="13" font-weight="800" fill="#236b00">Paso 1 · conectar</text>
+<text x="450" y="114" text-anchor="middle" font-size="12" fill="#475569">remote add + remote -v</text>
+<line x1="335" y1="168" x2="565" y2="168" stroke="#236b00" stroke-width="3" marker-end="url(#s4a-r)"/>
+<text x="450" y="152" text-anchor="middle" font-size="13" font-weight="800" fill="#236b00">Paso 2 · subir</text>
+<text x="450" y="190" text-anchor="middle" font-size="12" fill="#475569">push + ver el historial</text>
+<line x1="335" y1="244" x2="565" y2="244" stroke="#236b00" stroke-width="3" marker-end="url(#s4a-r)"/>
+<text x="450" y="228" text-anchor="middle" font-size="13" font-weight="800" fill="#236b00">Paso 3 · subir kotlin.txt</text>
+<text x="450" y="266" text-anchor="middle" font-size="12" fill="#475569">add + commit + push</text>
+</svg></div>
+<div class="table-container-card"><table class="table-comparativa"><thead><tr><th>Paso de la guía</th><th>Qué logras</th><th>Comandos que usarás</th></tr></thead><tbody>
+<tr><td><strong>Paso 1</strong></td><td>Crear el repositorio público <code>Programa-Git</code> en GitHub, añadirlo a tu repositorio local y mostrar los remotos</td><td><code>git remote add</code> y <code>git remote -v</code></td></tr>
+<tr><td><strong>Paso 2</strong></td><td>Subir los cambios del local al remoto y comprobarlos en GitHub mostrando el historial</td><td><code>git push</code></td></tr>
+<tr><td><strong>Paso 3</strong></td><td>Agregar <code>kotlin.txt</code> con tu nombre y tu correo, hacer commit «Añadido datos» y subirlo</td><td>crear el archivo, <code>git add .</code>, <code>git commit -m</code>, <code>git push</code></td></tr>
+</tbody></table></div>
+<div class="callout"><div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg> Analogía: el cuaderno y el casillero</div><p>En la Sesión 3 instalaste el cuaderno (Git) y abriste un casillero en la nube (GitHub). Hoy haces el recorrido completo: dejas escrita una primera hoja, le dices al cuaderno dónde está el casillero (<code>remote add</code>), llevas la copia (<code>push</code>) y repites con una hoja nueva (<code>kotlin.txt</code>).</p></div><div class="fa-take"><strong>Qué te llevas para tu video EV05:</strong> en tu video, muestra este mapa con palabras: «tengo un repositorio local y uno remoto, y voy a conectarlos en tres pasos».</div>
+      </div>
+    </section>
+
+
+    <section class="slide-section" id="slide-04">
+      <div class="slide-container">
+        <span class="slide-badge-category badge-blue"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg> Bloque 2 · Preparar el Entorno (Paso 0)</span>
+        <h2 class="slide-title">Paso 0: deja listo tu repositorio local antes de conectarlo</h2>
+        <p class="slide-subtitle">El paso 2 de la guía sube «los cambios del repositorio local». Para que haya algo que subir, tu repositorio local necesita al menos un commit.</p>
+<div class="table-container-card"><table class="table-comparativa"><thead><tr><th>Requisito</th><th>Qué debes revisar</th><th>Por qué importa</th></tr></thead><tbody>
+<tr><td><strong>Git instalado y con tu identidad</strong></td><td><code>git --version</code> y <code>git config --global --list</code> responden con tus datos</td><td>Es la base de la Sesión 3. Si fallan, vuelve a la Guía de Estudio de esa sesión</td></tr>
+<tr><td><strong>Cuenta de GitHub activa</strong></td><td>Puedes iniciar sesión en github.com</td><td>Ahí crearás el repositorio remoto</td></tr>
+<tr><td><strong>Autenticación resuelta</strong></td><td>Credential Manager o token funcionando (Sesión 3, slide 11)</td><td>Sin ella, el <code>push</code> falla. No repetimos la explicación completa aquí</td></tr>
+<tr><td><strong>Un repositorio local con un commit</strong></td><td>Carpeta <code>Programa-Git</code> con <code>git init</code> y un primer commit</td><td>Es lo que subirás en el paso 2</td></tr>
+<tr><td><strong>Programa para grabar la pantalla y micrófono</strong></td><td>Pruébalo con 20 segundos (slide 14)</td><td>Evita descubrir un problema de audio después de grabar todo</td></tr>
+</tbody></table></div>
+<div class="code-editor-box"><div class="editor-header"><div class="editor-dot r"></div><div class="editor-dot y"></div><div class="editor-dot g"></div><div class="editor-title"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span>04_preparar_programa_git_local.sh</span></div><div class="editor-badge">Terminal · Git Bash</div></div><div class="editor-body"><div class="cl"><span class="ln">1</span><span class="code"><span class="syn-comment"># Paso 0: comprueba que Git y tu identidad siguen funcionando (Sesión 3)</span></span></div>
+<div class="cl"><span class="ln">2</span><span class="code"><span class="syn-method">git --version</span></span></div>
+<div class="cl"><span class="ln">3</span><span class="code"><span class="syn-method">git config --global --list</span></span></div>
+<div class="cl"><span class="ln">4</span><span class="code"></span></div>
+<div class="cl"><span class="ln">5</span><span class="code"><span class="syn-comment"># 1) Crea la carpeta del programa y entra en ella</span></span></div>
+<div class="cl"><span class="ln">6</span><span class="code"><span class="syn-method">mkdir Programa-Git</span></span></div>
+<div class="cl"><span class="ln">7</span><span class="code"><span class="syn-method">cd Programa-Git</span></span></div>
+<div class="cl"><span class="ln">8</span><span class="code"></span></div>
+<div class="cl"><span class="ln">9</span><span class="code"><span class="syn-comment"># 2) Inicia el repositorio local</span></span></div>
+<div class="cl"><span class="ln">10</span><span class="code"><span class="syn-method">git init</span></span></div>
+<div class="cl"><span class="ln">11</span><span class="code"></span></div>
+<div class="cl"><span class="ln">12</span><span class="code"><span class="syn-comment"># 3) Crea un primer archivo y guarda la primera versión</span></span></div>
+<div class="cl"><span class="ln">13</span><span class="code"><span class="syn-method">echo "# Programa-Git" &gt; README.md</span></span></div>
+<div class="cl"><span class="ln">14</span><span class="code"><span class="syn-method">git add README.md</span></span></div>
+<div class="cl"><span class="ln">15</span><span class="code"><span class="syn-method">git commit -m "Primer commit del programa"</span></span></div>
+<div class="cl"><span class="ln">16</span><span class="code"></span></div>
+<div class="cl"><span class="ln">17</span><span class="code"><span class="syn-comment"># 4) Comprueba tu historial y el nombre de tu rama</span></span></div>
+<div class="cl"><span class="ln">18</span><span class="code"><span class="syn-method">git log --oneline</span></span></div>
+<div class="cl"><span class="ln">19</span><span class="code"><span class="syn-method">git branch</span></span></div>
+<div class="cl"><span class="ln">20</span><span class="code"><span class="punc">* main</span></span></div></div></div>
+<div class="cmd-explain"><h3 class="s13-h">Qué hace cada comando</h3><div class="table-container-card"><table class="table-comparativa"><thead><tr><th>Comando</th><th>Qué hace</th><th>Cómo se lee, parte por parte</th></tr></thead><tbody>
+<tr><td><code>git --version</code></td><td>Muestra la versión de Git instalada. Si responde, Git está instalado y la terminal lo encuentra (está en el PATH).</td><td><code>git</code> = el programa<br><code>--version</code> = pide que muestre su versión</td></tr>
+<tr><td><code>git config --global --list</code></td><td>Muestra todo lo que quedó guardado en la configuración global. Sirve para comprobar tu nombre y tu correo.</td><td><code>--list</code> = listar la configuración</td></tr>
+<tr><td><code>mkdir Programa-Git</code></td><td>Crea una carpeta nueva con ese nombre en la ubicación donde estás.</td><td><code>mkdir</code> = make directory: crear carpeta<br><code>el nombre</code> = cómo se llamará la carpeta</td></tr>
+<tr><td><code>cd Programa-Git</code></td><td>Entra a la carpeta indicada. Desde ahí se ejecutarán los siguientes comandos.</td><td><code>cd</code> = change directory: cambiar de carpeta<br><code>el nombre</code> = la carpeta a la que entras</td></tr>
+<tr><td><code>git init</code></td><td>Convierte la carpeta actual en un repositorio local: crea la carpeta oculta .git donde Git guarda el historial.</td><td><code>git</code> = el programa<br><code>init</code> = iniciar un repositorio</td></tr>
+<tr><td><code>echo &quot;# Programa-Git&quot; &gt; README.md</code></td><td>Crea el archivo con ese texto dentro (si ya existía, lo reemplaza).</td><td><code>echo</code> = escribe un texto<br><code>&gt;</code> = en lugar de mostrarlo, lo guarda en un archivo<br><code>README.md</code> = el nombre del archivo que se crea</td></tr>
+<tr><td><code>git add README.md</code></td><td>Prepara el archivo para el próximo commit (lo pasa al staging).</td><td><code>add</code> = agregar al área de preparación<br><code>README.md</code> = el archivo que preparas; con . se preparan todos</td></tr>
+<tr><td><code>git commit -m &quot;Primer commit del programa&quot;</code></td><td>Guarda una versión con lo que preparaste, con un mensaje que explica el cambio. Queda solo en tu equipo.</td><td><code>commit</code> = guardar una versión<br><code>-m</code> = incluir el mensaje en el mismo comando<br><code>"mensaje"</code> = qué cambiaste, entre comillas</td></tr>
+<tr><td><code>git log --oneline</code></td><td>Lista el historial de commits, uno por línea: su código corto y su mensaje.</td><td><code>log</code> = mostrar el historial<br><code>--oneline</code> = formato resumido de una línea por commit</td></tr>
+<tr><td><code>git branch</code></td><td>Lista las ramas de tu repositorio y marca con asterisco la actual. Así sabes si tu rama es main o master.</td><td><code>branch</code> = trabajar con ramas; sin más opciones, solo las lista</td></tr>
+</tbody></table></div></div>
+
+
+
+
+
+<div class="callout warn"><div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg> Usa Git Bash para este slide</div><p>Si tu terminal es Windows PowerShell 5.1, el símbolo <code>&gt;</code> guarda el archivo en UTF-16 y GitHub puede mostrarlo raro. Usa Git Bash (o la terminal de VS Code configurada con Git Bash) o crea el archivo como se muestra en el <a href="#slide-09" style="color:var(--azul-tech-dark);font-weight:700;">slide 9</a>.</p></div><div class="callout"><div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg> Interpretación de la guía</div><p>El enunciado dice «añadirlo al repositorio local del programa». Aquí lo entendemos como un repositorio nuevo llamado <code>Programa-Git</code> con un primer commit. Si ya tienes otro repositorio de práctica, puedes usarlo, pero el video debe mostrar que tiene historial.</p></div><div class="fa-take"><strong>Qué te llevas para tu video EV05:</strong> en el video, di en voz alta qué carpeta usas y muestra <code>git log --oneline</code>: así el instructor ve que el local ya tiene historial (<strong>indicador 1</strong>).</div>
+      </div>
+    </section>
+
+
+    <section class="slide-section" id="slide-05">
+      <div class="slide-container">
+        <span class="slide-badge-category badge-blue"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg> Bloque 2 · Nombres que debes decidir</span>
+        <h2 class="slide-title">La guía mezcla nombres: elige uno y úsalo en los tres pasos</h2>
+        <p class="slide-subtitle">En la guía, los pasos 1 y 2 usan un remoto llamado <code>github</code> y el paso 3 usa <code>origin</code>; además habla de la rama <code>master</code>. Si copias todo tal cual, algo falla.</p>
+<div class="table-container-card"><table class="table-comparativa"><thead><tr><th>Qué dice la guía</th><th>Qué pasa si lo copias tal cual</th><th>Qué haces tú</th></tr></thead><tbody>
+<tr><td><code>git remote add github url</code> y <code>git push github master</code> (pasos 1 y 2)</td><td>Creas un remoto llamado <code>github</code></td><td>El nombre del remoto es solo una etiqueta que tú eliges</td></tr>
+<tr><td><code>git push origin master</code> (paso 3)</td><td>Falla con <code>'origin' does not appear to be a git repository</code>, porque tu remoto se llama <code>github</code></td><td>Usa <strong>el mismo nombre</strong> en <code>remote add</code> y en cada <code>push</code></td></tr>
+<tr><td>Rama <code>master</code></td><td>Si tu rama se llama <code>main</code> (lo normal desde la Sesión 3), falla con <code>src refspec master does not match any</code></td><td>Mira tu rama con <code>git branch</code> y usa <strong>ese nombre</strong></td></tr>
+<tr><td>Puntos finales: <code>git push origin master.</code></td><td>Es signo de puntuación del texto, no del comando</td><td>No lo escribas</td></tr>
+<tr><td>Mensaje <code>"Añadido datos."</code></td><td>El enunciado dice «Añadido datos»; el ejemplo de comandos trae punto final</td><td>Usa «Añadido datos» y menciónalo en el video</td></tr>
+</tbody></table></div>
+<div class="callout"><div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg> Ruta recomendada en esta sesión</div><p>Un solo nombre de remoto: <strong><code>origin</code></strong> (la convención y la que usaste en la Sesión 3), y tu rama real (<code>main</code>). Si prefieres seguir la guía al pie de la letra, usa <code>github</code> en <strong>los tres</strong> pasos (incluido <code>git push github main</code> en el paso 3) y dilo en el video. Ambas rutas cumplen el ejercicio: lo importante es ser coherente y explicarlo.</p></div><div class="table-container-card"><table class="table-comparativa"><thead><tr><th>Guía</th><th>Tu comando (ruta recomendada)</th><th>Tu comando (ruta literal)</th></tr></thead><tbody>
+<tr><td><code>git remote add github url</code></td><td><code>git remote add origin URL</code></td><td><code>git remote add github URL</code></td></tr>
+<tr><td><code>git push github master</code></td><td><code>git push -u origin main</code></td><td><code>git push -u github main</code></td></tr>
+<tr><td><code>git push origin master</code></td><td><code>git push origin main</code></td><td><code>git push github main</code></td></tr>
+</tbody></table></div>
+<div class="code-editor-box"><div class="editor-header"><div class="editor-dot r"></div><div class="editor-dot y"></div><div class="editor-dot g"></div><div class="editor-title"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span>05_nombres_remoto_y_rama.sh</span></div><div class="editor-badge">Terminal · Git Bash</div></div><div class="editor-body"><div class="cl"><span class="ln">1</span><span class="code"><span class="syn-comment"># Si ya creaste el remoto con otro nombre, renómbralo en vez de borrarlo</span></span></div>
+<div class="cl"><span class="ln">2</span><span class="code"><span class="syn-method">git remote rename github origin</span></span></div>
+<div class="cl"><span class="ln">3</span><span class="code"></span></div>
+<div class="cl"><span class="ln">4</span><span class="code"><span class="syn-comment"># Muestra tu rama actual (la que tiene el asterisco)</span></span></div>
+<div class="cl"><span class="ln">5</span><span class="code"><span class="syn-method">git branch</span></span></div>
+<div class="cl"><span class="ln">6</span><span class="code"></span></div>
+<div class="cl"><span class="ln">7</span><span class="code"><span class="syn-comment"># Si quieres cambiar el nombre de tu rama (main o master)</span></span></div>
+<div class="cl"><span class="ln">8</span><span class="code"><span class="syn-method">git branch -M main</span></span></div></div></div>
+<div class="cmd-explain"><h3 class="s13-h">Qué hace cada comando</h3><div class="table-container-card"><table class="table-comparativa"><thead><tr><th>Comando</th><th>Qué hace</th><th>Cómo se lee, parte por parte</th></tr></thead><tbody>
+<tr><td><code>git remote rename github origin</code></td><td>Cambia el nombre de un remoto ya creado, sin borrar la conexión.</td><td><code>remote rename</code> = renombrar un remoto<br><code>github</code> = el nombre actual<br><code>origin</code> = el nombre nuevo</td></tr>
+<tr><td><code>git branch</code></td><td>Lista las ramas de tu repositorio y marca con asterisco la actual. Así sabes si tu rama es main o master.</td><td><code>branch</code> = trabajar con ramas; sin más opciones, solo las lista</td></tr>
+<tr><td><code>git branch -M main</code></td><td>Renombra la rama actual a main para que coincida con la de GitHub.</td><td><code>branch</code> = trabajar con ramas<br><code>-M</code> = renombrar la rama actual aunque ya exista otra con ese nombre<br><code>main</code> = el nombre nuevo</td></tr>
+</tbody></table></div></div>
+
+
+
+
+
+<div class="callout warn"><div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg> Si tu rama sí se llama master</div><p>Entonces usa <code>master</code> en los pushes, tal como dice la guía. Cambiar o no el nombre de la rama es decisión tuya; lo que no puedes es escribir <code>master</code> si tu rama es <code>main</code>.</p></div><div class="fa-take"><strong>Qué te llevas para tu video EV05:</strong> una frase al inicio del video: «uso el remoto origin y la rama main; la guía usa github y master, que son solo nombres distintos para lo mismo».</div>
+      </div>
+    </section>
+
+
+    <section class="slide-section" id="slide-06">
+      <div class="slide-container">
+        <span class="slide-badge-category badge-blue"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/></svg> Bloque 3 · Paso 1 · Crear el repositorio remoto</span>
+        <h2 class="slide-title">Paso 1: crea el repositorio público Programa-Git en GitHub</h2>
+        <p class="slide-subtitle">El primer punto de la guía es crear un repositorio nuevo, público, con el nombre exacto <code>Programa-Git</code>. Se hace desde el navegador.</p>
+<ol class="steps-list"><li><strong>Entra a <code>github.com</code></strong> con tu sesión iniciada y abre el menú <em>+</em> (arriba a la derecha) &rarr; <em>New repository</em>.</li><li><strong>Nombre del repositorio:</strong> escribe exactamente <code>Programa-Git</code> (respeta mayúscula y guion).</li><li><strong>Visibilidad:</strong> marca <em>Public</em>. La guía pide un repositorio público.</li><li><strong>Déjalo vacío:</strong> NO marques <em>Add a README</em>, <em>.gitignore</em> ni licencia, porque tu repositorio local ya tiene su primer commit.</li><li><strong>Presiona <em>Create repository</em></strong> y copia la URL HTTPS de la sección <em>Quick setup</em> (termina en <code>.git</code>). La guía dice «copiar su url con el protocolo https».</li></ol>
+<div class="callout"><div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg> Qué obtienes</div><p>Una dirección como <code>https://github.com/TU_USUARIO/Programa-Git.git</code>. En el siguiente slide la usas con <code>git remote add</code>.</p></div><div class="callout warn"><div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg> Error frecuente</div><p>Crear el repositorio con README y luego recibir <code>rejected ... fetch first</code> o <code>unrelated histories</code> al hacer push. Si te pasa, crea un repositorio vacío nuevo (o ábrelo en Settings, elimínalo y créalo de nuevo).</p></div><div class="fa-take"><strong>Qué te llevas para tu video EV05:</strong> en el video, enseña la pantalla de creación con el nombre <code>Programa-Git</code> y la opción <em>Public</em> marcadas, y la URL que copias (<strong>indicador 3</strong>).</div>
+      </div>
+    </section>
+
+
+    <section class="slide-section" id="slide-07">
+      <div class="slide-container">
+        <span class="slide-badge-category badge-blue"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22v-5"/><path d="M9 8V2"/><path d="M15 8V2"/><path d="M18 8v5a4 4 0 0 1-4 4h-4a4 4 0 0 1-4-4V8Z"/></svg> Bloque 3 · Paso 1 · Conectar local y remoto</span>
+        <h2 class="slide-title">Paso 1: añade el remoto y muestra los remotos configurados</h2>
+        <p class="slide-subtitle">Estos dos comandos cubren los puntos 2 y 3 del paso 1 de la guía. Aún no se sube nada: solo guardas la dirección de GitHub.</p>
+<div class="code-editor-box"><div class="editor-header"><div class="editor-dot r"></div><div class="editor-dot y"></div><div class="editor-dot g"></div><div class="editor-title"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span>07_paso1_conectar_remoto.sh</span></div><div class="editor-badge">Terminal · Git Bash</div></div><div class="editor-body"><div class="cl"><span class="ln">1</span><span class="code"><span class="syn-comment"># Estando dentro de la carpeta Programa-Git (tu repositorio local)</span></span></div>
+<div class="cl"><span class="ln">2</span><span class="code"><span class="syn-comment"># 1) Añade el remoto; cambia TU_USUARIO por el tuyo</span></span></div>
+<div class="cl"><span class="ln">3</span><span class="code"><span class="syn-method">git remote add origin https://github.com/TU_USUARIO/Programa-Git.git</span></span></div>
+<div class="cl"><span class="ln">4</span><span class="code"></span></div>
+<div class="cl"><span class="ln">5</span><span class="code"><span class="syn-comment"># 2) Muestra todos los remotos configurados</span></span></div>
+<div class="cl"><span class="ln">6</span><span class="code"><span class="syn-method">git remote -v</span></span></div>
+<div class="cl"><span class="ln">7</span><span class="code"><span class="punc">origin  https://github.com/TU_USUARIO/Programa-Git.git (fetch)</span></span></div>
+<div class="cl"><span class="ln">8</span><span class="code"><span class="punc">origin  https://github.com/TU_USUARIO/Programa-Git.git (push)</span></span></div></div></div>
+<div class="cmd-explain"><h3 class="s13-h">Qué hace cada comando</h3><div class="table-container-card"><table class="table-comparativa"><thead><tr><th>Comando</th><th>Qué hace</th><th>Cómo se lee, parte por parte</th></tr></thead><tbody>
+<tr><td><code>git remote add origin https://github.com/TU_USUARIO/Programa-Git.git</code></td><td>Conecta tu repositorio local con el repositorio Programa-Git de GitHub. Todavía no sube nada: solo guarda la dirección con un nombre.</td><td><code>git remote</code> = administra las conexiones con repositorios remotos<br><code>add</code> = agregar una conexión nueva<br><code>origin</code> = el nombre corto de la conexión; en la guía se llama github en los pasos 1 y 2<br><code>https://github.com/TU_USUARIO/Programa-Git.git</code> = la URL HTTPS del repositorio; cambia TU_USUARIO por tu usuario</td></tr>
+<tr><td><code>git remote -v</code></td><td>Muestra las conexiones remotas guardadas y sus URL. Comprueba que el origin quedó bien escrito.</td><td><code>remote</code> = conexiones remotas<br><code>-v</code> = verbose: muestra también las URL (fetch para bajar, push para subir)</td></tr>
+</tbody></table></div></div>
+
+
+
+
+
+<div class="callout"><div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg> Cómo comprobar que funcionó</div><ul><li><code>git remote add</code> no muestra nada si salió bien: eso es normal.</li><li><code>git remote -v</code> debe listar tu nombre de remoto con tu URL, una vez para <em>fetch</em> y otra para <em>push</em>.</li><li>Si dice <code>remote origin already exists</code>, ya lo habías añadido: revisa con <code>git remote -v</code>.</li></ul></div><div class="callout warn"><div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg> Error frecuente</div><p>Dejar <code>TU_USUARIO</code> sin cambiar o copiar la URL de otro repositorio (por ejemplo, <code>prueba-git</code> de la Sesión 3). Copia la URL de <code>Programa-Git</code> desde GitHub.</p></div><div class="fa-take"><strong>Qué te llevas para tu video EV05:</strong> la captura del terminal con <code>git remote -v</code> y una frase que explique qué conexión acabas de crear (<strong>indicadores 2 y 3</strong>).</div>
+      </div>
+    </section>
+
+
+    <section class="slide-section" id="slide-08">
+      <div class="slide-container">
+        <span class="slide-badge-category badge-blue"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></svg> Bloque 3 · Paso 2 · Subir y comprobar</span>
+        <h2 class="slide-title">Paso 2: sube tus cambios y muestra el historial en GitHub</h2>
+        <p class="slide-subtitle">El paso 2 tiene dos partes: subir con <code>push</code> y comprobarlo en GitHub mostrando el historial de versiones. La segunda parte se hace en el navegador.</p>
+<div class="code-editor-box"><div class="editor-header"><div class="editor-dot r"></div><div class="editor-dot y"></div><div class="editor-dot g"></div><div class="editor-title"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span>08_paso2_push_y_verificar.sh</span></div><div class="editor-badge">Terminal · Git Bash</div></div><div class="editor-body"><div class="cl"><span class="ln">1</span><span class="code"><span class="syn-comment"># 1) Mira el nombre de tu rama (la del asterisco)</span></span></div>
+<div class="cl"><span class="ln">2</span><span class="code"><span class="syn-method">git branch</span></span></div>
+<div class="cl"><span class="ln">3</span><span class="code"><span class="punc">* main</span></span></div>
+<div class="cl"><span class="ln">4</span><span class="code"></span></div>
+<div class="cl"><span class="ln">5</span><span class="code"><span class="syn-comment"># 2) Sube tus commits al remoto (en la guía: git push github master)</span></span></div>
+<div class="cl"><span class="ln">6</span><span class="code"><span class="syn-method">git push -u origin main</span></span></div>
+<div class="cl"><span class="ln">7</span><span class="code"><span class="punc">Enumerating objects: 3, done.</span></span></div>
+<div class="cl"><span class="ln">8</span><span class="code"><span class="punc">To https://github.com/TU_USUARIO/Programa-Git.git</span></span></div>
+<div class="cl"><span class="ln">9</span><span class="code"><span class="punc"> * [new branch]      main -&gt; main</span></span></div>
+<div class="cl"><span class="ln">10</span><span class="code"><span class="punc">branch 'main' set up to track 'origin/main'.</span></span></div></div></div>
+<div class="cmd-explain"><h3 class="s13-h">Qué hace cada comando</h3><div class="table-container-card"><table class="table-comparativa"><thead><tr><th>Comando</th><th>Qué hace</th><th>Cómo se lee, parte por parte</th></tr></thead><tbody>
+<tr><td><code>git branch</code></td><td>Lista las ramas de tu repositorio y marca con asterisco la actual. Así sabes si tu rama es main o master.</td><td><code>branch</code> = trabajar con ramas; sin más opciones, solo las lista</td></tr>
+<tr><td><code>git push -u origin main</code></td><td>Sube tus commits de la rama main a GitHub, y deja recordado que main de tu equipo sigue a origin/main.</td><td><code>push</code> = subir commits al remoto<br><code>-u</code> = recuerda esta conexión para los próximos git push y git pull<br><code>origin</code> = a qué remoto se sube<br><code>main</code> = qué rama se sube</td></tr>
+</tbody></table></div></div>
+
+
+
+
+
+<ol class="steps-list"><li><strong>Autoriza si te lo pide.</strong> Se abre la ventana de Credential Manager o la terminal pide usuario y token (Sesión 3, slide 11). No muestres el token.</li><li><strong>Actualiza la página</strong> del repositorio <code>Programa-Git</code> en GitHub (F5): debe aparecer <code>README.md</code>.</li><li><strong>Abre el historial:</strong> presiona el enlace <em>Commits</em> (el icono del reloj con el número de commits). Ahí se ve cada versión con su mensaje, autor y fecha.</li></ol>
+<div style="max-width:560px;margin:10px auto 4px;border:1px solid #d0d7de;border-radius:10px;overflow:hidden;background:#fff;font-size:13px"><div style="padding:10px 14px;background:#f6f8fa;border-bottom:1px solid #d0d7de;font-weight:700">TU_USUARIO / Programa-Git <span style="border:1px solid #d0d7de;border-radius:20px;padding:1px 8px;font-size:11px;font-weight:600;color:#57606a">Public</span></div><div style="padding:8px 14px;border-bottom:1px solid #eaeef2;display:flex;justify-content:space-between;color:#57606a"><span>TU_USUARIO &nbsp; Primer commit del programa</span><span style="color:#0969da;font-weight:700">1 Commit</span></div><div style="padding:8px 14px;color:#24292f">README.md &nbsp;&nbsp;<span style="color:#57606a">Primer commit del programa</span></div><div style="padding:6px 14px;font-size:12px;background:#f8fafc;color:#475569;text-align:center"><strong>Figura.</strong> Ilustración de referencia: el enlace «Commits» abre el historial de versiones.</div></div>
+<div class="callout"><div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg> Qué demuestra cada resultado</div><ul><li>La salida con <code>[new branch]</code> confirma que la rama viajó a GitHub.</li><li>El mensaje <code>set up to track</code> significa que desde ahora un simple <code>git push</code> sabe a dónde ir.</li><li>El historial en GitHub es la prueba del punto 2 del paso 2.</li></ul></div><div class="callout warn"><div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg> Error frecuente</div><p><code>src refspec master does not match any</code>: tu rama se llama <code>main</code> y escribiste <code>master</code>. Revisa <code>git branch</code> (slide 5). Si no hay commits, haz el primer commit del slide 4.</p></div><div class="fa-take"><strong>Qué te llevas para tu video EV05:</strong> la terminal con el <code>push</code> exitoso, la página de GitHub con tu archivo y la pantalla del historial de commits, explicando cada una (<strong>indicadores 2 y 3</strong>).</div>
+      </div>
+    </section>
+
+
+    <section class="slide-section" id="slide-09">
+      <div class="slide-container">
+        <span class="slide-badge-category badge-blue"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> Bloque 3 · Paso 3 · Crear kotlin.txt</span>
+        <h2 class="slide-title">Paso 3 (parte 1): crea kotlin.txt con tu nombre y tu correo</h2>
+        <p class="slide-subtitle">La guía muestra <code>cat &gt; kotlin.txt</code>, que es un comando de Git Bash, macOS y Linux. En Windows PowerShell no funciona igual, así que tienes alternativas.</p>
+<div class="code-editor-box"><div class="editor-header"><div class="editor-dot r"></div><div class="editor-dot y"></div><div class="editor-dot g"></div><div class="editor-title"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span>09a_kotlin_git_bash.sh</span></div><div class="editor-badge">Terminal · Git Bash</div></div><div class="editor-body"><div class="cl"><span class="ln">1</span><span class="code"><span class="syn-comment"># Opción 1 (la de la guía): cat > crea el archivo con lo que escribas</span></span></div>
+<div class="cl"><span class="ln">2</span><span class="code"><span class="syn-method">cat &gt; kotlin.txt</span></span></div>
+<div class="cl"><span class="ln">3</span><span class="code"><span class="syn-comment"># Escribe tu nombre y tu correo, presiona Enter y luego Ctrl + D para terminar</span></span></div>
+<div class="cl"><span class="ln">4</span><span class="code"></span></div>
+<div class="cl"><span class="ln">5</span><span class="code"><span class="syn-comment"># Opción 2: una sola línea con echo</span></span></div>
+<div class="cl"><span class="ln">6</span><span class="code"><span class="syn-method">echo "Nombre Apellido - tu_correo@ejemplo.com" &gt; kotlin.txt</span></span></div>
+<div class="cl"><span class="ln">7</span><span class="code"></span></div>
+<div class="cl"><span class="ln">8</span><span class="code"><span class="syn-comment"># Comprueba el contenido</span></span></div>
+<div class="cl"><span class="ln">9</span><span class="code"><span class="syn-method">cat kotlin.txt</span></span></div>
+<div class="cl"><span class="ln">10</span><span class="code"><span class="punc">Nombre Apellido - tu_correo@ejemplo.com</span></span></div></div></div>
+<div class="cmd-explain"><h3 class="s13-h">Qué hace cada comando</h3><div class="table-container-card"><table class="table-comparativa"><thead><tr><th>Comando</th><th>Qué hace</th><th>Cómo se lee, parte por parte</th></tr></thead><tbody>
+<tr><td><code>cat &gt; kotlin.txt</code></td><td>Crea kotlin.txt con lo que escribas a continuación. Terminas con Ctrl + D. Funciona en Git Bash, macOS y Linux.</td><td><code>cat</code> = muestra o une contenido de archivos<br><code>&gt;</code> = en lugar de mostrarlo en pantalla, lo guarda en un archivo<br><code>kotlin.txt</code> = el archivo que se crea con lo que escribes</td></tr>
+<tr><td><code>echo &quot;Nombre Apellido - tu_correo@ejemplo.com&quot; &gt; kotlin.txt</code></td><td>Crea kotlin.txt con el texto entre comillas en una sola línea (si ya existía, lo reemplaza).</td><td><code>echo</code> = escribe un texto<br><code>"Nombre Apellido - correo"</code> = tu nombre y tu correo, entre comillas<br><code>&gt;</code> = lo guarda en un archivo en vez de mostrarlo<br><code>kotlin.txt</code> = el archivo que se crea</td></tr>
+<tr><td><code>cat kotlin.txt</code></td><td>Muestra en pantalla el contenido de kotlin.txt, para comprobar que tiene tu nombre y tu correo.</td><td><code>cat</code> = mostrar el contenido de un archivo<br><code>kotlin.txt</code> = el archivo que quieres ver</td></tr>
+</tbody></table></div></div>
+
+
+
+
+
+<div class="code-editor-box"><div class="editor-header"><div class="editor-dot r"></div><div class="editor-dot y"></div><div class="editor-dot g"></div><div class="editor-title"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span>09b_kotlin_powershell.ps1</span></div><div class="editor-badge">PowerShell</div></div><div class="editor-body"><div class="cl"><span class="ln">1</span><span class="code"><span class="syn-comment"># En PowerShell, cat no crea archivos (es un alias de Get-Content, que lee)</span></span></div>
+<div class="cl"><span class="ln">2</span><span class="code"><span class="syn-comment"># Crea el archivo así:</span></span></div>
+<div class="cl"><span class="ln">3</span><span class="code"><span class="syn-method">Set-Content -Path kotlin.txt -Value "Nombre Apellido - tu_correo@ejemplo.com" -Encoding utf8</span></span></div>
+<div class="cl"><span class="ln">4</span><span class="code"></span></div>
+<div class="cl"><span class="ln">5</span><span class="code"><span class="syn-comment"># Comprueba el contenido</span></span></div>
+<div class="cl"><span class="ln">6</span><span class="code"><span class="syn-method">Get-Content kotlin.txt</span></span></div></div></div>
+<div class="cmd-explain"><h3 class="s13-h">Qué hace cada comando</h3><div class="table-container-card"><table class="table-comparativa"><thead><tr><th>Comando</th><th>Qué hace</th><th>Cómo se lee, parte por parte</th></tr></thead><tbody>
+<tr><td><code>Set-Content -Path kotlin.txt -Value &quot;Nombre Apellido - tu_correo@ejemplo.com&quot; -Encoding utf8</code></td><td>Crea kotlin.txt en PowerShell con el texto indicado, guardado en UTF-8 para que GitHub lo muestre bien.</td><td><code>Set-Content</code> = escribir contenido en un archivo<br><code>-Path kotlin.txt</code> = el archivo que se crea<br><code>-Value "..."</code> = el texto que se guarda: tu nombre y tu correo<br><code>-Encoding utf8</code> = codificación UTF-8</td></tr>
+<tr><td><code>Get-Content kotlin.txt</code></td><td>Muestra en PowerShell el contenido de kotlin.txt para comprobarlo.</td><td><code>Get-Content</code> = leer el contenido de un archivo<br><code>kotlin.txt</code> = el archivo que quieres ver</td></tr>
+</tbody></table></div></div>
+
+
+
+
+
+<div class="table-container-card"><table class="table-comparativa"><thead><tr><th>Dónde trabajas</th><th>Cómo creas kotlin.txt</th><th>Ojo con</th></tr></thead><tbody>
+<tr><td><strong>Git Bash, macOS, Linux</strong></td><td><code>cat &gt; kotlin.txt</code> o <code>echo "..." &gt; kotlin.txt</code></td><td>Con <code>cat &gt;</code>, termina con Ctrl + D; si lo cierras sin escribir, el archivo queda vacío</td></tr>
+<tr><td><strong>Windows PowerShell</strong></td><td><code>Set-Content -Path kotlin.txt -Value "..." -Encoding utf8</code></td><td>En Windows PowerShell 5.1, <code>echo "..." &gt; archivo</code> guarda en UTF-16 y GitHub puede mostrarlo mal</td></tr>
+<tr><td><strong>Editor (VS Code, Bloc de notas)</strong></td><td>Crea el archivo <code>kotlin.txt</code> dentro de la carpeta <code>Programa-Git</code> y guarda en UTF-8</td><td>Que no quede como <code>kotlin.txt.txt</code> y que esté dentro de la carpeta del repositorio</td></tr>
+</tbody></table></div>
+<div class="callout warn"><div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> Tu correo quedará público</div><p>El repositorio es público y la guía pide el correo dentro del archivo. Escribe un correo que no te importe que se vea, y tápalo o no lo leas con la cámara si prefieres. No escribas contraseñas ni tokens en este archivo.</p></div><div class="fa-take"><strong>Qué te llevas para tu video EV05:</strong> la creación del archivo en el video y la comprobación de su contenido con <code>cat</code> o <code>Get-Content</code>, diciendo cuál terminal usas y por qué (<strong>indicador 2</strong>).</div>
+      </div>
+    </section>
+
+
+    <section class="slide-section" id="slide-10">
+      <div class="slide-container">
+        <span class="slide-badge-category badge-blue"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg> Bloque 3 · Paso 3 · Agregar, guardar y subir</span>
+        <h2 class="slide-title">Paso 3 (parte 2): add, commit «Añadido datos» y push</h2>
+        <p class="slide-subtitle">Con el archivo creado, repites el ciclo básico de Git: preparar, guardar una versión y subirla. Después compruebas que <code>kotlin.txt</code> aparece en GitHub.</p>
+<div class="code-editor-box"><div class="editor-header"><div class="editor-dot r"></div><div class="editor-dot y"></div><div class="editor-dot g"></div><div class="editor-title"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span>10_paso3_add_commit_push.sh</span></div><div class="editor-badge">Terminal · Git Bash</div></div><div class="editor-body"><div class="cl"><span class="ln">1</span><span class="code"><span class="syn-comment"># 1) Mira qué cambió: kotlin.txt aparece como archivo nuevo</span></span></div>
+<div class="cl"><span class="ln">2</span><span class="code"><span class="syn-method">git status</span></span></div>
+<div class="cl"><span class="ln">3</span><span class="code"><span class="punc">Untracked files:</span></span></div>
+<div class="cl"><span class="ln">4</span><span class="code"><span class="punc">        kotlin.txt</span></span></div>
+<div class="cl"><span class="ln">5</span><span class="code"></span></div>
+<div class="cl"><span class="ln">6</span><span class="code"><span class="syn-comment"># 2) Agrega los cambios al área de preparación</span></span></div>
+<div class="cl"><span class="ln">7</span><span class="code"><span class="syn-method">git add .</span></span></div>
+<div class="cl"><span class="ln">8</span><span class="code"></span></div>
+<div class="cl"><span class="ln">9</span><span class="code"><span class="syn-comment"># 3) Guarda la versión con el mensaje que pide la guía</span></span></div>
+<div class="cl"><span class="ln">10</span><span class="code"><span class="syn-method">git commit -m "Añadido datos"</span></span></div>
+<div class="cl"><span class="ln">11</span><span class="code"></span></div>
+<div class="cl"><span class="ln">12</span><span class="code"><span class="syn-comment"># 4) Sube al remoto (en la guía: git push origin master)</span></span></div>
+<div class="cl"><span class="ln">13</span><span class="code"><span class="syn-method">git push origin main</span></span></div>
+<div class="cl"><span class="ln">14</span><span class="code"></span></div>
+<div class="cl"><span class="ln">15</span><span class="code"><span class="syn-comment"># 5) Comprueba el historial local</span></span></div>
+<div class="cl"><span class="ln">16</span><span class="code"><span class="syn-method">git log --oneline</span></span></div>
+<div class="cl"><span class="ln">17</span><span class="code"><span class="punc">c4d5e6f Añadido datos</span></span></div>
+<div class="cl"><span class="ln">18</span><span class="code"><span class="punc">a1b2c3d Primer commit del programa</span></span></div></div></div>
+<div class="cmd-explain"><h3 class="s13-h">Qué hace cada comando</h3><div class="table-container-card"><table class="table-comparativa"><thead><tr><th>Comando</th><th>Qué hace</th><th>Cómo se lee, parte por parte</th></tr></thead><tbody>
+<tr><td><code>git status</code></td><td>Muestra qué archivos cambiaron, cuáles están preparados y cuáles Git todavía no sigue.</td><td><code>status</code> = estado del repositorio</td></tr>
+<tr><td><code>git add .</code></td><td>Prepara todos los cambios de la carpeta (el punto significa: todo lo de aquí) para el próximo commit.</td><td><code>git add</code> = agregar al área de preparación (staging)<br><code>.</code> = la carpeta actual: todos los archivos nuevos o modificados</td></tr>
+<tr><td><code>git commit -m &quot;Añadido datos&quot;</code></td><td>Guarda una versión con lo preparado y el mensaje que pide la guía. Queda solo en tu equipo hasta que hagas push.</td><td><code>commit</code> = guardar una versión<br><code>-m</code> = incluir el mensaje en el mismo comando<br><code>"Añadido datos"</code> = el mensaje exacto que pide el enunciado</td></tr>
+<tr><td><code>git push origin main</code></td><td>Sube a GitHub los commits nuevos de la rama main. Como ya usaste -u antes, Git sabe a dónde ir.</td><td><code>push</code> = subir commits al remoto<br><code>origin</code> = a qué remoto se sube<br><code>main</code> = qué rama se sube; usa el nombre real de tu rama</td></tr>
+<tr><td><code>git log --oneline</code></td><td>Lista el historial de commits, uno por línea: su código corto y su mensaje.</td><td><code>log</code> = mostrar el historial<br><code>--oneline</code> = formato resumido de una línea por commit</td></tr>
+</tbody></table></div></div>
+
+
+
+
+
+<div class="callout"><div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg> Cómo comprobar que funcionó</div><ul><li><code>git status</code> antes del <code>add</code> muestra <code>kotlin.txt</code> en rojo (sin seguimiento).</li><li>Después del <code>push</code>, actualiza GitHub: debe aparecer <code>kotlin.txt</code> y el historial debe mostrar <strong>dos commits</strong>: «Primer commit del programa» y «Añadido datos».</li><li>Abre <code>kotlin.txt</code> en GitHub y muestra que contiene tu nombre y tu correo.</li></ul></div><div class="callout warn"><div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg> Error frecuente</div><p><code>nothing to commit, working tree clean</code> significa que Git no ve cambios: <code>kotlin.txt</code> no se creó en esta carpeta, o ya hiciste el commit. Si ves <code>AÃ±adido</code> en lugar de «Añadido», tu terminal no usa UTF-8: repite el commit desde Git Bash.</p></div><div class="fa-take"><strong>Qué te llevas para tu video EV05:</strong> la terminal con los cuatro comandos y GitHub mostrando <code>kotlin.txt</code> con tu contenido y los dos commits (<strong>indicadores 2 y 3</strong>).</div>
+      </div>
+    </section>
+
+
+    <section class="slide-section" id="slide-11">
+      <div class="slide-container">
+        <span class="slide-badge-category badge-blue"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="8" x2="21" y1="6" y2="6"/><line x1="8" x2="21" y1="12" y2="12"/><line x1="8" x2="21" y1="18" y2="18"/><line x1="3" x2="3.01" y1="6" y2="6"/><line x1="3" x2="3.01" y1="12" y2="12"/><line x1="3" x2="3.01" y1="18" y2="18"/></svg> Bloque 3 · Recorrido Completo</span>
+        <h2 class="slide-title">Todo el ejercicio en una sola vista</h2>
+        <p class="slide-subtitle">Esta tabla es tu libreto de práctica: en orden, qué ejecutas, qué debe pasar y qué enseñas en el video. Cada comando está explicado en los slides indicados.</p>
+<div class="table-container-card"><table class="table-comparativa"><thead><tr><th>N.º</th><th>Qué haces</th><th>Comando</th><th>Qué debe verse en el video</th><th>Slide</th></tr></thead><tbody>
+<tr><td>1</td><td>Compruebas Git e identidad</td><td><code>git --version</code>, <code>git config --global --list</code></td><td>Versión y tu nombre y correo</td><td><a href="#slide-04" style="color:var(--azul-tech-dark);font-weight:700;">4</a></td></tr>
+<tr><td>2</td><td>Repositorio local con un commit</td><td><code>mkdir</code>, <code>cd</code>, <code>git init</code>, <code>git add</code>, <code>git commit</code></td><td><code>git log --oneline</code> con un commit</td><td><a href="#slide-04" style="color:var(--azul-tech-dark);font-weight:700;">4</a></td></tr>
+<tr><td>3</td><td>Creas el repositorio remoto público</td><td>(navegador) New repository</td><td>Nombre <code>Programa-Git</code> y <em>Public</em></td><td><a href="#slide-06" style="color:var(--azul-tech-dark);font-weight:700;">6</a></td></tr>
+<tr><td>4</td><td><strong>Paso 1:</strong> añades el remoto</td><td><code>git remote add origin URL</code></td><td>Sin errores</td><td><a href="#slide-07" style="color:var(--azul-tech-dark);font-weight:700;">7</a></td></tr>
+<tr><td>5</td><td><strong>Paso 1:</strong> muestras los remotos</td><td><code>git remote -v</code></td><td>Tu URL en fetch y push</td><td><a href="#slide-07" style="color:var(--azul-tech-dark);font-weight:700;">7</a></td></tr>
+<tr><td>6</td><td><strong>Paso 2:</strong> subes los cambios</td><td><code>git push -u origin main</code></td><td><code>[new branch]</code> y <code>set up to track</code></td><td><a href="#slide-08" style="color:var(--azul-tech-dark);font-weight:700;">8</a></td></tr>
+<tr><td>7</td><td><strong>Paso 2:</strong> compruebas en GitHub</td><td>(navegador) Commits</td><td>README.md y el historial de versiones</td><td><a href="#slide-08" style="color:var(--azul-tech-dark);font-weight:700;">8</a></td></tr>
+<tr><td>8</td><td><strong>Paso 3:</strong> creas kotlin.txt</td><td><code>cat &gt; kotlin.txt</code> o <code>Set-Content</code></td><td>El contenido con tu nombre y correo</td><td><a href="#slide-09" style="color:var(--azul-tech-dark);font-weight:700;">9</a></td></tr>
+<tr><td>9</td><td><strong>Paso 3:</strong> agregas y guardas</td><td><code>git add .</code>, <code>git commit -m "Añadido datos"</code></td><td>El commit sin errores</td><td><a href="#slide-10" style="color:var(--azul-tech-dark);font-weight:700;">10</a></td></tr>
+<tr><td>10</td><td><strong>Paso 3:</strong> subes y compruebas</td><td><code>git push origin main</code> y GitHub</td><td>kotlin.txt visible y dos commits</td><td><a href="#slide-10" style="color:var(--azul-tech-dark);font-weight:700;">10</a></td></tr>
+</tbody></table></div>
+<div class="callout"><div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg> Ensaya antes de grabar</div><p>Haz el recorrido una vez sin grabar. Para grabar «en limpio» necesitas empezar de cero: elimina la carpeta local <code>Programa-Git</code> y el repositorio en GitHub (Settings &rarr; Danger Zone &rarr; <em>Delete this repository</em>), o ensaya con otro nombre, por ejemplo <code>Programa-Git-prueba</code>, y graba con el nombre real.</p></div><div class="fa-take"><strong>Qué te llevas para tu video EV05:</strong> este libreto como guía mientras grabas: no memorices los comandos, léelos de aquí y explícalos con tus palabras.</div>
+      </div>
+    </section>
+
+
+    <section class="slide-section" id="slide-12">
+      <div class="slide-container">
+        <span class="slide-badge-category badge-blue"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg> Bloque 3 · Errores frecuentes</span>
+        <h2 class="slide-title">Errores frecuentes y cómo resolverlos</h2>
+        <p class="slide-subtitle">Si algo falla mientras grabas, no pasa nada: para, resuelve y vuelve a grabar esa parte. Casi siempre es una de estas causas.</p>
+<div class="table-container-card"><table class="table-comparativa"><thead><tr><th>Error o mensaje</th><th>Causa más común</th><th>Solución</th></tr></thead><tbody>
+<tr><td><code>'origin' does not appear to be a git repository</code></td><td>Tu remoto tiene otro nombre (por ejemplo <code>github</code>)</td><td>Revisa con <code>git remote -v</code> y usa ese nombre, o renómbralo con <code>git remote rename github origin</code></td></tr>
+<tr><td><code>src refspec main does not match any</code> (o <code>master</code>)</td><td>No hay commits o escribiste el nombre de rama equivocado</td><td>Haz el primer commit y revisa <code>git branch</code></td></tr>
+<tr><td><code>remote origin already exists</code></td><td>Ya habías añadido el remoto</td><td>Revisa <code>git remote -v</code>; si la URL es errónea, usa <code>git remote set-url origin URL</code></td></tr>
+<tr><td><code>Authentication failed</code> / <code>Support for password authentication was removed</code></td><td>Usaste la contraseña de la cuenta en lugar de Credential Manager o token</td><td>Repite el push y autoriza en el navegador, o pega un token (Sesión 3, slide 11)</td></tr>
+<tr><td><code>Repository not found</code></td><td>URL mal escrita, usuario equivocado o el nombre del repositorio no coincide</td><td>Copia de nuevo la URL desde GitHub (respeta mayúsculas: <code>Programa-Git</code>)</td></tr>
+<tr><td><code>rejected ... fetch first</code> / <code>unrelated histories</code></td><td>Creaste el repositorio remoto con README</td><td>Crea un repositorio vacío nuevo, o consulta al instructor</td></tr>
+<tr><td><code>nothing to commit, working tree clean</code></td><td><code>kotlin.txt</code> no está en la carpeta del repositorio, o ya lo guardaste</td><td>Comprueba con <code>ls</code> (o <code>dir</code>) que existe dentro de <code>Programa-Git</code></td></tr>
+<tr><td><code>Everything up-to-date</code></td><td>No hay commits nuevos que subir</td><td>Haz el commit del archivo nuevo y vuelve a subir</td></tr>
+<tr><td><code>kotlin.txt</code> aparece vacío o ilegible en GitHub</td><td>Cerraste <code>cat &gt;</code> sin escribir, o PowerShell 5.1 lo guardó en UTF-16</td><td>Recréalo con Git Bash o con <code>Set-Content ... -Encoding utf8</code>, y repite add, commit y push</td></tr>
+<tr><td><code>Please tell me who you are</code></td><td>No configuraste <code>user.name</code> y <code>user.email</code></td><td>Repite la configuración de la Sesión 3</td></tr>
+</tbody></table></div>
+<div class="callout"><div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg> Cómo usar esta tabla</div><p>Lee el mensaje completo: Git casi siempre sugiere el remedio. Si un error aparece en el video y lo resuelves explicando la causa, demuestras que dominas la herramienta.</p></div><div class="fa-take"><strong>Qué te llevas para tu video EV05:</strong> si encuentras un error durante la grabación, no lo escondas: explícalo en una frase y muestra la solución (<strong>indicador 1</strong>).</div>
+      </div>
+    </section>
+
+
+    <section class="slide-section" id="slide-13">
+      <div class="slide-container">
+        <span class="slide-badge-category badge-blue"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></svg> Bloque 3 · Seguridad en el Video</span>
+        <h2 class="slide-title">Qué se ve y qué NO se ve en tu video</h2>
+        <p class="slide-subtitle">Tu video es una entrega pública para el instructor. Antes de grabar, define qué puede aparecer en pantalla y qué debes tapar o evitar.</p>
+<div class="cards-grid-2"><div class="card-pro top-verde"><div class="card-header-flex"><div class="card-icon-badge icon-badge-green"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div><span class="card-pill-tag badge-green">Sí debe verse</span></div><h3 class="card-title">Lo que demuestra tu trabajo</h3><p class="card-desc">• Tu terminal con cada comando y su respuesta.<br>• El repositorio <code>Programa-Git</code> en GitHub, público.<br>• El historial de commits.<br>• El archivo <code>kotlin.txt</code> con tu nombre y correo.<br>• Tu cartel de presentación con tu nombre.</p></div><div class="card-pro top-naranja"><div class="card-header-flex"><div class="card-icon-badge icon-badge-orange"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div><span class="card-pill-tag badge-orange">No debe verse</span></div><h3 class="card-title">Lo que te expone</h3><p class="card-desc">• <strong>El token</strong> (empieza por <code>ghp_</code> o <code>github_pat_</code>) y cualquier contraseña.<br>• Tu bandeja de correo o mensajes personales.<br>• Pestañas del navegador con datos privados.<br>• Notificaciones emergentes de otras aplicaciones.</p></div></div>
+<div class="table-container-card"><table class="table-comparativa"><thead><tr><th>Situación</th><th>Qué hacer</th></tr></thead><tbody>
+<tr><td>Git pide <em>Password</em> y vas a pegar el token</td><td>Al pegar en la terminal no se ve nada: es normal. Evita mostrar el portapapeles o el sitio donde lo guardaste</td></tr>
+<tr><td>Se abre la ventana de Credential Manager</td><td>Basta con que se vea el inicio de sesión; no muestres códigos de verificación ni tu contraseña</td></tr>
+<tr><td>Se te ve el token por accidente</td><td>Detén la grabación, <strong>revoca el token en GitHub</strong> (Settings &rarr; Developer settings), crea otro y graba de nuevo esa parte</td></tr>
+<tr><td>Quieres evitar notificaciones</td><td>Activa el modo «No molestar» o el asistente de concentración de tu sistema antes de grabar</td></tr>
+</tbody></table></div>
+<div class="callout warn"><div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg> Un token expuesto es una contraseña regalada</div><p>Si el video con el token llega a Zajuna, cualquiera que lo vea puede usar tu cuenta. Revisa el video completo antes de subirlo (paso de revisión, slide 14).</p></div><div class="fa-take"><strong>Qué te llevas para tu video EV05:</strong> poder decir en el video «el token no se muestra por seguridad» y mostrar que lo has tapado o evitado (<strong>indicador 4</strong>).</div>
+      </div>
+    </section>
+
+
+    <section class="slide-section" id="slide-14">
+      <div class="slide-container">
+        <span class="slide-badge-category badge-orange"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m16 13 5.223 3.482a.5.5 0 0 0 .777-.416V7.87a.5.5 0 0 0-.752-.432L16 10.5"/><rect x="2" y="6" width="14" height="12" rx="2"/></svg> Bloque 4 · Cómo grabar tu video MP4</span>
+        <h2 class="slide-title">Cómo grabar tu video: herramientas, ajustes y revisión</h2>
+        <p class="slide-subtitle">Puedes usar la herramienta que prefieras, siempre que el resultado sea un archivo MP4 en el que se vea bien la pantalla y se escuche tu voz.</p>
+<div class="table-container-card"><table class="table-comparativa"><thead><tr><th>Herramienta</th><th>Cómo grabas</th><th>Ten en cuenta</th></tr></thead><tbody>
+<tr><td><strong>Microsoft Teams</strong></td><td>Inicia una reunión (por ejemplo «Reunirse ahora»), comparte tu pantalla y presiona <em>Grabar</em>. El archivo queda en el almacenamiento de la cuenta (OneDrive o SharePoint) como MP4</td><td>Depende de que tu cuenta tenga permiso para grabar. Si no te aparece el botón, usa otra opción</td></tr>
+<tr><td><strong>OBS Studio</strong></td><td>Programa gratuito: agrega una fuente de <em>Captura de pantalla</em> y de audio, y presiona <em>Iniciar grabación</em></td><td>En Ajustes &rarr; Salida elige el formato <em>MP4</em> (o <em>Hybrid MP4</em> en versiones recientes). Si graba MKV, conviértelo con Archivo &rarr; <em>Remux Recordings</em></td></tr>
+<tr><td><strong>Barra de juegos de Windows</strong></td><td>Presiona <strong>Win + G</strong> y el botón de grabar, o <strong>Win + Alt + R</strong>. Guarda en <code>Videos\Capturas</code> como MP4</td><td>Graba una sola ventana de aplicación, no el escritorio: si cambias del terminal al navegador, puede perder la captura. Úsala solo si todo ocurre en una ventana (por ejemplo VS Code)</td></tr>
+<tr><td><strong>Recortes de Windows 11</strong></td><td>Si tu versión trae la opción de video (icono de cámara), graba una región o pantalla</td><td>Comprueba que capture el micrófono y que el archivo sea MP4</td></tr>
+</tbody></table></div>
+<div class="table-container-card"><table class="table-comparativa"><thead><tr><th>Ajuste</th><th>Recomendación</th></tr></thead><tbody>
+<tr><td><strong>Resolución</strong></td><td>1280 × 720 o 1920 × 1080 para que el texto se lea</td></tr>
+<tr><td><strong>Tamaño de letra</strong></td><td>Agranda la fuente de la terminal (en VS Code, zoom con Ctrl + «+»; en Git Bash, clic derecho &rarr; Options &rarr; Text)</td></tr>
+<tr><td><strong>Micrófono</strong></td><td>Graba 20 segundos de prueba y escúchalos antes de empezar</td></tr>
+<tr><td><strong>Escritorio</strong></td><td>Cierra ventanas y notificaciones que no necesitas; deja solo terminal y navegador</td></tr>
+<tr><td><strong>Nombre del archivo</strong></td><td>Por ejemplo <code>NOMBRE_APELLIDO_AA1_EV05.mp4</code> (sugerencia)</td></tr>
+<tr><td><strong>Revisión</strong></td><td>Ábrelo con el reproductor de Windows o VLC: debe verse, oírse y sincronizar; revisa que no aparezca el token</td></tr>
+<tr><td><strong>Tamaño de carga</strong></td><td>Verifica el límite de archivo en el espacio de la EV05 en Zajuna antes de subirlo</td></tr>
+</tbody></table></div>
+<div class="fa-take"><strong>Qué te llevas para tu video EV05:</strong> un MP4 de calidad suficiente para leer los comandos y escuchar tu explicación: es lo que revisa el <strong>indicador 4</strong>.</div>
+      </div>
+    </section>
+
+
+    <section class="slide-section" id="slide-15">
+      <div class="slide-container">
+        <span class="slide-badge-category badge-orange"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" x2="12" y1="19" y2="22"/></svg> Bloque 4 · Estructura y Guion Modelo</span>
+        <h2 class="slide-title">Estructura y guion modelo de tu video</h2>
+        <p class="slide-subtitle">Este guion es un modelo para que sepas qué decir en cada momento. Léelo, entiéndelo y dilo con tus palabras: no lo recites ni lo copies.</p>
+<div class="diagram-card"><svg viewBox="0 0 900 150" role="img" aria-label="Línea de tiempo sugerida del video: cartel, entorno, paso 1, paso 2, paso 3 y cierre" xmlns="http://www.w3.org/2000/svg" font-family="Plus Jakarta Sans, Arial, sans-serif" style="width:100%;height:auto;display:block">
+<rect x="20" y="30" width="86" height="70" rx="8" fill="#f0fdf4" stroke="#39a900" stroke-width="2"/>
+<text x="63" y="62" text-anchor="middle" font-size="13" font-weight="800" fill="#0f172a">Cartel</text><text x="63" y="82" text-anchor="middle" font-size="12" fill="#475569">1 min</text>
+<rect x="106" y="30" width="86" height="70" rx="8" fill="#fff" stroke="#39a900" stroke-width="2"/>
+<text x="149" y="62" text-anchor="middle" font-size="13" font-weight="800" fill="#0f172a">Entorno</text><text x="149" y="82" text-anchor="middle" font-size="12" fill="#475569">1 min</text>
+<rect x="192" y="30" width="215" height="70" rx="8" fill="#e0f2fe" stroke="#0284c7" stroke-width="2"/>
+<text x="299" y="62" text-anchor="middle" font-size="13" font-weight="800" fill="#0f172a">Paso 1 · conectar</text><text x="299" y="82" text-anchor="middle" font-size="12" fill="#475569">2,5 min</text>
+<rect x="407" y="30" width="172" height="70" rx="8" fill="#fff" stroke="#0284c7" stroke-width="2"/>
+<text x="493" y="62" text-anchor="middle" font-size="13" font-weight="800" fill="#0f172a">Paso 2 · subir</text><text x="493" y="82" text-anchor="middle" font-size="12" fill="#475569">2 min</text>
+<rect x="579" y="30" width="215" height="70" rx="8" fill="#ffedd5" stroke="#c2410c" stroke-width="2"/>
+<text x="686" y="62" text-anchor="middle" font-size="13" font-weight="800" fill="#0f172a">Paso 3 · kotlin.txt</text><text x="686" y="82" text-anchor="middle" font-size="12" fill="#475569">2,5 min</text>
+<rect x="794" y="30" width="86" height="70" rx="8" fill="#f0fdf4" stroke="#39a900" stroke-width="2"/>
+<text x="837" y="62" text-anchor="middle" font-size="13" font-weight="800" fill="#0f172a">Cierre</text><text x="837" y="82" text-anchor="middle" font-size="12" fill="#475569">1 min</text>
+<text x="450" y="128" text-anchor="middle" font-size="13" fill="#475569">Tiempos orientativos: unos 10 minutos en total (sugerencia, la guía no fija duración)</text>
+</svg></div>
+<div class="table-container-card"><table class="table-comparativa"><thead><tr><th>Momento</th><th>En pantalla</th><th>Qué dices (modelo)</th></tr></thead><tbody>
+<tr><td><strong>1. Cartel</strong> (1 min)</td><td>Presentación con tu nombre y los 3 pasos</td><td>«Hola, soy [tu nombre], aprendiz de ADSO, ficha 3389010. En este video hago la evidencia EV05: conecto mi repositorio local con GitHub y ejecuto los comandos básicos de Git en tres pasos.»</td></tr>
+<tr><td><strong>2. Entorno</strong> (1 min)</td><td>Terminal: <code>git --version</code>, <code>git log --oneline</code></td><td>«Tengo Git instalado y mi repositorio local Programa-Git con un primer commit. Uso el remoto origin y la rama main; la guía usa github y master, son nombres distintos para lo mismo.»</td></tr>
+<tr><td><strong>3. Paso 1</strong> (2,5 min)</td><td>GitHub: New repository; terminal: <code>remote add</code>, <code>remote -v</code></td><td>«Creo un repositorio público llamado Programa-Git, vacío. Con git remote add le digo a mi repositorio local dónde está en GitHub, y con git remote -v compruebo que quedó registrado.»</td></tr>
+<tr><td><strong>4. Paso 2</strong> (2 min)</td><td>Terminal: <code>git push</code>; GitHub: historial</td><td>«Con git push subo mis commits al remoto. Ahora en GitHub actualizo la página: aparece README.md, y en Commits veo el historial de versiones.»</td></tr>
+<tr><td><strong>5. Paso 3</strong> (2,5 min)</td><td>Crear <code>kotlin.txt</code>, <code>add</code>, <code>commit</code>, <code>push</code>; GitHub</td><td>«Creo kotlin.txt con mi nombre y mi correo. Con git add . lo preparo, con git commit -m «Añadido datos» guardo la versión y con git push la subo. En GitHub veo el archivo y el nuevo commit.»</td></tr>
+<tr><td><strong>6. Cierre</strong> (1 min)</td><td>GitHub con el historial completo</td><td>«Así queda el ejercicio: el repositorio local y el remoto sincronizados, con dos commits. Usé init, add, commit y log en local, y remote y push en remoto. Gracias.»</td></tr>
+</tbody></table></div>
+<div class="callout"><div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg> Texto inventado para orientarte</div><p>Los tiempos y las frases son una propuesta del instructor, no un requisito de la guía. Lo que sí exige la guía es que <strong>ejecutes cada punto</strong> y <strong>expliques cada requerimiento</strong>.</p></div><div class="fa-take"><strong>Qué te llevas para tu video EV05:</strong> explica siempre tres cosas por comando: qué escribes, qué hace y cómo compruebas que funcionó (<strong>indicadores 2 y 4</strong>).</div>
+      </div>
+    </section>
+
+
+    <section class="slide-section" id="slide-16">
+      <div class="slide-container">
+        <span class="slide-badge-category badge-orange"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.09-3.09a2 2 0 0 0-2.82 0L6 21"/></svg> Bloque 4 · El Cartel de Presentación</span>
+        <h2 class="slide-title">El cartel con tu nombre y los ejercicios: cómo hacerlo</h2>
+        <p class="slide-subtitle">La guía exige que el video tenga «una presentación con su nombre y los ejercicios a realizar». Es una sola pantalla al inicio, que se muestra unos segundos mientras te presentas.</p>
+<div style="max-width:620px;margin:12px auto;aspect-ratio:16/9;min-height:250px;background:linear-gradient(135deg,#f0fdf4,#fff);border:3px solid #39a900;border-radius:14px;padding:22px 26px;box-sizing:border-box;display:flex;flex-direction:column;justify-content:center;gap:6px;color:#0f172a;text-align:left"><div style="font-size:12px;font-weight:800;letter-spacing:1px;color:#236b00">SENA · ADSO FICHA 3389010 · GA7-220501096-AA1-EV05</div><div style="font-size:22px;font-weight:800;line-height:1.2">Práctica Git local y remoto: repositorio Programa-Git</div><div style="font-size:15px;font-weight:700">Aprendiz: [Tu nombre y apellidos]</div><div style="font-size:13px;line-height:1.55;margin-top:6px"><strong>Ejercicios a realizar:</strong><br>1. Crear el repositorio público Programa-Git, añadirlo al local y mostrar los remotos.<br>2. Subir los cambios a GitHub y comprobar el historial de versiones.<br>3. Agregar kotlin.txt con mi nombre y correo, hacer commit «Añadido datos» y subirlo.</div><div style="font-size:11px;color:#475569;margin-top:6px">Ejemplo de referencia: haz el tuyo con tu nombre y tu diseño.</div></div>
+<div class="table-container-card"><table class="table-comparativa"><thead><tr><th>Qué incluir</th><th>Cómo hacerlo</th></tr></thead><tbody>
+<tr><td><strong>Tu nombre completo</strong></td><td>En letra grande y legible</td></tr>
+<tr><td><strong>Datos de la evidencia</strong></td><td>Ficha 3389010, programa ADSO y código GA7-220501096-AA1-EV05</td></tr>
+<tr><td><strong>Los ejercicios a realizar</strong></td><td>Los tres pasos, resumidos en una línea cada uno</td></tr>
+<tr><td><strong>Cómo crearlo</strong></td><td>En PowerPoint, Canva, Google Slides o Word; expórtalo o muéstralo en pantalla completa antes de abrir la terminal</td></tr>
+</tbody></table></div>
+<div class="callout warn"><div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg> Error frecuente</div><p>Empezar el video directamente en la terminal sin cartel. Es un requerimiento explícito de la guía y parte del indicador 4.</p></div><div class="fa-take"><strong>Qué te llevas para tu video EV05:</strong> un cartel con tu nombre y los tres ejercicios, como primera escena de tu video (<strong>indicador 4</strong>).</div>
+      </div>
+    </section>
+
+
+    <section class="slide-section" id="slide-17">
+      <div class="slide-container">
+        <span class="slide-badge-category badge-orange"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="M7 21h10"/><path d="M12 3v18"/><path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"/></svg> Bloque 4 · Instrumento de Evaluación Oficial</span>
+        <h2 class="slide-title">Lo que revisa el instructor: los 4 indicadores oficiales</h2>
+        <p class="slide-subtitle">Esta es la lista de chequeo del instrumento de evaluación de la evidencia GA7-220501096-AA1-EV05. Cada indicador se marca como cumple o no cumple: son tu guía real de calificación.</p>
+<div class="table-container-card"><table class="table-comparativa"><thead><tr><th>N.º</th><th>Indicador (texto del instrumento)</th><th>Cómo lo demuestras en tu video</th><th>Error frecuente</th><th>Dónde lo aprendes</th></tr></thead><tbody>
+<tr><td><strong>1</strong></td><td><strong>Ejecuta correctamente las herramientas de versionamiento.</strong></td><td>Muestras Git funcionando en tu terminal y GitHub en el navegador, sin errores sin resolver</td><td>Mostrar solo el resultado final sin ejecutar nada en pantalla</td><td><a href="#slide-04" style="color:var(--azul-tech-dark);font-weight:700;">Slides 4</a>, <a href="#slide-05" style="color:var(--azul-tech-dark);font-weight:700;">5</a> y <a href="#slide-12" style="color:var(--azul-tech-dark);font-weight:700;">12</a></td></tr>
+<tr><td><strong>2</strong></td><td><strong>Ejecuta correctamente cada uno de los comandos básicos de git local y remoto.</strong></td><td>Ejecutas y explicas <code>init</code>, <code>add</code>, <code>commit</code>, <code>log</code> (local) y <code>remote add</code>, <code>remote -v</code>, <code>push</code> (remoto)</td><td>Saltarse <code>git remote -v</code> o no explicar qué hace cada comando</td><td><a href="#slide-07" style="color:var(--azul-tech-dark);font-weight:700;">Slides 7</a> a <a href="#slide-10" style="color:var(--azul-tech-dark);font-weight:700;">10</a></td></tr>
+<tr><td><strong>3</strong></td><td><strong>Realiza un ejemplo funcional donde utiliza git local y remoto.</strong></td><td>Se ve el ciclo completo: local &rarr; remoto, con <code>kotlin.txt</code> y dos commits visibles en GitHub</td><td>Terminar sin abrir GitHub para comprobar el resultado</td><td><a href="#slide-08" style="color:var(--azul-tech-dark);font-weight:700;">Slides 8</a>, <a href="#slide-10" style="color:var(--azul-tech-dark);font-weight:700;">10</a> y <a href="#slide-11" style="color:var(--azul-tech-dark);font-weight:700;">11</a></td></tr>
+<tr><td><strong>4</strong></td><td><strong>Presenta el video cumpliendo con los requerimientos solicitados.</strong></td><td>MP4, cartel inicial con tu nombre y los ejercicios, explicación de cada requerimiento, sin datos sensibles</td><td>Sin cartel, sin voz o con el token a la vista</td><td><a href="#slide-13" style="color:var(--azul-tech-dark);font-weight:700;">Slides 13</a> a <a href="#slide-16" style="color:var(--azul-tech-dark);font-weight:700;">16</a></td></tr>
+</tbody></table></div>
+<div class="callout"><div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg> Criterio de evaluación del instrumento</div><p><strong>Selecciona y configura herramientas de versionamiento para el control de cambios en el código.</strong> Es el criterio general; los 4 indicadores se marcan uno por uno. La evidencia aporta al resultado de aprendizaje 220501096-01: planear actividades de construcción del software de acuerdo con el diseño establecido.</p></div><div class="callout warn"><div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg> Evidencia de producto</div><p>El instrumento la clasifica como evidencia de <strong>producto</strong>: lo que se califica es el video entregado. Lo que no se ve ni se explica en él, no cuenta.</p></div><div class="fa-take"><strong>Qué te llevas para tu video EV05:</strong> antes de subir tu video, míralo indicador por indicador y pregúntate: «¿el instructor puede marcar Sí solo con ver mi video?».</div>
+      </div>
+    </section>
+
+
+    <section class="slide-section" id="slide-18">
+      <div class="slide-container">
+        <span class="slide-badge-category badge-green"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg> Bloque 4 · Aseguramiento de Calidad</span>
+        <h2 class="slide-title">Checklist al 100% antes de subir tu video</h2>
+        <p class="slide-subtitle">Marca cada casilla antes de enviar. Tu progreso se guarda en este navegador para que lo retomes cuando quieras.</p>
+<div class="checklist-card"><div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;"><div style="font-family:'Syne',sans-serif;font-size:16px;font-weight:800;color:var(--texto-main);">Progreso de tu evidencia AA1-EV05:</div><div id="checklistScoreText" style="font-family:'JetBrains Mono',monospace;font-size:15px;font-weight:800;color:var(--azul-tech);">0% (0 de 12 ítems)</div></div><div class="checklist-progress-bar-wrap"><div class="checklist-progress-bar" id="checklistBar"></div></div><div class="checklist-items-list"><label class="check-item"><input type="checkbox" class="check-checkbox" data-idx="0"><div class="check-text"><h4>1. Git e identidad listos</h4><p>git --version y git config --global --list funcionan en tu equipo (indicador 1).</p></div></label>
+<label class="check-item"><input type="checkbox" class="check-checkbox" data-idx="1"><div class="check-text"><h4>2. Repositorio local con su primer commit</h4><p>Carpeta Programa-Git con git init y un commit visible con git log --oneline (indicador 2).</p></div></label>
+<label class="check-item"><input type="checkbox" class="check-checkbox" data-idx="2"><div class="check-text"><h4>3. Repositorio remoto público y vacío</h4><p>Programa-Git creado en GitHub, en modo Public y sin README (indicador 3).</p></div></label>
+<label class="check-item"><input type="checkbox" class="check-checkbox" data-idx="3"><div class="check-text"><h4>4. Paso 1 realizado</h4><p>git remote add y git remote -v mostrados y explicados (indicador 2).</p></div></label>
+<label class="check-item"><input type="checkbox" class="check-checkbox" data-idx="4"><div class="check-text"><h4>5. Paso 2 realizado</h4><p>git push exitoso y historial de versiones mostrado en GitHub (indicadores 2 y 3).</p></div></label>
+<label class="check-item"><input type="checkbox" class="check-checkbox" data-idx="5"><div class="check-text"><h4>6. kotlin.txt con tu nombre y correo</h4><p>Creado dentro de la carpeta del repositorio y comprobado su contenido (indicador 2).</p></div></label>
+<label class="check-item"><input type="checkbox" class="check-checkbox" data-idx="6"><div class="check-text"><h4>7. Paso 3 realizado</h4><p>git add ., git commit -m «Añadido datos» y git push, con kotlin.txt visible en GitHub (indicadores 2 y 3).</p></div></label>
+<label class="check-item"><input type="checkbox" class="check-checkbox" data-idx="7"><div class="check-text"><h4>8. Cartel de presentación</h4><p>Primera escena con tu nombre y los tres ejercicios (indicador 4).</p></div></label>
+<label class="check-item"><input type="checkbox" class="check-checkbox" data-idx="8"><div class="check-text"><h4>9. Explicaste cada requerimiento</h4><p>Dices qué haces y qué hace cada comando, con tus palabras (indicador 4).</p></div></label>
+<label class="check-item"><input type="checkbox" class="check-checkbox" data-idx="9"><div class="check-text"><h4>10. Sin datos sensibles</h4><p>El token, las contraseñas y los datos personales no se ven en el video (indicador 4).</p></div></label>
+<label class="check-item"><input type="checkbox" class="check-checkbox" data-idx="10"><div class="check-text"><h4>11. Video MP4 revisado</h4><p>Se ve, se oye, el nombre del archivo es claro y reproduce completo (indicador 4).</p></div></label>
+<label class="check-item"><input type="checkbox" class="check-checkbox" data-idx="11"><div class="check-text"><h4>12. Subido a Zajuna</h4><p>Entregado en el espacio GA7-220501096-AA1-EV05 y estado de entrega comprobado.</p></div></label>
+</div><div style="margin-top:12px;"><button type="button" class="reset-link" onclick="reiniciarChecklist()">Reiniciar checklist</button> <span style="font-size:12px;color:var(--texto-sub);">Tu avance se guarda en este navegador.</span></div></div>
+<h3 class="card-title" style="margin:28px 0 12px 0;">Cómo subir tu video a Zajuna</h3><ol class="steps-list"><li><strong>Revisa el MP4</strong> de principio a fin: cartel, voz, pantalla legible y ningún token a la vista.</li><li><strong>Nómbralo</strong> con claridad, por ejemplo <code>NOMBRE_APELLIDO_AA1_EV05.mp4</code> (sugerencia).</li><li><strong>Verifica el límite de tamaño</strong> del espacio de entrega en Zajuna antes de subirlo.</li><li><strong>Entra a Zajuna</strong>, al área de la actividad AA1 y abre el espacio <em>Herramientas de versionamiento (GIT) instalada y configurada. GA7-220501096-AA1-EV05</em>.</li><li><strong>Adjunta el MP4</strong>, guarda o envía y confirma que aparece como entregado. Fecha límite: <strong>por confirmar en Zajuna</strong>.</li></ol>
+<div class="callout"><div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg> Antes de la Sesión 5 (EV02)</div><p>La siguiente sesión es la <strong>Sesión 5: estándares de codificación (EV02)</strong>, un informe en PDF. Ve pensando con qué plataforma o lenguaje de desarrollo vas a trabajar. La fecha y la hora están en el anuncio y en el Hub.</p></div><div class="btn-row"><a href="./MANUAL_SESION04.html" class="btn-action-primary"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg> Abrir la Guía de Estudio</a><a href="https://julianon2.github.io/seguimiento-adso-3389010/" target="_blank" rel="noopener" class="btn-action-primary" style="background:var(--azul-tech);"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" x2="18" y1="20" y2="10"/><line x1="12" x2="12" y1="20" y2="4"/><line x1="6" x2="6" y1="20" y2="14"/></svg> Dashboard de Seguimiento</a><a href="../explorar.html" class="btn-return-hub"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg> Volver al Hub</a></div>
+      </div>
+    </section>
+
+
+  </main>
+
+  <script>
+    function toggleSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      const mainContent = document.getElementById('mainContent');
+      const floatingToggle = document.getElementById('floatingToggle');
+      if (sidebar && mainContent) {
+        sidebar.classList.toggle('collapsed');
+        mainContent.classList.toggle('expanded');
+        if (floatingToggle) floatingToggle.classList.toggle('visible', sidebar.classList.contains('collapsed'));
+      }
+    }
+
+    // ScrollSpy
+    const sections = document.querySelectorAll('.slide-section');
+    const navLinks = document.querySelectorAll('.nav-link');
+    const spyObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const currentId = entry.target.getAttribute('id');
+          navLinks.forEach(link => {
+            if (link.getAttribute('href').substring(1) === currentId) {
+              link.classList.add('active');
+              link.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+            } else {
+              link.classList.remove('active');
+            }
+          });
+        }
+      });
+    }, { root: null, rootMargin: '-20% 0px -70% 0px', threshold: 0 });
+    sections.forEach(sec => spyObserver.observe(sec));
+
+    // Checklist con localStorage
+    const CHECK_KEY = 'ga7_s4_ev05_checklist';
+    const checkboxes = Array.from(document.querySelectorAll('.check-checkbox'));
+
+    function guardarChecklist() {
+      const estado = checkboxes.map(cb => cb.checked);
+      try { localStorage.setItem(CHECK_KEY, JSON.stringify(estado)); } catch (e) { /* almacenamiento no disponible */ }
+    }
+
+    function actualizarProgresoChecklist() {
+      const total = checkboxes.length;
+      let marcados = 0;
+      checkboxes.forEach(cb => {
+        const label = cb.closest('.check-item');
+        if (cb.checked) { marcados++; if (label) label.classList.add('completed'); }
+        else if (label) label.classList.remove('completed');
+      });
+      const pct = total ? Math.round((marcados / total) * 100) : 0;
+      const bar = document.getElementById('checklistBar');
+      const text = document.getElementById('checklistScoreText');
+      if (bar) bar.style.width = pct + '%';
+      if (text) text.textContent = pct + '% (' + marcados + ' de ' + total + ' ítems)';
+    }
+
+    function reiniciarChecklist() {
+      checkboxes.forEach(cb => { cb.checked = false; });
+      guardarChecklist();
+      actualizarProgresoChecklist();
+    }
+
+    (function initChecklist() {
+      try {
+        const guardado = JSON.parse(localStorage.getItem(CHECK_KEY) || '[]');
+        checkboxes.forEach((cb, i) => { cb.checked = !!guardado[i]; });
+      } catch (e) { /* sin datos previos */ }
+      checkboxes.forEach(cb => cb.addEventListener('change', () => { guardarChecklist(); actualizarProgresoChecklist(); }));
+      actualizarProgresoChecklist();
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,1913 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sesión 5 — Estándares de codificación y cierre de AA1 (AA1-EV02) | SENA ADSO GA7</title>
+
+  <!-- Tipografías Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Syne:wght@700;800;900&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --sena-verde: #39a900;
+      --sena-verde-dark: #236b00;
+      --sena-verde-soft: #44c702;
+      --sena-verde-bg: rgba(57, 169, 0, 0.08);
+      --sena-verde-border: rgba(57, 169, 0, 0.28);
+      --sena-verde-glow: rgba(57, 169, 0, 0.15);
+
+      --sena-naranja: #ff6b00;
+      --sena-naranja-dark: #c2410c;
+      --sena-naranja-bg: rgba(255, 107, 0, 0.08);
+      --sena-naranja-border: rgba(255, 107, 0, 0.28);
+
+      --azul-tech: #0284c7;
+      --azul-tech-dark: #0369a1;
+      --azul-bg: rgba(2, 132, 199, 0.08);
+      --azul-border: rgba(2, 132, 199, 0.28);
+      --azul-glow: rgba(2, 132, 199, 0.15);
+
+      --mongo-verde: #00ed64;
+      --mongo-verde-dark: #00684a;
+      --mongo-verde-bg: rgba(0, 237, 100, 0.08);
+      --mongo-verde-border: rgba(0, 104, 74, 0.28);
+
+      --purpura: #7c3aed;
+      --purpura-bg: rgba(124, 58, 237, 0.08);
+      --purpura-border: rgba(124, 58, 237, 0.28);
+
+      --bg-main: #f8fafc;
+      --bg-card: #ffffff;
+      --borde-light: #e2e8f0;
+      --borde-focus: #cbd5e1;
+
+      --texto-main: #0f172a;
+      --texto-muted: #334155;
+      --texto-sub: #64748b;
+      --texto-dimmer: #94a3b8;
+
+      --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.04);
+      --shadow-card: 0 10px 30px rgba(15, 23, 42, 0.05), 0 1px 3px rgba(0, 0, 0, 0.03);
+      --shadow-hover: 0 20px 40px rgba(2, 132, 199, 0.12), 0 4px 12px rgba(0, 0, 0, 0.05);
+
+      --radius-xl: 20px;
+      --radius-lg: 16px;
+      --radius-md: 12px;
+      --radius-sm: 8px;
+    }
+
+    * { margin:0; padding:0; box-sizing:border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: var(--bg-main);
+      color: var(--texto-main);
+      line-height: 1.6;
+      overflow-x: hidden;
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* ==========================================================================
+       SIDEBAR INSTITUCIONAL 280PX (PATRÓN OFICIAL)
+       ========================================================================== */
+    .sidebar {
+      width: 280px;
+      background: #ffffff;
+      border-right: 1px solid var(--borde-light);
+      position: fixed;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 2px 0 16px rgba(15, 23, 42, 0.04);
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .sidebar.collapsed {
+      transform: translateX(-100%);
+    }
+
+    .sidebar-logo {
+      width: 40px;
+      height: 40px;
+      background: var(--sena-verde, #39a900);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+      flex-shrink: 0;
+      box-shadow: 0 4px 10px rgba(57, 169, 0, 0.25);
+    }
+    .sidebar-header {
+      padding: 18px 20px;
+      border-bottom: 1px solid var(--borde-light);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .brand-link {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .brand-logo-svg {
+      width: 36px;
+      height: 36px;
+      flex-shrink: 0;
+    }
+
+    .brand-info h1 {
+      font-family: 'Syne', sans-serif;
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--texto-main);
+      line-height: 1.2;
+    }
+
+    .brand-info p {
+      font-size: 11px;
+      color: var(--azul-tech);
+      font-weight: 600;
+      letter-spacing: 0.3px;
+    }
+
+    .sidebar-toggle-btn {
+      background: transparent;
+      border: 1px solid var(--borde-light);
+      border-radius: 8px;
+      padding: 6px;
+      cursor: pointer;
+      color: var(--texto-sub);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+
+    .sidebar-toggle-btn:hover {
+      background: var(--bg-main);
+      color: var(--azul-tech);
+      border-color: var(--azul-border);
+    }
+
+    .sidebar-nav {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .nav-group-title {
+      font-size: 10.5px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--texto-dimmer);
+      padding: 0 10px 6px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nav-links-list {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .nav-link {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 12px;
+      border-radius: 8px;
+      color: var(--texto-muted);
+      text-decoration: none;
+      font-size: 12.5px;
+      font-weight: 600;
+      transition: all 0.2s ease;
+      position: relative;
+    }
+
+    .nav-link:hover {
+      background: var(--azul-bg);
+      color: var(--azul-tech-dark);
+    }
+
+    .nav-link.active {
+      background: rgba(2, 132, 199, 0.1);
+      color: var(--azul-tech-dark);
+      font-weight: 700;
+    }
+
+    .nav-link.active::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 6px;
+      bottom: 6px;
+      width: 3.5px;
+      background: var(--azul-tech);
+      border-radius: 0 4px 4px 0;
+    }
+
+    .nav-link-num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--texto-dimmer);
+      min-width: 18px;
+    }
+
+    .nav-link.active .nav-link-num {
+      color: var(--azul-tech);
+      font-weight: 700;
+    }
+
+    .nav-link-title {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .sidebar-footer {
+      padding: 14px 16px;
+      border-top: 1px solid var(--borde-light);
+      background: #fafbfe;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .sidebar-footer-pill {
+      background: var(--azul-bg);
+      border: 1px solid var(--azul-border);
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 11px;
+      color: var(--azul-tech-dark);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 600;
+    }
+
+    .btn-return-hub {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 8px 12px;
+      background: #ffffff;
+      border: 1px solid var(--borde-light);
+      border-radius: 8px;
+      color: var(--texto-muted);
+      font-size: 12px;
+      font-weight: 700;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+
+    .btn-return-hub:hover {
+      background: var(--sena-verde-bg);
+      color: var(--sena-verde-dark);
+      border-color: var(--sena-verde-border);
+    }
+
+    /* BOTÓN FLOTANTE DE REAPERTURA DEL SIDEBAR */
+    .floating-sidebar-toggle {
+      position: fixed;
+      top: 18px;
+      left: 20px;
+      z-index: 999;
+      height: 38px;
+      padding: 0 14px 0 10px;
+      background: #ffffff;
+      border: 1px solid var(--borde-focus);
+      border-radius: 10px;
+      box-shadow: 0 6px 18px rgba(15, 23, 42, 0.08);
+      color: var(--texto-main);
+      font-size: 12.5px;
+      font-weight: 700;
+      display: none;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      transition: all 0.25s ease;
+    }
+
+    .floating-sidebar-toggle:hover {
+      border-color: var(--azul-tech);
+      color: var(--azul-tech);
+      box-shadow: 0 8px 24px rgba(2, 132, 199, 0.2);
+    }
+
+    .sidebar.collapsed ~ .floating-sidebar-toggle,
+    .floating-sidebar-toggle.visible {
+      display: inline-flex !important;
+      animation: fadeInToggle 0.25s ease-out forwards;
+    }
+
+    @keyframes fadeInToggle {
+      from { opacity: 0; transform: translateX(-12px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    /* ==========================================================================
+       MAIN CONTENT CONTAINER
+       ========================================================================== */
+    .main-content {
+      margin-left: 280px;
+      flex: 1;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      transition: margin-left 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .main-content.expanded {
+      margin-left: 0;
+    }
+
+    .slide-section {
+      padding: 64px 54px;
+      border-bottom: 1px solid var(--borde-light);
+      position: relative;
+      scroll-margin-top: 0px;
+    }
+
+    .slide-container {
+      max-width: 1140px;
+      margin: 0 auto;
+    }
+
+    /* HEADER DE CADA SLIDE */
+    .slide-badge-category {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 11.5px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      padding: 4px 12px;
+      border-radius: 20px;
+      margin-bottom: 12px;
+    }
+
+    .badge-blue { background: var(--azul-bg); color: var(--azul-tech-dark); border: 1px solid var(--azul-border); }
+    .badge-green { background: var(--sena-verde-bg); color: var(--sena-verde-dark); border: 1px solid var(--sena-verde-border); }
+    .badge-mongo { background: var(--mongo-verde-bg); color: var(--mongo-verde-dark); border: 1px solid var(--mongo-verde-border); }
+    .badge-orange { background: var(--sena-naranja-bg); color: var(--sena-naranja-dark); border: 1px solid var(--sena-naranja-border); }
+
+    .slide-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 32px;
+      font-weight: 800;
+      color: var(--texto-main);
+      line-height: 1.25;
+      margin-bottom: 12px;
+      letter-spacing: -0.5px;
+    }
+
+    .slide-subtitle {
+      font-size: 15.5px;
+      color: var(--texto-muted);
+      line-height: 1.6;
+      max-width: 880px;
+      margin-bottom: 28px;
+    }
+
+    /* ==========================================================================
+       TARJETAS Y GRIDS PREMIUM
+       ========================================================================== */
+    .cards-grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+
+    .cards-grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    .card-pro {
+      background: linear-gradient(175deg, #ffffff 0%, #fbfcfe 65%, #f8fafc 100%);
+      border: 1px solid var(--borde-light);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      box-shadow: var(--shadow-card);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: all 0.25s ease;
+    }
+
+    .card-pro:hover {
+      box-shadow: var(--shadow-hover);
+      transform: translateY(-2px);
+    }
+
+    .card-pro.top-azul { border-top: 4px solid var(--azul-tech); }
+    .card-pro.top-verde { border-top: 4px solid var(--sena-verde); }
+    .card-pro.top-mongo { border-top: 4px solid #13aa52; }
+    .card-pro.top-naranja { border-top: 4px solid var(--sena-naranja); }
+    .card-pro.top-purpura { border-top: 4px solid var(--purpura); }
+
+    .card-header-flex {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+
+    .card-icon-badge {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .icon-badge-blue { background: var(--azul-bg); color: var(--azul-tech); }
+    .icon-badge-green { background: var(--sena-verde-bg); color: var(--sena-verde); }
+    .icon-badge-mongo { background: rgba(19, 170, 82, 0.1); color: #13aa52; }
+    .icon-badge-orange { background: var(--sena-naranja-bg); color: var(--sena-naranja); }
+    .icon-badge-purpura { background: var(--purpura-bg); color: var(--purpura); }
+
+    .card-pill-tag {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 20px;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .card-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--texto-main);
+      margin-bottom: 8px;
+      line-height: 1.3;
+    }
+
+    .card-desc {
+      font-size: 13.5px;
+      color: var(--texto-muted);
+      line-height: 1.6;
+    }
+
+    /* ==========================================================================
+       TABLA COMPARATIVA SQL VS NOSQL MONGODB
+       ========================================================================== */
+    .table-container-card {
+      background: #ffffff;
+      border: 1px solid var(--borde-light);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: var(--shadow-card);
+      margin-top: 16px;
+    }
+
+    .table-comparativa {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      text-align: left;
+    }
+
+    .table-comparativa th {
+      background: #f1f5f9;
+      color: var(--texto-main);
+      font-weight: 800;
+      padding: 14px 18px;
+      border-bottom: 2px solid var(--borde-light);
+      font-family: 'Syne', sans-serif;
+      font-size: 13.5px;
+    }
+
+    .table-comparativa td {
+      padding: 13px 18px;
+      border-bottom: 1px solid var(--borde-light);
+      color: var(--texto-muted);
+      vertical-align: middle;
+    }
+
+    .table-comparativa tr:hover td {
+      background: #fafcfe;
+    }
+
+    .concept-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 700;
+      color: var(--texto-main);
+    }
+
+    .badge-sql {
+      background: #fef2f2;
+      color: #991b1b;
+      border: 1px solid #fecaca;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .badge-nosql {
+      background: #f0fdf4;
+      color: #166534;
+      border: 1px solid #bbf7d0;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    /* ==========================================================================
+       ESTÁNDAR DE CODEBOXES (ESTILO TERMINAL CON SEMÁFORO - PATRÓN SESIÓN 19)
+       ========================================================================== */
+    .code-editor-box {
+      background: #1a1a2e;
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 20px 50px rgba(0,0,0,.25);
+      font-family: 'JetBrains Mono', Consolas, 'Courier New', monospace;
+      margin: 14px auto;
+      max-width: 760px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .editor-header {
+      background: #12121f;
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-sizing: border-box;
+    }
+
+    .editor-dot { width: 11px; height: 11px; border-radius: 50%; }
+    .editor-dot.r { background: #ff5f57; }
+    .editor-dot.y { background: #febc2e; }
+    .editor-dot.g { background: #28c840; }
+
+    .editor-title {
+      margin-left: 8px;
+      font-family: 'JetBrains Mono', Consolas, monospace;
+      font-size: 11px;
+      color: #8892a4;
+      flex: 1;
+    }
+
+    .editor-badge {
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 3px 9px;
+      border-radius: 5px;
+      background: rgba(74,222,128,.15);
+      color: #4ade80;
+    }
+
+    .editor-body {
+      padding: 10px 0;
+      font-family: 'JetBrains Mono', Consolas, 'Courier New', monospace;
+      font-size: 12.5px;
+      line-height: 1.9;
+      flex: 1;
+      overflow-x: auto;
+      background: #1a1a2e;
+      box-sizing: border-box;
+    }
+
+    .cl {
+      display: grid;
+      grid-template-columns: 34px 1fr;
+      column-gap: 12px;
+      padding: 0 20px;
+      white-space: pre;
+    }
+
+    .cl .ln {
+      color: #4a5178;
+      user-select: none;
+      text-align: right;
+    }
+
+    .cl .code { color: #e2e8f0; }
+    .cl.indent-1 .code { padding-left: 18px; }
+    .cl.indent-2 .code { padding-left: 36px; }
+
+    /* TOKENS DE SINTAXIS JSON / BSON / MONGODB (paleta Tokyo Night, patrón Sesión 19) */
+    .tok-key, .sel, .syn-key, .syn-prop { color: #7dcfff; }
+    .tok-str, .str, .prop, .syn-str { color: #9ece6a; }
+    .tok-num, .val, .syn-num { color: #e2e8f0; }
+    .tok-bool, .syn-keyword { color: #f7768e; font-weight: 700; }
+    .tok-bson, .var, .syn-method, .syn-func { color: #e0af68; }
+    .tok-comment, .cm, .syn-comment { color: #565f89; font-style: italic; }
+    .tok-op, .punc { color: #8892a4; }
+    .tag { color: #f7768e; }
+    .attr { color: #e0af68; }
+    .tok-id-badge { background: rgba(78, 201, 176, 0.2); color: #4ec9b0; border: 1px solid rgba(78, 201, 176, 0.4); font-size: 9px; font-weight: 800; padding: 0 5px; border-radius: 3px; height: 16px; line-height: 14px; display: inline-block; vertical-align: middle; margin-left: 6px; }
+    .tok-embed-badge { background: rgba(255, 107, 0, 0.2); color: #ff9800; border: 1px solid rgba(255, 107, 0, 0.4); font-size: 9px; font-weight: 800; padding: 0 5px; border-radius: 3px; height: 16px; line-height: 14px; display: inline-block; vertical-align: middle; margin-left: 6px; }
+    .tok-ref-badge { background: rgba(59, 130, 246, 0.2); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.4); font-size: 9px; font-weight: 800; padding: 0 5px; border-radius: 3px; height: 16px; line-height: 14px; display: inline-block; vertical-align: middle; margin-left: 6px; }
+
+    /* ==========================================================================
+       STEPPER DIDÁCTICO & MODALES GUIADOS
+       ========================================================================== */
+    .stepper-steps-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 16px;
+      margin-top: 18px;
+    }
+
+    .stepper-card-btn {
+      background: #ffffff;
+      border: 1px solid var(--borde-light);
+      border-radius: var(--radius-md);
+      padding: 18px;
+      text-align: left;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      transition: all 0.2s ease;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .stepper-card-btn:hover {
+      border-color: var(--azul-tech);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-card);
+    }
+
+    .step-pill-number {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--azul-bg);
+      color: var(--azul-tech-dark);
+      font-size: 12px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .step-card-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 14.5px;
+      font-weight: 700;
+      color: var(--texto-main);
+      line-height: 1.3;
+    }
+
+    .step-card-action-hint {
+      font-size: 11.5px;
+      color: var(--azul-tech);
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      margin-top: auto;
+    }
+
+    /* TABLA ESTRUCTURADA DE PARÁMETROS (.cweijan-params-table) */
+    .cweijan-params-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      background: #ffffff;
+      border: 1px solid var(--borde-light);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      margin: 14px 0;
+    }
+
+    .cweijan-params-table th {
+      background: #f8fafc;
+      padding: 12px 16px;
+      font-weight: 800;
+      color: var(--texto-main);
+      border-bottom: 2px solid var(--borde-light);
+      font-family: 'Syne', sans-serif;
+    }
+
+    .cpt-row td {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--borde-light);
+      color: var(--texto-muted);
+    }
+
+    .cpt-row.highlight {
+      background: #fffbeb;
+    }
+
+    .cpt-row.highlight td:first-child {
+      border-left: 4px solid var(--sena-naranja);
+      font-weight: 700;
+      color: #92400e;
+    }
+
+    /* MODALES DE STEPPER */
+    .ddl-modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(15, 23, 42, 0.75);
+      backdrop-filter: blur(6px);
+      z-index: 2000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .ddl-modal-overlay.active {
+      display: flex;
+      animation: modalFadeIn 0.25s ease-out forwards;
+    }
+
+    /* TOAST INSTITUCIONAL (reemplaza alert() nativo) */
+    .app-toast {
+      position: fixed;
+      bottom: 28px;
+      left: 50%;
+      transform: translateX(-50%) translateY(16px);
+      background: #ffffff;
+      color: var(--texto-main, #1a1a2e);
+      border: 1px solid #bbf7d0;
+      border-left: 4px solid #39a900;
+      border-radius: 10px;
+      padding: 12px 18px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 13.5px;
+      font-weight: 600;
+      box-shadow: 0 12px 32px rgba(15, 23, 42, 0.18);
+      z-index: 9999;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease, transform 0.25s ease;
+      max-width: 90vw;
+    }
+
+    .app-toast svg { color: #39a900; }
+
+    .app-toast.visible {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    @keyframes modalFadeIn {
+      from { opacity: 0; transform: scale(0.96); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .ddl-modal-box {
+      background: #ffffff;
+      border-radius: var(--radius-lg);
+      width: 100%;
+      max-width: 1080px;
+      max-height: 94vh;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.25);
+      overflow: hidden;
+    }
+
+    .modal-header-nav {
+      padding: 16px 22px;
+      border-bottom: 1px solid var(--borde-light);
+      background: #f8fafc;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .modal-nav-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .modal-pill-btn {
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 11.5px;
+      font-weight: 700;
+      background: #ffffff;
+      border: 1px solid var(--borde-light);
+      color: var(--texto-sub);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .modal-pill-btn.active {
+      background: var(--azul-tech);
+      color: #ffffff;
+      border-color: var(--azul-tech);
+    }
+
+    .col-tab-pill {
+      background: #2d2d30;
+      color: #94a3b8;
+      border: 1px solid #475569;
+      border-radius: 6px;
+      padding: 5px 12px;
+      font-size: 11.5px;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .col-tab-pill:hover {
+      background: #3e3e42;
+      color: #ffffff;
+      border-color: #64748b;
+    }
+
+    .col-tab-pill.active {
+      background: rgba(0, 237, 100, 0.15);
+      color: #00ed64;
+      border-color: #00ed64;
+      box-shadow: 0 0 8px rgba(0, 237, 100, 0.2);
+    }
+
+    .modal-close-btn {
+      background: transparent;
+      border: none;
+      font-size: 20px;
+      color: var(--texto-sub);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+    }
+
+    .modal-close-btn:hover {
+      background: #fee2e2;
+      color: #ef4444;
+    }
+
+    .modal-body-scroll {
+      padding: 24px;
+      overflow-y: auto;
+      flex: 1;
+    }
+
+    /* ==========================================================================
+       CHECKLIST INTERACTIVO EV03 (CORTES & RÚBRICA)
+       ========================================================================== */
+    .checklist-card {
+      background: #ffffff;
+      border: 1px solid var(--borde-light);
+      border-radius: var(--radius-lg);
+      padding: 28px;
+      box-shadow: var(--shadow-card);
+      margin-top: 18px;
+    }
+
+    .checklist-progress-bar-wrap {
+      background: #e2e8f0;
+      border-radius: 10px;
+      height: 10px;
+      overflow: hidden;
+      margin: 14px 0 20px 0;
+    }
+
+    .checklist-progress-bar {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--azul-tech) 0%, #00ed64 100%);
+      transition: width 0.3s ease;
+    }
+
+    .checklist-items-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .check-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 12px 14px;
+      border-radius: var(--radius-md);
+      background: #f8fafc;
+      border: 1px solid var(--borde-light);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .check-item:hover {
+      background: #f1f5f9;
+    }
+
+    .check-item.completed {
+      background: #f0fdf4;
+      border-color: #bbf7d0;
+    }
+
+    .check-checkbox {
+      margin-top: 3px;
+      width: 18px;
+      height: 18px;
+      accent-color: var(--azul-tech);
+      cursor: pointer;
+    }
+
+    .check-text h4 {
+      font-size: 13.5px;
+      font-weight: 700;
+      color: var(--texto-main);
+      margin-bottom: 2px;
+    }
+
+    .check-text p {
+      font-size: 12px;
+      color: var(--texto-sub);
+      line-height: 1.5;
+    }
+
+    /* BOTONES DE ACCIÓN */
+    .btn-action-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--azul-tech);
+      color: #ffffff;
+      padding: 10px 18px;
+      border-radius: 10px;
+      font-size: 13.5px;
+      font-weight: 700;
+      text-decoration: none;
+      transition: all 0.2s;
+      box-shadow: 0 4px 12px rgba(2, 132, 199, 0.25);
+    }
+
+    .btn-action-primary:hover {
+      background: var(--azul-tech-dark);
+      transform: translateY(-1px);
+    }
+
+    .btn-copy-code {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #333333;
+      color: #ffffff;
+      border: 1px solid #444444;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 11px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-copy-code:hover {
+      background: #444444;
+      border-color: #555555;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 992px) {
+      .sidebar { transform: translateX(-100%); }
+      .main-content { margin-left: 0; }
+      .floating-sidebar-toggle { display: inline-flex !important; }
+      .cards-grid-2, .cards-grid-3, .stepper-steps-grid { grid-template-columns: 1fr; }
+      .slide-section { padding: 40px 20px; }
+      .slide-title { font-size: 26px; }
+    }
+
+    /* ===== EXTRAS GA7 SESION 1 ===== */
+    .callout { margin-top:20px; background:linear-gradient(135deg,#f0fdf4 0%,#e0f2fe 100%); border:1.5px solid #86efac; border-radius:12px; padding:16px 20px; }
+    .callout.warn { background:linear-gradient(135deg,#fff7ed 0%,#fef3c7 100%); border-color:#fdba74; }
+    .callout-title { color:#166534; font-size:14px; font-weight:700; display:flex; align-items:center; gap:8px; margin-bottom:8px; }
+    .callout.warn .callout-title { color:#9a3412; }
+    .callout p, .callout li { margin:0 0 8px 0; font-size:13px; color:#334155; line-height:1.65; }
+    .callout ul { margin:0; padding-left:20px; }
+    .diagram-card { background:#fff; border:1px solid var(--borde-light); border-radius:14px; padding:16px; margin:16px 0; box-shadow:0 2px 8px rgba(0,0,0,.04); }
+    .diagram-card svg { width:100%; height:auto; display:block; }
+    .doc-preview { background:#fff; border:1px solid var(--borde-light); border-left:5px solid var(--sena-verde); border-radius:10px; padding:16px 20px; margin-bottom:14px; box-shadow:0 2px 8px rgba(0,0,0,.04); }
+    .doc-preview h4 { margin:0 0 4px 0; font-family:'Syne',sans-serif; font-size:15px; color:var(--texto-main); }
+    .doc-preview .doc-tag { font-size:11px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; color:var(--sena-verde-dark); margin-bottom:8px; display:block; }
+    .doc-preview p { margin:0 0 8px 0; font-size:13px; line-height:1.7; color:#334155; }
+    .doc-preview blockquote { margin:8px 0 0 0; padding:10px 14px; background:#f8fafc; border-radius:8px; font-size:12.5px; line-height:1.7; color:#475569; font-style:italic; }
+    .steps-list { counter-reset:st; list-style:none; padding:0; margin:0; }
+    .steps-list li { counter-increment:st; position:relative; padding:10px 14px 10px 52px; margin-bottom:10px; background:#fff; border:1px solid var(--borde-light); border-radius:10px; font-size:13px; line-height:1.65; color:#334155; }
+    .steps-list li::before { content:counter(st); position:absolute; left:14px; top:10px; width:26px; height:26px; border-radius:50%; background:var(--sena-verde); color:#fff; font-weight:800; font-size:13px; display:flex; align-items:center; justify-content:center; }
+    .score-cell { font-family:'JetBrains Mono',monospace; font-weight:700; text-align:center; }
+    .score-win { background:rgba(57,169,0,.12); color:#236b00; }
+    .btn-row { display:flex; gap:10px; flex-wrap:wrap; margin-top:18px; }
+    .reset-link { background:none; border:none; color:var(--azul-tech-dark); font-size:12.5px; cursor:pointer; text-decoration:underline; padding:0; font-family:inherit; }
+  </style>
+<style>
+  .fb-grid { display:grid; grid-template-columns: 1fr 76px 1fr; gap:14px; align-items:stretch; margin-top:6px; }
+  .fb-panel { border-radius:16px; padding:16px 16px 14px; display:flex; flex-direction:column; background:#fff; }
+  .fb-bad { border:1.5px solid rgba(255,107,0,0.38); background:linear-gradient(180deg,#fff7ed 0%,#ffffff 55%); }
+  .fb-good { border:1.5px solid rgba(57,169,0,0.38); background:linear-gradient(180deg,#f0fdf4 0%,#ffffff 55%); }
+  .fb-ptitle { display:flex; align-items:center; gap:8px; font-family:'Syne',sans-serif; font-weight:800; font-size:18px; margin:0 0 4px; }
+  .fb-bad .fb-ptitle { color:#c2410c; }
+  .fb-good .fb-ptitle { color:#236b00; }
+  .fb-psub { font-size:13px; color:#475569; margin:0 0 8px; line-height:1.5; }
+  .fb-svg { width:100%; height:auto; display:block; }
+  .fb-svg text { font-family:'Plus Jakarta Sans',sans-serif; }
+  .fb-svg .fb-mono { font-family:'JetBrains Mono',monospace; }
+  .fb-result { margin-top:auto; border-radius:12px; padding:11px 14px; font-size:14px; line-height:1.55; font-weight:600; }
+  .fb-bad .fb-result { background:rgba(255,107,0,0.10); color:#9a3412; border:1px solid rgba(255,107,0,0.3); }
+  .fb-good .fb-result { background:rgba(57,169,0,0.10); color:#1b5200; border:1px solid rgba(57,169,0,0.3); }
+  .fb-result b { font-weight:800; }
+  .fb-mid { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px; }
+  .fb-mid span { font-family:'JetBrains Mono',monospace; font-weight:800; font-size:14px; color:#236b00; background:rgba(57,169,0,0.12); border:1px solid rgba(57,169,0,0.35); border-radius:20px; padding:3px 11px; }
+  .fb-ind { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-top:16px; }
+  .fb-ind-card { background:#fff; border:1px solid #e2e8f0; border-radius:14px; padding:14px 16px; box-shadow:0 4px 14px rgba(15,23,42,0.05); }
+  .fb-ind-q { font-weight:800; font-size:15px; color:#0f172a; margin:0 0 10px; }
+  .fb-ind-row { display:flex; align-items:center; gap:10px; font-size:13.5px; font-weight:700; padding:5px 0; }
+  .fb-ind-row.no { color:#c2410c; }
+  .fb-ind-row.si { color:#236b00; }
+  .fb-ind-row svg { flex:none; }
+  @media (max-width: 992px) {
+    .fb-grid { grid-template-columns:1fr; }
+    .fb-mid { flex-direction:row; justify-content:center; padding:2px 0; }
+    .fb-mid svg { transform:rotate(90deg); }
+    .fb-ind { grid-template-columns:1fr; }
+  }
+</style><style>
+  .fc-card .fc-art { background:#f8fafc; border:1px solid var(--borde-light, #e2e8f0); border-radius:12px; padding:8px; margin-bottom:14px; }
+  .fc-card .fc-art svg { width:100%; height:auto; display:block; }
+  .fc-card .fc-idea { font-family:'Syne',sans-serif; font-size:17px; font-weight:800; line-height:1.3; margin:0 0 6px; color:var(--texto-main, #0f172a); }
+  .fc-card .fc-short { font-size:14px; line-height:1.5; color:var(--texto-muted, #475569); margin:0 0 12px; }
+  .fc-card .fc-term { border-top:1px dashed var(--borde-light, #cbd5e1); padding-top:12px; margin-bottom:12px; font-size:14px; line-height:1.55; }
+  .fc-card .fc-term b { display:block; font-size:11.5px; text-transform:uppercase; letter-spacing:.6px; color:var(--sena-verde-dark, #236b00); margin-bottom:4px; }
+  .fc-card .fc-term code { background:#1a1a2e; color:#9ece6a; padding:2px 8px; border-radius:6px; font-size:13px; margin-right:4px; display:inline-block; }
+  .fc-quiz { margin-top:auto; background:#fff; border:1px solid var(--borde-light, #e2e8f0); border-radius:10px; padding:12px; }
+  .fc-quiz-q { font-size:13px; font-weight:700; margin:0 0 8px; color:var(--texto-main, #0f172a); }
+  .fc-quiz-q span { font-weight:500; color:var(--texto-muted, #475569); }
+  .fc-opts { display:flex; flex-wrap:wrap; gap:6px; }
+  .fc-opt { font-family:'JetBrains Mono',Consolas,monospace; font-size:12.5px; padding:7px 10px; border-radius:8px; border:1px solid #cbd5e1; background:#f8fafc; color:#0f172a; cursor:pointer; }
+  .fc-opt:hover:not(:disabled) { border-color:var(--sena-verde, #39a900); background:var(--sena-verde-bg, rgba(57,169,0,.08)); }
+  .fc-opt:disabled { cursor:default; }
+  .fc-opt.fc-ok { background:var(--sena-verde, #39a900); border-color:var(--sena-verde, #39a900); color:#fff; }
+  .fc-opt.fc-bad { background:#fee2e2; border-color:#dc2626; color:#991b1b; }
+  .fc-fb { font-size:13px; font-weight:600; margin:8px 0 0; min-height:18px; }
+  .fc-fb.fc-ok-t { color:var(--sena-verde-dark, #236b00); }
+  .fc-fb.fc-bad-t { color:#b91c1c; }
+  .fc-remote { display:flex; align-items:center; gap:14px; flex-wrap:wrap; margin-top:18px; padding:14px 18px; border-radius:12px; background:rgba(2,132,199,.07); border:1px solid rgba(2,132,199,.28); font-size:14.5px; line-height:1.5; }
+  .fc-remote svg.fc-cloud { flex-shrink:0; }
+  .fc-remote code { background:#1a1a2e; color:#7dcfff; padding:2px 8px; border-radius:6px; font-size:13px; }
+  .fc-score { margin-top:12px; text-align:right; font-size:12.5px; color:var(--texto-muted, #475569); }
+  .fc-score strong { color:var(--sena-verde-dark, #236b00); }
+  .fc-takeaway { margin-top:18px; padding:14px 18px; border-left:4px solid var(--sena-naranja, #ff6b00); background:rgba(255,107,0,.06); border-radius:0 10px 10px 0; font-size:14.5px; line-height:1.55; }
+</style><style>
+.fa-wrap{background:#fff;border:1px solid #e2e8f0;border-radius:14px;padding:12px;overflow-x:auto;-webkit-overflow-scrolling:touch;scroll-behavior:smooth;box-shadow:0 2px 8px rgba(0,0,0,.04)}
+.fa-svg{display:block;width:100%;min-width:820px;height:auto}
+.fa-hint{display:none;font-size:12px;color:#64748b;margin:6px 0 0}
+.fa-why{margin-top:18px;background:linear-gradient(135deg,#f0fdf4 0%,#e0f2fe 100%);border:1.5px solid #86efac;border-left:5px solid #39a900;border-radius:12px;padding:16px 20px}
+.fa-why-title{color:#166534;font-size:15px;font-weight:700;display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.fa-why p{margin:0 0 8px;font-size:14px;color:#334155;line-height:1.65}
+.fa-take{margin-top:14px;font-size:14px;color:#0f172a;line-height:1.6;padding:12px 16px;border-left:4px solid #ff6b00;background:rgba(255,107,0,.08);border-radius:0 10px 10px 0}
+@media(max-width:760px){.fa-hint{display:block}}
+</style><style>
+  .fd-widget { background:#fff; border:1px solid var(--borde-light); border-radius:16px; padding:18px; box-shadow:var(--shadow-card); outline:none; }
+  .fd-widget:focus-visible { box-shadow:0 0 0 3px rgba(2,132,199,.35); }
+  .fd-scroll { overflow-x:auto; }
+  .fd-svg { display:block; width:100%; min-width:720px; height:auto; font-family:'Inter',system-ui,sans-serif; }
+  .fd-zone { fill:#f8fafc; stroke:#cbd5e1; stroke-width:2; }
+  .fd-zone-title { font-size:16px; font-weight:800; fill:#0f172a; }
+  .fd-zone-sub { font-size:14px; fill:#64748b; }
+  .fd-arrow { stroke:#cbd5e1; stroke-width:4; fill:none; transition:stroke .3s; }
+  .fd-arrow-head { fill:#cbd5e1; transition:fill .3s; }
+  .fd-arrow.fd-on { stroke:#39a900; }
+  .fd-arrow-head.fd-on { fill:#39a900; }
+  .fd-pill rect { fill:#fff; stroke:#cbd5e1; stroke-width:2; transition:fill .3s, stroke .3s; }
+  .fd-pill text { font-family:'JetBrains Mono',Consolas,monospace; font-size:14px; font-weight:700; fill:#64748b; }
+  .fd-pill.fd-on rect { fill:#39a900; stroke:#236b00; }
+  .fd-pill.fd-on text { fill:#fff; }
+  .fd-packet { transition:transform .7s cubic-bezier(.4,0,.2,1); }
+  .fd-packet-box { stroke-width:3; transition:fill .4s, stroke .4s; }
+  .fd-packet-t1 { font-family:'JetBrains Mono',Consolas,monospace; font-size:16px; font-weight:800; fill:#0f172a; }
+  .fd-packet-t2 { font-size:14px; font-weight:700; fill:#334155; }
+  .fd-ghost { fill:none; stroke:#94a3b8; stroke-width:2; stroke-dasharray:6 5; opacity:0; transition:opacity .4s; }
+  .fd-ghost-t { font-family:'JetBrains Mono',Consolas,monospace; font-size:14px; fill:#64748b; opacity:0; transition:opacity .4s; }
+  .fd-ghost.fd-show, .fd-ghost-t.fd-show { opacity:1; }
+  .fd-state-mod { fill:#fff7ed; stroke:#ff6b00; }
+  .fd-state-stg { fill:#e0f2fe; stroke:#0284c7; }
+  .fd-state-com { fill:#f0fdf4; stroke:#39a900; }
+  .fd-controls { display:flex; flex-wrap:wrap; align-items:center; gap:10px; margin:14px 0 4px; }
+  .fd-btn { font:inherit; font-size:14px; font-weight:700; padding:9px 18px; border-radius:10px; border:1.5px solid var(--borde-focus); background:#fff; color:var(--texto-main); cursor:pointer; transition:background .2s, border-color .2s; }
+  .fd-btn:hover:not(:disabled) { border-color:var(--sena-verde); background:var(--sena-verde-bg); }
+  .fd-btn:focus-visible { outline:3px solid rgba(2,132,199,.45); outline-offset:2px; }
+  .fd-btn:disabled { opacity:.45; cursor:not-allowed; }
+  .fd-btn.fd-primary { background:var(--sena-verde); border-color:var(--sena-verde-dark); color:#fff; }
+  .fd-btn.fd-primary:hover:not(:disabled) { background:var(--sena-verde-dark); }
+  .fd-counter { margin-left:auto; font-size:13px; font-weight:700; color:var(--texto-sub); }
+  .fd-hint { font-size:12.5px; color:var(--texto-sub); margin:0 0 10px; }
+  .fd-what { margin:12px 0 4px; padding:14px 18px; border-left:5px solid var(--sena-verde); background:var(--sena-verde-bg); border-radius:0 10px 10px 0; font-size:15px; line-height:1.6; color:var(--texto-muted); }
+  .fd-what strong { color:var(--texto-main); }
+  .fd-boxes { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:8px; }
+  .fd-boxes .code-editor-box { margin:8px 0; max-width:none; }
+  .fd-boxes .editor-body { min-height:96px; }
+  @media (max-width: 900px) { .fd-boxes { grid-template-columns:1fr; } }
+  @media (prefers-reduced-motion: reduce) {
+    .fd-packet, .fd-packet-box, .fd-arrow, .fd-arrow-head, .fd-pill rect, .fd-ghost, .fd-ghost-t { transition:none !important; }
+  }
+</style>
+<style>.fs7-note{margin:2px 0 10px;padding:8px 11px;border-radius:9px;font-size:13px;line-height:1.45;border:1px solid}.fs7-bad{background:#fef2f2;color:#b91c1c;border-color:#fecaca}.fs7-good{background:#f0fdf4;color:#236b00;border-color:#bbf7d0}</style>
+<style>.s13-steps{margin:8px 0 0;padding-left:20px;font-size:13.5px;line-height:1.55;color:#334155}.s13-steps li{margin-bottom:6px}.s13-h{margin:18px 0 8px;font-size:17px;font-weight:800;color:#0f172a}</style>
+<style>
+.s2q-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;margin:12px 0 4px}
+.s2q-item{background:#fff;border:1px solid var(--borde-light,#e2e8f0);border-radius:12px;padding:12px 14px}
+.s2q-cmd{display:inline-block;background:#1a1a2e;color:#e0af68;padding:4px 10px;border-radius:7px;font-size:14px;margin-bottom:8px;font-family:'JetBrains Mono',Consolas,monospace}
+.s2q-opts{display:flex;gap:8px;flex-wrap:wrap}
+.s2q-item .fc-fb{margin:8px 0 0;font-size:13px;line-height:1.4;min-height:1px}
+.s2q-item .fc-fb.fc-ok-t{color:#236b00}.s2q-item .fc-fb.fc-bad-t{color:#b91c1c}
+.table-container-card{overflow-x:auto}
+.table-container-card table{min-width:560px}
+</style>
+<style>
+.s5-cmp{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:14px 0;align-items:start}
+.s5-cmp .code-editor-box{margin:0;max-width:none;min-width:0}
+.s5-cmp .editor-body{overflow-x:auto}
+.s5-cmp3{grid-template-columns:1fr 1fr}
+@media (max-width:1100px){.s5-cmp,.s5-cmp3{grid-template-columns:1fr}}
+.cmd-explain{margin:10px 0 16px}.cmd-explain td code{white-space:normal;word-break:break-word}.cmd-explain td:nth-child(3){font-size:12.5px;line-height:1.7}
+.slide-container ul{padding-left:20px;line-height:1.7;font-size:13px}
+</style>
+
+</head>
+<body>
+
+  <!-- SIDEBAR (ESTANDAR UNIFICADO) -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <a href="../explorar.html" class="brand-link" title="Ir al Portal de Materiales">
+        <!-- Logo Vectorial Oficial SENA -->
+        <div class="sidebar-logo" title="Servicio Nacional de Aprendizaje SENA">
+          <svg width="24" height="24" viewBox="0 0 64 62" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
+            <g transform="translate(-377 -19)">
+              <path d="M409.164 19C412.922 19 415.992 22.09 415.992 25.8778 415.992 29.6656 412.932 32.7556 409.164 32.7556 405.397 32.7556 402.336 29.6656 402.336 25.8778 402.336 22.09 405.407 19 409.164 19"/>
+              <path d="M384.305 41.1884 384.305 41.2183C384.285 41.3379 384.275 41.4177 384.275 41.4675 384.275 41.8264 384.474 42.0855 384.873 42.265 385.282 42.4344 385.9 42.5241 386.747 42.5241 387.395 42.5241 387.893 42.4543 388.262 42.3148 388.631 42.1752 388.81 41.9759 388.81 41.7267 388.81 41.3479 388.082 41.0489 386.647 40.8096 386.478 40.7797 386.348 40.7598 386.268 40.7498 386.179 40.7299 386.039 40.71 385.86 40.6801 383.567 40.3013 382.092 39.8926 381.434 39.454 381.115 39.2347 380.876 38.9855 380.706 38.6965 380.547 38.4074 380.467 38.0785 380.467 37.7096 380.467 36.8125 380.995 36.1248 382.052 35.6563 383.109 35.1878 384.654 34.9486 386.677 34.9486 388.7 34.9486 390.166 35.1678 391.133 35.6064 392.1 36.045 392.578 36.7228 392.578 37.6399L392.578 37.7495 388.78 37.7495 388.78 37.7096C388.78 37.3907 388.591 37.1614 388.202 36.992 387.813 36.8325 387.255 36.7428 386.508 36.7428 385.929 36.7428 385.481 36.8026 385.182 36.9122 384.863 37.0318 384.713 37.1913 384.713 37.4006 384.713 37.7794 385.541 38.1084 387.195 38.3675 387.514 38.4174 387.764 38.4572 387.943 38.4871 389.119 38.6865 389.966 38.8559 390.465 38.9955 390.963 39.135 391.392 39.3045 391.761 39.4939 392.159 39.7132 392.478 39.9923 392.698 40.3312 392.917 40.6701 393.027 41.0389 393.027 41.4476 393.027 42.3746 392.448 43.0823 391.302 43.5907 390.156 44.0891 388.501 44.3383 386.348 44.3383 384.195 44.3383 382.67 44.099 381.723 43.6206 380.766 43.1421 380.298 42.3746 380.298 41.308L380.298 41.1685 384.305 41.1685ZM394.711 44.1987 394.711 35.0881 405.546 35.0881 405.546 37.0518 398.778 37.0518 398.778 38.5071 405.028 38.5071 405.028 40.4508 398.778 40.4508 398.778 42.2151 405.795 42.2151 405.795 44.2087 394.711 44.2087ZM407.5 44.1987 407.5 35.0881 412.643 35.0881 418.155 41.2084 418.155 35.0881 422.063 35.0881 422.063 44.1987 416.72 44.1987 411.387 38.0585 411.387 44.1987 407.49 44.1987ZM432.569 40.5604 430.625 37.2511 428.572 40.5604 432.579 40.5604ZM426.369 44.1987 422.292 44.1987 428.592 35.0881 433.107 35.0881 439.118 44.1987 434.592 44.1987 433.675 42.554 427.366 42.554 426.389 44.1987Z"/>
+              <path d="M389.309 76.3351 385.67 72.9161 396.735 53.6881C397.333 52.6415 396.585 51.3257 395.379 51.3257L377.267 51.3257 377.267 46.5113 406.413 46.5113 389.309 76.3351Z"/>
+              <path d="M428.701 76.3351 432.34 72.9161 421.275 53.6881C420.677 52.6415 421.425 51.3257 422.631 51.3257L440.743 51.3257 440.743 46.5113 411.597 46.5113 428.701 76.3351Z"/>
+              <path d="M408.965 51.5949C408.965 51.5949 409.005 51.5251 409.005 51.5251L425.432 78.7174 421.066 80.99 410.48 63.2373C409.852 62.1907 408.347 62.1907 407.729 63.2373 404.2 69.1981 397.213 80.99 397.213 80.99L392.947 78.8768C392.947 78.8768 408.088 53.09 408.965 51.5949"/>
+            </g>
+          </svg>
+        </div>
+        <div class="brand-info">
+          <h1>ADSO 3389010</h1>
+          <p>Sesión 5 · Estándares de codificación</p>
+        </div>
+      </a>
+      <button type="button" class="sidebar-toggle-btn" onclick="toggleSidebar()" title="Contraer panel lateral">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><line x1="9" x2="9" y1="3" y2="21"/><path d="m14 9-3 3 3 3"/></svg>
+      </button>
+    </div>
+
+    <nav class="sidebar-nav" id="sidebarNav">
+      <div class="nav-group">
+        <div class="nav-group-title">Bloque 1 · Portada & Regla de Oro</div>
+        <div class="nav-links-list">
+          <a href="#slide-01" class="nav-link active">
+            <span class="nav-link-num">01</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            <span class="nav-link-title">Portada & Datos de la Sesión</span>
+          </a>
+          <a href="#slide-02" class="nav-link">
+            <span class="nav-link-num">02</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <span class="nav-link-title">Regla de Oro: Qué entregas</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="nav-group">
+        <div class="nav-group-title">Bloque 2 · Teoría y Estándares</div>
+        <div class="nav-links-list">
+          <a href="#slide-03" class="nav-link">
+            <span class="nav-link-num">03</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+            <span class="nav-link-title">Qué es un estándar y por qué</span>
+          </a>
+          <a href="#slide-04" class="nav-link">
+            <span class="nav-link-num">04</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg>
+            <span class="nav-link-title">Variables y constantes</span>
+          </a>
+          <a href="#slide-05" class="nav-link">
+            <span class="nav-link-num">05</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+            <span class="nav-link-title">Declaración de clases</span>
+          </a>
+          <a href="#slide-06" class="nav-link">
+            <span class="nav-link-num">06</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+            <span class="nav-link-title">Métodos y funciones</span>
+          </a>
+          <a href="#slide-07" class="nav-link">
+            <span class="nav-link-num">07</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg>
+            <span class="nav-link-title">Comentarios y documentación</span>
+          </a>
+          <a href="#slide-08" class="nav-link">
+            <span class="nav-link-num">08</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18"/><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M3 9h18"/><path d="M3 15h18"/></svg>
+            <span class="nav-link-title">Indentación y formato</span>
+          </a>
+          <a href="#slide-09" class="nav-link">
+            <span class="nav-link-num">09</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/></svg>
+            <span class="nav-link-title">Organización de archivos</span>
+          </a>
+          <a href="#slide-10" class="nav-link">
+            <span class="nav-link-num">10</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="M7 21h10"/><path d="M12 3v18"/><path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"/></svg>
+            <span class="nav-link-title">JavaScript, Java y PHP</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="nav-group">
+        <div class="nav-group-title">Bloque 3 · Demo & Práctica</div>
+        <div class="nav-links-list">
+          <a href="#slide-11" class="nav-link">
+            <span class="nav-link-num">11</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></svg>
+            <span class="nav-link-title">Linter y formateador</span>
+          </a>
+          <a href="#slide-12" class="nav-link">
+            <span class="nav-link-num">12</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+            <span class="nav-link-title">Configura ESLint y Prettier</span>
+          </a>
+          <a href="#slide-13" class="nav-link">
+            <span class="nav-link-num">13</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+            <span class="nav-link-title">Ejemplo completo mal vs bien</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="nav-group">
+        <div class="nav-group-title">Bloque 4 · Construye tu EV02</div>
+        <div class="nav-links-list">
+          <a href="#slide-14" class="nav-link">
+            <span class="nav-link-num">14</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            <span class="nav-link-title">Estructura del informe EV02</span>
+          </a>
+          <a href="#slide-15" class="nav-link">
+            <span class="nav-link-num">15</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg>
+            <span class="nav-link-title">Ejemplo de redacción</span>
+          </a>
+          <a href="#slide-16" class="nav-link">
+            <span class="nav-link-num">16</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="M7 21h10"/><path d="M12 3v18"/><path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"/></svg>
+            <span class="nav-link-title">Los 4 Indicadores Oficiales</span>
+          </a>
+          <a href="#slide-17" class="nav-link">
+            <span class="nav-link-num">17</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+            <span class="nav-link-title">Checklist y Entrega en Zajuna</span>
+          </a>
+          <a href="#slide-18" class="nav-link">
+            <span class="nav-link-num">18</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" x2="4" y1="22" y2="15"/></svg>
+            <span class="nav-link-title">Cierre de AA1</span>
+          </a>
+        </div>
+      </div>
+
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="sidebar-footer-pill">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        <span>Entrega EV02: por confirmar en Zajuna</span>
+      </div>
+      <a href="../explorar.html" class="btn-return-hub">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+        Volver al Hub
+      </a>
+    </div>
+  </aside>
+
+  <button type="button" class="floating-sidebar-toggle" id="floatingToggle" onclick="toggleSidebar()" title="Abrir Menú de Navegación">
+    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><line x1="9" x2="9" y1="3" y2="21"/><path d="m10 9 3 3-3 3"/></svg>
+    <span>Menú (18 Slides)</span>
+  </button>
+
+  <main class="main-content" id="mainContent">
+
+    <section class="slide-section" id="slide-01">
+      <div class="slide-container">
+        <span class="slide-badge-category badge-green"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg> Sesión Sincrónica 5 · Guía 7 (GA7-220501096) · AA1</span>
+        <h2 class="slide-title">Define los estándares de codificación de tu proyecto y cierra la AA1</h2>
+        <p class="slide-subtitle">Hoy aprendes las reglas con las que un equipo escribe código que todos pueden leer, y las conviertes en un informe técnico: tu evidencia AA1-EV02. Es la última evidencia de la actividad AA1.</p>
+<div class="cards-grid-3"><div class="card-pro top-azul"><div class="card-header-flex"><div class="card-icon-badge icon-badge-blue"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div><span class="card-pill-tag badge-blue">Sincrónico</span></div><h3 class="card-title">Datos de la Sesión</h3><p class="card-desc"><strong>Fecha:</strong> Martes, 24 de Noviembre de 2026<br><strong>Horario:</strong> [HORA-S5] (Teams)<br><strong>Instructor:</strong> Julián Andrés Trujillo Morales<br><strong>Regional:</strong> Huila | CADPH Garzón</p></div><div class="card-pro top-verde"><div class="card-header-flex"><div class="card-icon-badge icon-badge-green"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></div><span class="card-pill-tag badge-green">Tema de hoy</span></div><h3 class="card-title">Qué vas a hacer</h3><p class="card-desc">Entender qué es un estándar de codificación, cómo se nombran variables, clases y métodos, cómo se comenta y se da formato al código, y cómo un linter y un formateador hacen cumplir las reglas.</p></div><div class="card-pro top-naranja"><div class="card-header-flex"><div class="card-icon-badge icon-badge-orange"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div><span class="card-pill-tag badge-orange">Evidencia</span></div><h3 class="card-title">AA1-EV02 · Estándares de codificación (informe PDF)</h3><p class="card-desc"><strong>Producto:</strong> informe técnico en PDF con portada, introducción, objetivo y los estándares de codificación de tu plataforma de desarrollo.<br><strong>Fecha límite en Zajuna:</strong> por confirmar en Zajuna.</p></div></div>
+        <div class="btn-row"><a href="./MANUAL_SESION05.html" class="btn-action-primary"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg> Abrir la Guía de Estudio</a></div>
+      </div>
+    </section>
+
+
+    <section class="slide-section" id="slide-02">
+      <div class="slide-container">
+        <span class="slide-badge-category badge-orange"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> Bloque 1 · Regla de Oro de la Evidencia</span>
+        <h2 class="slide-title">Regla de oro: un informe con estándares reales, con ejemplos y con las herramientas que usas</h2>
+        <p class="slide-subtitle">La guía te pide definir los estándares de codificación para tu software. Se aprueba con un informe claro, con ejemplos de código «mal vs bien» y mostrando con qué herramientas los haces cumplir.</p>
+<div class="cards-grid-2"><div class="card-pro top-verde"><div class="card-header-flex"><div class="card-icon-badge icon-badge-green"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div><span class="card-pill-tag badge-green">Regla de oro</span></div><h3 class="card-title">Un solo producto: un informe en PDF</h3><p class="card-desc">La guía pide un <strong>informe técnico en PDF</strong> (extensión libre) con el estándar de codificación del software. Como mínimo: <strong>portada, introducción, objetivo</strong> y los <strong>estándares de codificación</strong>: nombramiento de variables, declaración de clases, declaración de métodos, etc.</p></div><div class="card-pro top-naranja"><div class="card-header-flex"><div class="card-icon-badge icon-badge-orange"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></div><span class="card-pill-tag badge-orange">Contenido mínimo</span></div><h3 class="card-title">Lo que no puede faltar</h3><p class="card-desc">Portada, introducción, objetivo, la plataforma de desarrollo que elegiste, reglas de nombrado, clases, métodos, comentarios, formato, organización de archivos, y un ejemplo «mal vs bien» por regla.</p></div></div>
+<div class="callout"><div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg> Qué te pide exactamente la guía (texto oficial resumido)</div><p>Elaboras un informe técnico con el <strong>estándar de codificación</strong> que se utilizará para desarrollar el software, según lo visto en los componentes formativos y las características del software. Se entrega en PDF en el espacio <em>Definir estándares de codificación, de acuerdo con la plataforma de desarrollo elegida. GA7-220501096-AA1-EV02</em>.</p></div><div class="callout warn"><div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> El instructor evalúa 4 indicadores (texto literal del instrumento)</div><p>(1) Diferencia con claridad versionamientos locales y remotos. (2) Selecciona y describe herramientas de desarrollo a utilizar, para la codificación del software. (3) Selecciona y describe herramientas de versionamiento. (4) Presenta el informe cumpliendo con las normas básicas de presentación de documentos. Los ves completos en el <a href="#slide-16" style="color:var(--azul-tech-dark);font-weight:700;">slide 16</a>.</p></div><div class="callout"><div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg> Cómo cuadra con el título de la evidencia</div><p>El título habla de estándares de codificación, y la lista de chequeo del instrumento pide además herramientas de desarrollo y de versionamiento. Por eso tu informe incluye <strong>las dos cosas</strong>: una sección breve de herramientas (local vs remoto, desarrollo y versionamiento) y la sección principal de estándares. Así cubres la guía y el instrumento sin contradecir ninguno.</p></div>
+      </div>
+    </section>
+
+
+    <section class="slide-section" id="slide-03">
+      <div class="slide-container">
+        <span class="slide-badge-category badge-blue"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg> Bloque 2 · Qué es un estándar y por qué importa</span>
+        <h2 class="slide-title">Un estándar de codificación es el acuerdo del equipo sobre cómo se escribe el código</h2>
+        <p class="slide-subtitle">No cambia lo que hace el programa: cambia lo fácil que es leerlo, revisarlo y mantenerlo entre varias personas.</p>
+<div class="cards-grid-2"><div class="card-pro top-naranja"><div class="card-header-flex"><div class="card-icon-badge icon-badge-orange"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg></div><span class="card-pill-tag badge-orange">Sin estándar</span></div><h3 class="card-title">El equipo de TechStore Pro, semana 1</h3><p class="card-desc">Laura escribe <code>calc_total</code>, Camilo escribe <code>CalcularTotal</code> y Andrea escribe <code>ct</code>. Cada archivo tiene otra indentación y otro tipo de comillas. En la revisión nadie entiende el código del otro y, al unir ramas con Git, aparecen conflictos que son solo de formato.</p></div><div class="card-pro top-verde"><div class="card-header-flex"><div class="card-icon-badge icon-badge-green"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div><span class="card-pill-tag badge-green">Con estándar</span></div><h3 class="card-title">El mismo equipo, semana 3</h3><p class="card-desc">Acuerdan un documento de una página: funciones en <code>camelCase</code>, clases en <code>PascalCase</code>, 2 espacios, comillas simples. Un formateador aplica el formato solo y un linter avisa los errores. Las revisiones se centran en la lógica, no en el estilo.</p></div></div>
+<div class="table-container-card"><table class="table-comparativa"><thead><tr><th>Beneficio</th><th>Qué significa en la práctica</th></tr></thead><tbody>
+<tr><td><strong>Legibilidad</strong></td><td>Cualquiera del equipo entiende el código sin preguntar</td></tr>
+<tr><td><strong>Mantenimiento</strong></td><td>Corregir o ampliar el programa cuesta menos tiempo</td></tr>
+<tr><td><strong>Menos errores</strong></td><td>Reglas como <code>const</code> en vez de <code>var</code> evitan fallos típicos</td></tr>
+<tr><td><strong>Trabajo en equipo con Git</strong></td><td>Menos conflictos por formato y revisiones más cortas</td></tr>
+</tbody></table></div>
+<div class="callout"><div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg> Dónde sale el estándar</div><p>Un equipo no inventa todo desde cero: <strong>adopta una guía oficial</strong> (Google, Airbnb, PSR-12…) y documenta sus decisiones propias. Las reglas de hoy vienen de esas guías y las referencias están en el <a href="#slide-14" style="color:var(--azul-tech-dark);font-weight:700;">slide 14</a>. Lo que es convención del equipo (por ejemplo, identificadores en inglés y comentarios en español) lo marcamos como tal.</p></div><div class="fa-take"><strong>Qué te llevas para tu informe EV02:</strong> la introducción de tu informe puede usar este caso: qué problema resuelve un estándar y por qué lo necesita tu proyecto (TechStore Pro u otro).</div>
+      </div>
+    </section>
+
+
+    <section class="slide-section" id="slide-04">
+      <div class="slide-container">
+        <span class="slide-badge-category badge-blue"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg> Bloque 2 · Variables y constantes</span>
+        <h2 class="slide-title">Nombrado de variables y constantes: que el nombre diga qué guarda</h2>
+        <p class="slide-subtitle">Es la regla que más se nota al leer código. Un buen nombre evita comentarios innecesarios.</p>
+<div class="table-container-card"><table class="table-comparativa"><thead><tr><th>Regla</th><th>Cómo se aplica</th><th>Fuente</th></tr></thead><tbody>
+<tr><td>Variables en <code>camelCase</code></td><td><code>totalPrice</code>, <code>createdAt</code></td><td>Guías de Google y Airbnb para JavaScript</td></tr>
+<tr><td>Constantes en <code>MAYUSCULAS_CON_GUION_BAJO</code></td><td><code>IVA_RATE</code>, <code>MAX_ITEMS</code> (valores fijos del módulo)</td><td>Google JavaScript Style Guide (<code>CONSTANT_CASE</code>)</td></tr>
+<tr><td><code>const</code> por defecto, <code>let</code> si cambia, nunca <code>var</code></td><td><code>const item = ...</code>; <code>let total = 0</code></td><td>Airbnb: «Use const for all of your references; avoid using var»</td></tr>
+<tr><td>Nombres descriptivos, sin abreviaturas ambiguas</td><td><code>customer</code> mejor que <code>c</code></td><td>Google: nombres lo más descriptivos posible</td></tr>
+<tr><td>Booleanos con prefijo <code>is</code>, <code>has</code>, <code>can</code></td><td><code>isAvailable</code>, <code>hasStock</code></td><td>Convención común de equipos (no la impone Google)</td></tr>
+</tbody></table></div>
+<div class="s5-cmp"><div class="code-editor-box"><div class="editor-header"><div class="editor-dot r"></div><div class="editor-dot y"></div><div class="editor-dot g"></div><div class="editor-title"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span>variables_mal.js</span></div><div class="editor-badge">MAL</div></div><div class="editor-body"><div class="cl"><span class="ln">1</span><span class="code"><span class="syn-keyword">var</span> x = <span class="syn-num">10</span>;</span></div>
+<div class="cl"><span class="ln">2</span><span class="code"><span class="syn-keyword">const</span> P = <span class="syn-num">0.19</span>;</span></div>
+<div class="cl"><span class="ln">3</span><span class="code"><span class="syn-keyword">let</span> Total_Price = <span class="syn-num">0</span>;</span></div>
+<div class="cl"><span class="ln">4</span><span class="code"><span class="syn-keyword">const</span> maxItems = <span class="syn-num">50</span>;</span></div>
+<div class="cl"><span class="ln">5</span><span class="code"><span class="syn-keyword">let</span> d = <span class="syn-keyword">new</span> Date();</span></div>
+<div class="cl"><span class="ln">6</span><span class="code"><span class="syn-keyword">let</span> flag = <span class="syn-keyword">true</span>;</span></div></div></div><div class="code-editor-box"><div class="editor-header"><div class="editor-dot r"></div><div class="editor-dot y"></div><div class="editor-dot g"></div><div class="editor-title"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span>variables_bien.js</span></div><div class="editor-badge">BIEN</div></div><div class="editor-body"><div class="cl"><span class="ln">1</span><span class="code"><span class="syn-comment">// Constantes fijas: MAYUSCULAS con guion bajo</span></span></div>
+<div class="cl"><span class="ln">2</span><span class="code"><span class="syn-keyword">const</span> IVA_RATE = <span class="syn-num">0.19</span>;</span></div>
+<div class="cl"><span class="ln">3</span><span class="code"><span class="syn-keyword">const</span> MAX_ITEMS = <span class="syn-num">50</span>;</span></div>
+<div class="cl"><span class="ln">4</span><span class="code"><span class="syn-comment">// Variables: camelCase y con significado</span></span></div>
+<div class="cl"><span class="ln">5</span><span class="code"><span class="syn-keyword">let</span> totalPrice = <span class="syn-num">0</span>;</span></div>
+<div class="cl"><span class="ln">6</span><span class="code"><span class="syn-keyword">const</span> createdAt = <span class="syn-keyword">new</span> Date();</span></div>
+<div class="cl"><span class="ln">7</span><span class="code"><span class="syn-keyword">let</span> isAvailable = <span class="syn-keyword">true</span>;</span></div></div></div></div><div class="callout warn"><div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg> Error frecuente</div><p>Nombres de una letra (<code>x</code>, <code>d</code>), mezclar estilos (<code>Total_Price</code> junto a <code>maxItems</code>) y usar <code>var</code>. Cada una de estas cosas hace que el archivo parezca escrito por personas distintas.</p></div><div class="fa-take"><strong>Qué te llevas para tu informe EV02:</strong> en tu informe escribe la regla de variables y constantes con su ejemplo «mal vs bien» tomado de tu proyecto.</div>
+      </div>
+    </section>
+
+
+    <section class="slide-section" id="slide-05">
+      <div class="slide-container">
+        <span class="slide-badge-category badge-blue"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg> Bloque 2 · Declaración de clases</span>
+        <h2 class="slide-title">Declaración de clases: sustantivos en PascalCase y una responsabilidad por clase</h2>
+        <p class="slide-subtitle">La guía te pide explícitamente el estándar de declaración de clases. Una clase representa una cosa del problema: Producto, Carrito, Cliente.</p>
+<ul class="steps-list"><li><strong>Nombre en PascalCase</strong> (<code>ProductItem</code>), en singular y como sustantivo. Google lo llama <code>UpperCamelCase</code>.</li><li><strong>Un archivo, una clase</strong> y el archivo se llama como la clase (<code>ProductItem.js</code>): así se encuentra sin buscar. En PHP, PSR-1 también exige una clase por archivo.</li><li><strong>Propiedades y métodos en camelCase</strong> y con nombres completos (<code>name</code>, <code>price</code>), no <code>n</code> ni <code>p</code>.</li><li><strong>Una responsabilidad</strong>: si el nombre necesita «y» (<code>ProductAndCart</code>), probablemente son dos clases.</li><li><strong>Constructor corto</strong>: solo asigna datos; la lógica va en métodos.</li></ul>
+<div class="s5-cmp"><div class="code-editor-box"><div class="editor-header"><div class="editor-dot r"></div><div class="editor-dot y"></div><div class="editor-dot g"></div><div class="editor-title"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span>clase_mal.js</span></div><div class="editor-badge">MAL</div></div><div class="editor-body"><div class="cl"><span class="ln">1</span><span class="code"><span class="syn-keyword">class</span> product_item {</span></div>
+<div class="cl"><span class="ln">2</span><span class="code">  <span class="syn-keyword">constructor</span>(n, p) {</span></div>
+<div class="cl"><span class="ln">3</span><span class="code">    <span class="syn-keyword">this</span>.n = n;</span></div>
+<div class="cl"><span class="ln">4</span><span class="code">    <span class="syn-keyword">this</span>.p = p;</span></div>
+<div class="cl"><span class="ln">5</span><span class="code">  }</span></div>
+<div class="cl"><span class="ln">6</span><span class="code">}</span></div>
+<div class="cl"><span class="ln">7</span><span class="code"><span class="syn-keyword">const</span> item = <span class="syn-keyword">new</span> product_item(<span class="syn-str">'Mouse'</span>, <span class="syn-num">45000</span>);</span></div></div></div><div class="code-editor-box"><div class="editor-header"><div class="editor-dot r"></div><div class="editor-dot y"></div><div class="editor-dot g"></div><div class="editor-title"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span>clase_bien.js</span></div><div class="editor-badge">BIEN</div></div><div class="editor-body"><div class="cl"><span class="ln">1</span><span class="code"><span class="syn-keyword">class</span> ProductItem {</span></div>
+<div class="cl"><span class="ln">2</span><span class="code">  <span class="syn-keyword">constructor</span>(name, price) {</span></div>
+<div class="cl"><span class="ln">3</span><span class="code">    <span class="syn-keyword">this</span>.name = name;</span></div>
+<div class="cl"><span class="ln">4</span><span class="code">    <span class="syn-keyword">this</span>.price = price;</span></div>
+<div class="cl"><span class="ln">5</span><span class="code">  }</span></div>
+<div class="cl"><span class="ln">6</span><span class="code">}</span></div>
+<div class="cl"><span class="ln">7</span><span class="code"><span class="syn-keyword">const</span> item = <span class="syn-keyword">new</span> ProductItem(<span class="syn-str">'Mouse'</span>, <span class="syn-num">45000</span>);</span></div></div></div></div><div class="callout"><div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg> Y en otros lenguajes</div><p>En Java la clase también es <code>UpperCamelCase</code> y los nombres de paquete van en minúscula, sin guion bajo. En PHP, PSR-1 usa <code>StudlyCaps</code> y las llaves de la clase van en la línea siguiente. Lo ves comparado en el <a href="#slide-10" style="color:var(--azul-tech-dark);font-weight:700;">slide 10</a>.</p></div><div class="fa-take"><strong>Qué te llevas para tu informe EV02:</strong> la regla de clases con su ejemplo «mal vs bien», y una frase que explique por qué una clase por archivo ayuda al equipo.</div>
+      </div>
+    </section>
+
+
+    <section class="slide-section" id="slide-06">
+      <div class="slide-container">
+        <span class="slide-badge-category badge-blue"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg> Bloque 2 · Declaración de métodos y funciones</span>
+        <h2 class="slide-title">Métodos y funciones: un verbo, camelCase y una sola tarea</h2>
+        <p class="slide-subtitle">El nombre de una función debe responder «qué hace». Si necesitas un comentario para explicar el nombre, el nombre es malo.</p>
+<div class="table-container-card"><table class="table-comparativa"><thead><tr><th>Regla</th><th>Ejemplo bien</th><th>Ejemplo mal</th></tr></thead><tbody>
+<tr><td>Verbo + objeto en <code>camelCase</code></td><td><code>calculateTotal</code>, <code>getProductById</code></td><td><code>Calc</code>, <code>data</code></td></tr>
+<tr><td>Una sola tarea por función</td><td><code>calculateTotal</code> solo calcula; otra función imprime</td><td><code>calcAndPrintAndSave</code></td></tr>
+<tr><td>Parámetros con nombre completo y pocos (3 o menos como guía práctica)</td><td><code>(unitPrice, quantity, discount)</code></td><td><code>(a, b, c)</code></td></tr>
+<tr><td>Funciones cortas que caben en una pantalla</td><td>10 a 20 líneas</td><td>Una función de 200 líneas</td></tr>
+<tr><td>Devuelve un valor claro o lanza un error con mensaje</td><td><code>throw new TypeError('...')</code></td><td>Devolver <code>undefined</code> sin avisar</td></tr>
+</tbody></table></div>
+<div class="s5-cmp"><div class="code-editor-box"><div class="editor-header"><div class="editor-dot r"></div><div class="editor-dot y"></div><div class="editor-dot g"></div><div class="editor-title"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span>funciones_mal.js</span></div><div class="editor-badge">MAL</div></div><div class="editor-body"><div class="cl"><span class="ln">1</span><span class="code"><span class="syn-keyword">function</span> Calc(a, b, c) {</span></div>
+<div class="cl"><span class="ln">2</span><span class="code">  <span class="syn-keyword">return</span> a * b - c;</span></div>
+<div class="cl"><span class="ln">3</span><span class="code">}</span></div>
+<div class="cl"><span class="ln">4</span><span class="code"><span class="syn-keyword">function</span> data(id) {</span></div>
+<div class="cl"><span class="ln">5</span><span class="code">  <span class="syn-keyword">return</span> products.find((p) =&gt; p.id === id);</span></div>
+<div class="cl"><span class="ln">6</span><span class="code">}</span></div></div></div><div class="code-editor-box"><div class="editor-header"><div class="editor-dot r"></div><div class="editor-dot y"></div><div class="editor-dot g"></div><div class="editor-title"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span>funciones_bien.js</span></div><div class="editor-badge">BIEN</div></div><div class="editor-body"><div class="cl"><span class="ln">1</span><span class="code"><span class="syn-keyword">function</span> calculateTotal(unitPrice, quantity, discount) {</span></div>
+<div class="cl"><span class="ln">2</span><span class="code">  <span class="syn-keyword">return</span> unitPrice * quantity - discount;</span></div>
+<div class="cl"><span class="ln">3</span><span class="code">}</span></div>
+<div class="cl"><span class="ln">4</span><span class="code"><span class="syn-keyword">function</span> getProductById(id) {</span></div>
+<div class="cl"><span class="ln">5</span><span class="code">  <span class="syn-keyword">return</span> products.find((p) =&gt; p.id === id);</span></div>
+<div class="cl"><span class="ln">6</span><span class="code">}</span></div></div></div></div><div class="callout"><div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg> Qué es regla de la guía y qué es práctica común</div><p>Google exige <code>lowerCamelCase</code> para métodos. La recomendación de pocos parámetros y de funciones cortas es una buena práctica ampliamente aceptada, no una regla numérica de Google ni de Airbnb: si la usas en tu informe, preséntala como criterio de tu equipo.</p></div><div class="fa-take"><strong>Qué te llevas para tu informe EV02:</strong> la regla de métodos con su ejemplo «mal vs bien» y el criterio de tu equipo sobre tamaño y parámetros.</div>
+      </div>
+    </section>
+
+
+    <section class="slide-section" id="slide-07">
+      <div class="slide-container">
+        <span class="slide-badge-category badge-blue"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg> Bloque 2 · Comentarios y documentación</span>
+        <h2 class="slide-title">Comentarios: explican el porqué; la documentación explica cómo usar el código</h2>
+        <p class="slide-subtitle">Un comentario que repite el código sobra. Uno que explica una decisión o documenta una función es oro para quien lo hereda.</p>
+<div class="cards-grid-2"><div class="card-pro top-verde"><div class="card-header-flex"><div class="card-icon-badge icon-badge-green"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div><span class="card-pill-tag badge-green">Sí comentas</span></div><h3 class="card-title">Lo que el código no dice</h3><p class="card-desc">Por qué tomaste una decisión, una restricción del negocio (por ejemplo «el IVA es 19 %») y la documentación de cada función pública: qué recibe, qué devuelve y qué errores lanza.</p></div><div class="card-pro top-naranja"><div class="card-header-flex"><div class="card-icon-badge icon-badge-orange"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg></div><span class="card-pill-tag badge-orange">No comentas</span></div><h3 class="card-title">Lo obvio</h3><p class="card-desc"><code>// suma 1 a i</code> repite la línea de abajo. Tampoco dejes código viejo comentado: para eso existe Git y su historial.</p></div></div>
+<div class="table-container-card"><table class="table-comparativa"><thead><tr><th>Lenguaje</th><th>Documentación de funciones</th><th>Fuente</th></tr></thead><tbody>
+<tr><td>JavaScript</td><td>Bloque <code>/** ... */</code> con JSDoc (<code>@param</code>, <code>@returns</code>)</td><td>Google JavaScript Style Guide</td></tr>
+<tr><td>Java</td><td>Javadoc con <code>@param</code>, <code>@return</code>, <code>@throws</code> en ese orden</td><td>Google Java Style Guide</td></tr>
+<tr><td>PHP</td><td>Bloques PHPDoc encima de clases y métodos</td><td>Práctica común en proyectos PHP</td></tr>
+</tbody></table></div>
+<div class="s5-cmp"><div class="code-editor-box"><div class="editor-header"><div class="editor-dot r"></div><div class="editor-dot y"></div><div class="editor-dot g"></div><div class="editor-title"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span>comentarios_mal.js</span></div><div class="editor-badge">MAL</div></div><div class="editor-body"><div class="cl"><span class="ln">1</span><span class="code"><span class="syn-comment">// suma 1 a i</span></span></div>
+<div class="cl"><span class="ln">2</span><span class="code">i = i + <span class="syn-num">1</span>;</span></div>
+<div class="cl"><span class="ln">3</span><span class="code"><span class="syn-comment">// funcion</span></span></div>
+<div class="cl"><span class="ln">4</span><span class="code"><span class="syn-keyword">function</span> f(x) {</span></div>
+<div class="cl"><span class="ln">5</span><span class="code">  <span class="syn-keyword">return</span> x * <span class="syn-num">0.19</span>;</span></div>
+<div class="cl"><span class="ln">6</span><span class="code">}</span></div></div></div><div class="code-editor-box"><div class="editor-header"><div class="editor-dot r"></div><div class="editor-dot y"></div><div class="editor-dot g"></div><div class="editor-title"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span>comentarios_bien.js</span></div><div class="editor-badge">BIEN</div></div><div class="editor-body"><div class="cl"><span class="ln">1</span><span class="code"><span class="syn-comment">/**</span></span></div>
+<div class="cl"><span class="ln">2</span><span class="code"><span class="syn-comment"> * Calcula el IVA de un valor.</span></span></div>
+<div class="cl"><span class="ln">3</span><span class="code"><span class="syn-comment"> * @param {number} amount Valor sin IVA, en pesos.</span></span></div>
+<div class="cl"><span class="ln">4</span><span class="code"><span class="syn-comment"> * @returns {number} Valor del IVA.</span></span></div>
+<div class="cl"><span class="ln">5</span><span class="code"><span class="syn-comment"> */</span></span></div>
+<div class="cl"><span class="ln">6</span><span class="code"><span class="syn-keyword">function</span> calculateVat(amount) {</span></div>
+<div class="cl"><span class="ln">7</span><span class="code">  <span class="syn-keyword">return</span> amount * IVA_RATE;</span></div>
+<div class="cl"><span class="ln">8</span><span class="code">}</span></div></div></div></div><div class="fa-take"><strong>Qué te llevas para tu informe EV02:</strong> la regla de comentarios (qué sí y qué no) con un ejemplo «mal vs bien» y el formato de documentación que usará tu equipo.</div>
+      </div>
+    </section>
+
+
+    <section class="slide-section" id="slide-08">
+      <div class="slide-container">
+        <span class="slide-badge-category badge-blue"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18"/><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M3 9h18"/><path d="M3 15h18"/></svg> Bloque 2 · Indentación y formato</span>
+        <h2 class="slide-title">Indentación y formato: el mismo aspecto en todos los archivos</h2>
+        <p class="slide-subtitle">Aquí no hay «mejor» ni «peor» universal: lo importante es elegir una regla y que todo el equipo la cumpla. Lo ideal es que una herramienta lo haga por ti.</p>
+<div class="table-container-card"><table class="table-comparativa"><thead><tr><th>Regla</th><th>JavaScript (Google)</th><th>Java (Google)</th><th>PHP (PSR-12)</th></tr></thead><tbody>
+<tr><td><strong>Indentación</strong></td><td>2 espacios, sin tabuladores</td><td>2 espacios, sin tabuladores</td><td>4 espacios, sin tabuladores</td></tr>
+<tr><td><strong>Llaves</strong></td><td>Misma línea (estilo K&amp;R), obligatorias en <code>if</code>/<code>for</code></td><td>Misma línea (K&amp;R), obligatorias</td><td>Clases y métodos: llave en la línea siguiente</td></tr>
+<tr><td><strong>Punto y coma</strong></td><td>Obligatorio al final de cada sentencia</td><td>Obligatorio (lenguaje)</td><td>Obligatorio (lenguaje)</td></tr>
+<tr><td><strong>Comillas</strong></td><td>Simples para texto normal</td><td>Dobles (lenguaje)</td><td>Simples o dobles según el caso</td></tr>
+<tr><td><strong>Largo de línea</strong></td><td>80 columnas</td><td>100 columnas</td><td>Límite blando de 120; ideal 80</td></tr>
+</tbody></table></div>
+<div class="s5-cmp"><div class="code-editor-box"><div class="editor-header"><div class="editor-dot r"></div><div class="editor-dot y"></div><div class="editor-dot g"></div><div class="editor-title"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span>formato_mal.js</span></div><div class="editor-badge">MAL</div></div><div class="editor-body"><div class="cl"><span class="ln">1</span><span class="code"><span class="syn-keyword">function</span> addItem(cart,item){</span></div>
+<div class="cl"><span class="ln">2</span><span class="code"><span class="syn-keyword">if</span>(item.stock&gt;<span class="syn-num">0</span>){</span></div>
+<div class="cl"><span class="ln">3</span><span class="code">cart.items.push(item)</span></div>
+<div class="cl"><span class="ln">4</span><span class="code">}<span class="syn-keyword">else</span>{</span></div>
+<div class="cl"><span class="ln">5</span><span class="code">console.log(<span class="syn-str">"sin stock"</span>)</span></div>
+<div class="cl"><span class="ln">6</span><span class="code">}</span></div>
+<div class="cl"><span class="ln">7</span><span class="code"><span class="syn-keyword">return</span> cart}</span></div></div></div><div class="code-editor-box"><div class="editor-header"><div class="editor-dot r"></div><div class="editor-dot y"></div><div class="editor-dot g"></div><div class="editor-title"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span>formato_bien.js</span></div><div class="editor-badge">BIEN</div></div><div class="editor-body"><div class="cl"><span class="ln">1</span><span class="code"><span class="syn-keyword">function</span> addItem(cart, item) {</span></div>
+<div class="cl"><span class="ln">2</span><span class="code">  <span class="syn-keyword">if</span> (item.stock &gt; <span class="syn-num">0</span>) {</span></div>
+<div class="cl"><span class="ln">3</span><span class="code">    cart.items.push(item);</span></div>
+<div class="cl"><span class="ln">4</span><span class="code">  } <span class="syn-keyword">else</span> {</span></div>
+<div class="cl"><span class="ln">5</span><span class="code">    console.log(<span class="syn-str">'Sin stock'</span>);</span></div>
+<div class="cl"><span class="ln">6</span><span class="code">  }</span></div>
+<div class="cl"><span class="ln">7</span><span class="code">  <span class="syn-keyword">return</span> cart;</span></div>
+<div class="cl"><span class="ln">8</span><span class="code">}</span></div></div></div></div><div class="callout"><div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg> Una regla, un formateador</div><p>En lugar de discutir espacios, el equipo configura un formateador (Prettier) y todos los archivos quedan iguales al guardar. Lo configuramos en el <a href="#slide-12" style="color:var(--azul-tech-dark);font-weight:700;">slide 12</a>.</p></div><div class="fa-take"><strong>Qué te llevas para tu informe EV02:</strong> la regla de indentación y formato de tu plataforma y la herramienta que la aplica.</div>
+      </div>
+    </section>
+
+
+    <section class="slide-section" id="slide-09">
+      <div class="slide-container">
+        <span class="slide-badge-category badge-blue"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/></svg> Bloque 2 · Organización de archivos y carpetas</span>
+        <h2 class="slide-title">Organización: cada cosa en su lugar y con un nombre predecible</h2>
+        <p class="slide-subtitle">Un estándar también dice dónde vive el código y cómo se llaman los archivos. Es la parte que más ayuda a quien llega nuevo al proyecto.</p>
+<div class="code-editor-box"><div class="editor-header"><div class="editor-dot r"></div><div class="editor-dot y"></div><div class="editor-dot g"></div><div class="editor-title"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span>estructura_techstore.txt</span></div><div class="editor-badge">ESTRUCTURA</div></div><div class="editor-body"><div class="cl"><span class="ln">1</span><span class="code">techstore-pro/</span></div>
+<div class="cl"><span class="ln">2</span><span class="code">  package.json</span></div>
+<div class="cl"><span class="ln">3</span><span class="code">  eslint.config.mjs</span></div>
+<div class="cl"><span class="ln">4</span><span class="code">  .prettierrc</span></div>
+<div class="cl"><span class="ln">5</span><span class="code">  README.md</span></div>
+<div class="cl"><span class="ln">6</span><span class="code">  src/</span></div>
+<div class="cl"><span class="ln">7</span><span class="code">    constants.js</span></div>
+<div class="cl"><span class="ln">8</span><span class="code">    components/</span></div>
+<div class="cl"><span class="ln">9</span><span class="code">      ProductCard.jsx</span></div>
+<div class="cl"><span class="ln">10</span><span class="code">    services/</span></div>
+<div class="cl"><span class="ln">11</span><span class="code">      cartService.js</span></div>
+<div class="cl"><span class="ln">12</span><span class="code">    utils/</span></div>
+<div class="cl"><span class="ln">13</span><span class="code">      formatPrice.js</span></div>
+<div class="cl"><span class="ln">14</span><span class="code">  tests/</span></div>
+<div class="cl"><span class="ln">15</span><span class="code">    cartService.test.js</span></div></div></div><div class="table-container-card"><table class="table-comparativa"><thead><tr><th>Elemento</th><th>Convención sugerida</th><th>Ejemplo</th></tr></thead><tbody>
+<tr><td>Carpetas</td><td>Minúsculas, un nombre por función</td><td><code>components</code>, <code>services</code>, <code>utils</code></td></tr>
+<tr><td>Componentes de React</td><td>PascalCase, igual que el componente</td><td><code>ProductCard.jsx</code></td></tr>
+<tr><td>Módulos y utilidades</td><td>camelCase</td><td><code>cartService.js</code>, <code>formatPrice.js</code></td></tr>
+<tr><td>Constantes compartidas</td><td>Un archivo propio</td><td><code>constants.js</code></td></tr>
+<tr><td>Pruebas</td><td>Carpeta <code>tests</code> o sufijo <code>.test.js</code></td><td><code>cartService.test.js</code></td></tr>
+<tr><td>Configuración de herramientas</td><td>En la raíz del proyecto</td><td><code>eslint.config.mjs</code>, <code>.prettierrc</code></td></tr>
+</tbody></table></div>
+<div class="callout warn"><div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg> Importante: convención del equipo</div><p>Las guías de Google y Airbnb definen sobre todo el código dentro del archivo. La estructura de carpetas y los nombres de archivo de arriba son una <strong>convención de equipo</strong> habitual en proyectos con Node.js y React: puedes adaptarla, pero documenta lo que decidas.</p></div><div class="fa-take"><strong>Qué te llevas para tu informe EV02:</strong> un árbol de carpetas de tu proyecto con la regla de nombres de archivos, y una frase que explique por qué ayuda al equipo.</div>
+      </div>
+    </section>
+
+
+    <section class="slide-section" id="slide-10">
+      <div class="slide-container">
+        <span class="slide-badge-category badge-blue"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="M7 21h10"/><path d="M12 3v18"/><path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"/></svg> Bloque 2 · Comparación entre plataformas</span>
+        <h2 class="slide-title">Nombrado por tipo de elemento: JavaScript, Java y PHP</h2>
+        <p class="slide-subtitle">Tu plataforma de desarrollo decide el estándar. Aquí tienes las tres más relevantes para esta ficha: JavaScript (TechStore Pro), Java (la AA2 usa desarrollo de aplicaciones web con Java) y PHP.</p>
+<div class="table-container-card"><table class="table-comparativa"><thead><tr><th>Elemento</th><th>JavaScript</th><th>Java</th><th>PHP</th></tr></thead><tbody>
+<tr><td><strong>Variables locales</strong></td><td><code>camelCase</code></td><td><code>lowerCamelCase</code></td><td>Sin regla en PSR-1; se usa <code>$camelCase</code> y se mantiene en todo el proyecto</td></tr>
+<tr><td><strong>Constantes</strong></td><td><code>CONSTANT_CASE</code></td><td><code>UPPER_SNAKE_CASE</code></td><td>Mayúsculas con guion bajo (PSR-1)</td></tr>
+<tr><td><strong>Funciones o métodos</strong></td><td><code>lowerCamelCase</code></td><td><code>lowerCamelCase</code></td><td><code>camelCase()</code> (PSR-1)</td></tr>
+<tr><td><strong>Clases</strong></td><td><code>UpperCamelCase</code></td><td><code>UpperCamelCase</code></td><td><code>StudlyCaps</code> (PSR-1)</td></tr>
+<tr><td><strong>Paquetes o espacios de nombres</strong></td><td><code>lowerCamelCase</code> (Google)</td><td>Minúsculas, sin guion bajo</td><td><code>Vendor\Paquete</code>, con carga automática PSR-4</td></tr>
+<tr><td><strong>Indentación</strong></td><td>2 espacios</td><td>2 espacios (Google)</td><td>4 espacios (PSR-12)</td></tr>
+<tr><td><strong>Documentación</strong></td><td>JSDoc</td><td>Javadoc</td><td>PHPDoc</td></tr>
+<tr><td><strong>Guía de referencia</strong></td><td>Google JS y Airbnb</td><td>Google Java Style Guide</td><td>PSR-1 y PSR-12</td></tr>
+</tbody></table></div>
+<div class="s5-cmp s5-cmp3"><div class="code-editor-box"><div class="editor-header"><div class="editor-dot r"></div><div class="editor-dot y"></div><div class="editor-dot g"></div><div class="editor-title"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span>CartService.java</span></div><div class="editor-badge">JAVA</div></div><div class="editor-body"><div class="cl"><span class="ln">1</span><span class="code">package com.techstore.cart;</span></div>
+<div class="cl"><span class="ln">2</span><span class="code"></span></div>
+<div class="cl"><span class="ln">3</span><span class="code"><span class="syn-keyword">public</span> <span class="syn-keyword">class</span> CartService {</span></div>
+<div class="cl"><span class="ln">4</span><span class="code">  <span class="syn-keyword">private</span> <span class="syn-keyword">static</span> <span class="syn-keyword">final</span> <span class="syn-keyword">double</span> IVA_RATE = <span class="syn-num">0.19</span>;</span></div>
+<div class="cl"><span class="ln">5</span><span class="code">  <span class="syn-keyword">private</span> <span class="syn-keyword">double</span> subtotal;</span></div>
+<div class="cl"><span class="ln">6</span><span class="code"></span></div>
+<div class="cl"><span class="ln">7</span><span class="code">  <span class="syn-keyword">public</span> <span class="syn-keyword">double</span> calculateTotal(<span class="syn-keyword">double</span> unitPrice, <span class="syn-keyword">int</span> quantity) {</span></div>
+<div class="cl"><span class="ln">8</span><span class="code">    subtotal = unitPrice * quantity;</span></div>
+<div class="cl"><span class="ln">9</span><span class="code">    <span class="syn-keyword">return</span> subtotal * (<span class="syn-num">1</span> + IVA_RATE);</span></div>
+<div class="cl"><span class="ln">10</span><span class="code">  }</span></div>
+<div class="cl"><span class="ln">11</span><span class="code">}</span></div></div></div><div class="code-editor-box"><div class="editor-header"><div class="editor-dot r"></div><div class="editor-dot y"></div><div class="editor-dot g"></div><div class="editor-title"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span>CartService.php</span></div><div class="editor-badge">PHP</div></div><div class="editor-body"><div class="cl"><span class="ln">1</span><span class="code">&lt;?php</span></div>
+<div class="cl"><span class="ln">2</span><span class="code"><span class="syn-keyword">declare</span>(strict_types=<span class="syn-num">1</span>);</span></div>
+<div class="cl"><span class="ln">3</span><span class="code"></span></div>
+<div class="cl"><span class="ln">4</span><span class="code"><span class="syn-keyword">namespace</span> TechStore\Cart;</span></div>
+<div class="cl"><span class="ln">5</span><span class="code"></span></div>
+<div class="cl"><span class="ln">6</span><span class="code"><span class="syn-keyword">class</span> CartService</span></div>
+<div class="cl"><span class="ln">7</span><span class="code">{</span></div>
+<div class="cl"><span class="ln">8</span><span class="code">    <span class="syn-keyword">private</span> <span class="syn-keyword">const</span> IVA_RATE = <span class="syn-num">0.19</span>;</span></div>
+<div class="cl"><span class="ln">9</span><span class="code"></span></div>
+<div class="cl"><span class="ln">10</span><span class="code">    <span class="syn-keyword">public</span> <span class="syn-keyword">function</span> calculateTotal(float $unitPrice, <span class="syn-keyword">int</span> $quantity): float</span></div>
+<div class="cl"><span class="ln">11</span><span class="code">    {</span></div>
+<div class="cl"><span class="ln">12</span><span class="code">        $subtotal = $unitPrice * $quantity;</span></div>
+<div class="cl"><span class="ln">13</span><span class="code">        <span class="syn-keyword">return</span> $subtotal * (<span class="syn-num">1</span> + self::IVA_RATE);</span></div>
+<div class="cl"><span class="ln">14</span><span class="code">    }</span></div>
+<div class="cl"><span class="ln">15</span><span class="code">}</span></div></div></div></div>
+<div class="callout warn"><div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg> Cuidado con las guías antiguas</div><p>Las «Code Conventions for the Java Programming Language» de Oracle son un documento histórico; hoy la mayoría de equipos usa la guía de Google u otra más reciente. Elige una, cítala y no mezcles reglas de varias.</p></div><div class="fa-take"><strong>Qué te llevas para tu informe EV02:</strong> en tu informe usa la columna de tu plataforma. Si eliges JavaScript, cita Google o Airbnb; si eliges Java, Google Java Style Guide; si eliges PHP, PSR-1 y PSR-12.</div>
+      </div>
+    </section>
+
+
+    <section class="slide-section" id="slide-11">
+      <div class="slide-container">
+        <span class="slide-badge-category badge-green"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></svg> Bloque 3 · Herramientas que hacen cumplir el estándar</span>
+        <h2 class="slide-title">Linter y formateador: que la máquina revise lo que las personas olvidan</h2>
+        <p class="slide-subtitle">Un estándar escrito en un documento se olvida. Un estándar que una herramienta revisa cada vez que guardas o haces commit se cumple.</p>
+<div class="diagram-card">
+<svg viewBox="0 0 900 190" role="img" aria-label="Flujo: escribes código, Prettier lo formatea, ESLint lo revisa y haces commit con Git" xmlns="http://www.w3.org/2000/svg" font-family="Plus Jakarta Sans, Arial, sans-serif" style="width:100%;height:auto;display:block">
+<defs><marker id="s5a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0 10 5 0 10z" fill="#236b00"/></marker></defs>
+<rect x="20" y="40" width="190" height="90" rx="14" fill="#f0fdf4" stroke="#39a900" stroke-width="2.5"/>
+<text x="115" y="78" text-anchor="middle" font-size="16" font-weight="800" fill="#236b00">1. Escribes</text>
+<text x="115" y="104" text-anchor="middle" font-size="13" fill="#475569">tu código en el editor</text>
+<rect x="250" y="40" width="190" height="90" rx="14" fill="#eff6ff" stroke="#0284c7" stroke-width="2.5"/>
+<text x="345" y="78" text-anchor="middle" font-size="16" font-weight="800" fill="#0369a1">2. Prettier</text>
+<text x="345" y="104" text-anchor="middle" font-size="13" fill="#475569">arregla el formato</text>
+<rect x="480" y="40" width="190" height="90" rx="14" fill="#fff7ed" stroke="#ff6b00" stroke-width="2.5"/>
+<text x="575" y="78" text-anchor="middle" font-size="16" font-weight="800" fill="#c2410c">3. ESLint</text>
+<text x="575" y="104" text-anchor="middle" font-size="13" fill="#475569">avisa errores y nombres</text>
+<rect x="710" y="40" width="170" height="90" rx="14" fill="#f0fdf4" stroke="#39a900" stroke-width="2.5"/>
+<text x="795" y="78" text-anchor="middle" font-size="16" font-weight="800" fill="#236b00">4. Git</text>
+<text x="795" y="104" text-anchor="middle" font-size="13" fill="#475569">commit y push limpios</text>
+<line x1="212" y1="85" x2="246" y2="85" stroke="#236b00" stroke-width="3" marker-end="url(#s5a)"/>
+<line x1="442" y1="85" x2="476" y2="85" stroke="#236b00" stroke-width="3" marker-end="url(#s5a)"/>
+<line x1="672" y1="85" x2="706" y2="85" stroke="#236b00" stroke-width="3" marker-end="url(#s5a)"/>
+<text x="450" y="165" text-anchor="middle" font-size="14" font-weight="800" fill="#334155">El estándar deja de depender de la memoria de las personas</text>
+</svg></div>
+<div class="table-container-card"><table class="table-comparativa"><thead><tr><th>Plataforma</th><th>Formateador</th><th>Linter o verificador de estilo</th><th>Qué revisan</th></tr></thead><tbody>
+<tr><td><strong>JavaScript / Node.js / React</strong></td><td><strong>Prettier</strong></td><td><strong>ESLint</strong></td><td>Prettier: comillas, espacios, saltos de línea. ESLint: <code>var</code>, nombres, variables sin usar, errores probables</td></tr>
+<tr><td><strong>Java</strong></td><td>google-java-format</td><td>Checkstyle</td><td>Reglas de la Google Java Style Guide (nombres, Javadoc, llaves)</td></tr>
+<tr><td><strong>PHP</strong></td><td>PHP-CS-Fixer o PHP_CodeSniffer (phpcbf)</td><td>PHP_CodeSniffer (phpcs)</td><td>Cumplimiento de PSR-12 y PSR-1</td></tr>
+</tbody></table></div>
+<div class="callout"><div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg> Diferencia entre linter y formateador</div><p>El <strong>formateador</strong> reescribe el aspecto del código (espacios, comillas). El <strong>linter</strong> analiza el código y avisa de errores y de reglas rotas (por ejemplo, un nombre que no está en <code>camelCase</code>). Se usan juntos.</p></div><div class="callout"><div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg> Dónde entra Git</div><p>Estas herramientas se guardan en el repositorio (<code>package.json</code>, <code>eslint.config.mjs</code>, <code>.prettierrc</code>). Así todo el equipo, al hacer <code>git pull</code>, recibe las mismas reglas. Es una buena razón para conectar este tema con tu informe de versionamiento.</p></div><div class="fa-take"><strong>Qué te llevas para tu informe EV02:</strong> una tabla corta con la herramienta de tu plataforma que verifica el estándar y qué revisa. Esto cuenta como herramienta de desarrollo en tu informe.</div>
+      </div>
+    </section>
+
+
+    <section class="slide-section" id="slide-12">
+      <div class="slide-container">
+        <span class="slide-badge-category badge-green"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg> Bloque 3 · Demo en vivo</span>
+        <h2 class="slide-title">Demo: configura ESLint y Prettier en TechStore Pro</h2>
+        <p class="slide-subtitle">Vas a dejar un proyecto de práctica que avisa cuando rompes el estándar y que se formatea solo. Cada comando y cada archivo se explican abajo.</p>
+<h3 class="s13-h">Paso 0 · Instalación de Node.js (si no lo tienes)</h3><p class="slide-subtitle">Node.js incluye <code>npm</code>. En Windows usa <code>winget</code> o el instalador LTS de nodejs.org; en macOS, el instalador o <code>brew install node</code>; en Linux, el paquete de tu distribución o nvm. Después abre una terminal nueva.</p><div class="code-editor-box"><div class="editor-header"><div class="editor-dot r"></div><div class="editor-dot y"></div><div class="editor-dot g"></div><div class="editor-title"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span>instalar_node.ps1</span></div><div class="editor-badge">POWERSHELL</div></div><div class="editor-body"><div class="cl"><span class="ln">1</span><span class="code"><span class="syn-comment"># Windows: instala Node.js LTS (alternativa al instalador de nodejs.org)</span></span></div>
+<div class="cl"><span class="ln">2</span><span class="code"><span class="syn-method">winget install -e --id OpenJS.NodeJS.LTS</span></span></div></div></div>
+<div class="cmd-explain"><h3 class="s13-h">Qué hace cada comando</h3><div class="table-container-card"><table class="table-comparativa"><thead><tr><th>Comando</th><th>Qué hace</th><th>Cómo se lee, parte por parte</th></tr></thead><tbody>
+<tr><td><code>winget install -e --id OpenJS.NodeJS.LTS</code></td><td>Instala Node.js (versión LTS, la de soporte largo) desde el administrador de paquetes de Windows.</td><td><code>winget</code> = el administrador de paquetes de Windows<br><code>install</code> = instalar un programa<br><code>-e</code> = coincidencia exacta del identificador<br><code>--id OpenJS.NodeJS.LTS</code> = el programa exacto: Node.js LTS</td></tr></tbody></table></div></div>
+
+
+
+<div class="code-editor-box"><div class="editor-header"><div class="editor-dot r"></div><div class="editor-dot y"></div><div class="editor-dot g"></div><div class="editor-title"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span>preparar_proyecto.sh</span></div><div class="editor-badge">TERMINAL</div></div><div class="editor-body"><div class="cl"><span class="ln">1</span><span class="code"><span class="syn-comment"># Paso 0: comprueba que tienes Node.js y npm</span></span></div>
+<div class="cl"><span class="ln">2</span><span class="code"><span class="syn-method">node --version</span></span></div>
+<div class="cl"><span class="ln">3</span><span class="code"><span class="syn-method">npm --version</span></span></div>
+<div class="cl"><span class="ln">4</span><span class="code"><span class="syn-comment"># Crea la carpeta del proyecto y su package.json</span></span></div>
+<div class="cl"><span class="ln">5</span><span class="code"><span class="syn-method">mkdir techstore-pro</span></span></div>
+<div class="cl"><span class="ln">6</span><span class="code"><span class="syn-method">cd techstore-pro</span></span></div>
+<div class="cl"><span class="ln">7</span><span class="code"><span class="syn-method">npm init -y</span></span></div>
+<div class="cl"><span class="ln">8</span><span class="code"><span class="syn-comment"># Instala ESLint y Prettier solo para desarrollo</span></span></div>
+<div class="cl"><span class="ln">9</span><span class="code"><span class="syn-method">npm install --save-dev eslint @eslint/js globals prettier</span></span></div></div></div>
+<div class="cmd-explain"><h3 class="s13-h">Qué hace cada comando</h3><div class="table-container-card"><table class="table-comparativa"><thead><tr><th>Comando</th><th>Qué hace</th><th>Cómo se lee, parte por parte</th></tr></thead><tbody>
+<tr><td><code>node --version</code></td><td>Muestra la versión de Node.js instalada. Si responde, Node.js está instalado y la terminal lo encuentra.</td><td><code>node</code> = el programa que ejecuta JavaScript fuera del navegador<br><code>--version</code> = pide que muestre su versión</td></tr><tr><td><code>npm --version</code></td><td>Muestra la versión de npm, el administrador de paquetes que viene con Node.js.</td><td><code>npm</code> = node package manager: instala y administra librerías<br><code>--version</code> = pide que muestre su versión</td></tr><tr><td><code>mkdir techstore-pro</code></td><td>Crea una carpeta nueva con ese nombre en la ubicación donde estás.</td><td><code>mkdir</code> = make directory: crear carpeta<br><code>techstore-pro</code> = el nombre de la carpeta que se crea</td></tr><tr><td><code>cd techstore-pro</code></td><td>Entra a la carpeta indicada. Desde ahí se ejecutarán los siguientes comandos.</td><td><code>cd</code> = change directory: cambiar de carpeta<br><code>techstore-pro</code> = la carpeta a la que entras</td></tr><tr><td><code>npm init -y</code></td><td>Crea el archivo package.json con valores por defecto: es la ficha del proyecto Node.js.</td><td><code>npm init</code> = iniciar un proyecto Node.js<br><code>-y</code> = responde «sí» a todas las preguntas con valores por defecto</td></tr><tr><td><code>npm install --save-dev eslint @eslint/js globals prettier</code></td><td>Descarga ESLint, Prettier y dos paquetes de apoyo, y los anota como dependencias de desarrollo en package.json.</td><td><code>npm install</code> = instalar paquetes<br><code>--save-dev</code> = solo para desarrollar; no forman parte del programa final<br><code>eslint</code> = el linter<br><code>@eslint/js</code> = las reglas base que usa nuestra configuración<br><code>globals</code> = lista de variables globales de Node.js<br><code>prettier</code> = el formateador</td></tr></tbody></table></div></div>
+
+
+
+<h3 class="s13-h">Archivos de configuración</h3><p class="slide-subtitle">ESLint 9 usa el archivo <code>eslint.config.mjs</code> (configuración «flat»). Las reglas <code>camelcase</code>, <code>no-var</code>, <code>prefer-const</code>, <code>eqeqeq</code> y <code>new-cap</code> son reglas incluidas en ESLint.</p><div class="code-editor-box"><div class="editor-header"><div class="editor-dot r"></div><div class="editor-dot y"></div><div class="editor-dot g"></div><div class="editor-title"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span>eslint.config.mjs</span></div><div class="editor-badge">JAVASCRIPT</div></div><div class="editor-body"><div class="cl"><span class="ln">1</span><span class="code"><span class="syn-keyword">import</span> js <span class="syn-keyword">from</span> <span class="syn-str">'@eslint/js'</span>;</span></div>
+<div class="cl"><span class="ln">2</span><span class="code"><span class="syn-keyword">import</span> globals <span class="syn-keyword">from</span> <span class="syn-str">'globals'</span>;</span></div>
+<div class="cl"><span class="ln">3</span><span class="code"></span></div>
+<div class="cl"><span class="ln">4</span><span class="code"><span class="syn-keyword">export</span> <span class="syn-keyword">default</span> [</span></div>
+<div class="cl"><span class="ln">5</span><span class="code">  js.configs.recommended,</span></div>
+<div class="cl"><span class="ln">6</span><span class="code">  {</span></div>
+<div class="cl"><span class="ln">7</span><span class="code">    languageOptions: { globals: globals.node },</span></div>
+<div class="cl"><span class="ln">8</span><span class="code">    rules: {</span></div>
+<div class="cl"><span class="ln">9</span><span class="code">      camelcase: <span class="syn-str">'error'</span>,</span></div>
+<div class="cl"><span class="ln">10</span><span class="code">      <span class="syn-str">'no-var'</span>: <span class="syn-str">'error'</span>,</span></div>
+<div class="cl"><span class="ln">11</span><span class="code">      <span class="syn-str">'prefer-const'</span>: <span class="syn-str">'error'</span>,</span></div>
+<div class="cl"><span class="ln">12</span><span class="code">      eqeqeq: <span class="syn-str">'error'</span>,</span></div>
+<div class="cl"><span class="ln">13</span><span class="code">      <span class="syn-str">'new-cap'</span>: <span class="syn-str">'error'</span>,</span></div>
+<div class="cl"><span class="ln">14</span><span class="code">    },</span></div>
+<div class="cl"><span class="ln">15</span><span class="code">  },</span></div>
+<div class="cl"><span class="ln">16</span><span class="code">];</span></div></div></div>
+<div class="code-editor-box"><div class="editor-header"><div class="editor-dot r"></div><div class="editor-dot y"></div><div class="editor-dot g"></div><div class="editor-title"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span>.prettierrc</span></div><div class="editor-badge">JSON</div></div><div class="editor-body"><div class="cl"><span class="ln">1</span><span class="code">{</span></div>
+<div class="cl"><span class="ln">2</span><span class="code">  <span class="syn-str">"singleQuote"</span>: <span class="syn-keyword">true</span>,</span></div>
+<div class="cl"><span class="ln">3</span><span class="code">  <span class="syn-str">"semi"</span>: <span class="syn-keyword">true</span>,</span></div>
+<div class="cl"><span class="ln">4</span><span class="code">  <span class="syn-str">"tabWidth"</span>: <span class="syn-num">2</span>,</span></div>
+<div class="cl"><span class="ln">5</span><span class="code">  <span class="syn-str">"printWidth"</span>: <span class="syn-num">80</span></span></div>
+<div class="cl"><span class="ln">6</span><span class="code">}</span></div></div></div>
+<div class="table-container-card"><table class="table-comparativa"><thead><tr><th>Archivo</th><th>Para qué sirve</th><th>Qué hace cada parte</th></tr></thead><tbody>
+<tr><td><code>eslint.config.mjs</code></td><td>Define las reglas de ESLint</td><td><code>js.configs.recommended</code> = reglas base; <code>camelcase</code> = nombres en camelCase; <code>no-var</code> = prohíbe <code>var</code>; <code>prefer-const</code> = exige <code>const</code> si no cambia; <code>eqeqeq</code> = exige <code>===</code>; <code>new-cap</code> = las clases se escriben con mayúscula inicial</td></tr>
+<tr><td><code>.prettierrc</code></td><td>Define el formato</td><td><code>singleQuote</code> = comillas simples; <code>semi</code> = punto y coma; <code>tabWidth</code> = 2 espacios; <code>printWidth</code> = 80 columnas</td></tr>
+</tbody></table></div>
+<h3 class="s13-h">Ejecuta las herramientas</h3><div class="code-editor-box"><div class="editor-header"><div class="editor-dot r"></div><div class="editor-dot y"></div><div class="editor-dot g"></div><div class="editor-title"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span>revisar_codigo.sh</span></div><div class="editor-badge">TERMINAL</div></div><div class="editor-body"><div class="cl"><span class="ln">1</span><span class="code"><span class="syn-comment"># Revisa el código con ESLint</span></span></div>
+<div class="cl"><span class="ln">2</span><span class="code"><span class="syn-method">npx eslint .</span></span></div>
+<div class="cl"><span class="ln">3</span><span class="code"><span class="syn-comment"># Corrige lo que ESLint puede arreglar solo</span></span></div>
+<div class="cl"><span class="ln">4</span><span class="code"><span class="syn-method">npx eslint . --fix</span></span></div>
+<div class="cl"><span class="ln">5</span><span class="code"><span class="syn-comment"># Comprueba el formato sin cambiar nada</span></span></div>
+<div class="cl"><span class="ln">6</span><span class="code"><span class="syn-method">npx prettier . --check</span></span></div>
+<div class="cl"><span class="ln">7</span><span class="code"><span class="syn-comment"># Aplica el formato a todos los archivos</span></span></div>
+<div class="cl"><span class="ln">8</span><span class="code"><span class="syn-method">npx prettier . --write</span></span></div></div></div>
+<div class="cmd-explain"><h3 class="s13-h">Qué hace cada comando</h3><div class="table-container-card"><table class="table-comparativa"><thead><tr><th>Comando</th><th>Qué hace</th><th>Cómo se lee, parte por parte</th></tr></thead><tbody>
+<tr><td><code>npx eslint .</code></td><td>Revisa con ESLint todos los archivos JavaScript del proyecto y lista las reglas rotas.</td><td><code>npx</code> = ejecuta un programa instalado en el proyecto<br><code>eslint</code> = el linter<br><code>.</code> = la carpeta actual: revisa todo el proyecto</td></tr><tr><td><code>npx eslint . --fix</code></td><td>Igual que el anterior, pero corrige solo lo que ESLint puede arreglar de forma segura.</td><td><code>npx eslint .</code> = revisar el proyecto<br><code>--fix</code> = aplicar las correcciones automáticas posibles</td></tr><tr><td><code>npx prettier . --check</code></td><td>Comprueba si los archivos cumplen el formato, sin modificar nada. Sirve para verificar.</td><td><code>npx prettier</code> = ejecuta el formateador<br><code>.</code> = todo el proyecto<br><code>--check</code> = solo comprobar; no cambia archivos</td></tr><tr><td><code>npx prettier . --write</code></td><td>Reescribe los archivos con el formato definido en .prettierrc.</td><td><code>npx prettier .</code> = formateador sobre todo el proyecto<br><code>--write</code> = guardar los cambios en los archivos</td></tr></tbody></table></div></div>
+
+
+
+<div class="code-editor-box"><div class="editor-header"><div class="editor-dot r"></div><div class="editor-dot y"></div><div class="editor-dot g"></div><div class="editor-title"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span>guardar_configuracion.sh</span></div><div class="editor-badge">GIT</div></div><div class="editor-body"><div class="cl"><span class="ln">1</span><span class="code"><span class="syn-comment"># Guarda la configuración en el repositorio (no subas node_modules)</span></span></div>
+<div class="cl"><span class="ln">2</span><span class="code"><span class="syn-method">git add package.json eslint.config.mjs .prettierrc</span></span></div>
+<div class="cl"><span class="ln">3</span><span class="code"><span class="syn-method">git commit -m "chore: agrega ESLint y Prettier"</span></span></div>
+<div class="cl"><span class="ln">4</span><span class="code"><span class="syn-method">git push</span></span></div></div></div>
+<div class="cmd-explain"><h3 class="s13-h">Qué hace cada comando</h3><div class="table-container-card"><table class="table-comparativa"><thead><tr><th>Comando</th><th>Qué hace</th><th>Cómo se lee, parte por parte</th></tr></thead><tbody>
+<tr><td><code>git add package.json eslint.config.mjs .prettierrc</code></td><td>Prepara esos archivos para el próximo commit (los pasa al staging).</td><td><code>git add</code> = agregar al área de preparación<br><code>package.json eslint.config.mjs .prettierrc</code> = los tres archivos de configuración, separados por espacios</td></tr><tr><td><code>git commit -m &quot;chore: agrega ESLint y Prettier&quot;</code></td><td>Guarda una versión con lo que preparaste, con un mensaje que explica el cambio. Queda solo en tu equipo.</td><td><code>commit</code> = guardar una versión<br><code>-m</code> = incluir el mensaje en el mismo comando<br><code>&quot;chore: agrega ESLint y Prettier&quot;</code> = el mensaje: tipo «chore» (tarea de mantenimiento) y qué se hizo</td></tr><tr><td><code>git push</code></td><td>Sube tus commits al repositorio remoto configurado en GitHub.</td><td><code>git push</code> = enviar commits al remoto que ya dejaste configurado con -u</td></tr></tbody></table></div></div>
+
+
+
+<div class="callout warn"><div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg> Errores frecuentes</div><p>Ejecutar <code>npx</code> fuera de la carpeta del proyecto; olvidar abrir una terminal nueva después de instalar Node.js; subir la carpeta <code>node_modules</code> a GitHub (agrégala a <code>.gitignore</code>); y no guardar los archivos de configuración en el repositorio.</p></div><div class="fa-take"><strong>Qué te llevas para tu informe EV02:</strong> un pantallazo de <code>npx eslint .</code> mostrando una regla rota, otro con el código corregido y la mención de los archivos de configuración.</div>
+      </div>
+    </section>
+
+
+    <section class="slide-section" id="slide-13">
+      <div class="slide-container">
+        <span class="slide-badge-category badge-green"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg> Bloque 3 · Ejemplo completo «mal vs bien»</span>
+        <h2 class="slide-title">Ejemplo completo: el mismo cálculo de carrito, sin y con estándar</h2>
+        <p class="slide-subtitle">Las dos versiones calculan lo mismo. Una es difícil de leer y de mantener; la otra aplica todo lo que viste hoy.</p>
+<h3 class="s13-h">Sin estándar</h3><div class="code-editor-box"><div class="editor-header"><div class="editor-dot r"></div><div class="editor-dot y"></div><div class="editor-dot g"></div><div class="editor-title"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span>carrito_mal.js</span></div><div class="editor-badge">JAVASCRIPT</div></div><div class="editor-body"><div class="cl"><span class="ln">1</span><span class="code"><span class="syn-keyword">var</span> iva=<span class="syn-num">0.19</span></span></div>
+<div class="cl"><span class="ln">2</span><span class="code"><span class="syn-keyword">function</span> calc(l){</span></div>
+<div class="cl"><span class="ln">3</span><span class="code"><span class="syn-keyword">var</span> t=<span class="syn-num">0</span></span></div>
+<div class="cl"><span class="ln">4</span><span class="code"><span class="syn-keyword">for</span>(<span class="syn-keyword">var</span> i=<span class="syn-num">0</span>;i&lt;l.length;i++){t=t+l[i].p*l[i].q}</span></div>
+<div class="cl"><span class="ln">5</span><span class="code"><span class="syn-keyword">return</span> t+t*iva}</span></div></div></div><h3 class="s13-h">Con estándar</h3><div class="code-editor-box"><div class="editor-header"><div class="editor-dot r"></div><div class="editor-dot y"></div><div class="editor-dot g"></div><div class="editor-title"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span>carrito_bien.js</span></div><div class="editor-badge">JAVASCRIPT</div></div><div class="editor-body"><div class="cl"><span class="ln">1</span><span class="code"><span class="syn-keyword">const</span> IVA_RATE = <span class="syn-num">0.19</span>;</span></div>
+<div class="cl"><span class="ln">2</span><span class="code"></span></div>
+<div class="cl"><span class="ln">3</span><span class="code"><span class="syn-comment">/**</span></span></div>
+<div class="cl"><span class="ln">4</span><span class="code"><span class="syn-comment"> * Calcula el total de un carrito con IVA.</span></span></div>
+<div class="cl"><span class="ln">5</span><span class="code"><span class="syn-comment"> * @param {Array&lt;{price: number, quantity: number}&gt;} items</span></span></div>
+<div class="cl"><span class="ln">6</span><span class="code"><span class="syn-comment"> * @returns {number} Total con IVA.</span></span></div>
+<div class="cl"><span class="ln">7</span><span class="code"><span class="syn-comment"> */</span></span></div>
+<div class="cl"><span class="ln">8</span><span class="code"><span class="syn-keyword">function</span> calculateCartTotal(items) {</span></div>
+<div class="cl"><span class="ln">9</span><span class="code">  <span class="syn-keyword">if</span> (!Array.isArray(items)) {</span></div>
+<div class="cl"><span class="ln">10</span><span class="code">    <span class="syn-keyword">throw</span> <span class="syn-keyword">new</span> TypeError(<span class="syn-str">'items debe ser un arreglo'</span>);</span></div>
+<div class="cl"><span class="ln">11</span><span class="code">  }</span></div>
+<div class="cl"><span class="ln">12</span><span class="code">  <span class="syn-keyword">let</span> subtotal = <span class="syn-num">0</span>;</span></div>
+<div class="cl"><span class="ln">13</span><span class="code">  <span class="syn-keyword">for</span> (<span class="syn-keyword">const</span> item <span class="syn-keyword">of</span> items) {</span></div>
+<div class="cl"><span class="ln">14</span><span class="code">    subtotal += item.price * item.quantity;</span></div>
+<div class="cl"><span class="ln">15</span><span class="code">  }</span></div>
+<div class="cl"><span class="ln">16</span><span class="code">  <span class="syn-keyword">return</span> subtotal * (<span class="syn-num">1</span> + IVA_RATE);</span></div>
+<div class="cl"><span class="ln">17</span><span class="code">}</span></div></div></div><div class="table-container-card"><table class="table-comparativa"><thead><tr><th>Qué cambió</th><th>Regla del estándar</th><th>Dónde la viste</th></tr></thead><tbody>
+<tr><td><code>iva</code> pasó a <code>IVA_RATE</code></td><td>Constantes en mayúsculas con guion bajo</td><td>Slide 4</td></tr>
+<tr><td><code>var</code> pasó a <code>const</code> y <code>let</code></td><td>Nunca <code>var</code></td><td>Slide 4</td></tr>
+<tr><td><code>calc(l)</code> pasó a <code>calculateCartTotal(items)</code></td><td>Verbo + objeto, nombres completos</td><td>Slide 6</td></tr>
+<tr><td>Apareció un bloque JSDoc</td><td>Documentar funciones públicas</td><td>Slide 7</td></tr>
+<tr><td>Cada sentencia en su línea, 2 espacios, punto y coma</td><td>Indentación y formato</td><td>Slide 8</td></tr>
+<tr><td>Se valida la entrada y se lanza <code>TypeError</code></td><td>Manejo de errores con mensaje claro</td><td>Esta slide</td></tr>
+</tbody></table></div>
+<div class="callout"><div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg> Manejo de errores también es estándar</div><p>Define qué hace el equipo ante un dato inválido: lanzar un error con un mensaje claro (<code>throw new TypeError(...)</code>) en vez de devolver un valor extraño. Escríbelo en tu informe como una regla más.</p></div><div class="fa-take"><strong>Qué te llevas para tu informe EV02:</strong> usa este tipo de ejemplo completo en tu informe: el mismo fragmento con y sin estándar, y una tabla de qué regla se aplicó.</div>
+      </div>
+    </section>
+
+
+    <section class="slide-section" id="slide-14">
+      <div class="slide-container">
+        <span class="slide-badge-category badge-orange"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> Bloque 4 · Estructura del informe EV02</span>
+        <h2 class="slide-title">Cómo organizas tu informe de estándares de codificación</h2>
+        <p class="slide-subtitle">Esta es tu hoja de ruta. Incluye lo que pide la guía y, en las secciones 1.x, lo que pide el instrumento de evaluación.</p>
+<ol class="steps-list"><li><strong>Portada.</strong> Título, tu nombre, ficha 3389010, programa (Análisis y Desarrollo de Software), instructor, centro (SENA Regional Huila, CADPH Garzón), código GA7-220501096-AA1-EV02 y fecha.</li><li><strong>Introducción.</strong> Qué es un estándar de codificación y por qué lo necesita tu proyecto (ver <a href="#slide-03" style="color:var(--azul-tech-dark);font-weight:700;">slide 3</a>).</li><li><strong>Objetivo.</strong> Una frase en infinitivo: definir los estándares de codificación de [tu proyecto] según las reglas de [tu plataforma].</li><li><strong>1. Plataforma y herramientas.</strong> 1.1 Plataforma de desarrollo elegida y por qué. 1.2 Herramientas de desarrollo (editor, Node.js, ESLint, Prettier). 1.3 Versionamiento local y remoto: en qué se diferencian. 1.4 Herramientas de versionamiento (Git y GitHub). Indicadores 1, 2 y 3.</li><li><strong>2. Estándares de codificación.</strong> 2.1 Variables y constantes. 2.2 Clases. 2.3 Métodos y funciones. 2.4 Comentarios y documentación. 2.5 Indentación y formato. 2.6 Organización de archivos. 2.7 Manejo de errores. Cada una con su regla y un ejemplo «mal vs bien» (ver <a href="#slide-04" style="color:var(--azul-tech-dark);font-weight:700;">slide 4</a> a <a href="#slide-08" style="color:var(--azul-tech-dark);font-weight:700;">slide 8</a>).</li><li><strong>3. Cumplimiento del estándar.</strong> Qué herramienta revisa cada regla y cómo se ejecuta (ver <a href="#slide-12" style="color:var(--azul-tech-dark);font-weight:700;">slide 12</a>).</li><li><strong>4. Conclusiones.</strong></li><li><strong>5. Referencias.</strong> Las guías que usaste, con su enlace (ver abajo).</li></ol>
+<div class="callout"><div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg> Referencias que puedes citar (verificadas el 24/11/2026)</div><ul><li>Google. (s. f.). Google JavaScript Style Guide. <span style="word-break:break-all">https://google.github.io/styleguide/jsguide.html</span></li><li>Google. (s. f.). Google Java Style Guide. <span style="word-break:break-all">https://google.github.io/styleguide/javaguide.html</span></li><li>Airbnb. (s. f.). Airbnb JavaScript Style Guide. <span style="word-break:break-all">https://github.com/airbnb/javascript</span></li><li>PHP-FIG. (s. f.). PSR-1: Basic Coding Standard. <span style="word-break:break-all">https://www.php-fig.org/psr/psr-1/</span></li><li>PHP-FIG. (s. f.). PSR-12: Extended Coding Style. <span style="word-break:break-all">https://www.php-fig.org/psr/psr-12/</span></li><li>ESLint. (s. f.). Documentación de ESLint. <span style="word-break:break-all">https://eslint.org/docs/latest/</span></li><li>Prettier. (s. f.). Documentación de Prettier. <span style="word-break:break-all">https://prettier.io/docs/</span></li></ul></div><div class="callout"><div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg> Normas básicas de presentación</div><p>Fuente legible (Arial o Calibri 11 o 12), títulos claros, párrafos cortos, código en fuente monoespaciada con numeración de figura y pie, numeración de páginas y ortografía revisada. Si tu centro exige APA para las referencias, aplícala. Exporta siempre a <strong>PDF</strong>.</p></div><div class="fa-take"><strong>Qué te llevas para tu informe EV02:</strong> una tabla de contenido sencilla y los títulos con los mismos nombres de arriba, para que el instructor encuentre cada indicador de inmediato.</div>
+      </div>
+    </section>
+
+
+    <section class="slide-section" id="slide-15">
+      <div class="slide-container">
+        <span class="slide-badge-category badge-orange"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg> Bloque 4 · Ejemplo de redacción</span>
+        <h2 class="slide-title">Ejemplo de redacción: introducción, herramientas y una regla con su ejemplo</h2>
+        <p class="slide-subtitle">Mira cómo suena un texto técnico claro y corto. Úsalo como molde, no lo copies.</p>
+<div class="doc-preview"><span class="doc-tag">Ejemplo · Introducción</span><h4>Introducción</h4><blockquote>"Cuando varias personas programan un mismo software, cada una tiende a escribir el código a su manera. Un estándar de codificación es el conjunto de reglas que el equipo acuerda para nombrar, comentar y dar formato al código, de modo que cualquiera pueda leerlo y mantenerlo. Este informe define los estándares del proyecto TechStore Pro, desarrollado con JavaScript sobre Node.js, tomando como referencia la Google JavaScript Style Guide."</blockquote></div><div class="doc-preview"><span class="doc-tag">Ejemplo · Objetivo</span><h4>Objetivo</h4><blockquote>"Definir los estándares de codificación del proyecto TechStore Pro según las reglas de JavaScript, para que el código del equipo sea legible, consistente y fácil de mantener."</blockquote></div><div class="doc-preview"><span class="doc-tag">Ejemplo · Versionamiento local y remoto (indicador 1)</span><h4>1.3 Versionamiento local y remoto</h4><blockquote>"El versionamiento local ocurre en el equipo del desarrollador: Git guarda el historial de cambios en una carpeta oculta del proyecto y funciona sin internet. El versionamiento remoto ocurre en un servidor: GitHub aloja una copia del repositorio para respaldarla y compartirla con el equipo. Se conectan con comandos como git remote add y git push."</blockquote></div><div class="doc-preview"><span class="doc-tag">Ejemplo · Una regla con su ejemplo (estándares)</span><h4>2.2 Declaración de clases</h4><blockquote>"Las clases se nombran en PascalCase, con sustantivos en singular, y cada clase se guarda en un archivo con su mismo nombre. Por ejemplo, ProductItem se guarda en ProductItem.js. No se aceptan nombres como product_item o pi, porque no indican qué representa la clase."</blockquote><div class="s5-cmp"><div class="code-editor-box"><div class="editor-header"><div class="editor-dot r"></div><div class="editor-dot y"></div><div class="editor-dot g"></div><div class="editor-title"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span>ejemplo_clase_mal.js</span></div><div class="editor-badge">MAL</div></div><div class="editor-body"><div class="cl"><span class="ln">1</span><span class="code"><span class="syn-keyword">class</span> product_item {</span></div>
+<div class="cl"><span class="ln">2</span><span class="code">  <span class="syn-keyword">constructor</span>(n, p) {</span></div>
+<div class="cl"><span class="ln">3</span><span class="code">    <span class="syn-keyword">this</span>.n = n;</span></div>
+<div class="cl"><span class="ln">4</span><span class="code">    <span class="syn-keyword">this</span>.p = p;</span></div>
+<div class="cl"><span class="ln">5</span><span class="code">  }</span></div>
+<div class="cl"><span class="ln">6</span><span class="code">}</span></div>
+<div class="cl"><span class="ln">7</span><span class="code"><span class="syn-keyword">const</span> item = <span class="syn-keyword">new</span> product_item(<span class="syn-str">'Mouse'</span>, <span class="syn-num">45000</span>);</span></div></div></div><div class="code-editor-box"><div class="editor-header"><div class="editor-dot r"></div><div class="editor-dot y"></div><div class="editor-dot g"></div><div class="editor-title"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span>ejemplo_clase_bien.js</span></div><div class="editor-badge">BIEN</div></div><div class="editor-body"><div class="cl"><span class="ln">1</span><span class="code"><span class="syn-keyword">class</span> ProductItem {</span></div>
+<div class="cl"><span class="ln">2</span><span class="code">  <span class="syn-keyword">constructor</span>(name, price) {</span></div>
+<div class="cl"><span class="ln">3</span><span class="code">    <span class="syn-keyword">this</span>.name = name;</span></div>
+<div class="cl"><span class="ln">4</span><span class="code">    <span class="syn-keyword">this</span>.price = price;</span></div>
+<div class="cl"><span class="ln">5</span><span class="code">  }</span></div>
+<div class="cl"><span class="ln">6</span><span class="code">}</span></div>
+<div class="cl"><span class="ln">7</span><span class="code"><span class="syn-keyword">const</span> item = <span class="syn-keyword">new</span> ProductItem(<span class="syn-str">'Mouse'</span>, <span class="syn-num">45000</span>);</span></div></div></div></div><p style="text-align:center;font-size:13px;color:#475569"><strong>Figura 1.</strong> Declaración de clases: ejemplo incorrecto y correcto.</p></div>
+<div class="callout warn"><div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg> Lo que más baja la calidad del informe</div><ul><li>Copiar reglas sin citar la guía de donde salen.</li><li>Ejemplos que no se parecen a tu proyecto.</li><li>No decir qué plataforma elegiste ni por qué.</li><li>Olvidar la portada, la introducción o el objetivo.</li></ul></div><div class="fa-take"><strong>Qué te llevas para tu informe EV02:</strong> este patrón en cada regla: una frase con la regla, el ejemplo «mal vs bien» y el pie de figura.</div>
+      </div>
+    </section>
+
+
+    <section class="slide-section" id="slide-16">
+      <div class="slide-container">
+        <span class="slide-badge-category badge-orange"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="M7 21h10"/><path d="M12 3v18"/><path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"/></svg> Bloque 4 · Instrumento de Evaluación Oficial</span>
+        <h2 class="slide-title">Lo que revisa el instructor: los 4 indicadores oficiales</h2>
+        <p class="slide-subtitle">Esta es la lista de chequeo del instrumento de evaluación de la evidencia GA7-220501096-AA1-EV02. Cada indicador se marca como cumple o no cumple: son tu guía real de calificación.</p>
+<div class="table-container-card"><table class="table-comparativa"><thead><tr><th>N.º</th><th>Indicador (texto del instrumento)</th><th>Cómo lo demuestras en tu informe</th><th>Error frecuente</th><th>Dónde lo aprendes</th></tr></thead><tbody>
+<tr><td><strong>1</strong></td><td><strong>Diferencia con claridad versionamientos locales y remotos.</strong></td><td>Sección 1.3: dos párrafos que explican qué es local (Git en tu equipo, sin internet) y qué es remoto (GitHub), y cómo se conectan</td><td>Describir solo Git o solo GitHub, o decir que son lo mismo</td><td>Slides 11 y 12 y Guía de Estudio, paso 3</td></tr>
+<tr><td><strong>2</strong></td><td><strong>Selecciona y describe herramientas de desarrollo a utilizar, para la codificación del software.</strong></td><td>Sección 1.2: editor, Node.js, npm, ESLint y Prettier, cada uno con para qué lo usas en tu proyecto</td><td>Listar nombres sin explicar para qué sirven</td><td>Slides 11 y 12 y Guía de Estudio, paso 3</td></tr>
+<tr><td><strong>3</strong></td><td><strong>Selecciona y describe herramientas de versionamiento.</strong></td><td>Sección 1.4: Git y GitHub, qué hace cada uno y un comando de ejemplo (<code>git commit</code>, <code>git push</code>)</td><td>No justificar por qué se eligieron o confundir Git con GitHub</td><td>Slide 12 y Sesiones 2 a 4</td></tr>
+<tr><td><strong>4</strong></td><td><strong>Presenta el informe cumpliendo con las normas básicas de presentación de documentos.</strong></td><td>Portada, introducción, objetivo, títulos numerados, figuras con pie, fuente legible, páginas numeradas y PDF final</td><td>Entregar sin portada o sin objetivo, o con código ilegible</td><td>Slide 14 y Guía de Estudio, pasos 7 a 9</td></tr>
+</tbody></table></div>
+<div class="callout"><div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg> Criterios de evaluación del instrumento (texto oficial)</div><ul><li>Interpreta el informe de diseño para definir el plan de trabajo en la construcción del software.</li><li>Selecciona y configura herramientas de desarrollo de acuerdo con las condiciones del software a construir.</li><li>Define estándares de codificación de acuerdo con las reglas de la plataforma de desarrollo seleccionada.</li></ul><p>El resultado de aprendizaje es 220501096-01: planear actividades de construcción del software de acuerdo con el diseño establecido.</p></div><div class="callout warn"><div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg> Nota sobre el instrumento</div><p>Los 4 indicadores de esta lista de chequeo son los mismos de la evidencia EV01 (versionamiento y herramientas) y no mencionan los estándares de codificación, aunque el criterio de evaluación sí los incluye y la guía los pide. Por eso tu informe cubre <strong>los 4 indicadores</strong> (secciones 1.2 a 1.4 y formato) y <strong>los estándares</strong> (sección 2). Tu instructor está confirmando el instrumento; si cambia, lo avisará.</p></div><div class="fa-take"><strong>Qué te llevas para tu informe EV02:</strong> antes de exportar a PDF, revisa tu informe indicador por indicador y pregúntate: "¿el instructor puede marcar Sí con solo leer mi informe?".</div>
+      </div>
+    </section>
+
+
+    <section class="slide-section" id="slide-17">
+      <div class="slide-container">
+        <span class="slide-badge-category badge-green"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg> Bloque 4 · Aseguramiento de Calidad</span>
+        <h2 class="slide-title">Checklist al 100% antes de subir tu evidencia</h2>
+        <p class="slide-subtitle">Marca cada casilla antes de enviar. Tu progreso se guarda en este navegador para que lo retomes cuando quieras.</p>
+<div class="checklist-card"><div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;"><div style="font-family:'Syne',sans-serif;font-size:16px;font-weight:800;color:var(--texto-main);">Progreso de tu evidencia AA1-EV02:</div><div id="checklistScoreText" style="font-family:'JetBrains Mono',monospace;font-size:15px;font-weight:800;color:var(--azul-tech);">0% (0 de 12 ítems)</div></div><div class="checklist-progress-bar-wrap"><div class="checklist-progress-bar" id="checklistBar"></div></div><div class="checklist-items-list"><label class="check-item"><input type="checkbox" class="check-checkbox" data-idx="0"><div class="check-text"><h4>1. Portada completa</h4><p>Título, tu nombre, ficha 3389010, programa, instructor, centro, código GA7-220501096-AA1-EV02 y fecha.</p></div></label>
+<label class="check-item"><input type="checkbox" class="check-checkbox" data-idx="1"><div class="check-text"><h4>2. Introducción y objetivo</h4><p>Explicas qué es un estándar de codificación y tu objetivo en infinitivo.</p></div></label>
+<label class="check-item"><input type="checkbox" class="check-checkbox" data-idx="2"><div class="check-text"><h4>3. Plataforma de desarrollo elegida</h4><p>Dices cuál es y por qué la elegiste (sección 1.1).</p></div></label>
+<label class="check-item"><input type="checkbox" class="check-checkbox" data-idx="3"><div class="check-text"><h4>4. Versionamiento local y remoto diferenciado</h4><p>Explicas la diferencia entre Git y GitHub y cómo se conectan (indicador 1).</p></div></label>
+<label class="check-item"><input type="checkbox" class="check-checkbox" data-idx="4"><div class="check-text"><h4>5. Herramientas de desarrollo descritas</h4><p>Editor, runtime, linter y formateador, cada uno con su función (indicador 2).</p></div></label>
+<label class="check-item"><input type="checkbox" class="check-checkbox" data-idx="5"><div class="check-text"><h4>6. Herramientas de versionamiento descritas</h4><p>Git y GitHub con su función y un comando de ejemplo (indicador 3).</p></div></label>
+<label class="check-item"><input type="checkbox" class="check-checkbox" data-idx="6"><div class="check-text"><h4>7. Estándares de variables, clases y métodos</h4><p>Cada regla con su ejemplo «mal vs bien» (sección 2).</p></div></label>
+<label class="check-item"><input type="checkbox" class="check-checkbox" data-idx="7"><div class="check-text"><h4>8. Comentarios, formato y organización de archivos</h4><p>Reglas y ejemplos del estándar de tu equipo.</p></div></label>
+<label class="check-item"><input type="checkbox" class="check-checkbox" data-idx="8"><div class="check-text"><h4>9. Herramientas que hacen cumplir el estándar</h4><p>ESLint y Prettier (u otras de tu plataforma), con un pantallazo.</p></div></label>
+<label class="check-item"><input type="checkbox" class="check-checkbox" data-idx="9"><div class="check-text"><h4>10. Referencias de las guías oficiales</h4><p>Cada guía citada con su enlace.</p></div></label>
+<label class="check-item"><input type="checkbox" class="check-checkbox" data-idx="10"><div class="check-text"><h4>11. Normas de presentación y ortografía revisadas</h4><p>Fuente legible, títulos consistentes, páginas numeradas y figuras con pie (indicador 4).</p></div></label>
+<label class="check-item"><input type="checkbox" class="check-checkbox" data-idx="11"><div class="check-text"><h4>12. Exportado a PDF y subido a Zajuna</h4><p>Abres el PDF final, confirmas que se ve completo y lo subes al espacio GA7-220501096-AA1-EV02.</p></div></label>
+</div><div style="margin-top:12px;"><button type="button" class="reset-link" onclick="reiniciarChecklist()">Reiniciar checklist</button> <span style="font-size:12px;color:var(--texto-sub);">Tu avance se guarda en este navegador.</span></div></div>
+<h3 class="card-title" style="margin:28px 0 12px 0;">Cómo exportar a PDF y subir a Zajuna</h3><ol class="steps-list"><li><strong>Exporta a PDF.</strong> En Word: Archivo &rarr; Guardar como &rarr; tipo PDF. En Google Docs: Archivo &rarr; Descargar &rarr; Documento PDF. En LibreOffice: Archivo &rarr; Exportar como PDF.</li><li><strong>Nombra el archivo</strong> de forma clara, por ejemplo <code>NOMBRE_APELLIDO_AA1_EV02.pdf</code> (sugerencia; la extensión del documento es libre).</li><li><strong>Ábrelo y revísalo</strong> de principio a fin: portada, código y numeración deben verse completos y legibles.</li><li><strong>Entra a Zajuna</strong>, al área de la actividad AA1 y abre el espacio <em>Definir estándares de codificación, de acuerdo con la plataforma de desarrollo elegida. GA7-220501096-AA1-EV02</em>.</li><li><strong>Adjunta el PDF</strong>, guarda o envía según el botón que muestre la plataforma y confirma que aparece como entregado. Fecha límite: <strong>por confirmar en Zajuna</strong>.</li></ol>
+<div class="btn-row"><a href="./MANUAL_SESION05.html" class="btn-action-primary"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg> Abrir la Guía de Estudio</a><a href="https://julianon2.github.io/seguimiento-adso-3389010/" target="_blank" rel="noopener" class="btn-action-primary" style="background:var(--azul-tech);"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" x2="18" y1="20" y2="10"/><line x1="12" x2="12" y1="20" y2="4"/><line x1="6" x2="6" y1="20" y2="14"/></svg> Dashboard de Seguimiento</a><a href="../explorar.html" class="btn-return-hub"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg> Volver al Hub</a></div>
+      </div>
+    </section>
+
+
+    <section class="slide-section" id="slide-18">
+      <div class="slide-container">
+        <span class="slide-badge-category badge-orange"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" x2="4" y1="22" y2="15"/></svg> Bloque 4 · Cierre de la AA1</span>
+        <h2 class="slide-title">Cierre de AA1: lo que entregaste y lo que sigue</h2>
+        <p class="slide-subtitle">Con la EV02 terminas la actividad AA1 (Configurar herramientas de versionamiento para control de código). Repasa tus cinco evidencias.</p>
+<div class="table-container-card"><table class="table-comparativa"><thead><tr><th>Evidencia</th><th>Qué entregas</th><th>Formato</th><th>Sesión</th></tr></thead><tbody>
+<tr><td><strong>EV01</strong></td><td>Herramientas de versionamiento y de desarrollo (informe)</td><td>Documento</td><td>Sesión 1</td></tr>
+<tr><td><strong>EV03</strong></td><td>Versionamiento local y remoto con comandos básicos de Git</td><td>Documento</td><td>Sesión 2</td></tr>
+<tr><td><strong>EV04</strong></td><td>Instalación y configuración de herramienta de versionamiento (local/web)</td><td>PDF con pantallazos</td><td>Sesión 3</td></tr>
+<tr><td><strong>EV05</strong></td><td>Herramientas de versionamiento (GIT) instalada y configurada</td><td>Video MP4</td><td>Sesión 4</td></tr>
+<tr><td><strong>EV02</strong></td><td>Estándares de codificación según la plataforma de desarrollo</td><td>PDF</td><td>Sesión 5 (hoy)</td></tr>
+</tbody></table></div>
+<div class="callout"><div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg> Antes de la Sesión 6 (entrega de notas)</div><ul><li>Revisa en Zajuna que las cinco evidencias de la AA1 aparezcan como entregadas.</li><li>Confirma la fecha límite de entrega en Zajuna: <strong>por confirmar en Zajuna</strong>.</li><li>Si algo falta, termínalo y escribe por el Foro de Dudas e Inquietudes.</li><li>Ten a la mano tus archivos (PDF y video) por si necesitas volver a subirlos.</li></ul></div><div class="callout"><div class="callout-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg> Qué sigue</div><p>En la <strong>Sesión 6</strong> se entregan las notas y la retroalimentación de las evidencias entregadas. La fecha y la hora las encuentras en el Hub y en el anuncio de esa sesión.</p></div><div class="fa-take"><strong>Qué te llevas para tu informe EV02:</strong> tu informe EV02 cierra la AA1: es la evidencia donde dejas por escrito las reglas con las que vas a programar el resto del proyecto.</div>
+      </div>
+    </section>
+
+
+  </main>
+
+  <script>
+    function toggleSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      const mainContent = document.getElementById('mainContent');
+      const floatingToggle = document.getElementById('floatingToggle');
+      if (sidebar && mainContent) {
+        sidebar.classList.toggle('collapsed');
+        mainContent.classList.toggle('expanded');
+        if (floatingToggle) floatingToggle.classList.toggle('visible', sidebar.classList.contains('collapsed'));
+      }
+    }
+
+    // ScrollSpy
+    const sections = document.querySelectorAll('.slide-section');
+    const navLinks = document.querySelectorAll('.nav-link');
+    const spyObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const currentId = entry.target.getAttribute('id');
+          navLinks.forEach(link => {
+            if (link.getAttribute('href').substring(1) === currentId) {
+              link.classList.add('active');
+              link.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+            } else {
+              link.classList.remove('active');
+            }
+          });
+        }
+      });
+    }, { root: null, rootMargin: '-20% 0px -70% 0px', threshold: 0 });
+    sections.forEach(sec => spyObserver.observe(sec));
+
+    // Checklist con localStorage
+    const CHECK_KEY = 'ga7_s5_ev02_checklist';
+    const checkboxes = Array.from(document.querySelectorAll('.check-checkbox'));
+
+    function guardarChecklist() {
+      const estado = checkboxes.map(cb => cb.checked);
+      try { localStorage.setItem(CHECK_KEY, JSON.stringify(estado)); } catch (e) { /* almacenamiento no disponible */ }
+    }
+
+    function actualizarProgresoChecklist() {
+      const total = checkboxes.length;
+      let marcados = 0;
+      checkboxes.forEach(cb => {
+        const label = cb.closest('.check-item');
+        if (cb.checked) { marcados++; if (label) label.classList.add('completed'); }
+        else if (label) label.classList.remove('completed');
+      });
+      const pct = total ? Math.round((marcados / total) * 100) : 0;
+      const bar = document.getElementById('checklistBar');
+      const text = document.getElementById('checklistScoreText');
+      if (bar) bar.style.width = pct + '%';
+      if (text) text.textContent = pct + '% (' + marcados + ' de ' + total + ' ítems)';
+    }
+
+    function reiniciarChecklist() {
+      checkboxes.forEach(cb => { cb.checked = false; });
+      guardarChecklist();
+      actualizarProgresoChecklist();
+    }
+
+    (function initChecklist() {
+      try {
+        const guardado = JSON.parse(localStorage.getItem(CHECK_KEY) || '[]');
+        checkboxes.forEach((cb, i) => { cb.checked = !!guardado[i]; });
+      } catch (e) { /* sin datos previos */ }
+      checkboxes.forEach(cb => cb.addEventListener('change', () => { guardarChecklist(); actualizarProgresoChecklist(); }));
+      actualizarProgresoChecklist();
+    })();
+  </script>
+</body>
+</html>
